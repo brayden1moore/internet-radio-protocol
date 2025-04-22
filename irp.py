@@ -194,12 +194,11 @@ class Stream:
             description_url = f'https://wnyu.org/v1/schedule/{id}'
             info = requests.get(description_url).json()
             self.now_playing = clean_text(schedule[0]['program']['name']) # show name like "The New Evening Show"
-            print(clean_text(schedule[0]['program']['name']))
             self.additional_info = ', '.join([i.title() for i in info['episode']['genre_list']]) # genre list if provided
             self.show_logo = info['episode']['program']['image']['large']['url'] or self.show_logo # show-specific logo if provided
             try:
                 self.now_playing_description_long = clean_text(info['episode']['description']) # blurb like "An eclectic mix of rock and related music. Etc etc"
-                self.now_playing_description = self.now_playing_description_long.split('.')[:44] # first sentence of the blurb
+                self.now_playing_description = clean_text(self.now_playing_description_long)[:44] + '...' # first sentence of the blurb
             except:
                 pass
 
