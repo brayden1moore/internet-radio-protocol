@@ -20,12 +20,12 @@ def write_main_page(streams):
             latest_time = ts
             latest_name = name
 
-    main_text = '\n'.join(
-        ['The Internet Radio Protocol is a simple, standardized hub of information with direct streaming links and real-time now playing data for an ever-expanding list of internet radio stations.',
-        'You can access the information by going to internetradioprotocol.org/info.',
+    main_text = '<br>'.join(
+        ['<b>The Internet Radio Protocol</b> is a simple, standardized hub of information with direct streaming links and real-time now playing data for an ever-expanding list of internet radio stations.',
+        'You can access the information by going to <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>',
         'The list currently includes:',
         '',
-        '\n'.join([f'• {i}' for i in list(streams.keys())]),
+        '<br>'.join([f'- {i}' for i in list(streams.keys())]),
         '',
         'And the last update was made at:',
         f"{latest_time} (UTC) to {latest_name}",
@@ -33,7 +33,7 @@ def write_main_page(streams):
         'If you have any questions, comments, or radio station addition suggestions, please email brayden.moore@icloud.com.'
         ]
     )
-    with open('main.txt', 'w') as f:
+    with open('main.html', 'w') as f:
         f.write(main_text)
 
 def clean_text(text):
