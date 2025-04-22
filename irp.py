@@ -32,6 +32,7 @@ def write_main_page(streams):
         f"{latest_time} (UTC) to {latest_name}",
         '',
         'If you have any questions, comments, or radio station addition suggestions, please email brayden.moore@icloud.com.'
+        '</body></html>'
         ]
     )
     with open('main.html', 'w') as f:
