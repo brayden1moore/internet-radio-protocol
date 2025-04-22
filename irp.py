@@ -3,9 +3,38 @@ from concurrent.futures import ThreadPoolExecutor
 from bs4 import BeautifulSoup
 import traceback
 import requests
+import shutil
 import time
 import json
 import re
+
+def write_main_page(streams):
+    latest_time = datetime.min.replace(tzinfo=timezone.utc)
+    latest_name = None
+
+    for name, data in streams.items():
+        ts = data.get('lastUpdated')
+        if isinstance(ts, str):
+            ts = datetime.fromisoformat(ts)
+        if ts and ts > latest_time:
+            latest_time = ts
+            latest_name = name
+
+    main_text = '\n'.join(
+        ['The Internet Radio Protocol is a simple, standardized hub of information with direct streaming links and real-time now playing data for an ever-expanding list of internet radio stations.',
+        'You can access the information by going to internetradioprotocol.org/info.',
+        'The list currently includes:',
+        '',
+        '\n'.join([f'• {i}' for i in list(streams.keys())]),
+        '',
+        'And the last update was made at:',
+        f"{latest_time} (UTC) to {latest_name}",
+        '',
+        'If you have any questions, comments, or radio station addition suggestions, please email brayden.moore@icloud.com.'
+        ]
+    )
+    with open('main.txt', 'w') as f:
+        f.write(main_text)
 
 def clean_text(text):
     cleaned_text = re.sub(r'<[^>]+>', '', text
@@ -358,5 +387,7 @@ if __name__ == '__main__':
 
         with open('errorlog.txt', 'w') as log:
             log.writelines(error_lines)
+
+        write_main_page(stream_json)
 
         time.sleep(60)
