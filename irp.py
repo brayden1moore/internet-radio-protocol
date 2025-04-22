@@ -35,7 +35,7 @@ def write_main_page(streams):
         '</body></html>'
         ]
     )
-    with open('main.html', 'w') as f:
+    with open('index.html', 'w') as f:
         f.write(main_text)
 
 def clean_text(text):
