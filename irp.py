@@ -51,7 +51,7 @@ def clean_text(text):
                         ).replace('\u201c','"'
                         ).replace('\u201d','"'
                         ).strip()
-    return 
+    return cleaned_text
 
 def s(number):
     if number == 1:
@@ -189,13 +189,12 @@ class Stream:
 
             
         elif self.name == 'WNYU':
-            info = requests.get(self.info_link).json()
-
-            id = info[0]['id']
+            schedule = requests.get(self.info_link).json()
+            id = schedule[0]['id']
             description_url = f'https://wnyu.org/v1/schedule/{id}'
             info = requests.get(description_url).json()
-
-            self.now_playing = clean_text(info['program']['name']) # show name like "The New Evening Show"
+            self.now_playing = clean_text(schedule[0]['program']['name']) # show name like "The New Evening Show"
+            print(clean_text(schedule[0]['program']['name']))
             self.additional_info = ', '.join([i.title() for i in info['episode']['genre_list']]) # genre list if provided
             self.show_logo = info['episode']['program']['image']['large']['url'] or self.show_logo # show-specific logo if provided
             try:
