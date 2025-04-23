@@ -130,9 +130,7 @@ class Stream:
         }
     
     def update(self):
-        if 'internetradioprotocol.org' not in self.logo:
-            self.logo = 'https://internetradioprotocol.org/' + self.logo
-
+        
         if self.name in ['HydeFM','SutroFM']:
             info = requests.get(self.info_link).json()
             self.status = "Online" if info['online'] == True else "Offline"
