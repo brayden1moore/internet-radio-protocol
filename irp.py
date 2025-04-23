@@ -130,7 +130,7 @@ class Stream:
         }
     
     def update(self):
-        
+
         if self.name in ['HydeFM','SutroFM']:
             info = requests.get(self.info_link).json()
             self.status = "Online" if info['online'] == True else "Offline"
@@ -140,7 +140,7 @@ class Stream:
                     self.now_playing = info['name'].strip().split(' w/ ')[0] # show name like "Super Supplement"
                 except:
                     self.now_playing = info.get('name', self.name).strip() # full title like "Super Supplement w/ Vitamin 1k (Benji)"
-            self.additional_info = f"{info['listeners']} listener{s(info['listeners'])}." # listener count 
+            self.additional_info = f"{info['listeners']} listener{s(info['listeners'])}" # listener count 
 
 
         elif 'NTS' in self.name:
