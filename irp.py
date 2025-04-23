@@ -130,6 +130,8 @@ class Stream:
         }
     
     def update(self):
+        if 'internetradioprotocol' not in self.logo:
+            self.logo = 'https://internetradioprotocol/' + self.logo
 
         if self.name in ['HydeFM','SutroFM']:
             info = requests.get(self.info_link).json()
