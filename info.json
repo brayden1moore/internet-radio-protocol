@@ -104,6 +104,27 @@
         "status": "Online",
         "streamLink": "https://c11.radioboss.fm:18270/stream?_ic2=1744737620752"
     },
+    "KEXP": {
+        "about": "KEXP is an international community of music lovers and music makers, and a nonprofit organization fostering relationship and community building through broadcast, online, and in-person music experiences.",
+        "bandcampLink": null,
+        "infoLink": "https://api.kexp.org/v2/plays/?format=json&limit=1",
+        "instaLink": null,
+        "lastUpdated": null,
+        "location": "Seattle",
+        "logo": "logos/kexp.png",
+        "mainLink": "https://www.kexp.org",
+        "name": "KEXP",
+        "nowPlaying": null,
+        "nowPlayingAdditionalInfo": null,
+        "nowPlayingArtist": null,
+        "nowPlayingDescription": null,
+        "nowPlayingDescriptionLong": null,
+        "nowPlayingSubtitle": null,
+        "showLogo": null,
+        "soundcloudLink": null,
+        "status": "Online",
+        "streamLink": "https://kexp-mp3-128.streamguys1.com/kexp128.mp3"
+    },
     "KJazz": {
         "about": "KKJZ 88.1 FM (\u201cKJazz\u201d) is the #1 full-time mainstream jazz station in the United States and one of the top ranked public radio stations in the country.",
         "bandcampLink": null,

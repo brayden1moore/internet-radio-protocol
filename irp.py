@@ -346,7 +346,21 @@ class Stream:
         elif self.name == 'KJazz':
             webpage = requests.get(self.main_link).text
             soup = BeautifulSoup(webpage, 'html.parser')
-            self.now_playing_artist = soup.find_all("a", "noDec")[1].get_text()
+            self.now_playing_artist = soup.find_all("a", "noDec")[1].get_text() # host name
+
+        elif self.name == 'KEXP':
+            now_utc = datetime.now(timezone.utc)
+            song = requests.get(self.info_link).json()['results'][0]
+            show_uri = song['show_uri']
+            show = requests.get(show_uri).json()
+
+            self.now_playing_artist = ', '.join(show['host_names']) # concatenation of host names
+            self.now_playing = show['program_name'] # concatenation of host names show name
+            self.now_playing_additional_info = show['program_tags'] # genre list
+            self.show_logo = show['program_image_uri'] # show logo if provided
+
+            if song['play_type'] == 'trackplay':
+                self.now_playing_subtitle = f"{song['song']} by {song['artist']}" # last played song and artist
         
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
