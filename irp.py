@@ -9,18 +9,28 @@ import json
 import re
 
 def get_latest_time(streams):
-    latest_time = datetime.min.replace(tzinfo=timezone.utc)
+    latest_utc = datetime.min.replace(tzinfo=timezone.utc)
     latest_name = None
+
     for name, data in streams.items():
         ts = data.get('lastUpdated')
         if isinstance(ts, str):
             ts = datetime.fromisoformat(ts)
-        if ts and ts > latest_time:
-            latest_time_utc = ts
-            latest_time_pt = ts.astimezone('PT')
-            latest_time_et = ts.astimezone('ET')
-            latest_name = name
-    return latest_time_utc, latest_time_pt, latest_time_et, latest_name
+        if isinstance(ts, datetime):
+            if ts.tzinfo is None:
+                ts = ts.replace(tzinfo=timezone.utc)
+            if ts > latest_utc:
+                latest_utc, latest_name = ts, name
+
+    if not latest_name:
+        return None, None, None, None
+
+    PST = timezone(timedelta(hours=-8))
+    EST = timezone(timedelta(hours=-5))
+
+    latest_pt = latest_utc.astimezone(PST)
+    latest_et = latest_utc.astimezone(EST)
+    return latest_utc, latest_pt, latest_et, latest_name
 
 def write_main_page(streams):
     latest_time_utc, latest_time_pt, latest_time_et, latest_name = get_latest_time(streams)
