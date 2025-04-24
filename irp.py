@@ -28,6 +28,7 @@ def write_main_page(streams):
         'The list currently includes:',
         '',
         '<br>'.join([f'- {i}' for i in list(streams.keys())]),
+        '<br>'.join([f'<img src="{v.logo}"</img>' for _,v in streams.items()]),
         '',
         'And the last update was made at:',
         f"{latest_time} (UTC) to {latest_name}",
