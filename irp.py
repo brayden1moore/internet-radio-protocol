@@ -64,9 +64,9 @@ def write_main_page(streams):
         f"{latest_time_utc} (UTC)",
         f"{latest_time_pt} (PT)",
         f"{latest_time_et} (ET)",
-        f'To {latest_name}',
+        f'to {latest_name}',
         '',
-        'If you have any questions, comments, or radio station addition suggestions, please email brayden.moore@icloud.com.'
+        'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden.moore@icloud.com">brayden.moore@icloud.com</a>.'
         '</body></html>',
         '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>'
         ]
