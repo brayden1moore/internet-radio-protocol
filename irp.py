@@ -27,7 +27,7 @@ def write_main_page(streams):
         'You can access the information by going to <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>',
         'The list currently includes:',
         '',
-        '<br>'.join([f'<div style="align-items: center; display: flex;"><img width="35px" height="35px" style="border: 1px solid black;" src="{v["logo"]}"</img> {k}</div>' for k,v in streams.items()]),
+        '<br>'.join([f'<div style="align-items: center; display: flex;"><img width="35px" height="35px" style="border: 1px solid black;" src="{v["logo"]}"</img> - <a href="{v['mainLink']}">{k}</a></div>' for k,v in streams.items()]),
         '',
         'And the last update was made at:',
         f"{latest_time} (UTC) to {latest_name}",
