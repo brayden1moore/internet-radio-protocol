@@ -355,5 +355,26 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://azuracast.wearevarious.com/listen/we_are_various/live.mp3"
+    },
+    "Clyde Built Radio": {
+        "about": "Clyde Built Radio is a non-profit community radio station highlighting Glasgow’s music, arts and culture communities to the rest of the world.",
+        "bandcampLink": null,
+        "infoLink": "https://clydebuiltradio.airtime.pro/api/live-info-v2?timezone=America/Los_Angeles",
+        "instaLink": null,
+        "lastUpdated": null,
+        "location": "Glascow",
+        "logo": "logos/clyde.png",
+        "mainLink": "https://www.clydebuiltradio.com",
+        "name": "Clyde Built Radio",
+        "nowPlaying": null,
+        "nowPlayingAdditionalInfo": null,
+        "nowPlayingArtist": null,
+        "nowPlayingDescription": null,
+        "nowPlayingDescriptionLong": null,
+        "nowPlayingSubtitle": null,
+        "showLogo": null,
+        "soundcloudLink": null,
+        "status": "Online",
+        "streamLink": "https://clydebuiltradio.out.airtime.pro/clydebuiltradio_a"
     }
 }

@@ -400,6 +400,10 @@ class Stream:
             if song['play_type'] == 'trackplay':
                 self.now_playing_subtitle = f"{song['song']} by {song['artist']}" # last played song and artist
         
+        elif self.name == 'Clyde Built Radio':
+            info = requests.get(self.info_link).json()
+            self.now_playing = info['shows']['current']['name']
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
