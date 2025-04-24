@@ -23,6 +23,7 @@ def write_main_page(streams):
     main_text = '<br>'.join(
         ['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Internet Radio Protocol</title></head><body style="font-family:Andale Mono; padding:50px;">',
         '<b>The Internet Radio Protocol</b> is a simple, standardized hub of information with direct streaming links and real-time now playing data for an ever-expanding list of internet radio stations.',
+        '',
         'You can access the information by going to <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>',
         'The list currently includes:',
         '',
