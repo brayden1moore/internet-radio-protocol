@@ -8,18 +8,22 @@ import time
 import json
 import re
 
-def write_main_page(streams):
+def get_latest_time(streams):
     latest_time = datetime.min.replace(tzinfo=timezone.utc)
     latest_name = None
-
     for name, data in streams.items():
         ts = data.get('lastUpdated')
         if isinstance(ts, str):
             ts = datetime.fromisoformat(ts)
         if ts and ts > latest_time:
-            latest_time = ts
+            latest_time_utc = ts
+            latest_time_pt = ts.astimezone('PT')
+            latest_time_et = ts.astimezone('ET')
             latest_name = name
+    return latest_time_utc, latest_time_pt, latest_time_et, latest_name
 
+def write_main_page(streams):
+    latest_time_utc, latest_time_pt, latest_time_et, latest_name = get_latest_time(streams)
     main_text = '<br>'.join(
         ['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Internet Radio Protocol</title></head><body style="font-family:Andale Mono; padding:50px;">',
         '<b>The Internet Radio Protocol</b> is a simple, standardized hub of information with direct streaming links and real-time now playing data for an ever-expanding list of internet radio stations.',
@@ -30,7 +34,10 @@ def write_main_page(streams):
         '<br>'.join([f'<div style="align-items: center; display: flex;"><img width="40px" height="40px" style="border: 1px solid black;" src="{v["logo"]}"</img> - <a target="_blank" href="{v['mainLink']}">{k}</a></div>' for k,v in streams.items()]),
         '',
         'And the last update was made at:',
-        f"{latest_time} (UTC) to {latest_name}",
+        f"{latest_time_utc} (UTC)",
+        f"{latest_time_pt} (PT)",
+        f"{latest_time_et} (ET)",
+        f'To {latest_name}',
         '',
         'If you have any questions, comments, or radio station addition suggestions, please email brayden.moore@icloud.com.'
         '</body></html>',
