@@ -8,6 +8,17 @@ import time
 import json
 import re
 
+def _dst_bounds(year):
+    for d in range(8, 15):
+        if date(year, 3, d).weekday() == 6:
+            start = datetime(year, 3, d, 2, tzinfo=timezone.utc)
+            break
+    for d in range(1, 8):
+        if date(year, 11, d).weekday() == 6:
+            end = datetime(year, 11, d, 2, tzinfo=timezone.utc)
+            break
+    return start, end
+
 def get_latest_time(streams):
     latest_utc = datetime.min.replace(tzinfo=timezone.utc)
     latest_name = None
@@ -25,8 +36,14 @@ def get_latest_time(streams):
     if not latest_name:
         return None, None, None, None
 
-    PST = timezone(timedelta(hours=-8))
-    EST = timezone(timedelta(hours=-5))
+    start, end = _dst_bounds(latest_utc.year)
+    in_dst = start <= latest_utc < end
+
+    pt_offset = -7 if in_dst else -8
+    et_offset = -4 if in_dst else -5
+
+    PST = timezone(timedelta(hours=pt_offset))
+    EST = timezone(timedelta(hours=et_offset))
 
     latest_pt = latest_utc.astimezone(PST)
     latest_et = latest_utc.astimezone(EST)
