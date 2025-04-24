@@ -21,7 +21,7 @@ def write_main_page(streams):
             latest_name = name
 
     main_text = '<br>'.join(
-        ['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Internet Radio Protocol</title></head><body>',
+        ['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Internet Radio Protocol</title></head><body style=font-family:"Andale Mono">',
         '<b>The Internet Radio Protocol</b> is a simple, standardized hub of information with direct streaming links and real-time now playing data for an ever-expanding list of internet radio stations.',
         'You can access the information by going to <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>',
         'The list currently includes:',
@@ -32,7 +32,8 @@ def write_main_page(streams):
         f"{latest_time} (UTC) to {latest_name}",
         '',
         'If you have any questions, comments, or radio station addition suggestions, please email brayden.moore@icloud.com.'
-        '</body></html>'
+        '</body></html>',
+        '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>'
         ]
     )
     with open('index.html', 'w') as f:
