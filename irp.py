@@ -402,7 +402,19 @@ class Stream:
         
         elif self.name == 'Clyde Built Radio':
             info = requests.get(self.info_link).json()
-            self.now_playing = info['shows']['current']['name']
+            self.now_playing = info['shows']['current']['name'] # just song name
+
+        elif self.name == 'SF 10-33':
+            info = requests.get(self.info_link).json()
+            self.now_playing = info['songs'][0]['title']
+            self.now_playing_artist = info['songs'][0]['artist']
+            self.now_playing_subtitle = info['songs'][0]['album']
+        
+        elif self.name == 'SomaFM Live':
+            info = requests.get(self.info_link).json()
+            self.now_playing = info['songs'][0]['title']
+            self.now_playing_artist = info['songs'][0]['artist']
+            self.now_playing_subtitle = info['songs'][0]['album']
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
