@@ -63,6 +63,7 @@ def to_one_line(stream):
 
 def write_main_page(streams):
     latest_time_utc, latest_time_pt, latest_time_et, latest_name = get_latest_time(streams)
+    streams = dict(sorted(streams.items(), key=lambda item: item['lastUpdated']))
     main_text = '<br>'.join(
         ['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Internet Radio Protocol</title></head><body style="font-family:Andale Mono; padding:50px;">',
         '<b>The Internet Radio Protocol</b> is a simple, standardized hub of information with direct streaming links and real-time now playing data for an ever-expanding list of internet radio stations.',
