@@ -49,6 +49,15 @@ def get_latest_time(streams):
     latest_et = latest_utc.astimezone(EST)
     return latest_utc, latest_pt, latest_et, latest_name
 
+def to_one_line(stream):
+    parts = [
+        stream['nowPlaying'],
+        stream['nowPlayingArtist'],
+        stream['nowPlayingSubtitle'],
+        stream['nowPlayingAdditionalInfo'],
+    ]
+    return " - ".join(p for p in parts if p)
+
 def write_main_page(streams):
     latest_time_utc, latest_time_pt, latest_time_et, latest_name = get_latest_time(streams)
     main_text = '<br>'.join(
@@ -58,7 +67,7 @@ def write_main_page(streams):
         'You can access the information by going to <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>',
         'The list currently includes:',
         '',''
-        '<br>'.join([f'<div style="align-items: center; display: flex;"><img width="50px" height="50px" style="border: 1px solid black;" src="{v["logo"]}"</img><audio controls style="margin-left:10px; width:50px;" src="{v["streamLink"]}"></audio> - <div> <a target="_blank" href="{v['mainLink']}">{k}</a> <p>{v["nowPlaying"]} </div></div>' for k,v in streams.items()]),
+        '<br>'.join([f'<div style="align-items: center; display: flex;"><img width="50px" height="50px" style="border: 1px solid black;" src="{v["logo"]}"</img><audio controls style="margin-left:10px; width:50px;" src="{v["streamLink"]}"></audio> <div> <a target="_blank" href="{v['mainLink']}">{k}</a><br>{to_one_line(v)}<br>{v["location"]})</div></div>' for k,v in streams.items()]),
         '',
         'And the last update was made at:',
         f"{latest_time_utc} (UTC)",
