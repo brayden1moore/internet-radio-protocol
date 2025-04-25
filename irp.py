@@ -56,7 +56,10 @@ def to_one_line(stream):
         stream['nowPlayingSubtitle'],
         stream['nowPlayingAdditionalInfo'],
     ]
-    return " - ".join(p for p in parts if p)[:144]
+    return_string = " - ".join(p for p in parts if p)
+    if len(return_string) > 100:
+        return_string = return_string[:100] + '...'
+    return return_string
 
 def write_main_page(streams):
     latest_time_utc, latest_time_pt, latest_time_et, latest_name = get_latest_time(streams)
