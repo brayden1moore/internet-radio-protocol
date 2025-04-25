@@ -255,6 +255,7 @@ class Stream:
             if not info['shows']['current']:
                 self.status = 'Offline'
             else:
+                self.status = 'Online'
                 try:
                     self.now_playing_artist = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # just artist name if possible like "Willow"
                     self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[0]) # just show name if posible like "Wispy"
@@ -268,6 +269,7 @@ class Stream:
                 self.status = 'Offline'
             else:
                 self.now_playing  = clean_text(info['shows']['current']['name']) # broadcast name like "Staff Picks" or "Piffy (live)"
+                self.status = 'Online'
                 try:
                     self.now_playing_artist  = clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # artist names like "Fa_Fane & F.M."
                     self.now_playing_subtitle = clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[0]) # episode title "Delodio"
@@ -281,6 +283,7 @@ class Stream:
             if not info['shows']['current']:
                 self.status = 'Offline'
             else:
+                self.status = 'Online'
                 try:
                     self.now_playing_artist = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # artist name like "Charlemagne Eagle"
                     self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split('w/')[0]) # show name like "The Do!You!!! Breakfast Show"
@@ -388,6 +391,7 @@ class Stream:
             if not info['shows']['current']:
                 self.status = 'Offline'
             else:
+                self.status = 'Online'
                 self.now_playing = info['shows']['current']['name'] # simple show title
             
         elif self.name == 'KJazz':
