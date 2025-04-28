@@ -448,7 +448,8 @@ class Stream:
             for i in episodes:
                 episode_time = datetime.fromisoformat(i['episodeTime'])
                 episode_date = (datetime.fromisoformat(i['episodeDate']) + timedelta(days=1)).date()
-                episode_end = episode_time + timedelta(minutes=i['episodeLength'])
+                episode_length = i.get('episodeLength',120)
+                episode_end = episode_time + timedelta(minutes=episode_length)
                 if (episode_time <= now_utc <= episode_end) & (episode_date == now_utc.date()):
                     self.now_playing_title = i['title']
                     self.now_playing_subtitle = i['subtitle']
