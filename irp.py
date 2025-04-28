@@ -434,10 +434,10 @@ class Stream:
 
         elif self.name in ['Rinse UK','Rinse FR','SWU FM','Kool FM']:
             name_to_slug_dict = {
-                'Rinse UK','uk',
-                'Rinse FR','france',
-                'SWU FM','swu',
-                'Kool FM','kool'
+                'Rinse UK':'uk',
+                'Rinse FR':'france',
+                'SWU FM':'swu',
+                'Kool FM':'kool'
             }
 
             info = requests.get(self.info_link).json()
