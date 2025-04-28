@@ -432,6 +432,37 @@ class Stream:
             self.now_playing_artist = info['songs'][0]['artist']
             self.now_playing_subtitle = info['songs'][0]['album']
 
+        elif self.name in ['Rinse UK','Rinse FR','SWU FM','Kool FM']:
+            name_to_slug_dict = {
+                'Rinse UK','uk',
+                'Rinse FR','france',
+                'SWU FM','swu',
+                'Kool FM','kool'
+            }
+
+            info = requests.get(self.info_link).json()
+            now_utc = datetime.now(timezone.utc)
+            shows = info['pageProps']['uniqueChannels']
+            episodes = [i for i in info['pageProps']['episodesData']['entries'] if i['channel'][0]['slug'] == name_to_slug_dict[self.name]]
+
+            for i in episodes:
+                episode_time = datetime.fromisoformat(i['episodeTime'])
+                episode_date = (datetime.fromisoformat(i['episodeDate']) + timedelta(days=1)).date()
+                episode_end = episode_time + timedelta(minutes=i['episodeLength'])
+                if (episode_time <= now_utc <= episode_end) & (episode_date == now_utc.date()):
+                    self.now_playing_title = i['title']
+                    self.now_playing_subtitle = i['subtitle']
+                    self.now_playing_description_long = i['parentShow'][0]['extract']
+                    self.now_playing_description_long = i['parentShow'][0]['extract']
+                    try:
+                        self.now_playing_additional_info = ', '.join([i['title'] for i in i['parentShow'][0]['genreTag']])
+                    except:
+                        pass
+                    try:
+                        self.show_logo = f"https://img.imageboss.me/rinse-fm/cover:smart/600x600/{i['featuredImage'][0]['filename']}"
+                    except:
+                        pass
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
