@@ -453,7 +453,7 @@ class Stream:
                 episode_end = episode_time + timedelta(minutes=episode_length)
 
                 if (episode_time <= now_utc <= episode_end) & (episode_date.date() == now_utc.date()):
-                    self.now_playing_title = i['title']
+                    self.now_playing = i['title']
                     self.now_playing_subtitle = i['subtitle']
                     self.now_playing_description_long = i['parentShow'][0]['extract']
                     self.now_playing_description = i['parentShow'][0]['extract'][:44] + '...'
