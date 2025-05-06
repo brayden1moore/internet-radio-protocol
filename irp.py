@@ -442,27 +442,31 @@ class Stream:
 
             info = requests.get(self.info_link).json()
             now_utc = datetime.now(timezone.utc)
-            shows = info['pageProps']['uniqueChannels']
-            episodes = [i for i in info['pageProps']['episodesData']['entries'] if i['channel'][0]['slug'] == name_to_slug_dict[self.name]]
+            shows = info['channels']
+            episodes = [i for i in info['episodes'] if i['channel'][0]['slug'] == name_to_slug_dict[self.name]]
 
             for i in episodes:
-                episode_time = datetime.fromisoformat(i['episodeTime'])
-                episode_date = (datetime.fromisoformat(i['episodeDate']) + timedelta(days=1)).date()
+                episode_time = datetime.fromisoformat(i['episodeTime']) 
+                episode_date = datetime.fromisoformat(i['episodeDate']) + timedelta(minutes=60)
+
                 episode_length = i.get('episodeLength') or 120
                 episode_end = episode_time + timedelta(minutes=episode_length)
-                if (episode_time <= now_utc <= episode_end) & (episode_date == now_utc.date()):
-                    self.now_playing_title = i['title']
-                    self.now_playing_subtitle = i['subtitle']
-                    self.now_playing_description_long = i['parentShow'][0]['extract']
-                    self.now_playing_description_long = i['parentShow'][0]['extract']
+
+                if (episode_time <= now_utc <= episode_end) & (episode_date.date() == now_utc.date()):
+                    now_playing_title = i['title']
+                    now_playing_subtitle = i['subtitle']
+                    now_playing_description_long = i['parentShow'][0]['extract']
+                    now_playing_description_long = i['parentShow'][0]['extract']
+                
                     try:
-                        self.now_playing_additional_info = ', '.join([i['title'] for i in i['parentShow'][0]['genreTag']])
+                        now_playing_additional_info = ', '.join([i['title'] for i in i['parentShow'][0]['genreTag']])
                     except:
                         pass
                     try:
-                        self.show_logo = f"https://img.imageboss.me/rinse-fm/cover:smart/600x600/{i['featuredImage'][0]['filename']}"
+                        show_logo = f"https://img.imageboss.me/rinse-fm/cover:smart/600x600/{i['featuredImage'][0]['filename']}"
                     except:
                         pass
+
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)

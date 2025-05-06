@@ -443,7 +443,7 @@
     "Rinse UK": {
         "about": "London-based community radio station, licensed for 'young people living and/or working within the central, east and south London areas'. It plays garage, grime, dubstep, house, jungle, UK funky and other dance music genres popular in the United Kingdom.",
         "bandcampLink": null,
-        "infoLink": "https://www.rinse.fm/_next/data/t_jvPn4HeXelQP8FipL2z/en/schedule.json",
+        "infoLink": "https://www.rinse.fm/api/query/v1/schedule/",
         "instaLink": null,
         "lastUpdated": null,
         "location": "London",
@@ -464,7 +464,7 @@
     "Rinse FR": {
         "about": "Based in Paris, London, and all over the world with its online platforms, Rinse is a radio station but not only: label, management, curation, cultural events.",
         "bandcampLink": null,
-        "infoLink": "https://www.rinse.fm/_next/data/t_jvPn4HeXelQP8FipL2z/en/schedule.json",
+        "infoLink": "https://www.rinse.fm/api/query/v1/schedule/",
         "instaLink": null,
         "lastUpdated": null,
         "location": "Paris",
@@ -485,7 +485,7 @@
     "Kool FM": {
         "about": "Kool FM, also known as Kool London, is a former London pirate radio station that now broadcasts on DAB and online, playing jungle, drum and bass, and old skool. Kool is generally regarded as being instrumental in the development of the jungle music scene.",
         "bandcampLink": null,
-        "infoLink": "https://www.rinse.fm/_next/data/t_jvPn4HeXelQP8FipL2z/en/schedule.json",
+        "infoLink": "https://www.rinse.fm/api/query/v1/schedule/",
         "instaLink": null,
         "lastUpdated": null,
         "location": "London",
@@ -502,5 +502,26 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://admin.stream.rinse.fm/proxy/kool/stream"
+    },
+    "Radio Sygma": {
+        "about": "radio.syg.ma is a community platform for mixes, podcasts, live recordings and releases by independent musicians, sound artists and collectives.",
+        "bandcampLink": null,
+        "infoLink": "https://radio.syg.ma/stats-icecast.json",
+        "instaLink": null,
+        "lastUpdated": null,
+        "location": "International",
+        "logo": "https://internetradioprotocol.org/logos/sygma.png",
+        "mainLink": "https://radio.syg.ma/",
+        "name": "Radio Sygma",
+        "nowPlaying": null,
+        "nowPlayingAdditionalInfo": null,
+        "nowPlayingArtist": null,
+        "nowPlayingDescription": null,
+        "nowPlayingDescriptionLong": null,
+        "nowPlayingSubtitle": null,
+        "showLogo": null,
+        "soundcloudLink": null,
+        "status": "Online",
+        "streamLink": "https://radio.syg.ma/audio.mp3"
     }
 }
