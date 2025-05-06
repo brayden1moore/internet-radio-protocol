@@ -69,8 +69,15 @@ def write_main_page(streams):
         '',
         'You can access the information by going to <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>',
         'The list currently includes:',
-        '',''
-        '<br>'.join([f'<div style="align-items: center; display: flex;"><img width="70px" height="70px" style="margin-left:10px; margin-right:10px; border: 1px solid black;" src="{v["logo"]}"</img> <div> <a target="_blank" href="{v['mainLink']}">{k}</a><br>{to_one_line(v)}<br>{v["location"]}<br>{v["status"]}<br><audio controls style="width:40px;" src="{v["streamLink"]}"></audio></div></div>' for k,v in streams.items()]),
+        '', '',
+        '<br>'.join([f'''<div style="align-items: center; display: flex;">
+            <img width="70px" height="70px" style="margin-left:10px; margin-right:10px; border: 1px solid black; cursor: pointer;" 
+                src="{v["logo"]}" onclick="toggleAudio('{k}-audio')" />
+            <div> 
+                <a target="_blank" href="{v['mainLink']}">{k}</a><br>{to_one_line(v)}<br>{v["location"]}<br>{v["status"]}<br>
+                <audio id="{k}-audio" style="width:40px;" src="{v["streamLink"]}"></audio>
+            </div>
+        </div>''' for k, v in streams.items()]),
         '',
         'And the last update was made at:',
         f"{latest_time_utc} (UTC)",
@@ -78,7 +85,19 @@ def write_main_page(streams):
         f"{latest_time_et} (ET)",
         f'to {latest_name}',
         '',
-        'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden.moore@icloud.com">brayden.moore@icloud.com</a>.'
+        'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden.moore@icloud.com">brayden.moore@icloud.com</a>.',
+        '<script>',
+        '''
+        function toggleAudio(id) {
+            var audio = document.getElementById(id);
+            if (audio.paused) {
+                audio.play();
+            } else {
+                audio.pause();
+            }
+        }
+        ''',
+        '</script>',
         '</body></html>',
         '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>'
         ]
