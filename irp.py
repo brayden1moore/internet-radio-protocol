@@ -68,6 +68,7 @@ def write_main_page(streams):
         '<b>The Internet Radio Protocol</b> is a simple, standardized hub of information with direct streaming links and real-time now playing data for an ever-expanding list of internet radio stations.',
         '',
         'You can access the information by going to <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>',
+        'And you can listen directly by <b>clicking a show\'s logo</b> below.',
         'The list currently includes:',
         '', '',
         '<br>'.join([f'''<div id="{k}" style="align-items: center; display: flex;">
