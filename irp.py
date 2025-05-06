@@ -467,6 +467,10 @@ class Stream:
                     except:
                         pass
 
+        elif self.name == 'Radio Sygma':
+            info = requests.get(self.info_link).json()
+            self.now_playing = info['tracks']['current']['metadata']['track_title']
+
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
