@@ -86,6 +86,8 @@ def write_main_page(streams):
         f'to {latest_name}',
         '',
         'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden.moore@icloud.com">brayden.moore@icloud.com</a>.',
+        '</body></html>',
+        '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>',
         '<script>',
         '''
         function toggleAudio(id) {
@@ -97,9 +99,7 @@ def write_main_page(streams):
             }
         }
         ''',
-        '</script>',
-        '</body></html>',
-        '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>'
+        '</script>'
         ]
     )
     with open('index.html', 'w') as f:
