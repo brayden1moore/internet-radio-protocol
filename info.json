@@ -422,7 +422,7 @@
     "SWU FM": {
         "about": "Tasked with celebrating Bristol's music culture on air, SWU FM took to the airwaves on 87.7FM for 27 days in May 2016. These historic sets from the pilot broadcast shaped the station and paved the way for SWU to secure a permanent space on the dial (103.7FM) in 2020.",
         "bandcampLink": null,
-        "infoLink": "https://www.rinse.fm/_next/data/t_jvPn4HeXelQP8FipL2z/en/schedule.json",
+        "infoLink": "https://www.rinse.fm/api/query/v1/schedule/",
         "instaLink": null,
         "lastUpdated": null,
         "location": "Bristol",
