@@ -209,6 +209,8 @@ class Stream:
             now = info['results'][result_idx]['now']
             self.now_playing = clean_text(now['broadcast_title']) # show name like "In Focus: Timbaland"
             self.location = now['embeds']['details']['location_long'] # location like "New York"
+            if not self.location:
+                self.location = 'London'
             self.show_logo = now['embeds']['details']['media']['background_large'] or self.show_logo # show-specific logo if provided
             try:
                 self.now_playing_description_long =  clean_text(now['embeds']['details']['description']) # full description
