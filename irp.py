@@ -459,7 +459,7 @@ class Stream:
                     self.now_playing_description = i['parentShow'][0]['extract'][:44] + '...'
                 
                     try:
-                        self.now_playing_additional_info = ', '.join([i['title'] for i in i['parentShow'][0]['genreTag']])
+                        self.additional_info = ', '.join([i['title'] for i in i['parentShow'][0]['genreTag']])
                     except:
                         pass
                     try:
