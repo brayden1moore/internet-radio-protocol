@@ -453,17 +453,17 @@ class Stream:
                 episode_end = episode_time + timedelta(minutes=episode_length)
 
                 if (episode_time <= now_utc <= episode_end) & (episode_date.date() == now_utc.date()):
-                    now_playing_title = i['title']
-                    now_playing_subtitle = i['subtitle']
-                    now_playing_description_long = i['parentShow'][0]['extract']
-                    now_playing_description_long = i['parentShow'][0]['extract']
+                    self.now_playing_title = i['title']
+                    self.now_playing_subtitle = i['subtitle']
+                    self.now_playing_description_long = i['parentShow'][0]['extract']
+                    self.now_playing_description = i['parentShow'][0]['extract'][:44] + '...'
                 
                     try:
-                        now_playing_additional_info = ', '.join([i['title'] for i in i['parentShow'][0]['genreTag']])
+                        self.now_playing_additional_info = ', '.join([i['title'] for i in i['parentShow'][0]['genreTag']])
                     except:
                         pass
                     try:
-                        show_logo = f"https://img.imageboss.me/rinse-fm/cover:smart/600x600/{i['featuredImage'][0]['filename']}"
+                        self.show_logo = f"https://img.imageboss.me/rinse-fm/cover:smart/600x600/{i['featuredImage'][0]['filename']}"
                     except:
                         pass
 
