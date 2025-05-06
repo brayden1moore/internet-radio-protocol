@@ -455,11 +455,14 @@ class Stream:
                 if (episode_time <= now_utc <= episode_end) & (episode_date.date() == now_utc.date()):
                     self.now_playing = i['title']
                     self.now_playing_subtitle = i['subtitle']
-                    self.now_playing_description_long = i['parentShow'][0]['extract']
-                    self.now_playing_description = i['parentShow'][0]['extract'][:44] + '...'
                 
                     try:
                         self.additional_info = ', '.join([i['title'] for i in i['parentShow'][0]['genreTag']])
+                    except:
+                        pass
+                    try:
+                        self.now_playing_description_long = i['parentShow'][0]['extract']
+                        self.now_playing_description = i['parentShow'][0]['extract'][:44] + '...'
                     except:
                         pass
                     try:
