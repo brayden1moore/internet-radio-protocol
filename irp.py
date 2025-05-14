@@ -81,7 +81,7 @@ def write_main_page(streams):
         '',
         ", ".join(k for k, v in streams.items()) + '.',
         '',
-        'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden.moore@icloud.com">brayden.moore@icloud.com</a>.',
+        'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden@scudhouse.com">brayden@scudhouse.com</a>.',
         '', '',
         '<br>'.join([f'''<div id="{k}" style="align-items: center; display: flex;">
             <img width="100px" height="100px" style="margin-right:10px; border: 1px solid black; cursor: pointer;" 
