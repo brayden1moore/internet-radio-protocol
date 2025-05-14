@@ -79,7 +79,7 @@ def write_main_page(streams):
         'And you can listen directly by <b>clicking a show\'s logo</b> below.',
         'The list currently includes:',
         '',
-        ", ".join(k for k, v in streams.items()),
+        ", ".join(k for k, v in streams.items()) + '.',
         '', '',
         '<br>'.join([f'''<div id="{k}" style="align-items: center; display: flex;">
             <img width="100px" height="100px" style="margin-right:10px; border: 1px solid black; cursor: pointer;" 
