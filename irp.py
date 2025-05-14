@@ -80,6 +80,8 @@ def write_main_page(streams):
         'The list currently includes:',
         '',
         ", ".join(k for k, v in streams.items()) + '.',
+        '',
+        'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden.moore@icloud.com">brayden.moore@icloud.com</a>.',
         '', '',
         '<br>'.join([f'''<div id="{k}" style="align-items: center; display: flex;">
             <img width="100px" height="100px" style="margin-right:10px; border: 1px solid black; cursor: pointer;" 
@@ -90,7 +92,6 @@ def write_main_page(streams):
             </div>
         </div>''' for k, v in streams.items()]),
         '',
-        'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden.moore@icloud.com">brayden.moore@icloud.com</a>.',
         '</body></html>',
         '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>',
         '<script>function toggleAudio(id) {var audio = document.getElementById(`${id}-audio`);var div = document.getElementById(id);if (audio.paused) {audio.play();div.style.backgroundColor="yellow";} else {audio.pause();div.style.backgroundColor="white";}}</script>',
