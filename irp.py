@@ -83,7 +83,7 @@ def write_main_page(streams):
             <img width="80px" height="80px" style="margin-right:10px; border: 1px solid black; cursor: pointer;" 
                 src="{v["logo"]}" onclick="toggleAudio('{k}')" />
             <div> 
-                <a target="_blank" href="{v['mainLink']}">{k}</a><br>{to_one_line(v)}<br>{v.get('shazamGuess')}<br>{v["location"]}<br>{v["status"]}<br>
+                <a target="_blank" href="{v['mainLink']}">{k}</a><br>Now Playing: {to_one_line(v)}<br>Track ID: {v.get('shazamGuess')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>
                 <audio id="{k}-audio" style="width:40px;" src="{v["streamLink"]}"></audio>
             </div>
         </div>''' for k, v in streams.items()]),
@@ -532,6 +532,7 @@ class Stream:
             self.now_playing = info['tracks']['current']['metadata']['track_title']
 
     async def guess_shazam(self):
+        self.shazam_guess = "Unknown"
         shazam = Shazam()
         try:
             with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
