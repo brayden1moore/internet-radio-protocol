@@ -542,7 +542,7 @@ class Stream:
                 '/usr/bin/ffmpeg',
                 '-y',
                 '-i', self.stream_link,
-                '-t', '10',
+                '-t', '5',
                 '-c:a', 'libmp3lame',
                 temp_path
             ]
