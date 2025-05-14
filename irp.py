@@ -2,6 +2,7 @@ from datetime import datetime, timezone, timedelta, date
 from concurrent.futures import ThreadPoolExecutor
 from shazamio import Shazam, Serialize
 from bs4 import BeautifulSoup
+import subprocess
 import traceback
 import requests
 import tempfile
@@ -532,6 +533,7 @@ class Stream:
 
         
         # finally, try to guess the song playing
+        shazam = Shazam()
         try:
             with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
                 temp_path = tmp.name
