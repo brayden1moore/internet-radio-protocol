@@ -75,9 +75,7 @@ def write_main_page(streams):
         ['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Internet Radio Protocol</title><link rel="icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="shortcut icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="apple-touch-icon" href="assets/icon-dark.png"></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img src="assets/circle.gif" alt="Loading" height="250px" width="250px" style="margin-left:-25px;"></div>',
         '<b>The Internet Radio Protocol</b> is a simple, standardized hub of information with direct streaming links and real-time now playing data for an ever-expanding list of internet radio stations.',
         '',
-        'You can access the information in JSON format at <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>',
-        'And you can listen directly by <b>clicking a show\'s logo</b> below.',
-        'The list currently includes:',
+        'You can access the information in JSON format at <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>, and you can listen directly by <b>clicking a show\'s logo</b> below. The list currently includes:',
         '',
         ", ".join(k for k, v in streams.items()) + '.',
         '',
@@ -86,7 +84,7 @@ def write_main_page(streams):
         '<br>'.join([f'''<div id="{k}" style="align-items: center; display: flex;">
             <img width="100px" height="100px" style="margin-right:10px; border: 1px solid black; cursor: pointer;" 
                 src="{v["logo"]}" onclick="toggleAudio('{k}')" />
-            <div style="font-size:small;"> 
+            <div style="font-size:10pt;"> 
                 <a target="_blank" href="{v['mainLink']}">{k}</a><br>Now Playing: {to_one_line(v)}<br>Track ID: {v.get('shazamGuess')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: <span class="last-updated" data-utc="{v['lastUpdated']}">{v['lastUpdated']}</span><br>
                 <audio id="{k}-audio" style="width:40px;" src="{v["streamLink"]}"></audio>
             </div>
