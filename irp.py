@@ -88,12 +88,6 @@ def write_main_page(streams):
             </div>
         </div>''' for k, v in streams.items()]),
         '',
-        'And the last update was made at:',
-        f"{latest_time_utc} (UTC)",
-        f"{latest_time_pt} (PT)",
-        f"{latest_time_et} (ET)",
-        f'to {latest_name}',
-        '',
         'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden.moore@icloud.com">brayden.moore@icloud.com</a>.',
         '</body></html>',
         '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>',
