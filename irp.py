@@ -390,15 +390,15 @@ class Stream:
                 if end_time > now_utc > start_time:
                     self.now_playing = event['summary']
                     try:
-                        description_lines = event['description'].split('\n')
-                        self.now_playing_description = clean_text(description_lines[0])[:44] + '...' # short desc like "A late night special with Kem Kem playing from the heart ..."
+                        description_lines = event['description'].split('<br>')
                         self.now_playing_description_long = clean_text(description_lines[0]) # long desc 
+                        self.now_playing_description = self.now_playing_description_long[:44] + '...'# short desc like "A late night special with Kem Kem playing from the heart ..."
                         self.additional_info = clean_text(description_lines[-1]) # genre list like "World, Jazz, Afrobeats, Electronic"
                         
                         self.insta_link = None
                         self.bandcamp_link = None
                         self.soundcloud_link = None
-                        for l in description_lines[1:-1]:
+                        for l in description_lines:
                             l = clean_text(l)
                             if 'instagram.' in l.lower():
                                 self.insta_link = l
