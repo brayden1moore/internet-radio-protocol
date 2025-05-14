@@ -80,9 +80,9 @@ def write_main_page(streams):
         'The list currently includes:',
         '', '',
         '<br>'.join([f'''<div id="{k}" style="align-items: center; display: flex;">
-            <img width="90px" height="90px" style="margin-right:10px; border: 1px solid black; cursor: pointer;" 
+            <img width="100px" height="100px" style="margin-right:10px; border: 1px solid black; cursor: pointer;" 
                 src="{v["logo"]}" onclick="toggleAudio('{k}')" />
-            <div> 
+            <div style="font-size:small;"> 
                 <a target="_blank" href="{v['mainLink']}">{k}</a><br>Now Playing: {to_one_line(v)}<br>Track ID: {v.get('shazamGuess')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: {v["lastUpdated"]}<br>
                 <audio id="{k}-audio" style="width:40px;" src="{v["streamLink"]}"></audio>
             </div>
