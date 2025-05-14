@@ -1,5 +1,5 @@
 beautifulsoup4==4.12.3
 requests==2.30.0
-ffmpeg==1.4
 shazamio==0.8.0
 shazamio_core==1.1.2
+ffmpeg==1.4
