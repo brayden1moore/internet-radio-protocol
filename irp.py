@@ -532,13 +532,12 @@ class Stream:
             self.now_playing = info['tracks']['current']['metadata']['track_title']
 
     async def guess_shazam(self):
-        # finally, try to guess the song playing
         shazam = Shazam()
         try:
             with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
                 temp_path = tmp.name
             cmd = [
-                'ffmpeg',
+                '/usr/bin/ffmpeg',
                 '-y',
                 '-i', self.stream_link,
                 '-t', '10',
