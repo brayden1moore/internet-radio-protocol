@@ -546,7 +546,6 @@ class Stream:
                 temp_path
             ]
             subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            print(temp_path)
             result = await shazam.recognize(temp_path)
             try:
                 track_id = result['matches'][0]['id']
@@ -564,44 +563,49 @@ class Stream:
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
+async def process_stream(name, value):
+    stream = Stream(from_dict=value)
+    try:
+        stream.update()
+        await stream.guess_shazam()
+        updated_dict = stream.to_dict()
+        if value != updated_dict:
+            stream.set_last_updated()
+            return (stream.name, stream.to_dict())
+        else:
+            print('No update for', stream.name)
+            return (stream.name, value)
+    except Exception:
+        error = f'[{datetime.now()}] Error updating {stream.name}:\n{traceback.format_exc()}\n'
+        return (stream.name, value, error)
 
-if __name__ == '__main__':
+async def main_loop():
     while True:
-        with open('info.json','r') as f:
+        with open('info.json', 'r') as f:
             stream_json = json.load(f)
 
+        tasks = [process_stream(name, val) for name, val in stream_json.items()]
+        results = await asyncio.gather(*tasks)
+
         error_lines = []
+        updated = {}
 
-        async def process_stream(kv):
-            name, value = kv
-            stream = Stream(from_dict=value)
+        for result in results:
+            if len(result) == 3:
+                name, val, err = result
+                error_lines.append(err)
+            else:
+                name, val = result
+            updated[name] = val
 
-            try:
-                stream.update()
-                await stream.guess_shazam()
-                updated_dict = stream.to_dict()
-                if value != updated_dict:
-                    stream.set_last_updated()
-                    return (stream.name, stream.to_dict())
-                else:
-                    print('No update for', stream.name)
-                    return (stream.name, value)
-            except Exception:
-                error_lines.append(f'[{datetime.now()}] Error updating {stream.name}:\n')
-                error_lines.append(traceback.format_exc() + '\n')
-                return (stream.name, value)
-
-        with ThreadPoolExecutor(max_workers=10) as executor:
-            results = executor.map(process_stream, stream_json.items())
-
-        stream_json = dict(results)
-
-        with open('info.json','w') as f:
-            json.dump(stream_json, f, indent=4, sort_keys=True, default=str)
+        with open('info.json', 'w') as f:
+            json.dump(updated, f, indent=4, sort_keys=True, default=str)
 
         with open('errorlog.txt', 'w') as log:
             log.writelines(error_lines)
 
-        write_main_page(stream_json)
+        write_main_page(updated)
+        await asyncio.sleep(60)
 
-        time.sleep(60)
+if __name__ == '__main__':
+    asyncio.run(main_loop())
