@@ -145,7 +145,7 @@ class Stream:
         self.bandcamp_link = None
         self.soundcloud_link = None
         self.last_updated = None
-        self.last_shazam_guess = None
+        self.shazam_guess = None
 
         if isinstance(from_dict, dict):
             self.name = from_dict.get('name')
