@@ -204,6 +204,8 @@ class Stream:
 
         if self.name in ['HydeFM','SutroFM']:
             info = requests.get(self.info_link).json()
+            self.now_playing = None
+            self.now_playing_artist = None
             self.status = "Online" if info['online'] == True else "Offline"
             try: 
                 self.now_playing_artist = info['name'].strip().split(' w/ ')[1] # artist name like "Vitamin 1K (Benji)"
