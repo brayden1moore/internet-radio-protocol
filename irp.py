@@ -1,12 +1,19 @@
 from datetime import datetime, timezone, timedelta, date
 from concurrent.futures import ThreadPoolExecutor
+from shazamio import Shazam, Serialize
 from bs4 import BeautifulSoup
 import traceback
 import requests
+import tempfile
+import asyncio
+import logging
 import shutil
 import time
 import json
 import re
+import io
+
+logging.disable()
 
 def _dst_bounds(year):
     for d in range(8, 15):
@@ -137,27 +144,29 @@ class Stream:
         self.bandcamp_link = None
         self.soundcloud_link = None
         self.last_updated = None
+        self.last_shazam_guess = None
 
-        if type(from_dict) == dict:
-            self.name = from_dict['name']
-            self.logo = from_dict['logo']
-            self.location = from_dict['location']
-            self.info_link = from_dict['infoLink']
-            self.stream_link = from_dict['streamLink']
-            self.main_link = from_dict['mainLink']
-            self.about = from_dict['about']
-            self.status = from_dict['status']
-            self.now_playing_artist = from_dict['nowPlayingArtist']
-            self.now_playing = from_dict['nowPlaying']
-            self.now_playing_subtitle = from_dict['nowPlayingSubtitle']
-            self.now_playing_description = from_dict['nowPlayingDescription']
-            self.now_playing_description_long = from_dict['nowPlayingDescriptionLong']
-            self.additional_info = from_dict['nowPlayingAdditionalInfo']
-            self.show_logo = from_dict['showLogo']
-            self.insta_link = from_dict['instaLink']
-            self.bandcamp_link = from_dict['bandcampLink']
-            self.soundcloud_link = from_dict['soundcloudLink']
-            self.last_updated = from_dict['lastUpdated']
+        if isinstance(from_dict, dict):
+            self.name = from_dict.get('name')
+            self.logo = from_dict.get('logo')
+            self.location = from_dict.get('location')
+            self.info_link = from_dict.get('infoLink')
+            self.stream_link = from_dict.get('streamLink')
+            self.main_link = from_dict.get('mainLink')
+            self.about = from_dict.get('about')
+            self.status = from_dict.get('status')
+            self.now_playing_artist = from_dict.get('nowPlayingArtist')
+            self.now_playing = from_dict.get('nowPlaying')
+            self.now_playing_subtitle = from_dict.get('nowPlayingSubtitle')
+            self.now_playing_description = from_dict.get('nowPlayingDescription')
+            self.now_playing_description_long = from_dict.get('nowPlayingDescriptionLong')
+            self.additional_info = from_dict.get('nowPlayingAdditionalInfo')
+            self.show_logo = from_dict.get('showLogo')
+            self.insta_link = from_dict.get('instaLink')
+            self.bandcamp_link = from_dict.get('bandcampLink')
+            self.soundcloud_link = from_dict.get('soundcloudLink')
+            self.last_updated = from_dict.get('lastUpdated')
+            self.shazam_guess = from_dict.get('shazamGuess')
 
     def to_dict(self):
         return {
@@ -183,6 +192,8 @@ class Stream:
             "soundcloudLink": self.soundcloud_link,
             "instaLink": self.insta_link,
 
+            "shazamGuess": self.shazam_guess,
+
             "lastUpdated": self.last_updated
         }
     
@@ -199,6 +210,7 @@ class Stream:
                     self.now_playing = info['name'].strip().split(' w/ ')[0] # show name like "Super Supplement"
                 except:
                     self.now_playing = info.get('name', self.name).strip() # full title like "Super Supplement w/ Vitamin 1k (Benji)"
+                    self.now_playing_artist = None
             self.additional_info = f"{info['listeners']} listener{s(info['listeners'])}" # listener count 
 
 
@@ -216,6 +228,8 @@ class Stream:
                 self.now_playing_description_long =  clean_text(now['embeds']['details']['description']) # full description
                 self.now_playing_description =  clean_text(now['embeds']['details']['description'])[:44] + '...' # abridged description
             except:
+                self.now_playing_description_long = None
+                self.now_playing_description = None
                 pass
             
             genres = []
@@ -224,6 +238,9 @@ class Stream:
 
             self.additional_info = ', '.join(genres) # genre list if provided
 
+            self.insta_link = None
+            self.bandcamp_link = None
+            self.soundcloud_link = None
             for l in now['embeds']['details']['external_links']: # various external links
                 if 'instagram.' in l.lower():
                     self.insta_link = l
@@ -246,6 +263,8 @@ class Stream:
                         self.now_playing_description_long = clean_text(program['description']) # long description of the show
                         self.now_playing_description = clean_text(program['description'])[:44] + '...'  # abridged description
                     except:
+                        self.now_playing_description_long = None
+                        self.now_playing_description = None
                         pass
 
             
@@ -261,6 +280,8 @@ class Stream:
                 self.now_playing_description_long = clean_text(info['episode']['description']) # blurb like "An eclectic mix of rock and related music. Etc etc"
                 self.now_playing_description = clean_text(self.now_playing_description_long)[:44] + '...' # first sentence of the blurb
             except:
+                self.now_playing_description_long = None
+                self.now_playing_description = None
                 pass
 
 
@@ -268,12 +289,15 @@ class Stream:
             info = requests.get(self.info_link).json()
             if not info['shows']['current']:
                 self.status = 'Offline'
+                self.now_playing = None
+                self.now_playing_artist = None
             else:
                 self.status = 'Online'
                 try:
                     self.now_playing_artist = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # just artist name if possible like "Willow"
                     self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[0]) # just show name if posible like "Wispy"
                 except:
+                    self.now_playing_artist = None
                     self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ','').replace('.mp3','')) # full title like "Wispy w/ Willow"
 
 
@@ -281,6 +305,9 @@ class Stream:
             info = requests.get(self.info_link).json()
             if not info['shows']['current']:
                 self.status = 'Offline'
+                self.now_playing = None
+                self.now_playing_artist = None
+                self.now_playing_subtitle = None
             else:
                 self.now_playing  = clean_text(info['shows']['current']['name']) # broadcast name like "Staff Picks" or "Piffy (live)"
                 self.status = 'Online'
@@ -288,6 +315,7 @@ class Stream:
                     self.now_playing_artist  = clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # artist names like "Fa_Fane & F.M."
                     self.now_playing_subtitle = clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[0]) # episode title "Delodio"
                 except:
+                    self.now_playing_artist = None
                     self.now_playing_subtitle = clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','')) # full title like "Badlcukwind plays Drowned By Locals"'
 
 
@@ -296,12 +324,15 @@ class Stream:
 
             if not info['shows']['current']:
                 self.status = 'Offline'
+                self.now_playing = None
+                self.now_playing_artist = None
             else:
                 self.status = 'Online'
                 try:
                     self.now_playing_artist = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # artist name like "Charlemagne Eagle"
                     self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split('w/')[0]) # show name like "The Do!You!!! Breakfast Show"
                 except:
+                    self.now_playing_artist = None
                     self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','')) # show name like "The Do!You!!! Breakfast Show w/ Charlemagne Eagle"
 
         elif self.name == 'Radio Quantica':
@@ -310,6 +341,7 @@ class Stream:
             self.now_playing = info['currentShow'][0]['name'] # show name like "NIGHT MOVES"
             try:
                 self.now_playing_subtitle = info['current']['name'] # track name if provided
+                self.now_playing_subtitle = None
             except: 
                 pass
 
@@ -362,6 +394,9 @@ class Stream:
                         self.now_playing_description_long = clean_text(description_lines[0]) # long desc 
                         self.additional_info = clean_text(description_lines[-1]) # genre list like "World, Jazz, Afrobeats, Electronic"
                         
+                        self.insta_link = None
+                        self.bandcamp_link = None
+                        self.soundcloud_link = None
                         for l in description_lines[1:-1]:
                             l = clean_text(l)
                             if 'instagram.' in l.lower():
@@ -371,6 +406,9 @@ class Stream:
                             elif 'soundcloud.' in l.lower():
                                 self.soundcloud_link = l   
                     except:
+                        self.now_playing_description = None
+                        self.now_playing_description_long = None
+                        self.additional_info = None
                         pass
 
         elif self.name == 'Internet Public Radio':
@@ -392,6 +430,8 @@ class Stream:
                         self.now_playing_description = clean_text(program['programDescription'])[:44] + '...' # series description like "The Trump administration has been dismantlin..."
                         self.now_playing_description_long = clean_text(program['programDescription']) # full series description
                     except:
+                        self.now_playing_description = None
+                        self.now_playing_description_long = None
                         pass
 
         elif self.name == 'We Are Various':
@@ -404,6 +444,7 @@ class Stream:
             info = requests.get(self.info_link).json()
             if not info['shows']['current']:
                 self.status = 'Offline'
+                self.now_playing = None
             else:
                 self.status = 'Online'
                 self.now_playing = info['shows']['current']['name'] # simple show title
@@ -423,7 +464,7 @@ class Stream:
             self.now_playing = show['program_name'] # concatenation of host names show name
             self.now_playing_additional_info = show['program_tags'] # genre list
             self.show_logo = show['program_image_uri'] # show logo if provided
-
+            self.now_playing_subtitle = None
             if song['play_type'] == 'trackplay':
                 self.now_playing_subtitle = f"{song['song']} by {song['artist']}" # last played song and artist
         
@@ -470,21 +511,53 @@ class Stream:
                     try:
                         self.additional_info = ', '.join([i['title'] for i in i['parentShow'][0]['genreTag']])
                     except:
+                        self.additional_info = None
                         pass
                     try:
                         self.now_playing_description_long = i['parentShow'][0]['extract']
                         self.now_playing_description = i['parentShow'][0]['extract'][:44] + '...'
                     except:
+                        self.now_playing_description_long = None
+                        self.now_playing_description = None
                         pass
                     try:
                         self.show_logo = f"https://img.imageboss.me/rinse-fm/cover:smart/600x600/{i['featuredImage'][0]['filename']}"
                     except:
+                        self.show_logo = None
                         pass
 
         elif self.name == 'Radio Sygma':
             info = requests.get(self.info_link).json()
             self.now_playing = info['tracks']['current']['metadata']['track_title']
 
+        
+        # finally, try to guess the song playing
+        try:
+            with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
+                temp_path = tmp.name
+            cmd = [
+                'ffmpeg',
+                '-y',
+                '-i', self.stream_link,
+                '-t', '10',
+                '-c:a', 'libmp3lame',
+                temp_path
+            ]
+            subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            print(temp_path)
+            result = await shazam.recognize(temp_path)
+            try:
+                track_id = result['matches'][0]['id']
+                about_track = await shazam.track_about(track_id=track_id)
+                serialized = Serialize.track(data=about_track)
+                title = serialized.title
+                artist = serialized.subtitle
+                link = serialized.apple_music_url
+                self.shazam_guess = f"{title} by {artist}"  
+            except:
+                pass
+        except:
+            pass
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)

@@ -107,7 +107,7 @@
     "Internet Public Radio": {
         "about": "Internet Public Radio is an independent cultural platform and radio station curated by local and international DJs, musicians and visual artists.",
         "bandcampLink": null,
-        "infoLink": "https://c11.radioboss.fm/w/nowplayinginfo?u=270&1744737649518",
+        "infoLink": "https://c11.radioboss.fm/w/nowplayinginfo",
         "instaLink": null,
         "lastUpdated": "2025-04-25 16:01:37.835636+00:00",
         "location": "Guadalajara",
@@ -123,7 +123,7 @@
         "showLogo": null,
         "soundcloudLink": null,
         "status": "Online",
-        "streamLink": "https://c11.radioboss.fm:18270/stream?_ic2=1744737620752"
+        "streamLink": "https://c11.radioboss.fm:18270/stream"
     },
     "KEXP": {
         "about": "KEXP is an international community of music lovers and music makers, and a nonprofit organization fostering relationship and community building through broadcast, online, and in-person music experiences.",
@@ -165,7 +165,7 @@
         "showLogo": null,
         "soundcloudLink": null,
         "status": "Online",
-        "streamLink": "https://das-edge11-live365-dal03.cdnstream.com/a49833/playlist.m3u8?listenerId=342ba3a8e8e2929e9ca9c422d487bf3c&aw_0_1st.playerid=esPlayer&aw_0_1st.skey=1745126858&us_privacy=1YN"
+        "streamLink": "https://das-edge11-live365-dal03.cdnstream.com/a49833/playlist.m3u8"
     },
     "KQED": {
         "about": "KQED serves the people of Northern California with a community-supported alternative to commercial media.",
@@ -312,7 +312,7 @@
         "showLogo": null,
         "soundcloudLink": "https://soundcloud.com/takuhxmusic",
         "status": "Online",
-        "streamLink": "https://sea-prod-catalyst-0.lp-playback.studio/hls/video+85c28sa2o8wppm58/0_1/index.m3u8?tkn=dAvba6VvdyAFTqOauDG09y"
+        "streamLink": "https://sea-prod-catalyst-0.lp-playback.studio/hls/video+85c28sa2o8wppm58/0_1/index.m3u8"
     },
     "Voices Radio": {
         "about": "Previously a nomadic club series called Ossia that threw parties up and down the country over the last decade, headlined by the likes of Leon Vynehall, Chaos In The CBD, and Shanti Celeste, we rebranded as Voices in 2020 as a platform to tackle social issues through panels and events. Having released a series of podcasts over lockdown, it was a natural next step to start an online radio station, further spotlighting the community work of the network of organisers we'd met through our conversations.",
@@ -396,7 +396,7 @@
         "showLogo": null,
         "soundcloudLink": null,
         "status": "Online",
-        "streamLink": "https://somafm.com/live.pls"
+        "streamLink": "https://ice2.somafm.com/live-128-mp3"
     },
     "SF 10-33": {
         "about": "Ambient music mixed with the sounds of San Francisco public safety radio traffic.",
@@ -417,7 +417,7 @@
         "showLogo": null,
         "soundcloudLink": null,
         "status": "Online",
-        "streamLink": "https://somafm.com/sf1033.pls"
+        "streamLink": "https://ice2.somafm.com/sf1033-128-mp3"
     },
     "SWU FM": {
         "about": "Tasked with celebrating Bristol's music culture on air, SWU FM took to the airwaves on 87.7FM for 27 days in May 2016. These historic sets from the pilot broadcast shaped the station and paved the way for SWU to secure a permanent space on the dial (103.7FM) in 2020.",
