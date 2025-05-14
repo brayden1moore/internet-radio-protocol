@@ -531,7 +531,7 @@ class Stream:
             info = requests.get(self.info_link).json()
             self.now_playing = info['tracks']['current']['metadata']['track_title']
 
-        
+    async def guess_shazam(self):
         # finally, try to guess the song playing
         shazam = Shazam()
         try:
@@ -572,12 +572,13 @@ if __name__ == '__main__':
 
         error_lines = []
 
-        def process_stream(kv):
+        async def process_stream(kv):
             name, value = kv
             stream = Stream(from_dict=value)
 
             try:
                 stream.update()
+                await stream.guess_shazam()
                 updated_dict = stream.to_dict()
                 if value != updated_dict:
                     stream.set_last_updated()
