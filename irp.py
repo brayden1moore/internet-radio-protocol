@@ -554,10 +554,12 @@ class Stream:
                 artist = serialized.subtitle
                 link = serialized.apple_music_url
                 self.shazam_guess = f"{title} by {artist}"  
-            except:
-                pass
-        except:
-            pass
+            except Exception:
+                print(f"[shazam parse error] {self.stream_link}")
+                traceback.print_exc()
+        except Exception:
+            print(f"[shazam exec error] {self.stream_link}")
+            traceback.print_exc()
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
