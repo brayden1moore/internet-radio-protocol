@@ -79,21 +79,21 @@ def write_main_page(streams):
         '',
         ", ".join(k for k, v in streams.items()) + '.',
         '',
-        'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden@scudhouse.com">brayden@scudhouse.com</a>.',
+        'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:bmo@scudhouse.com">bmo@scudhouse.com</a>.',
         '', '',
         '<br>'.join([f'''<div id="{k}" style="align-items: center; display: flex;">
             <img width="110px" height="110px" style="margin-right:10px; border: 1px solid black; cursor: pointer;" 
                 src="{v["logo"]}" onclick="toggleAudio('{k}')" />
             <div style="font-size:10pt;"> 
                 <a target="_blank" href="{v['mainLink']}">{k}</a><br>Now Playing: {to_one_line(v)}<br>Track ID: {v.get('shazamGuess')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: <span class="last-updated" data-utc="{v['lastUpdated']}">{v['lastUpdated']}</span><br>
-                <audio id="{k}-audio" style="width:40px;" src="{v["streamLink"]}"></audio>
+                <audio id="{k}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
             </div>
         </div>''' for k, v in streams.items()]),
         '',
         '</body></html>',
         '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>',
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
-        "<script>function toggleAudio(id){document.querySelectorAll('audio').forEach(a=>{a.pause();a.parentElement.parentElement.style.backgroundColor='white'});let audio=document.getElementById(`${id}-audio`);let div=document.getElementById(id);audio.play();div.style.backgroundColor='yellow';}</script>",
+        "<script>function toggleAudio(id){document.querySelectorAll('audio').forEach(a=>{a.pause(); a.src=''; a.parentElement.parentElement.style.backgroundColor='white'});let audio=document.getElementById(`${id}-audio`);let div=document.getElementById(id); audio.src=audio.dataset.src; audio.play();div.style.backgroundColor='yellow';}</script>",
         "<script>document.querySelectorAll('.last-updated').forEach(el => {const utcStr = el.dataset.utc;if (utcStr) {const date = new Date(utcStr);if (!isNaN(date)) {el.textContent = date.toLocaleString();}}});</script>"]
     )
     with open('index.html', 'w') as f:
