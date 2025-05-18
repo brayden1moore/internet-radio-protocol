@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="now-playing" content="">
+    <title>title</title>
+</head>
+<body style="background-color: black; display: flex; align-items: center; justify-content: center; height: 100vh;">
+    <audio controls autoplay="true" id="audio-element"></audio>
+</body>
+<script>
+
+const streams = [
+  {
+    url: "https://wnyu-archives.s3.amazonaws.com/archives/ae7d6c418a9eea79558ee42da5c991bd.mp3",
+    duration: 3607.8497959183674,
+    title: "Monotonic on WNYU 2023-07-28"
+  },
+  {
+    url: "https://wnyu-archives.s3.amazonaws.com/archives/616d57acf0b2cb579e003d82f57757fa.mp3",
+    duration: 3606.5959183673467,
+    title: "Monotonic on WNYU 2023-05-03"
+  },
+  {
+    url: "https://wnyu-archives.s3.amazonaws.com/archives/c84b4ad532b9bc0ab13d3a4393b2f871.mp3",
+    duration: 3607.092244897959,
+    title: "Monotonic on WNYU 2023-04-19"
+  },
+  {
+    url: "https://wnyu-archives.s3.amazonaws.com/archives/d930146f7a957b0b7c5f0ea71891afd8.mp3",
+    duration: 3606.6220408163267,
+    title: "Monotonic on WNYU 2023-04-05"
+  },
+  {
+    url: "https://wnyu-archives.s3.amazonaws.com/archives/444d2e9162eec491af726490e8a01d78.mp3",
+    duration: 3608.137142857143,
+    title: "Monotonic on WNYU 2023-05-25"
+  },
+  {
+    url: "https://wnyu-archives.s3.amazonaws.com/archives/b71e7663bfff2e457a21ca75cc232da2.mp3",
+    duration: 3606.8832653061227,
+    title: "Monotonic on WNYU 2023-03-08"
+  },
+  {
+    url: "https://wnyu-archives.s3.amazonaws.com/archives/603bd78075cfb47c0725a5351857240f.mp3",
+    duration: 3606.6220408163267,
+    title: "Monotonic on WNYU 2023-03-29"
+  },
+  {
+    url: "https://wnyu-archives.s3.amazonaws.com/archives/1b0488c1c6e159bdef0726d515096def.mp3",
+    duration: 3607.353469387755,
+    title: "Monotonic on WNYU 2023-06-08"
+  },
+  {
+    url: "https://wnyu-archives.s3.amazonaws.com/archives/cda030b3acaaa91ef1902f5c62c82c74.mp3",
+    duration: 3607.353469387755,
+    title: "Monotonic on WNYU 2023-05-10"
+  }
+];
+
+function seedRandom(seed) {
+  let s = seed % 2147483647;
+  if (s <= 0) s += 2147483646;
+  return () => {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+function shuffleWithSeed(array, rng) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function generateDigitStream(length, seed, repeat = 10) {
+  const base = Array.from({ length }, (_, i) => i);
+  const rng = seedRandom(seed);
+  let result = '';
+
+  while (result.length < length * repeat) {
+    const shuffled = shuffleWithSeed(base, rng);
+    result += shuffled.join('');
+  }
+
+  return result.slice(0, length * repeat);
+}
+
+const seed = 1234;
+const fromDate = new Date(2025, 4, 18, 16, 0, 0); 
+const order = generateDigitStream(streams.length, seed);
+const t = (Date.now() - fromDate.getTime()) / 1000;
+const totalDur = order.split('').reduce((sum, char) => sum + streams[Number(char)].duration, 0);
+const wrappedT = t % totalDur;
+
+let cumulative = 0;
+let currentIndex = 0;
+let offsetInStream = 0;
+
+for (const char of order) {
+  const index = Number(char);
+  const duration = streams[index].duration;
+
+  if (cumulative + duration > wrappedT) {
+    offsetInStream = wrappedT - cumulative;
+    currentIndex = index;
+    break;
+  }
+
+  cumulative += duration;
+}
+
+const audio = document.getElementById('audio-element');
+const stream = streams[currentIndex];
+
+audio.src = stream.url;
+audio.addEventListener('loadedmetadata', () => {
+  audio.currentTime = offsetInStream;
+  audio.play();
+});
+
+document.querySelector('meta[name="now-playing"]')?.setAttribute('content', stream.title);
+document.title = stream.title;
+
+</script>
+</html>
