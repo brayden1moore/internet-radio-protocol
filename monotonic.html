@@ -5,8 +5,11 @@
     <meta name="now-playing" content="">
     <title>title</title>
 </head>
-<body style="background-color: black; display: flex; align-items: center; justify-content: center; height: 100vh;">
-<video autoplay controls playsinline id="audio-element" type="audio/mpeg"></video>
+<body style="background-color: black; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+  <div id="live-label" style="color: white; font-family: monospace; font-size: 1.2em; margin-bottom: 10px;">
+    Live Broadcast
+  </div>
+  <video autoplay controls playsinline id="audio-element" type="audio/mpeg"></video>
 </body>
 <script>
 
