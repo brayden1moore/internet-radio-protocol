@@ -6,7 +6,7 @@
     <title>title</title>
 </head>
 <body style="background-color: black; display: flex; align-items: center; justify-content: center; height: 100vh;">
-<video autoplay controls id="audio-element" type="audio/mpeg" style="width: 300px;"></video>
+<video autoplay controls playsinline id="audio-element" type="audio/mpeg"></video>
 </body>
 <script>
 
@@ -58,67 +58,65 @@ const streams = [
   }
 ];
 
+// --- Seeded Shuffle Utilities ---
 function seedRandom(seed) {
   let s = seed % 2147483647;
   if (s <= 0) s += 2147483646;
-  return () => {
-    s = (s * 16807) % 2147483647;
-    return (s - 1) / 2147483646;
-  };
+  return () => (s = (s * 16807) % 2147483647, (s - 1) / 2147483646);
 }
 
-function shuffleWithSeed(array, rng) {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
+function shuffleArray(array, rng) {
+  const result = [...array];
+  for (let i = result.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+    [result[i], result[j]] = [result[j], result[i]];
   }
-  return arr;
+  return result;
 }
 
 function generateDigitStream(length, seed, repeat = 10) {
-  const base = Array.from({ length }, (_, i) => i);
   const rng = seedRandom(seed);
-  let result = '';
+  const base = Array.from({ length }, (_, i) => i);
+  let stream = '';
 
-  while (result.length < length * repeat) {
-    const shuffled = shuffleWithSeed(base, rng);
-    result += shuffled.join('');
+  while (stream.length < length * repeat) {
+    stream += shuffleArray(base, rng).join('');
   }
 
-  return result.slice(0, length * repeat);
+  return stream.slice(0, length * repeat);
 }
 
+// --- Time & Stream Selection ---
 const seed = 1234;
-const fromDate = new Date(2025, 4, 18, 16, 0, 0); 
+const fromDate = new Date(2025, 4, 18, 16, 0, 0);
+const tElapsed = (Date.now() - fromDate.getTime()) / 1000;
+
 const order = generateDigitStream(streams.length, seed);
-const t = (Date.now() - fromDate.getTime()) / 1000;
-const totalDur = order.split('').reduce((sum, char) => sum + streams[Number(char)].duration, 0);
-const wrappedT = t % totalDur;
+const totalDuration = order.split('').reduce((sum, d) => sum + streams[+d].duration, 0);
+const timeInLoop = tElapsed % totalDuration;
 
-let cumulative = 0;
 let currentIndex = 0;
-let offsetInStream = 0;
+let offset = 0;
+let accumulated = 0;
 
-for (const char of order) {
-  const index = Number(char);
-  const duration = streams[index].duration;
-
-  if (cumulative + duration > wrappedT) {
-    offsetInStream = wrappedT - cumulative;
-    currentIndex = index;
+for (const digit of order) {
+  const i = +digit;
+  const dur = streams[i].duration;
+  if (accumulated + dur > timeInLoop) {
+    currentIndex = i;
+    offset = timeInLoop - accumulated;
     break;
   }
-
-  cumulative += duration;
+  accumulated += dur;
 }
 
-const audio = document.getElementById('audio-element');
+// --- Audio Setup ---
 const stream = streams[currentIndex];
+const audio = document.getElementById('audio-element');
 
 audio.src = stream.url;
 audio.addEventListener('loadedmetadata', () => {
-  audio.currentTime = offsetInStream;
+  audio.currentTime = offset;
 });
 
 document.querySelector('meta[name="now-playing"]')?.setAttribute('content', stream.title);
