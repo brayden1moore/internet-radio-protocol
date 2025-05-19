@@ -6,8 +6,7 @@
     <title>title</title>
 </head>
 <body style="background-color: black; display: flex; align-items: center; justify-content: center; height: 100vh;">
-<video autoplay controls playsinline type="audio/mpeg"></video>
-<iframe id="audio-element" width="560" height="315" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<video autoplay controls playsinline id="audio-element" type="audio/mpeg"></video>
 </body>
 <script>
 
@@ -119,15 +118,11 @@ video.src = stream.url;
 document.title = stream.title;
 
 video.addEventListener('loadedmetadata', () => {
-  if (video.seekable.length && offset < video.seekable.end(0)) {
-    video.currentTime = offset;
-
-    video.addEventListener('seeked', () => {
-      video.play().catch(err => {
-        console.warn("Playback blocked after seek:", err);
-      });
-    }, { once: true });
-  }
+  setTimeout(() => {
+    if (video.duration > offset) {
+      video.currentTime = offset;
+    }
+  }, 1000);
 });
 
 document.querySelector('meta[name="now-playing"]')?.setAttribute('content', stream.title);
