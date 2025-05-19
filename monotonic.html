@@ -119,10 +119,12 @@ document.title = stream.title;
 
 video.addEventListener('loadedmetadata', () => {
   setTimeout(() => {
-    if (video.duration > offset) {
+    if (video.seekable.length && offset < video.seekable.end(0)) {
       video.currentTime = offset;
+    } else {
+      console.warn('Offset not seekable yet:', offset);
     }
-  }, 1000);
+  }, 500); // bump this up if needed
 });
 
 document.querySelector('meta[name="now-playing"]')?.setAttribute('content', stream.title);
