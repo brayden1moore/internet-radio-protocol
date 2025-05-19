@@ -123,6 +123,25 @@ video.addEventListener('loadedmetadata', () => {
 document.querySelector('meta[name="now-playing"]')?.setAttribute('content', stream.title);
 document.title = stream.title;
 
+function getCurrentPlaybackState() {
+  const tElapsed = (Date.now() - fromDate.getTime()) / 1000;
+  const timeInLoop = tElapsed % totalDuration;
+
+  let cumulative = 0;
+  for (const digit of order) {
+    const i = +digit;
+    const duration = streams[i].duration;
+    if (cumulative + duration > timeInLoop) {
+      return {
+        index: i,
+        offset: timeInLoop - cumulative
+      };
+    }
+    cumulative += duration;
+  }
+  return { index: 0, offset: 0 };
+}
+
 setInterval(() => {
   const { index, offset } = getCurrentPlaybackState();
 
