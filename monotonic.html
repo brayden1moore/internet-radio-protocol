@@ -118,11 +118,9 @@ video.src = stream.url;
 document.title = stream.title;
 
 video.addEventListener('loadedmetadata', () => {
-  setTimeout(() => {
     if (video.duration > offset) {
       video.currentTime = offset;
     }
-  }, 1000);
 });
 
 document.querySelector('meta[name="now-playing"]')?.setAttribute('content', stream.title);
