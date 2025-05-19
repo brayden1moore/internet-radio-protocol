@@ -86,9 +86,9 @@ function generateDigitStream(length, seed, repeat = 10) {
   return stream.slice(0, length * repeat);
 }
 
-// --- Time & Stream Selection ---
+// --- Time + Stream Calculation ---
 const seed = 1234;
-const fromDate = new Date(2025, 4, 18, 16, 0, 0);
+const fromDate = new Date(2025, 4, 18, 16, 0, 0); // May 18, 2025, 4PM PT
 const tElapsed = (Date.now() - fromDate.getTime()) / 1000;
 
 const order = generateDigitStream(streams.length, seed);
@@ -97,26 +97,33 @@ const timeInLoop = tElapsed % totalDuration;
 
 let currentIndex = 0;
 let offset = 0;
-let accumulated = 0;
+let cumulative = 0;
 
 for (const digit of order) {
   const i = +digit;
-  const dur = streams[i].duration;
-  if (accumulated + dur > timeInLoop) {
+  const duration = streams[i].duration;
+  if (cumulative + duration > timeInLoop) {
     currentIndex = i;
-    offset = timeInLoop - accumulated;
+    offset = timeInLoop - cumulative;
     break;
   }
-  accumulated += dur;
+  cumulative += duration;
 }
 
-// --- Audio Setup ---
+// --- Video Playback Setup ---
 const stream = streams[currentIndex];
-const audio = document.getElementById('audio-element');
+const video = document.getElementById('audio-element'); // it's a <video> now
 
-audio.src = stream.url;
-audio.addEventListener('loadedmetadata', () => {
-  audio.currentTime = offset;
+video.src = stream.url;
+document.title = stream.title;
+
+video.addEventListener('loadedmetadata', () => {
+  // Delay ensures autoplay kicks in first before seeking
+  setTimeout(() => {
+    if (video.duration > offset) {
+      video.currentTime = offset;
+    }
+  }, 300);
 });
 
 document.querySelector('meta[name="now-playing"]')?.setAttribute('content', stream.title);
