@@ -119,7 +119,6 @@ const stream = streams[currentIndex];
 audio.src = stream.url;
 audio.addEventListener('loadedmetadata', () => {
   audio.currentTime = offsetInStream;
-  audio.play();
 });
 
 document.querySelector('meta[name="now-playing"]')?.setAttribute('content', stream.title);
