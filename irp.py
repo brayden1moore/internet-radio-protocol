@@ -528,6 +528,15 @@ class Stream:
             info = requests.get(self.info_link).json()
             self.now_playing = info['tracks']['current']['metadata']['track_title']
 
+        elif self.name == 'LYL Radio':
+            info = requests.post('https://api.lyl.live/graphql',data={"variables":{},"query":"{\n  onair {\n    title\n    hls\n    __typename\n  }\n}\n"})
+            try:
+                self.now_playing = info.json()['data']['onair']['title']
+                self.status = 'Online'
+            except:
+                self.now_playing = None
+                self.status = 'Offline'
+
     async def guess_shazam(self):
         self.shazam_guess = "Unknown"
         shazam = Shazam()

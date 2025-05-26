@@ -547,5 +547,27 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://azuracast.wearevarious.com/listen/we_are_various/live.mp3"
+    },
+    "LYL Radio": {
+        "about": "Broadcasting live from Unité Centrale in Lyon, La Tour Orion in Paris, Brasserie Atlas in Brussels and Les Ateliers de la Ville in Marseille.",
+        "bandcampLink": null,
+        "infoLink": "https://api.lyl.live/graphql",
+        "instaLink": null,
+        "lastUpdated": "2025-05-14 20:43:06.419330+00:00",
+        "location": "Lyon",
+        "logo": "https://internetradioprotocol.org/logos/lyl.jpg",
+        "mainLink": "https://lyl.live",
+        "name": "LYL Radio",
+        "nowPlaying": "",
+        "nowPlayingAdditionalInfo": "",
+        "nowPlayingArtist": null,
+        "nowPlayingDescription": null,
+        "nowPlayingDescriptionLong": null,
+        "nowPlayingSubtitle": null,
+        "shazamGuess": "Unknown",
+        "showLogo": null,
+        "soundcloudLink": null,
+        "status": "Online",
+        "streamLink": "https://radio.lyl.live/hls/live.m3u8"
     }
 }
