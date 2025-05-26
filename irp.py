@@ -451,8 +451,7 @@ class Stream:
         elif self.name == 'KJazz':
             webpage = requests.get(self.main_link).text
             soup = BeautifulSoup(webpage, 'html.parser')
-            self.now_playing_artist = soup.find_all("a", "noDec")[1].get_text() # host name
-            self.now_playing = self.now_playing
+            self.now_playing = soup.find_all("a", "noDec")[1].get_text() # host name
 
         elif self.name == 'KEXP':
             now_utc = datetime.now(timezone.utc)
