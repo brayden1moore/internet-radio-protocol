@@ -249,7 +249,10 @@ class Stream:
                 if datetime.fromisoformat(program['startTime']) < now:
                     self.now_playing = program['eventTitleMeta']['eventName'] # show name like "Dying Songs"
                     self.now_playing_artist = program['eventTitleMeta']['artist'] if program['eventTitleMeta']['artist'] else "Dublab" # artist name if provided lile "Jimmy Tamborello"
-                    self.show_logo = program['attachments'] or self.show_logo # show-specific logo if provided
+                    try:
+                        self.show_logo = program['attachments'] or self.show_logo # show-specific logo if provided
+                    except:
+                        self.show_logo = None
                     try:
                         self.now_playing_description_long = clean_text(program['description']) # long description of the show
                         self.now_playing_description = clean_text(program['description'])[:44] + '...'  # abridged description
