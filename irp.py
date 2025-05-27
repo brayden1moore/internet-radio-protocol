@@ -164,7 +164,7 @@ class Stream:
             self.soundcloud_link = from_dict.get('soundcloudLink')
             self.last_updated = from_dict.get('lastUpdated')
             self.shazam_guess = from_dict.get('shazamGuess')
-            self.one_liner = from_dict.get('oneLiner')
+            self.one_liner = self.one_liner
 
     def to_dict(self):
         return {
