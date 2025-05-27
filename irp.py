@@ -540,7 +540,7 @@ class Stream:
                 self.status = 'Offline'
         
         elif self.name == 'Skylab Radio':
-            info = requests.get(self.info_link).json()
+            info = requests.get(self.info_link).json()['current']
 
             self.now_playing = info['metadata']['track_title']
             self.now_playing_artist = info['metadata']['artist_name']
@@ -549,7 +549,7 @@ class Stream:
                 self.show_logo = info['metadata']['artwork_url']
             except:
                 self.show_logo = None
-                
+
 
     async def guess_shazam(self):
         self.shazam_guess = "Unknown"
