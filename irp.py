@@ -557,8 +557,13 @@ class Stream:
             with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
                 temp_path = tmp.name
             subprocess.run([
-                'ffmpeg', '-y', '-i', self.stream_link,
-                '-t', '5', '-c:a', 'libmp3lame', temp_path
+                'ffmpeg', '-y',
+                '-i', self.stream_link,
+                '-t', '5',
+                '-f', 'wav',
+                '-ar', '44100',
+                '-ac', '1',
+                temp_path
             ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
             loop = asyncio.new_event_loop()
