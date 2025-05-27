@@ -597,8 +597,11 @@ async def process_stream(name, value):
     stream = Stream(from_dict=value)
     try:
         stream.update()
-        loop = asyncio.get_event_loop()
-        await loop.run_in_executor(None, stream.guess_shazam)
+
+        stream.shazam_guess = None
+        #loop = asyncio.get_event_loop()
+        #await loop.run_in_executor(None, stream.guess_shazam)
+
         stream.update_one_line()
         updated_dict = stream.to_dict()
         stream.set_last_updated()
