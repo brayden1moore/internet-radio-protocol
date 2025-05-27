@@ -57,18 +57,6 @@ def get_latest_time(streams):
     latest_et = latest_utc.astimezone(EST)
     return latest_utc, latest_pt, latest_et, latest_name
 
-def to_one_line(stream):
-    parts = [
-        stream['nowPlaying'],
-        stream['nowPlayingArtist'],
-        stream['nowPlayingSubtitle'],
-        stream['nowPlayingAdditionalInfo'],
-    ]
-    return_string = " - ".join(p for p in parts if p)
-    if len(return_string) > 100:
-        return_string = return_string[:100] + '...'
-    return return_string
-
 def write_main_page(streams):
     latest_time_utc, latest_time_pt, latest_time_et, latest_name = get_latest_time(streams)
     main_text = '<br>'.join(
@@ -143,7 +131,17 @@ class Stream:
         self.soundcloud_link = None
         self.last_updated = None
         self.shazam_guess = None
-        self.one_liner = to_one_line(self)
+
+        parts = [
+            self.now_playing,
+            self.now_playing_artist,
+            self.now_playing_subtitle,
+            self.now_playing_additional_info,
+        ]
+        return_string = " - ".join(p for p in parts if p)
+        if len(return_string) > 100:
+            return_string = return_string[:100] + '...'
+        self.one_liner = return_string
 
         if isinstance(from_dict, dict):
             self.name = from_dict.get('name')
@@ -166,7 +164,7 @@ class Stream:
             self.soundcloud_link = from_dict.get('soundcloudLink')
             self.last_updated = from_dict.get('lastUpdated')
             self.shazam_guess = from_dict.get('shazamGuess')
-            self.one_liner = to_one_line(self)
+            self.one_liner = from_dict.get('oneLiner')
 
     def to_dict(self):
         return {
@@ -576,6 +574,19 @@ class Stream:
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
+
+    def to_one_line(self):
+        parts = [
+            self.now_playing,
+            self.now_playing_artist,
+            self.now_playing_subtitle,
+            self.now_playing_additional_info,
+        ]
+        return_string = " - ".join(p for p in parts if p)
+        if len(return_string) > 100:
+            return_string = return_string[:100] + '...'
+
+        return return_string
 
 async def process_stream(name, value):
     stream = Stream(from_dict=value)
