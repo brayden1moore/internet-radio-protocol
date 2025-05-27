@@ -73,7 +73,7 @@ def write_main_page(streams):
             <img width="110px" height="110px" style="margin-right:10px; border: 1px solid black; cursor: pointer;" 
                 src="{v["logo"]}" onclick="toggleAudio('{k}')" />
             <div style="font-size:10pt;"> 
-                <a target="_blank" href="{v['mainLink']}">{k}</a><br>Now Playing: {to_one_line(v)}<br>Track ID: {v.get('shazamGuess')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: <span class="last-updated" data-utc="{v['lastUpdated']}">{v['lastUpdated']}</span><br>
+                <a target="_blank" href="{v['mainLink']}">{k}</a><br>Now Playing: {v.get('oneLiner')}<br>Track ID: {v.get('shazamGuess')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: <span class="last-updated" data-utc="{v['lastUpdated']}">{v['lastUpdated']}</span><br>
                 <audio id="{k}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
             </div>
         </div>''' for k, v in streams.items()]),
