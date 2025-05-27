@@ -584,12 +584,8 @@ async def process_stream(name, value):
         await stream.guess_shazam()
         stream.update_one_line()
         updated_dict = stream.to_dict()
-        if value != updated_dict:
-            stream.set_last_updated()
-            return (stream.name, stream.to_dict())
-        else:
-            print('No update for', stream.name)
-            return (stream.name, value)
+        stream.set_last_updated()
+        return (stream.name, stream.to_dict())
     except Exception:
         error = f'[{datetime.now()}] Error updating {stream.name}:\n{traceback.format_exc()}\n'
         return (stream.name, value, error)
