@@ -131,6 +131,7 @@ class Stream:
         self.soundcloud_link = None
         self.last_updated = None
         self.shazam_guess = None
+        self.one_liner = None
 
         if isinstance(from_dict, dict):
             self.name = from_dict.get('name')
