@@ -132,17 +132,6 @@ class Stream:
         self.last_updated = None
         self.shazam_guess = None
 
-        parts = [
-            self.now_playing,
-            self.now_playing_artist,
-            self.now_playing_subtitle,
-            self.additional_info,
-        ]
-        return_string = " - ".join(p for p in parts if p)
-        if len(return_string) > 100:
-            return_string = return_string[:100] + '...'
-        self.one_liner = return_string
-
         if isinstance(from_dict, dict):
             self.name = from_dict.get('name')
             self.logo = from_dict.get('logo')
@@ -575,24 +564,24 @@ class Stream:
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
-    def to_one_line(self):
+    def update_one_line(self):
         parts = [
             self.now_playing,
             self.now_playing_artist,
             self.now_playing_subtitle,
-            self.now_playing_additional_info,
+            self.additional_info,
         ]
         return_string = " - ".join(p for p in parts if p)
         if len(return_string) > 100:
             return_string = return_string[:100] + '...'
-
-        return return_string
+        self.one_liner = return_string
 
 async def process_stream(name, value):
     stream = Stream(from_dict=value)
     try:
         stream.update()
         await stream.guess_shazam()
+        stream.update_one_line()
         updated_dict = stream.to_dict()
         if value != updated_dict:
             stream.set_last_updated()
