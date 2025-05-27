@@ -559,7 +559,7 @@ class Stream:
             subprocess.run([
                 'ffmpeg', '-y',
                 '-i', self.stream_link,
-                '-t', '5',
+                '-t', '3',
                 '-f', 'wav',
                 '-ar', '44100',
                 '-ac', '1',
