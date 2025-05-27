@@ -143,6 +143,7 @@ class Stream:
         self.soundcloud_link = None
         self.last_updated = None
         self.shazam_guess = None
+        self.one_liner = to_one_line(self)
 
         if isinstance(from_dict, dict):
             self.name = from_dict.get('name')
@@ -165,6 +166,7 @@ class Stream:
             self.soundcloud_link = from_dict.get('soundcloudLink')
             self.last_updated = from_dict.get('lastUpdated')
             self.shazam_guess = from_dict.get('shazamGuess')
+            self.one_liner = to_one_line(self)
 
     def to_dict(self):
         return {
@@ -192,7 +194,9 @@ class Stream:
 
             "shazamGuess": self.shazam_guess,
 
-            "lastUpdated": self.last_updated
+            "lastUpdated": self.last_updated,
+
+            "oneLiner":self.one_liner
         }
     
     def update(self):
