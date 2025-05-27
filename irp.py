@@ -551,35 +551,26 @@ class Stream:
                 self.show_logo = None
 
 
-    async def guess_shazam(self):
+    def guess_shazam(self):
         self.shazam_guess = "Unknown"
-        shazam = Shazam()
         try:
             with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
                 temp_path = tmp.name
-            cmd = [
-                '/usr/bin/ffmpeg',
-                '-y',
-                '-i', self.stream_link,
-                '-t', '5',
-                '-c:a', 'libmp3lame',
-                temp_path
-            ]
-            subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            result = await shazam.recognize(temp_path)
-            try:
-                track_id = result['matches'][0]['id']
-                about_track = await shazam.track_about(track_id=track_id)
-                serialized = Serialize.track(data=about_track)
-                title = serialized.title
-                artist = serialized.subtitle
-                link = serialized.apple_music_url
-                self.shazam_guess = f"{title} by {artist}"  
-            except Exception:
-                print(f"[shazam parse error] {self.stream_link}")
-                traceback.print_exc()
+            subprocess.run([
+                'ffmpeg', '-y', '-i', self.stream_link,
+                '-t', '5', '-c:a', 'libmp3lame', temp_path
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            result = loop.run_until_complete(Shazam().recognize(temp_path))
+
+            track_id = result['matches'][0]['id']
+            about_track = loop.run_until_complete(Shazam().track_about(track_id=track_id))
+            serialized = Serialize.track(data=about_track)
+            self.shazam_guess = f"{serialized.title} by {serialized.subtitle}"
         except Exception:
-            print(f"[shazam exec error] {self.stream_link}")
+            print(f"[shazam error] {self.stream_link}")
             traceback.print_exc()
 
     def set_last_updated(self):
@@ -601,7 +592,8 @@ async def process_stream(name, value):
     stream = Stream(from_dict=value)
     try:
         stream.update()
-        await stream.guess_shazam()
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, stream.guess_shazam)
         stream.update_one_line()
         updated_dict = stream.to_dict()
         stream.set_last_updated()
