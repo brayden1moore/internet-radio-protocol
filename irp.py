@@ -195,15 +195,21 @@ class Stream:
             info = requests.get(self.info_link).json()
             self.now_playing = None
             self.now_playing_artist = None
-            self.status = "Online" if info['online'] == True else "Offline"
             try: 
                 self.now_playing_artist = info['name'].strip().split(' w/ ')[1] # artist name like "Vitamin 1K (Benji)"
                 self.now_playing = info['name'].strip().split(' w/ ')[0] # show name like "Super Supplement"
             except:
                 self.now_playing = info.get('name', self.name).strip() # full title like "Super Supplement w/ Vitamin 1k (Benji)"
                 self.now_playing_artist = None
-            self.additional_info = f"{info['listeners']} listener{s(info['listeners'])}" # listener count 
-
+            try:
+                self.additional_info = f"{info['listeners']} listener{s(info['listeners'])}" # listener count 
+            except:
+                self.additional_info = None
+            self.status = "Online" if info['online'] == True else "Offline"
+            if self.status == "Offline":
+                self.now_playing = None
+                self.now_playing_artist = None
+                self.additional_info = None
 
         elif 'NTS' in self.name:
             info = requests.get(self.info_link).json()
