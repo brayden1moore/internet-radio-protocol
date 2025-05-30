@@ -663,7 +663,7 @@
         "shazamGuess": null,
         "showLogo": null,
         "soundcloudLink": "https://soundcloud.com/hkcrlive",
-        "status": "Offline",
+        "status": "Online",
         "streamLink": "https://stream.hkcr.live/hls/stream_high.m3u8"
     }
 }
