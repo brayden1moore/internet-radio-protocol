@@ -642,5 +642,28 @@
         "soundcloudLink": "https://soundcloud.com/sutrofm",
         "status": "Offline",
         "streamLink": "https://media.evenings.co/s/7Lo66BLQe"
+    },
+    "HKCR": {
+        "about": "Founded in 2016, Hong Kong Community Radio (HKCR) is a community platform and independent radio station comprised of creators, musicians, artists and fans with aims to broadcast and support independent works as an open platform.",
+        "bandcampLink": null,
+        "infoLink": null,
+        "instaLink": "https://www.instagram.com/hkcronline/",
+        "lastUpdated": "2025-05-29 22:48:19.809118+00:00",
+        "location": "Hong Kong",
+        "logo": "https://internetradioprotocol.org/logos/hkcr.jpg",
+        "mainLink": "https://hkcr.live",
+        "name": "HKCR",
+        "nowPlaying": "RE-STREAM",
+        "nowPlayingAdditionalInfo": "Hong Kong Community Radio",
+        "nowPlayingArtist": null,
+        "nowPlayingDescription": null,
+        "nowPlayingDescriptionLong": null,
+        "nowPlayingSubtitle": null,
+        "oneLiner": null,
+        "shazamGuess": null,
+        "showLogo": null,
+        "soundcloudLink": "https://soundcloud.com/hkcrlive",
+        "status": "Offline",
+        "streamLink": "https://stream.hkcr.live/hls/stream_high.m3u8"
     }
 }
