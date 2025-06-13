@@ -447,7 +447,7 @@ class Stream:
                 self.now_playing = None
             else:
                 self.status = 'Online'
-                self.now_playing = info['tracks']['current']['track_title'] # simple show title
+                self.now_playing = info['tracks']['current']['metadata']['track_title'] # simple show title
             
         elif self.name == 'KJazz':
             webpage = requests.get(self.main_link).text
