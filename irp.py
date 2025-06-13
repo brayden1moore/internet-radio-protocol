@@ -442,12 +442,12 @@ class Stream:
 
         elif self.name == 'Lower Grand Radio':
             info = requests.get(self.info_link).json()
-            if not info['shows']['current']:
+            if not info['tracks']['current']:
                 self.status = 'Offline'
                 self.now_playing = None
             else:
                 self.status = 'Online'
-                self.now_playing = info['shows']['current']['name'] # simple show title
+                self.now_playing = info['tracks']['current']['track_title'] # simple show title
             
         elif self.name == 'KJazz':
             webpage = requests.get(self.main_link).text
