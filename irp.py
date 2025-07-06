@@ -555,6 +555,16 @@ class Stream:
                 self.show_logo = info['metadata']['artwork_url']
             except:
                 self.show_logo = None
+        
+        elif self.name == 'BFF.fm':
+            info = requests.get(self.info_link).json()
+            self.now_playing = info['program']
+            self.now_playing_artist = info['presenter']
+            self.now_playing_subtitle = info['title'] + ' by ' + info['artist']
+            try:
+                self.show_logo = info['program_image'].replace('\/','/')
+            except:
+                self.show_logo = None
 
 
     def guess_shazam(self):
