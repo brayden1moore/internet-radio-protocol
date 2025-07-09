@@ -688,5 +688,28 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://stream.bff.fm/1/mp3.mp3"
+    },
+    "Fault Radio": {
+        "about": "Fault Radio is the ultimate advocate for our local community, acting as a dynamic bridge between the Bay Area’s thriving arts scene and the broader music world.",
+        "bandcampLink": null,
+        "infoLink": "c_ae5b8ddc2f204a590949fe5d0ebad0f03d13e4a31bd6c3d9c3f8e06140a0deb9@group.calendar.google.com",
+        "instaLink": "https://www.instagram.com/its_fault_radio/",
+        "lastUpdated": "2025-05-29 22:48:19.809118+00:00",
+        "location": "San Francisco",
+        "logo": "https://internetradioprotocol.org/logos/fault.png",
+        "mainLink": "https://www.faultradio.com",
+        "name": "Fault Radio",
+        "nowPlaying": null,
+        "nowPlayingAdditionalInfo": null,
+        "nowPlayingArtist": null,
+        "nowPlayingDescription": null,
+        "nowPlayingDescriptionLong": null,
+        "nowPlayingSubtitle": null,
+        "oneLiner": null,
+        "shazamGuess": null,
+        "showLogo": null,
+        "soundcloudLink": "https://soundcloud.com/faultradio",
+        "status": "Online",
+        "streamLink": "https://player.twitch.tv/?autoplay=1&channel=Faultradio"
     }
 }

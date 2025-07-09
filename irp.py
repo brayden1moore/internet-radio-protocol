@@ -566,6 +566,34 @@ class Stream:
             except:
                 self.show_logo = None
 
+        elif self.name == 'Fault Radio':
+            api_key = 'AIzaSyDU4MOqK7SVbAtcXtaICsIZVyECmLWK6Dw'
+            calendar_id = self.info_link
+            time_minus_1hr = (datetime.now(timezone.utc) - timedelta(hours=1)).replace(microsecond=0).isoformat()
+
+            url = f'https://www.googleapis.com/calendar/v3/calendars/{calendar_id}/events'
+            params = {
+                'key': api_key,
+                'maxResults': 3,
+                'singleEvents': True,
+                'orderBy': 'startTime',
+                'timeMin': time_minus_1hr
+            }
+
+            response = requests.get(url, params=params)
+            data = response.json()
+
+            for event in data.get('items', []):
+                end_time_str = event['end']['dateTime']
+                end_time = datetime.fromisoformat(end_time_str)
+
+                start_time_str = event['start']['dateTime']
+                start_time = datetime.fromisoformat(start_time_str)
+                now_utc = datetime.now(timezone.utc)
+
+                if end_time > now_utc > start_time:
+                    self.now_playing = event['summary']
+
 
     def guess_shazam(self):
         self.shazam_guess = "Unknown"
