@@ -191,7 +191,7 @@ class Stream:
         if "internetradioprotocol.org" not in self.logo:
             self.logo = "https://internetradioprotocol.org/" + self.logo
 
-        if self.name in ['HydeFM','SutroFM']:
+        if self.name in ['HydeFM','SutroFM','Lower Grand Radio']:
             info = requests.get(self.info_link).json()
             self.now_playing = None
             self.now_playing_artist = None
@@ -440,15 +440,6 @@ class Stream:
             self.additional_info = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
             self.now_playing = info['now_playing']['song']['title'] # simple show title
 
-        elif self.name == 'Lower Grand Radio':
-            info = requests.get(self.info_link).json()
-            if not info['tracks']['current']:
-                self.status = 'Offline'
-                self.now_playing = None
-            else:
-                self.status = 'Online'
-                self.now_playing = info['tracks']['current']['metadata']['track_title'] # simple show title
-            
         elif self.name == 'KJazz':
             webpage = requests.get(self.main_link).text
             soup = BeautifulSoup(webpage, 'html.parser')

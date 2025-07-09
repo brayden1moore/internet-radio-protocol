@@ -278,7 +278,7 @@
     "Lower Grand Radio": {
         "about": "If you would like to do a show, please contact us at lowergrandshows@gmail.com All ideas are welcome. Please include any links or information about a type of show you are thinking. Please be specific!",
         "bandcampLink": null,
-        "infoLink": "https://lowergrandradio.airtime.pro/api/live-info-v2",
+        "infoLink": "https://api.evenings.co/v1/streams/lower-grand-radio/public",
         "instaLink": null,
         "lastUpdated": "2025-05-29 22:48:14.095749+00:00",
         "location": "Oakland",
@@ -296,7 +296,7 @@
         "showLogo": null,
         "soundcloudLink": null,
         "status": "Online",
-        "streamLink": "https://lowergrandradio.out.airtime.pro:8000/lowergrandradio_a"
+        "streamLink": "https://media.evenings.co/s/g1b9EBY39"
     },
     "NTS 1": {
         "about": "NTS provides curious minds with a home for music discovery. Built by music lovers, for music lovers.",
