@@ -583,6 +583,7 @@ class Stream:
             response = requests.get(url, params=params)
             data = response.json()
 
+            self.status = 'Offline'
             for event in data.get('items', []):
                 end_time_str = event['end']['dateTime']
                 end_time = datetime.fromisoformat(end_time_str)
@@ -592,6 +593,7 @@ class Stream:
                 now_utc = datetime.now(timezone.utc)
 
                 if end_time > now_utc > start_time:
+                    self.status = 'Online'
                     self.now_playing = event['summary']
 
 
