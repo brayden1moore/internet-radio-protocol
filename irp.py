@@ -76,7 +76,7 @@ def write_main_page(streams):
             online.append(v)
 
     now = datetime.now(ZoneInfo('America/Los_Angeles'))
-    formatted_time = now.strftime('%a %b %d %I:%M %p (Pacific)')
+    formatted_time = now.strftime('%a %b %d %I:%M %p (pacific)')
     
     random.shuffle(online)
     streams =  online + rerun + offline
