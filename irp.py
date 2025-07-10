@@ -105,7 +105,7 @@ def write_main_page(streams):
         '</body></html>',
         '''<style>
         .a-logo {width:80px; height:80px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
-        body {background-color: #FFFF00;}
+        body {background-color: #FFFF00; font-size: 10pt;}
         .the-header {font-family: "Arial Black"; font-size: 18pt; line-height:1em; margin-bottom:20px;}
         .a-station {font-family: "Andale Mono"; font-size:8pt; white-space: nowrap; flex-shrink: 0;}
         @font-face {font-family: "Arial Black";src: url("assets/Arial Black.ttf") format("truetype");}
@@ -114,7 +114,7 @@ def write_main_page(streams):
         @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}
         @keyframes pulse{0%{background:#ffffff}50%{background:#ddd}100%{background:##ffffff}}.pulsing{animation:pulse 1s infinite}
         .streams-container {display: grid; grid-template-columns: 1fr; gap: 20px; margin-top:30px; margin-bottom:30px;}
-        @media (orientation: landscape) {.streams-container {grid-template-columns: 1fr 1fr;} .the-header{font-size: 24pt;} .a-station {font-size:10pt;} .a-logo {width:110px; height:110px;}
+        @media (orientation: landscape) body{font-size: 12pt;} {.streams-container {grid-template-columns: 1fr 1fr;} .the-header{font-size: 24pt;} .a-station {font-size:10pt;} .a-logo {width:110px; height:110px;}
         </style>''',
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
         "<script>function toggleAudio(id){let a=document.getElementById(`${id}-audio`),d=document.getElementById(id),isPlaying=d.style.backgroundColor==='yellow';document.querySelectorAll('audio').forEach(e=>{e.pause();e.removeAttribute('src');e.load();e.parentElement.parentElement.style.backgroundColor='white';e.parentElement.parentElement.classList.remove('pulsing')});if(!isPlaying){a.src=a.dataset.src;a.load();d.classList.add('pulsing');a.play().then(()=>{d.classList.remove('pulsing');d.style.backgroundColor='yellow'}).catch(e=>{console.error(e);d.classList.remove('pulsing')})}}</script>",        
