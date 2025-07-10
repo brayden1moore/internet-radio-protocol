@@ -97,7 +97,7 @@ def write_main_page(streams):
         ", ".join(list(streams[0].keys())) + '.',
         '',
         '<br><br>If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden@braydenmoore.com">brayden@braydenmoore.com</a>. Also, check out the tuner I am making (I know it is still very crude!):<br><br>',
-        '<a href="https://www.instagram.com/p/DLncaEiys_R/" target="_blank"><img height=350px style="border: 1px solid black;" src="assets/tuner.jpg"></a>',
+        '<a href="https://www.instagram.com/p/DLncaEiys_R/" target="_blank"><img height=250px style="border: 1px solid black;" src="assets/tuner.jpg"></a>',
         '</body></html>',
         '<style>body {background-color: #FFFF00;}</style>',
         '<style>.the-header {font-family: "Arial Black"; font-size: 24pt; line-height:1em; margin-bottom:20px;}</style>',
