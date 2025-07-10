@@ -75,7 +75,7 @@ def write_main_page(streams):
 
     main_text = '<br>'.join(
         ['<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title><link rel="icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="shortcut icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="apple-touch-icon" href="assets/icon-dark.png"></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img src="assets/scudtower.png" alt="Loading" height="150px" width="auto"></div>',
-        'LISTEN TO COMMUNITY RADIO EVERY DAY.',        
+        '<span class="the-header">LISTEN TO COMMUNITY RADIO EVERY DAY</span>',        
         'The Internet Radio Protocol is a simple, standardized hub of information with direct streaming links and real-time now playing data for an ever-expanding list of internet radio stations.',
         '',
         'You can access the information in JSON format at <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>, and you can listen directly by clicking a show\'s logo below. The list currently includes:',
@@ -95,6 +95,7 @@ def write_main_page(streams):
         '',
         '</body></html>',
         '<style>body {background-color: #FFFF00;}</style>',
+        '<style>.the-header {font-family: "Arial Black";}</style>',
         '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>',
         '<style>@keyframes pulse{0%{background:#fff}50%{background:#ddd}100%{background:#fff}}.pulsing{animation:pulse 1s infinite}</style>',
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
