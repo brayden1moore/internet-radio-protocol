@@ -75,8 +75,9 @@ def write_main_page(streams):
 
     main_text = ''.join(
         ['<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title><link rel="icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="shortcut icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="apple-touch-icon" href="assets/icon-dark.png"></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img src="assets/scudradiocenter.gif" alt="Loading" height="300px" width="auto"></div>',
-        '<div class="the-header">INTERNETO<br>RADIO<br>PROTOCOL</div>',        
-        'The Internet Radio Protocol is a simple, standardized hub of information with direct streaming links and real-time now playing data for an ever-expanding list of internet radio stations.',
+        '<div class="the-header">LISTEN TO<br>COMMUNITY RADIO<br>EVERY DAY</div>', 
+        'I love internet radio and I want to put it all in one place, like radio-radio.',
+        'The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of internet radio stations.',
         '', '',
         '<div class="streams-container">',
         ''.join([f'''<div id="{v['name']}" style="background-color: #000000; color:#FFFFFF; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
