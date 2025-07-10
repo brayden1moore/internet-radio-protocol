@@ -74,7 +74,7 @@ def write_main_page(streams):
     streams = online + rerun + offline
 
     main_text = '<br>'.join(
-        ['<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title><link rel="icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="shortcut icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="apple-touch-icon" href="assets/icon-dark.png"></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img src="assets/scudtower.png" alt="Loading" height="150px" width="auto"></div>',
+        ['<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title><link rel="icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="shortcut icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="apple-touch-icon" href="assets/icon-dark.png"></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img src="assets/scudradiocenter.gif" alt="Loading" height="150px" width="auto"></div>',
         '<div class="the-header">LISTEN TO<br>COMMUNITY RADIO<br>EVERY DAY</div>',        
         'The Internet Radio Protocol is a simple, standardized hub of information with direct streaming links and real-time now playing data for an ever-expanding list of internet radio stations.',
         '', '',
