@@ -95,7 +95,7 @@ def write_main_page(streams):
         '',
         '</body></html>',
         '<style>body {background-color: #FFFF00;}</style>',
-        '<style>.the-header {font-family: "Arial Black"; font-size: 18pt;}</style>',
+        '<style>.the-header {font-family: "Arial Black"; font-size: 18pt; line-height:1em; margin-bottom:20px;}</style>',
         '<style> @font-face {font-family: "Arial Black";src: url("assets/Arial Black.ttf") format("truetype");}</style>',
         '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>',
         '<style>@keyframes pulse{0%{background:#fff}50%{background:#ddd}100%{background:#fff}}.pulsing{animation:pulse 1s infinite}</style>',
