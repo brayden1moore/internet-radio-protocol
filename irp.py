@@ -658,7 +658,11 @@ class Stream:
             info = requests.get(self.info_link).json()
             self.now_playing = info['title']
             self.now_playing_artist = info['artist']
-
+        
+        elif self.name == 'Mutant Radio':
+            info = requests.get(self.info_link).json()
+            self.now_playing = info['title']
+            
 
     def guess_shazam(self):
         self.shazam_guess = "Unknown"
