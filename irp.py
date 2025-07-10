@@ -81,7 +81,7 @@ def write_main_page(streams):
         "I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of internet radio stations.",
         '', '',
         '<div class="streams-container">',
-        ''.join([f'''<div id="{v['name']}" onclick="toggleAudio('{v['name']}')" style="background-color: #FFFFFF; color:#000000; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
+        ''.join([f'''<div id="{v['name']}" onclick="toggleAudio('{v['name']}')" style="cursor:pointer; background-color: #FFFFFF; color:#000000; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
         <img width="110px" height="110px" style="margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;"
         src="{v["logo"]}"  />
         <div style="font-size:10pt; white-space: nowrap; flex-shrink: 0;">
