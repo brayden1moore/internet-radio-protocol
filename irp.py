@@ -74,7 +74,7 @@ def write_main_page(streams):
     streams = online + rerun + offline
 
     main_text = '<br>'.join(
-        ['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Internet Radio Protocol</title><link rel="icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="shortcut icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="apple-touch-icon" href="assets/icon-dark.png"></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img src="assets/scudradio.png" alt="Loading" height="100px" width="auto" style="margin-left:-25px;"></div>',
+        ['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Internet Radio Protocol</title><link rel="icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="shortcut icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="apple-touch-icon" href="assets/icon-dark.png"></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img src="assets/scudradio.png" alt="Loading" height="150px" width="auto" style="margin-left:-25px;"></div>',
         'The Internet Radio Protocol is a simple, standardized hub of information with direct streaming links and real-time now playing data for an ever-expanding list of internet radio stations.',
         '',
         'You can access the information in JSON format at <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>, and you can listen directly by clicking a show\'s logo below. The list currently includes:',
@@ -83,7 +83,7 @@ def write_main_page(streams):
         '',
         'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:bmo@scudhouse.com">bmo@scudhouse.com</a> or <a href="mailto:brayden@braydenmoore.com">brayden@braydenmoore.com</a>.',
         '', '',
-        '<br>'.join([f'''<div id="{v['name']}" style="align-items: center; display: flex;">
+        '<br>'.join([f'''<div id="{v['name']}" style="border:1px solid black; align-items: center; display: flex;">
             <img width="110px" height="110px" style="margin-right:10px; border: 1px solid black; cursor: pointer;" 
                 src="{v["logo"]}" onclick="toggleAudio('{v['name']}')" />
             <div style="font-size:10pt;"> 
