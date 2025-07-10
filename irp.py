@@ -86,7 +86,7 @@ def write_main_page(streams):
         '<br>'.join([f'''<div id="{v['name']}" style="background-color: #FFFFFF; height: 110px; padding: 10px; overflow-x:scroll; border:1px solid black; align-items: center; display: flex;">
             <img width="110px" height="110px" style="margin-right:10px; border: 1px solid black; cursor: pointer;" 
                 src="{v["logo"]}" onclick="toggleAudio('{v['name']}')" />
-            <div style="font-size:10pt; width:100%;"> 
+            <div style="font-size:10pt; width:fit-content;"> 
                 <a target="_blank" href="{v['mainLink']}">{v['name']}</a><br>Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: <span class="last-updated" data-utc="{v['lastUpdated']}">{v['lastUpdated']}</span><br>
                 <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
             </div>
