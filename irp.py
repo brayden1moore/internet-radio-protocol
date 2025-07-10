@@ -83,7 +83,7 @@ def write_main_page(streams):
         '', '',
         '<div class="streams-container">',
         ''.join([f'''<div id="{v['name']}" style="background-color: #FFFF00; color:#000000; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
-        <img width="110px" height="110px" style="margin-right:10px; border: 1px solid white; cursor: pointer; flex-shrink: 0;"
+        <img width="110px" height="110px" style="margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;"
         src="{v["logo"]}" onclick="toggleAudio('{v['name']}')" />
         <div style="font-size:10pt; white-space: nowrap; flex-shrink: 0;">
         <a target="_blank" href="{v['mainLink']}">{v['name']}</a><br><br>Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: <span class="last-updated" data-utc="{v['lastUpdated']}">{v['lastUpdated']}</span><br>
