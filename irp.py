@@ -83,11 +83,11 @@ def write_main_page(streams):
         <link rel="manifest" href="/favicon/site.webmanifest" />''',
         '<meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img id="main-logo" src="assets/scudradiocenter.gif" alt="Loading" width="auto"></div>',
         '<div class="the-header">THE<br>INTERNET RADIO<br>PROTOCOL</div>', 
-        "I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of internet radio stations. Click to tune in. Follow me on instagram, <a target='_blank' href='https://www.instagram.com/scudhouse/'>@scudhouse</a>.",
+        "I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of stations. Click a logo to tune in. Follow me on instagram, <a target='_blank' href='https://www.instagram.com/scudhouse/'>@scudhouse</a>.",
         '', '',
         '<div class="streams-container">',
-        ''.join([f'''<div class="a-station-container" id="{v['name']}" onclick="toggleAudio('{v['name']}')">
-        <img class="a-logo" src="{v["logo"]}"  />
+        ''.join([f'''<div class="a-station-container" id="{v['name']}"">
+        <img class="a-logo"  onclick="toggleAudio('{v['name']}') src="{v["logo"]}"  />
         <div class="a-station">
         <a target="_blank" href="{v['mainLink']}">{v['name']}</a><br><br>Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: <span class="last-updated" data-utc="{v['lastUpdated']}">{v['lastUpdated']}</span><br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
