@@ -59,8 +59,19 @@ def get_latest_time(streams):
 
 def write_main_page(streams):
     latest_time_utc, latest_time_pt, latest_time_et, latest_name = get_latest_time(streams)
-
     
+    offline = []
+    online = []
+    rerun = []
+    for k, v in streams.items():
+        if v['status'] == 'Offline':
+            offline.append(v)
+        elif any(i in v.get('oneLiner').lower() for i in ['re-run','re-wav','restream','playlist']):
+            rerun.append(v)
+        else:
+            online.append(v)
+
+    streams = online + rerun + offline
     
     main_text = '<br>'.join(
         ['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Internet Radio Protocol</title><link rel="icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="shortcut icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="apple-touch-icon" href="assets/icon-dark.png"></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img src="assets/scudradio.png" alt="Loading" height="150px" width="auto" style="margin-left:-25px;"></div>',
@@ -68,18 +79,18 @@ def write_main_page(streams):
         '',
         'You can access the information in JSON format at <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>, and you can listen directly by clicking a show\'s logo below. The list currently includes:',
         '',
-        ", ".join(k for k, v in streams.items()) + '.',
+        ", ".join(v['name'] for v in streams) + '.',
         '',
         'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:bmo@scudhouse.com">bmo@scudhouse.com</a> or <a href="mailto:brayden@braydenmoore.com">brayden@braydenmoore.com</a>.',
         '', '',
-        '<br>'.join([f'''<div id="{k}" style="align-items: center; display: flex;">
+        '<br>'.join([f'''<div id="{v['name']}" style="align-items: center; display: flex;">
             <img width="110px" height="110px" style="margin-right:10px; border: 1px solid black; cursor: pointer;" 
-                src="{v["logo"]}" onclick="toggleAudio('{k}')" />
+                src="{v["logo"]}" onclick="toggleAudio('{v['name']}')" />
             <div style="font-size:10pt;"> 
-                <a target="_blank" href="{v['mainLink']}">{k}</a><br>Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: <span class="last-updated" data-utc="{v['lastUpdated']}">{v['lastUpdated']}</span><br>
-                <audio id="{k}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
+                <a target="_blank" href="{v['mainLink']}">{v['name']}</a><br>Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: <span class="last-updated" data-utc="{v['lastUpdated']}">{v['lastUpdated']}</span><br>
+                <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
             </div>
-        </div>''' for k, v in streams.items()]),
+        </div>''' for v in streams]),
         '',
         '</body></html>',
         '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>',
