@@ -742,5 +742,29 @@
         "status": "Online",
         "streamLink": "https://azuracast.wearevarious.com/listen/we_are_various/live.mp3",
         "supportLink": "https://wearevarious.com/support-wav/"
+    },
+    "Radio Alhara": {
+        "about": "Palestine community radio.",
+        "bandcampLink": null,
+        "infoLink": "https://proxy.radiojar.com/api/stations/78cxy6wkxtzuv/now_playing/",
+        "instaLink": null,
+        "lastUpdated": "2025-07-10 19:16:05.850419+00:00",
+        "location": "Palestine",
+        "logo": "https://internetradioprotocol.org/logos/alhara.png",
+        "mainLink": "https://www.radioalhara.net",
+        "name": "Radio Alhara",
+        "nowPlaying": null,
+        "nowPlayingAdditionalInfo": null,
+        "nowPlayingArtist": null,
+        "nowPlayingDescription": null,
+        "nowPlayingDescriptionLong": null,
+        "nowPlayingSubtitle": null,
+        "oneLiner": null,
+        "shazamGuess": null,
+        "showLogo": null,
+        "soundcloudLink": null,
+        "status": "Online",
+        "streamLink": "https://stream.radiojar.com/78cxy6wkxtzuv",
+        "supportLink": "https://www.paypal.com/GB/fundraiser/charity/4920746"
     }
 }

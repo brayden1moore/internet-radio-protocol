@@ -647,6 +647,11 @@ class Stream:
                 if end_time > now_utc > start_time:
                     self.status = 'Online'
                     self.now_playing = event['summary']
+        
+        elif self.name == 'Radio Alhara':
+            info = requests.get(self.info_link)
+            self.now_playing = info['title']
+            self.now_playing_artist = info['artist']
 
 
     def guess_shazam(self):
