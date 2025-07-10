@@ -98,7 +98,7 @@ def write_main_page(streams):
         '<style>.the-header {font-family: "Arial Black"; font-size: 24pt; line-height:1em; margin-bottom:20px;}</style>',
         '<style> @font-face {font-family: "Arial Black";src: url("assets/Arial Black.ttf") format("truetype");}</style>',
         '<style>a {background-color: #000000; color:#FFFFFF}</style>',
-        '<style>a {background-color: #FFFFFF; color:#000000}</style>',
+        '<style>a:hover {background-color: #FFFFFF; color:#000000}</style>',
         '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>',
         '<style>@keyframes pulse{0%{background:#fff}50%{background:#ddd}100%{background:#fff}}.pulsing{animation:pulse 1s infinite}</style>',
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
