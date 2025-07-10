@@ -651,7 +651,7 @@ class Stream:
                     self.now_playing = event['summary']
         
         elif self.name == 'Radio Alhara':
-            info = requests.get(self.info_link)
+            info = requests.get(self.info_link).json()
             self.now_playing = info['title']
             self.now_playing_artist = info['artist']
 
