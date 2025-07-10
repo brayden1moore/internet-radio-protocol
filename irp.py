@@ -86,7 +86,7 @@ def write_main_page(streams):
         "I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of internet radio stations. Click to tune in. Follow me on instagram, <a target='_blank' href='https://www.instagram.com/scudhouse/'>@scudhouse</a>.",
         '', '',
         '<div class="streams-container">',
-        ''.join([f'''<div id="{v['name']}" onclick="toggleAudio('{v['name']}')" style="cursor:pointer; background-color: #FFFFFF; color:#000000; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
+        ''.join([f'''<div class="a-station-container" id="{v['name']}" onclick="toggleAudio('{v['name']}')">
         <img class="a-logo" src="{v["logo"]}"  />
         <div class="a-station">
         <a target="_blank" href="{v['mainLink']}">{v['name']}</a><br><br>Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: <span class="last-updated" data-utc="{v['lastUpdated']}">{v['lastUpdated']}</span><br>
@@ -104,6 +104,7 @@ def write_main_page(streams):
         '<a href="https://www.instagram.com/p/DLncaEiys_R/" target="_blank"><img height=250px style="border: 1px solid black;" src="assets/tuner.jpg"></a>',
         '</body></html>',
         '''<style>
+        .a-station-container {cursor:pointer; background-color: #FFFFFF; color:#000000; height: 80px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
         .a-logo {width:80px; height:80px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
         body {background-color: #FFFF00; font-size: 10pt;}
         .the-header {font-family: "Arial Black"; font-size: 18pt; line-height:1em; margin-bottom:20px;}
@@ -114,7 +115,7 @@ def write_main_page(streams):
         @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}
         @keyframes pulse{0%{background:#ffffff}50%{background:#ddd}100%{background:##ffffff}}.pulsing{animation:pulse 1s infinite}
         .streams-container {display: grid; grid-template-columns: 1fr; gap: 20px; margin-top:30px; margin-bottom:30px;}
-        @media (orientation: landscape) {body{font-size: 12pt;} .streams-container {grid-template-columns: 1fr 1fr;} .the-header{font-size: 24pt;} .a-station {font-size:10pt;} .a-logo {width:110px; height:110px;} a {font-size: 12pt}}
+        @media (orientation: landscape) {body{font-size: 12pt;} .a-station-container {height:100px;} .streams-container {grid-template-columns: 1fr 1fr;} .the-header{font-size: 24pt;} .a-station {font-size:10pt;} .a-logo {width:110px; height:110px;} a {font-size: 12pt}}
         </style>''',
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
         "<script>function toggleAudio(id){let a=document.getElementById(`${id}-audio`),d=document.getElementById(id),isPlaying=d.style.backgroundColor==='yellow';document.querySelectorAll('audio').forEach(e=>{e.pause();e.removeAttribute('src');e.load();e.parentElement.parentElement.style.backgroundColor='white';e.parentElement.parentElement.classList.remove('pulsing')});if(!isPlaying){a.src=a.dataset.src;a.load();d.classList.add('pulsing');a.play().then(()=>{d.classList.remove('pulsing');d.style.backgroundColor='yellow'}).catch(e=>{console.error(e);d.classList.remove('pulsing')})}}</script>",        
