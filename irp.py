@@ -77,12 +77,6 @@ def write_main_page(streams):
         ['<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title><link rel="icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="shortcut icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="apple-touch-icon" href="assets/icon-dark.png"></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img src="assets/scudtower.png" alt="Loading" height="150px" width="auto"></div>',
         '<div class="the-header">LISTEN TO<br>COMMUNITY RADIO<br>EVERY DAY</div>',        
         'The Internet Radio Protocol is a simple, standardized hub of information with direct streaming links and real-time now playing data for an ever-expanding list of internet radio stations.',
-        '',
-        'You can access the information in JSON format at <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>, and you can listen directly by clicking a show\'s logo below. The list currently includes:',
-        '',
-        ", ".join(v['name'] for v in streams) + '.',
-        '',
-        'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden@braydenmoore.com">brayden@braydenmoore.com</a>.',
         '', '',
         '<br>'.join([f'''<div id="{v['name']}" style="background-color: #000000; color:#FFFFFF; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
         <img width="110px" height="110px" style="margin-right:10px; border: 1px solid white; cursor: pointer; flex-shrink: 0;"
@@ -93,6 +87,12 @@ def write_main_page(streams):
         </div>
         </div>''' for v in streams]),
         '',
+        '',
+        'You can access the information in JSON format at <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>, and you can listen directly by clicking a show\'s logo below. The list currently includes:',
+        '',
+        ", ".join(v['name'] for v in streams) + '.',
+        '',
+        'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden@braydenmoore.com">brayden@braydenmoore.com</a>.',
         '</body></html>',
         '<style>body {background-color: #FFFF00;}</style>',
         '<style>.the-header {font-family: "Arial Black"; font-size: 24pt; line-height:1em; margin-bottom:20px;}</style>',
