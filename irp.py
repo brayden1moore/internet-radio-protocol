@@ -82,7 +82,7 @@ def write_main_page(streams):
         'The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of internet radio stations.',
         '', '',
         '<div class="streams-container">',
-        ''.join([f'''<div id="{v['name']}" style="background-color: #000000; color:#FFFFFF; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
+        ''.join([f'''<div id="{v['name']}" style="background-color: #FFFF00; color:#000000; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
         <img width="110px" height="110px" style="margin-right:10px; border: 1px solid white; cursor: pointer; flex-shrink: 0;"
         src="{v["logo"]}" onclick="toggleAudio('{v['name']}')" />
         <div style="font-size:10pt; white-space: nowrap; flex-shrink: 0;">
@@ -105,7 +105,7 @@ def write_main_page(streams):
         '<style>a {background-color: #000000; color:#FFFFFF; border-bottom: 1px solid white; text-decoration: none;}</style>',
         '<style>a:hover {background-color: #FFFFFF; color:#000000}</style>',
         '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>',
-        '<style>@keyframes pulse{0%{background:#fff}50%{background:#ddd}100%{background:#fff}}.pulsing{animation:pulse 1s infinite}</style>',
+        '<style>@keyframes pulse{0%{background:#ffff00}50%{background:#ddd}100%{background:##ffff00}}.pulsing{animation:pulse 1s infinite}</style>',
         '<style>.streams-container {display: grid; grid-template-columns: 1fr; gap: 20px; margin-top:30px; margin-bottom:30px;}</style>',
         '<style>@media (orientation: landscape) {.streams-container {grid-template-columns: 1fr 1fr;}}</style>',
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
