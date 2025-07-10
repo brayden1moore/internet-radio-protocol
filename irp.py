@@ -81,9 +81,9 @@ def write_main_page(streams):
         "I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of internet radio stations.",
         '', '',
         '<div class="streams-container">',
-        ''.join([f'''<div id="{v['name']}" style="background-color: #FFFFFF; color:#000000; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
+        ''.join([f'''<div id="{v['name']}" onclick="toggleAudio('{v['name']}')" style="background-color: #FFFFFF; color:#000000; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
         <img width="110px" height="110px" style="margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;"
-        src="{v["logo"]}" onclick="toggleAudio('{v['name']}')" />
+        src="{v["logo"]}"  />
         <div style="font-size:10pt; white-space: nowrap; flex-shrink: 0;">
         <a target="_blank" href="{v['mainLink']}">{v['name']}</a><br><br>Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: <span class="last-updated" data-utc="{v['lastUpdated']}">{v['lastUpdated']}</span><br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
