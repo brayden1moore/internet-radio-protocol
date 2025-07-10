@@ -90,12 +90,12 @@ def write_main_page(streams):
         <img class="a-logo"  onclick="toggleAudio('{v['name']}')" src="{v["logo"]}"  />
         <div class="a-station">
         <a class="stream-name" target="_blank" href="{v['mainLink']}">{v['name']}</a>
+        <br>Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>
         <div class="links">
             <a class="a-link" target="_blank" href="{v['streamLink']}">STREAM</a>
             <a class="a-link" target="_blank" href="{v['mainLink']}">WEBSITE</a>
             <a class="a-link" target="_blank" href="{v['infoLink']}">INFO</a>
         </div>
-        Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
         </div>
         </div>''' for v in streams]),
