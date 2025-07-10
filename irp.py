@@ -2,6 +2,7 @@ from datetime import datetime, timezone, timedelta, date
 from concurrent.futures import ThreadPoolExecutor
 from shazamio import Shazam, Serialize
 from bs4 import BeautifulSoup
+from zoneinfo import ZoneInfo
 import subprocess
 import traceback
 import requests
@@ -73,6 +74,9 @@ def write_main_page(streams):
             rerun.append(v)
         else:
             online.append(v)
+
+    now = datetime.now(ZoneInfo('America/Los_Angeles'))
+    formatted_time = now.strftime('%a %b %d %I:%M %p (Pacific)')
     
     random.shuffle(online)
     streams =  online + rerun + offline
@@ -85,7 +89,7 @@ def write_main_page(streams):
         <link rel="manifest" href="/favicon/site.webmanifest" />''',
         '<meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img id="main-logo" src="assets/scudradiocenter.gif" alt="Loading" width="auto"></div>',
         '<div class="the-header">THE<br>INTERNET RADIO<br>PROTOCOL</div>', 
-        "I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of stations. Click a logo to tune in. Support a station if you like it. And follow me on instagram, <a target='_blank' href='https://www.instagram.com/scudhouse/'>@scudhouse</a>.",
+        f"I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of stations. Click a logo to tune in. Support a station if you like it. And follow me on instagram, <a target='_blank' href='https://www.instagram.com/scudhouse/'>@scudhouse</a>. Last updated {formatted_time}.",
         '', '',
         '<div class="streams-container">',
         ''.join([f'''<div class="a-station-container" id="{v['name']}">
