@@ -97,7 +97,7 @@ def write_main_page(streams):
         ", ".join(v['name'] for v in streams) + '.',
         '',
         '<br><br>If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden@braydenmoore.com">brayden@braydenmoore.com</a>.',
-        '<br><br>Also, check out the tuner I am making:',
+        '<br><br>Also, check out the tuner I am making:<br>',
         '<img height=250px style="border: 1px solid black;" src="assets/tuner.jpg"',
         '</body></html>',
         '<style>body {background-color: #FFFF00;}</style>',
