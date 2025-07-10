@@ -111,7 +111,7 @@ def write_main_page(streams):
         '</body></html>',
         '''<style>
         .stream-name {background-color:#000000 !important; color:#FFFFFF !important}
-        .links {display:flex; margin-top: 10px; }
+        .links {display:flex; margin-top: 10px; margin-bottom: 10px;}
         .a-link {font-size: 8pt !important; margin-right: 10px;}
         #main-logo {height: 225px;}
         .a-station-container {cursor:default; background-color: #FFFFFF; color:#000000; height: 80px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
