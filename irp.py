@@ -89,7 +89,7 @@ def write_main_page(streams):
         ''.join([f'''<div class="a-station-container" id="{v['name']}">
         <img class="a-logo"  onclick="toggleAudio('{v['name']}')" src="{v["logo"]}"  />
         <div class="a-station">
-        <a target="_blank" href="{v['mainLink']}">{v['name']}</a>
+        <a class="stream-name" target="_blank" href="{v['mainLink']}">{v['name']}</a>
         <div class="links">
             <a class="a-link" target="_blank" href="{v['streamLink']}">[Direct Stream]</a>
         </div>
@@ -108,6 +108,7 @@ def write_main_page(streams):
         '<a href="https://www.instagram.com/p/DLncaEiys_R/" target="_blank"><img height=250px style="border: 1px solid black;" src="assets/tuner.jpg"></a>',
         '</body></html>',
         '''<style>
+        .stream-name {background-color:#000000 !important; color:#FFFFFF !important}
         .links {display:flex;}
         .a-link {font-size: 8pt !important;}
         #main-logo {height: 225px;}
