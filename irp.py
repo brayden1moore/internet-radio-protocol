@@ -71,8 +71,9 @@ def write_main_page(streams):
             rerun.append(v)
         else:
             online.append(v)
-
-    streams = random.shuffle(online) + rerun + offline
+    
+    random.shuffle(online)
+    streams =  online + rerun + offline
 
     main_text = ''.join(
         ['<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title><link rel="icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="shortcut icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="apple-touch-icon" href="assets/icon-dark.png"></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img src="assets/scudradiocenter.gif" alt="Loading" height="300px" width="auto"></div>',
