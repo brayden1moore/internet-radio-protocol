@@ -102,7 +102,7 @@ def write_main_page(streams):
         '<style>body {background-color: #FFFF00;}</style>',
         '<style>.the-header {font-family: "Arial Black"; font-size: 24pt; line-height:1em; margin-bottom:20px;}</style>',
         '<style> @font-face {font-family: "Arial Black";src: url("assets/Arial Black.ttf") format("truetype");}</style>',
-        '<style>a {background-color: #FFFF00; color:#000000; border-bottom: 1px solid black; text-decoration: none;}</style>',
+        '<style>a {font-size: 12pt; background-color: #FFFF00; color:#000000; border-bottom: 1px solid black; text-decoration: none;}</style>',
         '<style>a:hover {background-color: #000000; color:#FFFFFF}</style>',
         '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>',
         '<style>@keyframes pulse{0%{background:#ffff00}50%{background:#ddd}100%{background:##ffff00}}.pulsing{animation:pulse 1s infinite}</style>',
