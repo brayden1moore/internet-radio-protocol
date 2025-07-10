@@ -67,7 +67,7 @@ def write_main_page(streams):
     for k, v in streams.items():
         if v['status'] == 'Offline':
             offline.append(v)
-        elif any(i in v.get('oneLiner').lower() for i in ['re-run','re-wav','restream','playlist']):
+        elif any(i in v.get('oneLiner', 'no data').lower() for i in ['re-run','re-wav','restream','playlist']):
             rerun.append(v)
         else:
             online.append(v)
