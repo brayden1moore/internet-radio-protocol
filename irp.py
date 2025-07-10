@@ -89,7 +89,7 @@ def write_main_page(streams):
         ''.join([f'''<div id="{v['name']}" onclick="toggleAudio('{v['name']}')" style="cursor:pointer; background-color: #FFFFFF; color:#000000; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
         <img width="110px" height="110px" style="margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;"
         src="{v["logo"]}"  />
-        <div style="font-size:10pt; white-space: nowrap; flex-shrink: 0;">
+        <div class="a-station">
         <a target="_blank" href="{v['mainLink']}">{v['name']}</a><br><br>Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: <span class="last-updated" data-utc="{v['lastUpdated']}">{v['lastUpdated']}</span><br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
         </div>
@@ -105,14 +105,15 @@ def write_main_page(streams):
         '<a href="https://www.instagram.com/p/DLncaEiys_R/" target="_blank"><img height=250px style="border: 1px solid black;" src="assets/tuner.jpg"></a>',
         '</body></html>',
         '<style>body {background-color: #FFFF00;}</style>',
-        '<style>.the-header {font-family: "Arial Black"; font-size: 24pt; line-height:1em; margin-bottom:20px;}</style>',
+        '<style>.the-header {font-family: "Arial Black"; font-size: 18pt; line-height:1em; margin-bottom:20px;}</style>',
+        '<style>.a-station {font-family: "Andale Mono"; font-size:8pt; white-space: nowrap; flex-shrink: 0;}</style>',
         '<style> @font-face {font-family: "Arial Black";src: url("assets/Arial Black.ttf") format("truetype");}</style>',
         '<style>a {font-size: 12pt; color:#000000; border-bottom: 1px solid black; text-decoration: none;}</style>',
         '<style>a:hover {background-color: #000000; color:#FFFFFF}</style>',
         '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>',
         '<style>@keyframes pulse{0%{background:#ffffff}50%{background:#ddd}100%{background:##ffffff}}.pulsing{animation:pulse 1s infinite}</style>',
         '<style>.streams-container {display: grid; grid-template-columns: 1fr; gap: 20px; margin-top:30px; margin-bottom:30px;}</style>',
-        '<style>@media (orientation: landscape) {.streams-container {grid-template-columns: 1fr 1fr;}}</style>',
+        '<style>@media (orientation: landscape) {.streams-container {grid-template-columns: 1fr 1fr;} .the-header{font-size: 24pt;} .a-station {font-size:10pt;}}</style>',
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
         "<script>function toggleAudio(id){let a=document.getElementById(`${id}-audio`),d=document.getElementById(id),isPlaying=d.style.backgroundColor==='yellow';document.querySelectorAll('audio').forEach(e=>{e.pause();e.removeAttribute('src');e.load();e.parentElement.parentElement.style.backgroundColor='white';e.parentElement.parentElement.classList.remove('pulsing')});if(!isPlaying){a.src=a.dataset.src;a.load();d.classList.add('pulsing');a.play().then(()=>{d.classList.remove('pulsing');d.style.backgroundColor='yellow'}).catch(e=>{console.error(e);d.classList.remove('pulsing')})}}</script>",        
         "<script>document.querySelectorAll('.last-updated').forEach(el => {const utcStr = el.dataset.utc;if (utcStr) {const date = new Date(utcStr);if (!isNaN(date)) {el.textContent = date.toLocaleString();}}});</script>"]
