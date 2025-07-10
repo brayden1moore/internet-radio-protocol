@@ -94,6 +94,7 @@ def write_main_page(streams):
             <a class="a-link" target="_blank" href="{v['streamLink']}">STREAM</a>
             <a class="a-link" target="_blank" href="{v['mainLink']}">WEBSITE</a>
             <a class="a-link" target="_blank" href="{v['infoLink']}">INFO</a>
+            <a class="a-link" target="_blank" href="{v.get('supportLink')}">SUPPORT</a>
         </div>
         Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
@@ -187,6 +188,7 @@ class Stream:
         self.last_updated = None
         self.shazam_guess = None
         self.one_liner = None
+        self.support_link = None
 
         if isinstance(from_dict, dict):
             self.name = from_dict.get('name')
@@ -210,6 +212,7 @@ class Stream:
             self.last_updated = from_dict.get('lastUpdated')
             self.shazam_guess = from_dict.get('shazamGuess')
             self.one_liner = self.one_liner
+            self.support_link = from_dict.get('supportLink')
 
     def to_dict(self):
         return {
@@ -223,6 +226,7 @@ class Stream:
             "streamLink": self.stream_link,
             "mainLink": self.main_link,
             "showLogo": self.show_logo,
+            "supportLink": self.support_link,
 
             "nowPlaying": self.now_playing,
             "nowPlayingSubtitle": self.now_playing_subtitle,
