@@ -107,7 +107,7 @@ def write_main_page(streams):
         '',
         ", ".join(list(streams[0].keys())) + '.',
         '',
-        '<br><br>If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden@braydenmoore.com">brayden@braydenmoore.com</a> or open an issue on Github <a target="_blank" href="https://github.com/brayden1moore/internet-radio-protocol">https://github.com/brayden1moore/internet-radio-protocol</a>. Also, check out the tuner I am making (I know it is still very crude!):<br><br><br>',
+        '<br><br>If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden@braydenmoore.com">brayden@braydenmoore.com</a> or open an issue on Github <a target="_blank" href="https://github.com/brayden1moore/internet-radio-protocol">github.com/brayden1moore/internet-radio-protocol</a>. Also, check out the tuner I am making (I know it is still very crude!):<br><br><br>',
         '<a href="https://www.instagram.com/p/DLncaEiys_R/" target="_blank"><img height=250px style="border: 1px solid black;" src="assets/tuner.jpg"></a>',
         '</body></html>',
         '''<style>
