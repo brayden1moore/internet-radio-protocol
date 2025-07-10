@@ -84,7 +84,7 @@ def write_main_page(streams):
         '',
         'If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:bmo@scudhouse.com">bmo@scudhouse.com</a> or <a href="mailto:brayden@braydenmoore.com">brayden@braydenmoore.com</a>.',
         '', '',
-        '<br>'.join([f'''<div id="{v['name']}" style="background-color: #FFFFFF; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
+        '<br>'.join([f'''<div id="{v['name']}" style="background-color: #000000; color:#FFFFFF; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
         <img width="110px" height="110px" style="margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;"
         src="{v["logo"]}" onclick="toggleAudio('{v['name']}')" />
         <div style="font-size:10pt; white-space: nowrap; flex-shrink: 0;">
