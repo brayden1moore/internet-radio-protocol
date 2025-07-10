@@ -105,7 +105,7 @@ def write_main_page(streams):
         '</body></html>',
         '''<style>
         #main-logo {height: 225px;}
-        .a-station-container {cursor:pointer; background-color: #FFFFFF; color:#000000; height: 80px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
+        .a-station-container {cursor:default; background-color: #FFFFFF; color:#000000; height: 80px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
         .a-logo {width:80px; height:80px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
         body {background-color: #FFFF00; font-size: 10pt;}
         .the-header {font-family: "Arial Black"; font-size: 18pt; line-height:1em; margin-bottom:20px;}
