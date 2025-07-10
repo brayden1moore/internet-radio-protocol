@@ -91,7 +91,7 @@ def write_main_page(streams):
         <div class="a-station">
         <a class="stream-name" target="_blank" href="{v['mainLink']}">{v['name']}</a>
         <div class="links">
-            <a class="a-link" target="_blank" href="{v['streamLink']}">[Direct Stream]</a>
+            <a class="a-link" target="_blank" href="{v['streamLink']}">Direct Stream</a>
         </div>
         Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
