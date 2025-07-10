@@ -602,6 +602,7 @@ class Stream:
             data = response.json()
 
             self.status = 'Offline'
+            self.now_playing = None
             for event in data.get('items', []):
                 end_time_str = event['end']['dateTime']
                 end_time = datetime.fromisoformat(end_time_str)
