@@ -91,6 +91,9 @@ def write_main_page(streams):
         <div class="a-station">
         <a target="_blank" href="{v['mainLink']}">{v['name']}</a><br><br>Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: <span class="last-updated" data-utc="{v['lastUpdated']}">{v['lastUpdated']}</span><br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
+            <div class="links">
+                <a class="a-link" target="_blank" src="{v['streamLink']}">Direct Stream</a>
+            </div>
         </div>
         </div>''' for v in streams]),
         '</div>',
@@ -100,10 +103,11 @@ def write_main_page(streams):
         '',
         ", ".join(list(streams[0].keys())) + '.',
         '',
-        '<br><br>If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden@braydenmoore.com">brayden@braydenmoore.com</a>. Also, check out the tuner I am making (I know it is still very crude!):<br><br>',
+        '<br><br>If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden@braydenmoore.com">brayden@braydenmoore.com</a>. Also, check out the tuner I am making (I know it is still very crude!):<br><br><br>',
         '<a href="https://www.instagram.com/p/DLncaEiys_R/" target="_blank"><img height=250px style="border: 1px solid black;" src="assets/tuner.jpg"></a>',
         '</body></html>',
         '''<style>
+        .links {display:flex;}
         #main-logo {height: 225px;}
         .a-station-container {cursor:default; background-color: #FFFFFF; color:#000000; height: 80px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
         .a-logo {width:80px; height:80px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
