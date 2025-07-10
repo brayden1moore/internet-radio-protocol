@@ -119,7 +119,7 @@ def write_main_page(streams):
         @media (orientation: landscape) 
         {
         body{font-size: 12pt;} 
-        .a-station-container {height:100px;} 
+        .a-station-container {height:110px;} 
         .streams-container {grid-template-columns: 1fr 1fr;} 
         .the-header{font-size: 24pt;} .a-station {font-size:10pt;} 
         .a-logo {width:110px; height:110px;} a {font-size: 12pt}
