@@ -78,7 +78,7 @@ def write_main_page(streams):
     main_text = ''.join(
         ['<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title><link rel="icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="shortcut icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="apple-touch-icon" href="assets/icon-dark.png"></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img src="assets/scudradiocenter.gif" alt="Loading" height="300px" width="auto"></div>',
         '<div class="the-header">LISTEN TO<br>COMMUNITY RADIO<br>EVERY DAY</div>', 
-        "I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of internet radio stations.",
+        "I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of internet radio stations. Click to tune in.",
         '', '',
         '<div class="streams-container">',
         ''.join([f'''<div id="{v['name']}" onclick="toggleAudio('{v['name']}')" style="cursor:pointer; background-color: #FFFFFF; color:#000000; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
@@ -92,7 +92,7 @@ def write_main_page(streams):
         '</div>',
         '',
         '',
-        'You can access the information in JSON format at <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>, and you can listen directly by clicking a show\'s logo below. The list currently includes:<br><br>',
+        'You can access the information in JSON format at <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>. The list currently includes:<br><br>',
         '',
         ", ".join(v['name'] for v in streams) + '.',
         '',
