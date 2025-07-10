@@ -78,8 +78,7 @@ def write_main_page(streams):
     main_text = ''.join(
         ['<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title><link rel="icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="shortcut icon" href="assets/icon-dark.ico" type="image/x-icon"><link rel="apple-touch-icon" href="assets/icon-dark.png"></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img src="assets/scudradiocenter.gif" alt="Loading" height="300px" width="auto"></div>',
         '<div class="the-header">LISTEN TO<br>COMMUNITY RADIO<br>EVERY DAY</div>', 
-        'I love internet radio and I want it all in one place, like radio-radio.<br><br>',
-        'The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of internet radio stations.',
+        'I love internet radio and I want it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of internet radio stations.',
         '', '',
         '<div class="streams-container">',
         ''.join([f'''<div id="{v['name']}" style="background-color: #FFFFFF; color:#000000; height: 110px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;">
@@ -103,9 +102,9 @@ def write_main_page(streams):
         '<style>.the-header {font-family: "Arial Black"; font-size: 24pt; line-height:1em; margin-bottom:20px;}</style>',
         '<style> @font-face {font-family: "Arial Black";src: url("assets/Arial Black.ttf") format("truetype");}</style>',
         '<style>a {font-size: 12pt; background-color: #FFFF00; color:#000000; border-bottom: 1px solid black; text-decoration: none;}</style>',
-        '<style>a:hover {background-color: #000000; color:#FFFFFF}</style>',
+        '<style>a:hover {color:#FFFFFF}</style>',
         '<style> @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}</style>',
-        '<style>@keyframes pulse{0%{background:#ffff00}50%{background:#ddd}100%{background:##ffff00}}.pulsing{animation:pulse 1s infinite}</style>',
+        '<style>@keyframes pulse{0%{background:#ffffff}50%{background:#ddd}100%{background:##ffffff}}.pulsing{animation:pulse 1s infinite}</style>',
         '<style>.streams-container {display: grid; grid-template-columns: 1fr; gap: 20px; margin-top:30px; margin-bottom:30px;}</style>',
         '<style>@media (orientation: landscape) {.streams-container {grid-template-columns: 1fr 1fr;}}</style>',
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
