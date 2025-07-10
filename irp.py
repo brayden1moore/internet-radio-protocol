@@ -89,11 +89,11 @@ def write_main_page(streams):
         ''.join([f'''<div class="a-station-container" id="{v['name']}">
         <img class="a-logo"  onclick="toggleAudio('{v['name']}')" src="{v["logo"]}"  />
         <div class="a-station">
-        <a target="_blank" href="{v['mainLink']}">{v['name']}</a><br><br>Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>Last Updated: <span class="last-updated" data-utc="{v['lastUpdated']}">{v['lastUpdated']}</span><br>
+        <a target="_blank" href="{v['mainLink']}">{v['name']}</a><br><br>Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>
+        <div class="links">
+            <a class="a-link" target="_blank" href="{v['streamLink']}">Direct Stream</a>
+        </div>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
-            <div class="links">
-                <a class="a-link" target="_blank" href="{v['streamLink']}">Direct Stream</a>
-            </div>
         </div>
         </div>''' for v in streams]),
         '</div>',
@@ -124,6 +124,7 @@ def write_main_page(streams):
         @media (orientation: landscape) 
         {
         body{font-size: 12pt;} 
+        .a-link {font-size: 10pt !important;}
         .a-station-container {height:110px;} 
         .streams-container {grid-template-columns: 1fr 1fr;} 
         .the-header{font-size: 24pt;} .a-station {font-size:10pt;} 
