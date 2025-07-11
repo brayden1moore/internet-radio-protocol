@@ -92,7 +92,7 @@ def write_main_page(streams):
         f"I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of stations. Click a logo to tune in. Support a station if you like it. And follow me on instagram, <a target='_blank' href='https://www.instagram.com/scudhouse/'>@scudhouse</a>. Last updated {formatted_time}. {len(rerun) + len(online)} ONLINE, {len(online)} LIVE, {len(offline)} OFFLINE.",
         '', '',
         '<div class="streams-container">',
-        ''.join([f'''<div class="a-station-container marquee" id="{v['name']}">
+        ''.join([f'''<div class="a-station-container" id="{v['name']}">
         <img class="a-logo"  onclick="toggleAudio('{v['name']}')" src="{v["logo"]}"  />
         <div class="a-station">
         <a class="stream-name" target="_blank" href="{v['mainLink']}">{v['name']}</a>
@@ -102,17 +102,7 @@ def write_main_page(streams):
             <a class="a-link" target="_blank" href="{v['infoLink']}">INFO</a>
             <a class="a-link support-link" target="_blank" href="{v.get('supportLink')}">SUPPORT</a>
         </div>
-
-        <div class="now-playing-line">
-            Now Playing: 
-            <div class="marquee">
-                <div class="marquee-content">
-                    <span>{v.get('oneLiner')}</span>
-                    <span>{v.get('oneLiner')}</span>
-                </div>
-            </div>
-        </div>
-        Location: {v["location"]}<br>Status: {v["status"]}<br>
+        Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
         </div>
         </div>''' for v in streams]),
@@ -127,39 +117,6 @@ def write_main_page(streams):
         '<a href="https://www.instagram.com/p/DLncaEiys_R/" target="_blank" style="border:none !important; height:250px;"><img height=250px style="border: 1px solid black;" src="assets/tuner.jpg"></a>',
         '</body></html>',
         '''<style>
-        .now-playing-line {
-            display: flex;
-        }
-
-        @keyframes scroll {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(calc(-50% - var(--gap) / 2));
-            }
-        }
-
-        .marquee {
-            --gap: 2rem;
-            display: flex;
-            overflow: hidden;
-            user-select: none;
-            width: 100%;
-        }
-
-        .marquee-content {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: var(--gap);
-            animation: scroll 20s linear infinite;
-        }
-
-        .marquee-content span {
-            white-space: nowrap;
-        }
-
         .stream-name {background-color:#000000 !important; color:#FFFFFF !important}
         .links {display:flex; margin-top: 10px; margin-bottom: 10px;}
         .a-link {font-size: 8pt !important; margin-right: 10px;}
@@ -192,7 +149,6 @@ def write_main_page(streams):
         "<script>document.querySelectorAll('.last-updated').forEach(el => {const utcStr = el.dataset.utc;if (utcStr) {const date = new Date(utcStr);if (!isNaN(date)) {el.textContent = date.toLocaleString();}}});</script>",
         '''
         <script>
-
         </script>
         ''']
     )
