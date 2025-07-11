@@ -102,7 +102,17 @@ def write_main_page(streams):
             <a class="a-link" target="_blank" href="{v['infoLink']}">INFO</a>
             <a class="a-link support-link" target="_blank" href="{v.get('supportLink')}">SUPPORT</a>
         </div>
-        Now Playing: <span class="marquee-content">{v.get('oneLiner')}</span>  <span aria-hidden="true" class="marquee-content">{v.get('oneLiner')}</span>  
+        
+        <div class="now-playing-line">
+            Now Playing: 
+            <div class="marquee">
+                <div class="marquee-content">
+                    <span>{v.get('oneLiner')}</span>
+                    <span>{v.get('oneLiner')}</span>
+                </div>
+            </div>
+        </div>
+        
         <br>Location: {v["location"]}<br>Status: {v["status"]}<br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
         </div>
@@ -119,28 +129,32 @@ def write_main_page(streams):
         '</body></html>',
         '''<style>
         @keyframes scroll {
-        from {
-            transform: translateX(0);
-        }
-        to {
-            transform: translateX(calc(-100% - var(--gap)));
-        }
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(-50% - var(--gap) / 2));
+            }
         }
 
         .marquee {
-        --gap: 1rem;
-        display: flex;
-        overflow: hidden;
-        user-select: none;
-        gap: var(--gap);
+            --gap: 2rem;
+            display: flex;
+            overflow: hidden;
+            user-select: none;
+            width: 100%;
         }
 
-        .marquee__content {
-        flex-shrink: 0;
-        display: flex;
-        justify-content: space-around;
-        min-width: 100%;
-        gap: var(--gap);
+        .marquee-content {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: var(--gap);
+            animation: scroll 20s linear infinite;
+        }
+
+        .marquee-content span {
+            white-space: nowrap;
         }
 
         .stream-name {background-color:#000000 !important; color:#FFFFFF !important}
