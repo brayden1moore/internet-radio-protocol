@@ -191,6 +191,7 @@ def write_main_page(streams):
                 position: relative;
                 top: 3px;
                 will-change: transform;
+                backface-visibility: hidden;
             `;
             
             const scrollContainer = document.createElement('div');
@@ -198,6 +199,7 @@ def write_main_page(streams):
                 display: inline-block;
                 white-space: nowrap;
                 will-change: transform;
+                backface-visibility: hidden;
             `;
             
             const originalSpan = document.createElement('span');
@@ -205,6 +207,7 @@ def write_main_page(streams):
             originalSpan.style.cssText = `
                 display: inline-block;
                 will-change: transform;
+                backface-visibility: hidden;
             `;
 
             const spacerSpan = document.createElement('span');
@@ -214,6 +217,7 @@ def write_main_page(streams):
                 margin-right: 20px;
                 margin-left: 20px;
                 will-change: transform;
+                backface-visibility: hidden;
             `;
 
             scrollContainer.appendChild(originalSpan);
@@ -269,6 +273,7 @@ def write_main_page(streams):
                 animation-iteration-count: infinite;
                 animation-fill-mode: forwards;
                 will-change: transform;
+                backface-visibility: hidden;
             `;
         }
         </script>
