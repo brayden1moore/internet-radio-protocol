@@ -224,7 +224,7 @@ def write_main_page(streams):
             const totalWidth = originalSpan.offsetWidth + 40; // text width + margin
             
             // Calculate duration (matching your 50px/sec speed)
-            const duration = totalWidth / 50;
+            const duration = totalWidth / 10;
             
             // Generate unique animation name
             const uid = Math.random().toString(36).substr(2, 5);
