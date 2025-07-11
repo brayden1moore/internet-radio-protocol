@@ -201,7 +201,7 @@ def write_main_page(streams):
             oneLinerElement.appendChild(wrapper);
             wrapper.appendChild(scrollContent);
             
-            const duration = Math.max(textLength / 8, 3); // At least 3 seconds
+            const duration = Math.max(textLength / 8, 4); // At least 3 seconds
             
             const uid = Math.random().toString(36).substr(2, 5);
             const animName = `scroll-oneliner-${direction}-${uid}`;
