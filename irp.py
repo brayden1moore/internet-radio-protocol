@@ -662,7 +662,16 @@ class Stream:
         elif self.name == 'Mutant Radio':
             info = requests.get(self.info_link).json()
             self.now_playing = info['title']
-            
+
+        elif self.name == 'Radio Banda Larga':
+            info = requests.get(self.info_link).json()
+            try:
+                self.now_playing = info['shows']['current']['name']
+                self.status = 'Online'
+            except:
+                self.now_playing = None
+                self.status = 'Offline'
+
 
     def guess_shazam(self):
         self.shazam_guess = "Unknown"

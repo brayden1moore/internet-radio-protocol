@@ -50,7 +50,8 @@
     "Clyde Built Radio": {
         "about": "Clyde Built Radio is a non-profit community radio station highlighting Glasgow\u2019s music, arts and culture communities to the rest of the world.",
         "bandcampLink": null,
-        "infoLink": "https://clydebuiltradio.airtime.pro/api/live-info-v2?timezone=America/Los_Angeles",
+        "infoLink": "
+        ",
         "instaLink": null,
         "lastUpdated": "2025-07-10 23:37:07.494306+00:00",
         "location": "Glascow",
@@ -747,7 +748,7 @@
         "about": "We Are Various is an online community radio station currently transmitting from inside Witzli Poetzli, Trix & Het Bos. Beats and pixels. Demos and expos. Rewinds and flashlights. Camera and musica obscura.",
         "bandcampLink": null,
         "infoLink": "https://azuracast.wearevarious.com/api/nowplaying/we_are_various",
-        "instaLink": null,
+        "instaLink": "https://www.instagram.com/we_are_various/",
         "lastUpdated": "2025-07-10 23:37:17.778217+00:00",
         "location": "Antwerp",
         "logo": "https://internetradioprotocol.org/logos/various.jpeg",
@@ -771,7 +772,7 @@
         "about": "Mutant Radio is a media platform that focuses on various directions: mixes, interviews, educational shows, live performances and discusssion broadcasts that are either live-streamed or filmed and streamed later on. It gathers various artists, DJs, and interesting personalities that have an opportunity to focus on the subject of their preference and their interest. What is unique about Mutant Radio is that it is mobile. The physical station is a fully-equipped caravan-wagon that is based in Tbilisi yet also streams from other regions and special locations around Georgia. Apart from the live streams, Mutant Radio also has an open-air cafe, where like-minded people have an opportunity to enjoy quality music and a friendly vibe.",
         "bandcampLink": "https://mutantradio.bandcamp.com",
         "infoLink": "https://api.radioking.io/widget/radio/mutant-radio/track/current",
-        "instaLink": null,
+        "instaLink": "https://www.instagram.com/mutantradiotbilisi/",
         "lastUpdated": "2025-07-10 23:37:17.778217+00:00",
         "location": "Tbilisi",
         "logo": "https://internetradioprotocol.org/logos/mutant.jpg",
@@ -790,5 +791,29 @@
         "status": "Online",
         "streamLink": "https://listen.radioking.com/radio/282820/stream/328621",
         "supportLink": "https://mutantradio.bandcamp.com/album/mutant-fundraising-compilation"
+    },
+    "Radio Banda Larga": {
+        "about": "Radio is our primary medium, our ears our favourite tool.",
+        "bandcampLink": null,
+        "infoLink": "https://api.radioking.io/widget/radio/mutant-radio/track/current",
+        "instaLink": "https://www.instagram.com/rbltorino/",
+        "lastUpdated": "2025-07-10 23:37:17.778217+00:00",
+        "location": "Turin",
+        "logo": "https://internetradioprotocol.org/logos/rbl.png",
+        "mainLink": "https://www.rbl.media",
+        "name": "Radio Banda Larga",
+        "nowPlaying": null,
+        "nowPlayingAdditionalInfo": null,
+        "nowPlayingArtist": null,
+        "nowPlayingDescription": null,
+        "nowPlayingDescriptionLong": null,
+        "nowPlayingSubtitle": null,
+        "oneLiner": null,
+        "shazamGuess": null,
+        "showLogo": null,
+        "soundcloudLink": null,
+        "status": "Online",
+        "streamLink": "https://rblmedia.out.airtime.pro/rblmedia_a",
+        "supportLink": "https://www.patreon.com/rblmedia"
     }    
 }
