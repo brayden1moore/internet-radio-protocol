@@ -119,14 +119,7 @@ def write_main_page(streams):
         '</body></html>',
         '''<style>
 
-        .marquee {
-            transform: translateX(0px);
-            animation-name: scroll-left-cofzw;
-            animation-duration: 26.6s;
-            animation-timing-function: linear;
-            animation-iteration-count: infinite;
-            animation-fill-mode: forwards;
-        }
+        
 
         .stream-name {background-color:#000000 !important; color:#FFFFFF !important}
         .links {display:flex; margin-top: 10px; margin-bottom: 10px;}
@@ -187,6 +180,7 @@ def write_main_page(streams):
                 display: inline-block;
                 width: width;
                 position: relative;
+                top: 3px;
             `;
             
             const scrollContent = document.createElement('div');
