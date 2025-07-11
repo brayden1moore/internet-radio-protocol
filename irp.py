@@ -167,14 +167,15 @@ def write_main_page(streams):
             const nowPlaying = container.querySelector('.now-playing');
             const oneLiner = container.querySelector('.one-liner');
 
+            const width = (container.offsetWidth - logo.offsetWidth - (nowPlaying.offsetWidth - oneLiner.offsetWidth)) + 'px';
             needsMarquee = (container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth) < 0;
-            console.log(needsMarquee);
+            console.log(width);
             if (needsMarquee) {
-                setupOneLinerMarquee(oneLiner, 'left');
+                setupOneLinerMarquee(oneLiner, width, 'left';
             };
         });
 
-        function setupOneLinerMarquee(oneLinerElement, direction = 'left') {
+        function setupOneLinerMarquee(oneLinerElement, width, direction = 'left') {
             
             const text = oneLinerElement.textContent;
             const textLength = text.length;
@@ -184,7 +185,7 @@ def write_main_page(streams):
                 overflow: hidden;
                 white-space: nowrap;
                 display: inline-block;
-                width: 200px; /* Adjust this based on your design */
+                width: width;
                 position: relative;
             `;
             
