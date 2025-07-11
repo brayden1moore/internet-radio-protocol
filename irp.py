@@ -171,7 +171,7 @@ def write_main_page(streams):
             needsMarquee = (container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth) < 0;
             console.log(width);
             if (needsMarquee) {
-                setupOneLinerMarquee(oneLiner, width, 'left';
+                setupOneLinerMarquee(oneLiner, width, 'left');
             };
         });
 
