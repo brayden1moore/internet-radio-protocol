@@ -196,15 +196,17 @@ def write_main_page(streams):
             wrapper.style.cssText = `
                 overflow: hidden;
                 white-space: nowrap;
-                display: grid;
+                display: inline-block;
                 width: ${width};
                 position: relative;
                 top: 3px;
+                will-change: transform;
+                backface-visibility: hidden;
             `;
             
             const scrollContainer = document.createElement('div');
             scrollContainer.style.cssText = `
-                display: flex;
+                display: inline-block;
                 white-space: nowrap;
                 will-change: transform;
                 backface-visibility: hidden;
@@ -243,7 +245,6 @@ def write_main_page(streams):
             oneLinerElement.appendChild(wrapper);
             wrapper.appendChild(scrollContainer);
             
-            scrollContainer.offsetHeight;
             scrollContainer.offsetHeight;
 
             const actualOriginalWidth = originalSpan.offsetWidth;
