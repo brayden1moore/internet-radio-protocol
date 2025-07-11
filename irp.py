@@ -179,6 +179,9 @@ def write_main_page(streams):
 
         function setupOneLinerMarquee(oneLinerElement, width, direction = 'left') {
             
+            const text = oneLinerElement.textContent;
+            const textLength = text.length;
+        
             // Create a wrapper that mimics your orgs structure
             const wrapper = document.createElement('div');
             wrapper.style.cssText = `
