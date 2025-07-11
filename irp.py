@@ -150,7 +150,7 @@ def write_main_page(streams):
         "<script>document.querySelectorAll('.last-updated').forEach(el => {const utcStr = el.dataset.utc;if (utcStr) {const date = new Date(utcStr);if (!isNaN(date)) {el.textContent = date.toLocaleString();}}});</script>",
         '''
         <script>
-        const oneLiners = document.querySelectorAll(.one-liner);
+        const oneLiners = document.querySelectorAll('.one-liner');
         oneLiners.forEach(liner, ()=> {
             console.log(liner.textContent);
             console.log(liner.offsetWidth);
