@@ -294,7 +294,7 @@ def write_main_page(streams):
 
         document.addEventListener('DOMContentLoaded', () => {
             calculateMarquees();
-        }
+        });
         </script>
         ''']
     )
