@@ -191,6 +191,7 @@ def write_main_page(streams):
                 position: relative;
                 top: 3px;
                 will-change: transform;
+                backface-visibility: hidden;
             `;
             
             const scrollContent = document.createElement('div');
