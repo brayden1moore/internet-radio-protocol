@@ -50,8 +50,7 @@
     "Clyde Built Radio": {
         "about": "Clyde Built Radio is a non-profit community radio station highlighting Glasgow\u2019s music, arts and culture communities to the rest of the world.",
         "bandcampLink": null,
-        "infoLink": "
-        ",
+        "infoLink": "https://clydebuiltradio.airtime.pro/api/live-info-v2?timezone=America/Los_Angeles",
         "instaLink": null,
         "lastUpdated": "2025-07-10 23:37:07.494306+00:00",
         "location": "Glascow",
