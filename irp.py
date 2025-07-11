@@ -119,15 +119,25 @@ def write_main_page(streams):
         '</body></html>',
         '''<style>
 
-        .now-playing {
-            will-change: transform;
+        .one-liner {
+        will-change: transform;
+        backface-visibility: hidden;
         }
 
-        .one-liner {
-            transform: none !important;
-            animation: none !important;
-            will-change: transform;
-            backface-visibility: hidden;
+        .one-liner > div {
+        will-change: transform;
+        backface-visibility: hidden;
+        }
+
+        .one-liner > div:hover {
+        animation-play-state: paused;
+        }
+
+        .one-liner span {
+        transform: none !important;
+        animation: none !important;
+        will-change: transform;
+        backface-visibility: hidden;
         }
 
         .stream-name {background-color:#000000 !important; color:#FFFFFF !important}
@@ -186,17 +196,15 @@ def write_main_page(streams):
             wrapper.style.cssText = `
                 overflow: hidden;
                 white-space: nowrap;
-                display: inline-block;
+                display: grid;
                 width: ${width};
                 position: relative;
                 top: 3px;
-                will-change: transform;
-                backface-visibility: hidden;
             `;
             
             const scrollContainer = document.createElement('div');
             scrollContainer.style.cssText = `
-                display: inline-block;
+                display: flex;
                 white-space: nowrap;
                 will-change: transform;
                 backface-visibility: hidden;
@@ -235,6 +243,7 @@ def write_main_page(streams):
             oneLinerElement.appendChild(wrapper);
             wrapper.appendChild(scrollContainer);
             
+            scrollContainer.offsetHeight;
             scrollContainer.offsetHeight;
 
             const actualOriginalWidth = originalSpan.offsetWidth;
