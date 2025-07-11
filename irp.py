@@ -168,8 +168,9 @@ def write_main_page(streams):
             const oneLiner = container.querySelector('.one-Liner');
 
             needsMarquee = (container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth) < 0;
+            console.log(needsMarquee);
             if (needsMarquee) {
-                setupOneLinerMarquee(oneLiner, 'left')
+                setupOneLinerMarquee(oneLiner, 'left');
             };
         });
 
