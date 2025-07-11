@@ -205,8 +205,11 @@ def write_main_page(streams):
                 margin-right: 40px;
             `;
 
-            scrollContainer.appendChild("<span>•</span>");
+            const spacerSpan = document.createElement('span');
+            spacerSpan.textContent = '•';
+
             scrollContainer.appendChild(originalSpan);
+            scrollContainer.appendChild(spacerSpan);
             
             const clonedSpan = originalSpan.cloneNode(true);
             
