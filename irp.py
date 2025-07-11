@@ -181,14 +181,13 @@ def write_main_page(streams):
             
             const text = oneLinerElement.textContent;
             const textLength = text.length;
-        
-            // Create a wrapper that mimics your orgs structure
+
             const wrapper = document.createElement('div');
             wrapper.style.cssText = `
                 overflow: hidden;
                 white-space: nowrap;
                 display: inline-block;
-                width: width;
+                width: ${width};
                 position: relative;
                 top: 3px;
             `;
@@ -224,8 +223,18 @@ def write_main_page(streams):
                 scrollContainer.insertBefore(clonedSpan, scrollContainer.firstChild);
             }
             
-            const totalWidth = originalSpan.offsetWidth + 40; // text width + margin
-            const duration = totalWidth / 5;
+            // Add to DOM first so we can measure
+            oneLinerElement.innerHTML = '';
+            oneLinerElement.appendChild(wrapper);
+            wrapper.appendChild(scrollContainer);
+            
+            // NOW calculate the actual width after elements are in DOM
+            const actualOriginalWidth = originalSpan.offsetWidth;
+            const actualSpacerWidth = spacerSpan.offsetWidth;
+            const totalWidth = actualOriginalWidth + actualSpacerWidth;
+            
+            // Use the same speed calculation as your org marquee (50px/sec)
+            const duration = totalWidth / 50;
             
             const uid = Math.random().toString(36).substr(2, 5);
             const animName = `scroll-oneliner-${direction}-${uid}`;
@@ -261,10 +270,6 @@ def write_main_page(streams):
                 animation-iteration-count: infinite;
                 animation-fill-mode: forwards;
             `;
-            
-            oneLinerElement.innerHTML = '';
-            oneLinerElement.appendChild(wrapper);
-            wrapper.appendChild(scrollContainer);
         }
         </script>
         ''']
