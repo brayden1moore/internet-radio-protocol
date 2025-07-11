@@ -190,18 +190,21 @@ def write_main_page(streams):
                 width: ${width};
                 position: relative;
                 top: 3px;
+                will-change: transform;
             `;
             
             const scrollContainer = document.createElement('div');
             scrollContainer.style.cssText = `
                 display: inline-block;
                 white-space: nowrap;
+                will-change: transform;
             `;
             
             const originalSpan = document.createElement('span');
             originalSpan.textContent = text;
             originalSpan.style.cssText = `
                 display: inline-block;
+                will-change: transform;
             `;
 
             const spacerSpan = document.createElement('span');
@@ -210,6 +213,7 @@ def write_main_page(streams):
                 display: inline-block;
                 margin-right: 20px;
                 margin-left: 20px;
+                will-change: transform;
             `;
 
             scrollContainer.appendChild(originalSpan);
@@ -223,19 +227,14 @@ def write_main_page(streams):
                 scrollContainer.insertBefore(clonedSpan, scrollContainer.firstChild);
             }
             
-            // Add to DOM first so we can measure
             oneLinerElement.innerHTML = '';
             oneLinerElement.appendChild(wrapper);
             wrapper.appendChild(scrollContainer);
             
-            // NOW calculate the actual width after elements are in DOM
             const actualOriginalWidth = originalSpan.offsetWidth;
             const actualSpacerWidth = spacerSpan.offsetWidth;
             const totalWidth = actualOriginalWidth + actualSpacerWidth;
-            
-            // Use the same speed calculation as your org marquee (50px/sec)
             const duration = totalWidth / 50;
-            
             const uid = Math.random().toString(36).substr(2, 5);
             const animName = `scroll-oneliner-${direction}-${uid}`;
             
@@ -269,6 +268,7 @@ def write_main_page(streams):
                 animation-timing-function: linear;
                 animation-iteration-count: infinite;
                 animation-fill-mode: forwards;
+                will-change: transform;
             `;
         }
         </script>
