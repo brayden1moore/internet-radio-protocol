@@ -261,7 +261,6 @@ def write_main_page(streams):
                 }
                 `;
             }
-            document.head.appendChild(style);
             
             scrollContainer.style.cssText += `
                 animation-name: ${animName};
