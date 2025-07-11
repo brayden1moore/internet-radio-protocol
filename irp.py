@@ -135,7 +135,7 @@ def write_main_page(streams):
         .a-link {font-size: 8pt !important; margin-right: 10px;}
         .support-link {background-color:#FFFF00; border: 1px solid #000000;}
         #main-logo {height: 225px;}
-        .a-station-container {cursor:default; background-color: #FFFFFF; color:#000000; height: 90px; padding: 10px; overflow-x:scroll; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
+        .a-station-container {cursor:default; background-color: #FFFFFF; color:#000000; height: 90px; padding: 10px; overflow-x:hidden; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
         .a-logo {width:90px; height:90px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
         body {background-color: #FFFF00; font-size: 10pt;}
         .the-header {font-family: "Arial Black"; font-size: 18pt; line-height:1em; margin-bottom:20px;}
@@ -207,24 +207,18 @@ def write_main_page(streams):
                 margin-right: 40px;
             `;
             
-            // Add original to container
             scrollContainer.appendChild(originalSpan);
             
-            // Clone the text span (like your cloning logic)
             const clonedSpan = originalSpan.cloneNode(true);
             
-            // Add clone to container
             if (direction === 'left') {
                 scrollContainer.appendChild(clonedSpan);
             } else {
                 scrollContainer.insertBefore(clonedSpan, scrollContainer.firstChild);
             }
             
-            // Calculate total width (like your totalWidth calculation)
             const totalWidth = originalSpan.offsetWidth + 40; // text width + margin
-            
-            // Calculate duration (matching your 50px/sec speed)
-            const duration = totalWidth / 10;
+            const duration = totalWidth / 5;
             
             // Generate unique animation name
             const uid = Math.random().toString(36).substr(2, 5);
