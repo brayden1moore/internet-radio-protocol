@@ -119,7 +119,13 @@ def write_main_page(streams):
         '</body></html>',
         '''<style>
 
-        
+        .now-playing {
+            will-change: transform;
+        }
+
+        .one-liner {
+            will-change: transform;
+        }
 
         .stream-name {background-color:#000000 !important; color:#FFFFFF !important}
         .links {display:flex; margin-top: 10px; margin-bottom: 10px;}
