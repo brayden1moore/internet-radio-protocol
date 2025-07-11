@@ -199,7 +199,9 @@ def write_main_page(streams):
                 display: inline-block;
                 white-space: nowrap;
                 will-change: transform;
+                backface-visibility: hidden;
             `;
+
             
             scrollContent.innerHTML = `${text}&nbsp;&nbsp;&nbsp;&nbsp;${text}`;
             
