@@ -112,8 +112,7 @@ def write_main_page(streams):
                 </div>
             </div>
         </div>
-        
-        <br>Location: {v["location"]}<br>Status: {v["status"]}<br>
+        Location: {v["location"]}<br>Status: {v["status"]}<br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
         </div>
         </div>''' for v in streams]),
