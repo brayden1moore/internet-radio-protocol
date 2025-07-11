@@ -151,7 +151,7 @@ def write_main_page(streams):
         '''
         <script>
         const oneLiners = document.querySelectorAll('.one-liner');
-        oneLiners.forEach(liner, ()=> {
+        oneLiners.forEach((liner), ()=> {
             console.log(liner.textContent);
             console.log(liner.offsetWidth);
         });
