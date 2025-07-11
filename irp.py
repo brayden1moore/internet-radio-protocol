@@ -124,7 +124,10 @@ def write_main_page(streams):
         }
 
         .one-liner {
+            transform: none !important;
+            animation: none !important;
             will-change: transform;
+            backface-visibility: hidden;
         }
 
         .stream-name {background-color:#000000 !important; color:#FFFFFF !important}
