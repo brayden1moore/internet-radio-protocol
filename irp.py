@@ -102,7 +102,7 @@ def write_main_page(streams):
             <a class="a-link" target="_blank" href="{v['infoLink']}">INFO</a>
             <a class="a-link support-link" target="_blank" href="{v.get('supportLink')}">SUPPORT</a>
         </div>
-        
+
         <div class="now-playing-line">
             Now Playing: 
             <div class="marquee">
@@ -128,6 +128,10 @@ def write_main_page(streams):
         '<a href="https://www.instagram.com/p/DLncaEiys_R/" target="_blank" style="border:none !important; height:250px;"><img height=250px style="border: 1px solid black;" src="assets/tuner.jpg"></a>',
         '</body></html>',
         '''<style>
+        .now-playing-div {
+            display: flex;
+        }
+
         @keyframes scroll {
             0% {
                 transform: translateX(0);
