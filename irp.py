@@ -290,6 +290,7 @@ def write_main_page(streams):
                 animation-fill-mode: forwards;
                 will-change: transform;
                 backface-visibility: hidden;
+                transform: translateZ(0);
             `;
         }
 
