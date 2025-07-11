@@ -202,11 +202,15 @@ def write_main_page(streams):
             originalSpan.textContent = text;
             originalSpan.style.cssText = `
                 display: inline-block;
-                margin-right: 40px;
             `;
 
             const spacerSpan = document.createElement('span');
             spacerSpan.textContent = '•';
+            spacerSpan.style.cssText = `
+                display: inline-block;
+                margin-right: 20px;
+                margin-left: 20px;
+            `;
 
             scrollContainer.appendChild(originalSpan);
             scrollContainer.appendChild(spacerSpan);
