@@ -235,6 +235,8 @@ def write_main_page(streams):
             oneLinerElement.appendChild(wrapper);
             wrapper.appendChild(scrollContainer);
             
+            scrollContainer.offsetHeight;
+
             const actualOriginalWidth = originalSpan.offsetWidth;
             const actualSpacerWidth = spacerSpan.offsetWidth;
             const totalWidth = actualOriginalWidth + actualSpacerWidth;
