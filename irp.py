@@ -102,7 +102,8 @@ def write_main_page(streams):
             <a class="a-link" target="_blank" href="{v['infoLink']}">INFO</a>
             <a class="a-link support-link" target="_blank" href="{v.get('supportLink')}">SUPPORT</a>
         </div>
-        Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>
+        Now Playing: <span class="one-liner">{v.get('oneLiner')}</span><br>
+        Location: {v["location"]}<br>Status: {v["status"]}<br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
         </div>
         </div>''' for v in streams]),
@@ -149,6 +150,11 @@ def write_main_page(streams):
         "<script>document.querySelectorAll('.last-updated').forEach(el => {const utcStr = el.dataset.utc;if (utcStr) {const date = new Date(utcStr);if (!isNaN(date)) {el.textContent = date.toLocaleString();}}});</script>",
         '''
         <script>
+        const oneLiners = document.querySelectorAll(.one-liner);
+        oneLiners.forEach(liner, ()=> {
+            console.log(liner.textContent);
+            console.log(liner.offsetWidth);
+        });
         </script>
         ''']
     )
