@@ -191,10 +191,10 @@ def write_main_page(streams):
         }
 
         function setupOneLinerMarquee(oneLinerElement, width, direction = 'left') {
-            
             const text = oneLinerElement.textContent;
             const textLength = text.length;
-
+            
+            // Create wrapper
             const wrapper = document.createElement('div');
             wrapper.style.cssText = `
                 overflow: hidden;
@@ -207,6 +207,7 @@ def write_main_page(streams):
                 backface-visibility: hidden;
             `;
             
+            // Create scroll container
             const scrollContainer = document.createElement('div');
             scrollContainer.style.cssText = `
                 display: inline-block;
@@ -214,47 +215,55 @@ def write_main_page(streams):
                 will-change: transform;
                 backface-visibility: hidden;
             `;
+            
+            // Create original span
             const originalSpan = document.createElement('span');
             originalSpan.textContent = text;
             originalSpan.style.cssText = `
                 display: inline-block;
-                margin-right: 40px;  
+                margin-right: 40px;
                 will-change: transform;
                 backface-visibility: hidden;
             `;
-                        
+            
+            // Clone span for seamless loop
             const clonedSpan = originalSpan.cloneNode(true);
+            
+            // Append elements
             scrollContainer.appendChild(originalSpan);
             scrollContainer.appendChild(clonedSpan);
-
             oneLinerElement.innerHTML = '';
             oneLinerElement.appendChild(wrapper);
             wrapper.appendChild(scrollContainer);
             
+            // Force layout calculation
             scrollContainer.offsetHeight;
-
-            const style = window.getComputedStyle(originalSpan);
-            const marginRight = parseFloat(style.marginRight) || 0;
+            
+            // Get computed styles and dimensions
+            const computedStyle = window.getComputedStyle(originalSpan);
+            const marginRight = parseFloat(computedStyle.marginRight) || 0;
             const totalWidth = originalSpan.offsetWidth + marginRight;
-            const duration = totalWidth / 50;
+            const duration = totalWidth / 50; // Adjust speed as needed
+            
+            // Generate unique animation name
             const uid = Math.random().toString(36).substr(2, 5);
             const animName = `scroll-oneliner-${direction}-${uid}`;
             
+            // Create style element for keyframes
+            const styleElement = document.createElement('style');
+            
+            // Set initial position and create keyframes
             if (direction === 'left') {
                 scrollContainer.style.transform = 'translateX(0px)';
-            } else {
-                scrollContainer.style.transform = 'translateX(-50%)';
-            }
-            
-            if (direction === 'left') {
-                style.textContent = `
+                styleElement.textContent = `
                 @keyframes ${animName} {
                     0% { transform: translateX(0px); }
                     100% { transform: translateX(-50%); }
                 }
                 `;
             } else {
-                style.textContent = `
+                scrollContainer.style.transform = 'translateX(-50%)';
+                styleElement.textContent = `
                 @keyframes ${animName} {
                     0% { transform: translateX(-50%); }
                     100% { transform: translateX(0px); }
@@ -262,6 +271,10 @@ def write_main_page(streams):
                 `;
             }
             
+            // Add styles to document head
+            document.head.appendChild(styleElement);
+            
+            // Apply animation
             scrollContainer.style.cssText += `
                 animation-name: ${animName};
                 animation-duration: ${duration}s;
@@ -275,7 +288,7 @@ def write_main_page(streams):
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            calculateMarquees();
+        calculateMarquees();
         });
         </script>
         ''']
