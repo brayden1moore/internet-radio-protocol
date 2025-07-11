@@ -219,39 +219,24 @@ def write_main_page(streams):
             originalSpan.textContent = text;
             originalSpan.style.cssText = `
                 display: inline-block;
+                margin-right: 40px;  // Use margin like your .an-org
                 will-change: transform;
                 backface-visibility: hidden;
             `;
-
-            const spacerSpan = document.createElement('span');
-            spacerSpan.textContent = ''; 
-            spacerSpan.style.cssText = `
-                display: inline-block;
-                margin-right: 40px; 
-                will-change: transform;
-                backface-visibility: hidden;
-            `;
-
-            scrollContainer.appendChild(originalSpan);
-            scrollContainer.appendChild(spacerSpan);
-            
+                        
             const clonedSpan = originalSpan.cloneNode(true);
-            
-            if (direction === 'left') {
-                scrollContainer.appendChild(clonedSpan);
-            } else {
-                scrollContainer.insertBefore(clonedSpan, scrollContainer.firstChild);
-            }
-            
+            scrollContainer.appendChild(originalSpan);
+            scrollContainer.appendChild(clonedSpan);
+
             oneLinerElement.innerHTML = '';
             oneLinerElement.appendChild(wrapper);
             wrapper.appendChild(scrollContainer);
             
             scrollContainer.offsetHeight;
 
-            const actualOriginalWidth = originalSpan.offsetWidth;
-            const spacerMargin = 40;
-            const totalWidth = actualOriginalWidth + spacerMargin;
+            const style = window.getComputedStyle(originalSpan);
+            const marginRight = parseFloat(style.marginRight) || 0;
+            const totalWidth = originalSpan.offsetWidth + marginRight;
             const duration = totalWidth / 50;
             const uid = Math.random().toString(36).substr(2, 5);
             const animName = `scroll-oneliner-${direction}-${uid}`;
