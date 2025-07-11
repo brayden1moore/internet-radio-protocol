@@ -250,8 +250,8 @@ def write_main_page(streams):
             scrollContainer.offsetHeight;
 
             const actualOriginalWidth = originalSpan.offsetWidth;
-            const actualSpacerWidth = spacerSpan.offsetWidth;
-            const totalWidth = actualOriginalWidth + actualSpacerWidth;
+            const spacerMargin = 40;
+            const totalWidth = actualOriginalWidth + spacerMargin;
             const duration = totalWidth / 50;
             const uid = Math.random().toString(36).substr(2, 5);
             const animName = `scroll-oneliner-${direction}-${uid}`;
