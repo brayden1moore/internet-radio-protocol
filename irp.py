@@ -175,6 +175,7 @@ def write_main_page(streams):
         });
 
         function setupOneLinerMarquee(oneLinerElement, direction = 'left') {
+            console.log("attempting to make marquee");
             if (!oneLinerElement) return;
             
             const text = oneLinerElement.textContent;
