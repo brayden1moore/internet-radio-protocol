@@ -102,8 +102,9 @@ def write_main_page(streams):
             <a class="a-link" target="_blank" href="{v['infoLink']}">INFO</a>
             <a class="a-link support-link" target="_blank" href="{v.get('supportLink')}">SUPPORT</a>
         </div>
-        <span class="now-playing">Now Playing: <span class="one-liner">{v.get('oneLiner')}</span></span><br>
-        Location: {v["location"]}<br>Status: {v["status"]}<br>
+        <span class="now-playing"><span class="one-liner">{v.get('oneLiner')}</span></span><br>
+        {v["location"]}<br>
+        {v["status"]}<br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
         </div>
         </div>''' for v in streams]),
@@ -151,13 +152,12 @@ def write_main_page(streams):
         '''
         <script>
         const stationContainers = document.querySelectorAll('.a-station-container');
+        let needsMarquee = false;
         stationContainers.forEach((container) => {
             const logo = container.querySelector('.a-logo');
             const nowPlaying = container.querySelector('.now-playing');
-            console.log(container.offsetWidth);
-            console.log(logo.offsetWidth);
-            console.log(nowPlaying.offsetWidth);
-            console.log(container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth);
+            needsMarquee = (container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth) < 0;
+
         });
         </script>
         ''']
