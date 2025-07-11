@@ -102,7 +102,7 @@ def write_main_page(streams):
             <a class="a-link" target="_blank" href="{v['infoLink']}">INFO</a>
             <a class="a-link support-link" target="_blank" href="{v.get('supportLink')}">SUPPORT</a>
         </div>
-        Now Playing: <span class="one-liner">{v.get('oneLiner')}</span><br>
+        <span class="now-playing">Now Playing: <span class="one-liner">{v.get('oneLiner')}</span></span><br>
         Location: {v["location"]}<br>Status: {v["status"]}<br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
         </div>
@@ -150,10 +150,14 @@ def write_main_page(streams):
         "<script>document.querySelectorAll('.last-updated').forEach(el => {const utcStr = el.dataset.utc;if (utcStr) {const date = new Date(utcStr);if (!isNaN(date)) {el.textContent = date.toLocaleString();}}});</script>",
         '''
         <script>
-        const oneLiners = document.querySelectorAll('.one-liner');
-        oneLiners.forEach((liner) => {
-            console.log(liner.textContent);
-            console.log(liner.offsetWidth);
+        const stationContainers = document.querySelectorAll('.a-station-container');
+        stationContainers.forEach((container) => {
+            const logo = container.querySelector('.a-logo');
+            const nowPlaying = container.querySelector('.now-playing');
+            console.log(container.offsetWidth);
+            console.log(logo.offsetWidth);
+            console.log(nowPlaying.offsetWidth);
+            console.log(container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth);
         });
         </script>
         ''']
