@@ -180,7 +180,7 @@ def write_main_page(streams):
             const oneLiner = container.querySelector('.one-liner');
 
             const width = (container.offsetWidth - logo.offsetWidth - (nowPlaying.offsetWidth - oneLiner.offsetWidth)) + 'px';
-            needsMarquee = (container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth) < 10;
+            needsMarquee = (container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth) < 20;
             console.log(width);
             if (needsMarquee) {
                 setupOneLinerMarquee(oneLiner, width, 'left');
