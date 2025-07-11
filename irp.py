@@ -224,11 +224,10 @@ def write_main_page(streams):
             `;
 
             const spacerSpan = document.createElement('span');
-            spacerSpan.textContent = '•';
+            spacerSpan.textContent = ''; 
             spacerSpan.style.cssText = `
                 display: inline-block;
-                margin-right: 20px;
-                margin-left: 20px;
+                margin-right: 40px; 
                 will-change: transform;
                 backface-visibility: hidden;
             `;
