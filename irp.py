@@ -179,9 +179,7 @@ def write_main_page(streams):
 
         function setupOneLinerMarquee(oneLinerElement, width, direction = 'left') {
             
-            const text = oneLinerElement.textContent;
-            const textLength = text.length;
-            
+            // Create a wrapper that mimics your orgs structure
             const wrapper = document.createElement('div');
             wrapper.style.cssText = `
                 overflow: hidden;
@@ -189,36 +187,59 @@ def write_main_page(streams):
                 display: inline-block;
                 width: width;
                 position: relative;
-                top: 3px;
-                will-change: transform;
-                backface-visibility: hidden;
             `;
             
-            const scrollContent = document.createElement('div');
-            scrollContent.style.cssText = `
+            // Create the scrolling container (like your .orgs div)
+            const scrollContainer = document.createElement('div');
+            scrollContainer.style.cssText = `
                 display: inline-block;
                 white-space: nowrap;
-                will-change: transform;
-                backface-visibility: hidden;
             `;
-
             
-            scrollContent.innerHTML = `${text}&nbsp;&nbsp;&nbsp;&nbsp;${text}`;
+            // Create original text span
+            const originalSpan = document.createElement('span');
+            originalSpan.textContent = text;
+            originalSpan.style.cssText = `
+                display: inline-block;
+                margin-right: 40px;
+            `;
             
-            oneLinerElement.innerHTML = '';
-            oneLinerElement.appendChild(wrapper);
-            wrapper.appendChild(scrollContent);
+            // Add original to container
+            scrollContainer.appendChild(originalSpan);
             
-            const duration = Math.max(textLength / 8, 4); // At least 3 seconds
+            // Clone the text span (like your cloning logic)
+            const clonedSpan = originalSpan.cloneNode(true);
             
+            // Add clone to container
+            if (direction === 'left') {
+                scrollContainer.appendChild(clonedSpan);
+            } else {
+                scrollContainer.insertBefore(clonedSpan, scrollContainer.firstChild);
+            }
+            
+            // Calculate total width (like your totalWidth calculation)
+            const totalWidth = originalSpan.offsetWidth + 40; // text width + margin
+            
+            // Calculate duration (matching your 50px/sec speed)
+            const duration = totalWidth / 50;
+            
+            // Generate unique animation name
             const uid = Math.random().toString(36).substr(2, 5);
             const animName = `scroll-oneliner-${direction}-${uid}`;
             
+            // Set initial transform
+            if (direction === 'left') {
+                scrollContainer.style.transform = 'translateX(0px)';
+            } else {
+                scrollContainer.style.transform = 'translateX(-50%)';
+            }
+            
+            // Create animation keyframes (exactly like your working version)
             const style = document.createElement('style');
             if (direction === 'left') {
                 style.textContent = `
                 @keyframes ${animName} {
-                    0% { transform: translateX(0); }
+                    0% { transform: translateX(0px); }
                     100% { transform: translateX(-50%); }
                 }
                 `;
@@ -226,19 +247,25 @@ def write_main_page(streams):
                 style.textContent = `
                 @keyframes ${animName} {
                     0% { transform: translateX(-50%); }
-                    100% { transform: translateX(0); }
+                    100% { transform: translateX(0px); }
                 }
                 `;
             }
             document.head.appendChild(style);
             
-            scrollContent.style.cssText += `
+            // Apply animation (exactly matching your working CSS)
+            scrollContainer.style.cssText += `
                 animation-name: ${animName};
                 animation-duration: ${duration}s;
                 animation-timing-function: linear;
                 animation-iteration-count: infinite;
                 animation-fill-mode: forwards;
             `;
+            
+            // Replace the original element's content
+            oneLinerElement.innerHTML = '';
+            oneLinerElement.appendChild(wrapper);
+            wrapper.appendChild(scrollContainer);
         }
         </script>
         ''']
