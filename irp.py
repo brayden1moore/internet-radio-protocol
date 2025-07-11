@@ -181,12 +181,14 @@ def write_main_page(streams):
                 width: width;
                 position: relative;
                 top: 3px;
+                will-change: transform;
             `;
             
             const scrollContent = document.createElement('div');
             scrollContent.style.cssText = `
                 display: inline-block;
                 white-space: nowrap;
+                will-change: transform;
             `;
             
             scrollContent.innerHTML = `${text}&nbsp;&nbsp;&nbsp;&nbsp;${text}`;
