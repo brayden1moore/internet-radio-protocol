@@ -192,21 +192,20 @@ def write_main_page(streams):
                 position: relative;
             `;
             
-            // Create the scrolling container (like your .orgs div)
             const scrollContainer = document.createElement('div');
             scrollContainer.style.cssText = `
                 display: inline-block;
                 white-space: nowrap;
             `;
             
-            // Create original text span
             const originalSpan = document.createElement('span');
             originalSpan.textContent = text;
             originalSpan.style.cssText = `
                 display: inline-block;
                 margin-right: 40px;
             `;
-            
+
+            scrollContainer.appendChild("<span>•</span>");
             scrollContainer.appendChild(originalSpan);
             
             const clonedSpan = originalSpan.cloneNode(true);
@@ -220,18 +219,15 @@ def write_main_page(streams):
             const totalWidth = originalSpan.offsetWidth + 40; // text width + margin
             const duration = totalWidth / 5;
             
-            // Generate unique animation name
             const uid = Math.random().toString(36).substr(2, 5);
             const animName = `scroll-oneliner-${direction}-${uid}`;
             
-            // Set initial transform
             if (direction === 'left') {
                 scrollContainer.style.transform = 'translateX(0px)';
             } else {
                 scrollContainer.style.transform = 'translateX(-50%)';
             }
             
-            // Create animation keyframes (exactly like your working version)
             const style = document.createElement('style');
             if (direction === 'left') {
                 style.textContent = `
