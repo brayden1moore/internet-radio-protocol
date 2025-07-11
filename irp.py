@@ -92,7 +92,7 @@ def write_main_page(streams):
         f"I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of stations. Click a logo to tune in. Support a station if you like it. And follow me on instagram, <a target='_blank' href='https://www.instagram.com/scudhouse/'>@scudhouse</a>. Last updated {formatted_time}. {len(rerun) + len(online)} ONLINE, {len(online)} LIVE, {len(offline)} OFFLINE.",
         '', '',
         '<div class="streams-container">',
-        ''.join([f'''<div class="a-station-container" id="{v['name']}">
+        ''.join([f'''<div class="a-station-container marquee" id="{v['name']}">
         <img class="a-logo"  onclick="toggleAudio('{v['name']}')" src="{v["logo"]}"  />
         <div class="a-station">
         <a class="stream-name" target="_blank" href="{v['mainLink']}">{v['name']}</a>
@@ -102,7 +102,8 @@ def write_main_page(streams):
             <a class="a-link" target="_blank" href="{v['infoLink']}">INFO</a>
             <a class="a-link support-link" target="_blank" href="{v.get('supportLink')}">SUPPORT</a>
         </div>
-        Now Playing: {v.get('oneLiner')}<br>Location: {v["location"]}<br>Status: {v["status"]}<br>
+        Now Playing: <span class="marquee-content">{v.get('oneLiner')}</span>  <span aria-hidden="true" class="marquee-content">{v.get('oneLiner')}</span>  
+        <br>Location: {v["location"]}<br>Status: {v["status"]}<br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
         </div>
         </div>''' for v in streams]),
@@ -117,6 +118,31 @@ def write_main_page(streams):
         '<a href="https://www.instagram.com/p/DLncaEiys_R/" target="_blank" style="border:none !important; height:250px;"><img height=250px style="border: 1px solid black;" src="assets/tuner.jpg"></a>',
         '</body></html>',
         '''<style>
+        @keyframes scroll {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(calc(-100% - var(--gap)));
+        }
+        }
+
+        .marquee {
+        --gap: 1rem;
+        display: flex;
+        overflow: hidden;
+        user-select: none;
+        gap: var(--gap);
+        }
+
+        .marquee__content {
+        flex-shrink: 0;
+        display: flex;
+        justify-content: space-around;
+        min-width: 100%;
+        gap: var(--gap);
+        }
+
         .stream-name {background-color:#000000 !important; color:#FFFFFF !important}
         .links {display:flex; margin-top: 10px; margin-bottom: 10px;}
         .a-link {font-size: 8pt !important; margin-right: 10px;}
@@ -146,7 +172,12 @@ def write_main_page(streams):
         </style>''',
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
         "<script>function toggleAudio(id){let a=document.getElementById(`${id}-audio`),d=document.getElementById(id),isPlaying=d.style.backgroundColor==='yellow';document.querySelectorAll('audio').forEach(e=>{e.pause();e.removeAttribute('src');e.load();e.parentElement.parentElement.style.backgroundColor='white';e.parentElement.parentElement.classList.remove('pulsing')});if(!isPlaying){a.src=a.dataset.src;a.load();d.classList.add('pulsing');a.play().then(()=>{d.classList.remove('pulsing');d.style.backgroundColor='yellow'}).catch(e=>{console.error(e);d.classList.remove('pulsing')})}}</script>",        
-        "<script>document.querySelectorAll('.last-updated').forEach(el => {const utcStr = el.dataset.utc;if (utcStr) {const date = new Date(utcStr);if (!isNaN(date)) {el.textContent = date.toLocaleString();}}});</script>"]
+        "<script>document.querySelectorAll('.last-updated').forEach(el => {const utcStr = el.dataset.utc;if (utcStr) {const date = new Date(utcStr);if (!isNaN(date)) {el.textContent = date.toLocaleString();}}});</script>",
+        '''
+        <script>
+
+        </script>
+        ''']
     )
     with open('index.html', 'w') as f:
         f.write(main_text)
