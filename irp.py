@@ -214,12 +214,11 @@ def write_main_page(streams):
                 will-change: transform;
                 backface-visibility: hidden;
             `;
-            
             const originalSpan = document.createElement('span');
             originalSpan.textContent = text;
             originalSpan.style.cssText = `
                 display: inline-block;
-                margin-right: 40px;  // Use margin like your .an-org
+                margin-right: 40px;  
                 will-change: transform;
                 backface-visibility: hidden;
             `;
@@ -247,7 +246,6 @@ def write_main_page(streams):
                 scrollContainer.style.transform = 'translateX(-50%)';
             }
             
-            const style = document.createElement('style');
             if (direction === 'left') {
                 style.textContent = `
                 @keyframes ${animName} {
