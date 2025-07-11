@@ -190,6 +190,7 @@ def write_main_page(streams):
                 display: inline-block;
                 width: width;
                 position: relative;
+                top: 3px;
             `;
             
             const scrollContainer = document.createElement('div');
@@ -259,7 +260,6 @@ def write_main_page(streams):
                 animation-timing-function: linear;
                 animation-iteration-count: infinite;
                 animation-fill-mode: forwards;
-                top: 3px;
             `;
             
             oneLinerElement.innerHTML = '';
