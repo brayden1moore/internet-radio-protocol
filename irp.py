@@ -172,20 +172,23 @@ def write_main_page(streams):
         "<script>document.querySelectorAll('.last-updated').forEach(el => {const utcStr = el.dataset.utc;if (utcStr) {const date = new Date(utcStr);if (!isNaN(date)) {el.textContent = date.toLocaleString();}}});</script>",
         '''
         <script>
-        const stationContainers = document.querySelectorAll('.a-station-container');
-        let needsMarquee = false;
-        stationContainers.forEach((container) => {
-            const logo = container.querySelector('.a-logo');
-            const nowPlaying = container.querySelector('.now-playing');
-            const oneLiner = container.querySelector('.one-liner');
 
-            const width = (container.offsetWidth - logo.offsetWidth - (nowPlaying.offsetWidth - oneLiner.offsetWidth)) + 'px';
-            needsMarquee = (container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth) < 20;
-            console.log(width);
-            if (needsMarquee) {
-                setupOneLinerMarquee(oneLiner, width, 'left');
-            };
-        });
+        function calculateMarquees() {
+            const stationContainers = document.querySelectorAll('.a-station-container');
+            let needsMarquee = false;
+            stationContainers.forEach((container) => {
+                const logo = container.querySelector('.a-logo');
+                const nowPlaying = container.querySelector('.now-playing');
+                const oneLiner = container.querySelector('.one-liner');
+
+                const width = (container.offsetWidth - logo.offsetWidth - (nowPlaying.offsetWidth - oneLiner.offsetWidth)) + 'px';
+                needsMarquee = (container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth) < 20;
+                console.log(width);
+                if (needsMarquee) {
+                    setupOneLinerMarquee(oneLiner, width, 'left');
+                };
+            });
+        }
 
         function setupOneLinerMarquee(oneLinerElement, width, direction = 'left') {
             
