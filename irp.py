@@ -118,6 +118,16 @@ def write_main_page(streams):
         '<a href="https://www.instagram.com/p/DLncaEiys_R/" target="_blank" style="border:none !important; height:250px;"><img height=250px style="border: 1px solid black;" src="assets/tuner.jpg"></a>',
         '</body></html>',
         '''<style>
+
+        .marquee {
+            transform: translateX(0px);
+            animation-name: scroll-left-cofzw;
+            animation-duration: 26.6s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            animation-fill-mode: forwards;
+        }
+
         .stream-name {background-color:#000000 !important; color:#FFFFFF !important}
         .links {display:flex; margin-top: 10px; margin-bottom: 10px;}
         .a-link {font-size: 8pt !important; margin-right: 10px;}
@@ -155,9 +165,72 @@ def write_main_page(streams):
         stationContainers.forEach((container) => {
             const logo = container.querySelector('.a-logo');
             const nowPlaying = container.querySelector('.now-playing');
+            const oneLiner = container.querySelector('.one-Liner');
+
             needsMarquee = (container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth) < 0;
-            
+            if (needsMarquee) {
+                setupOneLinerMarquee(oneLiner, 'left')
+            };
         });
+
+        function setupOneLinerMarquee(oneLinerElement, direction = 'left') {
+            if (!oneLinerElement) return;
+            
+            const text = oneLinerElement.textContent;
+            const textLength = text.length;
+            
+            const wrapper = document.createElement('div');
+            wrapper.style.cssText = `
+                overflow: hidden;
+                white-space: nowrap;
+                display: inline-block;
+                width: 200px; /* Adjust this based on your design */
+                position: relative;
+            `;
+            
+            const scrollContent = document.createElement('div');
+            scrollContent.style.cssText = `
+                display: inline-block;
+                white-space: nowrap;
+            `;
+            
+            scrollContent.innerHTML = `${text}&nbsp;&nbsp;&nbsp;&nbsp;${text}`;
+            
+            oneLinerElement.innerHTML = '';
+            oneLinerElement.appendChild(wrapper);
+            wrapper.appendChild(scrollContent);
+            
+            const duration = Math.max(textLength / 8, 3); // At least 3 seconds
+            
+            const uid = Math.random().toString(36).substr(2, 5);
+            const animName = `scroll-oneliner-${direction}-${uid}`;
+            
+            const style = document.createElement('style');
+            if (direction === 'left') {
+                style.textContent = `
+                @keyframes ${animName} {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-50%); }
+                }
+                `;
+            } else {
+                style.textContent = `
+                @keyframes ${animName} {
+                    0% { transform: translateX(-50%); }
+                    100% { transform: translateX(0); }
+                }
+                `;
+            }
+            document.head.appendChild(style);
+            
+            scrollContent.style.cssText += `
+                animation-name: ${animName};
+                animation-duration: ${duration}s;
+                animation-timing-function: linear;
+                animation-iteration-count: infinite;
+                animation-fill-mode: forwards;
+            `;
+        }
         </script>
         ''']
     )
