@@ -291,6 +291,10 @@ def write_main_page(streams):
                 backface-visibility: hidden;
             `;
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateMarquees();
+        }
         </script>
         ''']
     )
