@@ -165,7 +165,7 @@ def write_main_page(streams):
         stationContainers.forEach((container) => {
             const logo = container.querySelector('.a-logo');
             const nowPlaying = container.querySelector('.now-playing');
-            const oneLiner = container.querySelector('.one-Liner');
+            const oneLiner = container.querySelector('.one-liner');
 
             needsMarquee = (container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth) < 0;
             console.log(needsMarquee);
@@ -175,8 +175,6 @@ def write_main_page(streams):
         });
 
         function setupOneLinerMarquee(oneLinerElement, direction = 'left') {
-            console.log("attempting to make marquee");
-            if (!oneLinerElement) return;
             
             const text = oneLinerElement.textContent;
             const textLength = text.length;
