@@ -250,16 +250,15 @@ def write_main_page(streams):
             }
             document.head.appendChild(style);
             
-            // Apply animation (exactly matching your working CSS)
             scrollContainer.style.cssText += `
                 animation-name: ${animName};
                 animation-duration: ${duration}s;
                 animation-timing-function: linear;
                 animation-iteration-count: infinite;
                 animation-fill-mode: forwards;
+                top: 3px;
             `;
             
-            // Replace the original element's content
             oneLinerElement.innerHTML = '';
             oneLinerElement.appendChild(wrapper);
             wrapper.appendChild(scrollContainer);
