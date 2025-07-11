@@ -794,7 +794,7 @@
     "Radio Banda Larga": {
         "about": "Radio is our primary medium, our ears our favourite tool.",
         "bandcampLink": null,
-        "infoLink": "https://api.radioking.io/widget/radio/mutant-radio/track/current",
+        "infoLink": "https://rblmedia.airtime.pro/api/live-info-v2?timezone=America/Los_Angeles",
         "instaLink": "https://www.instagram.com/rbltorino/",
         "lastUpdated": "2025-07-10 23:37:17.778217+00:00",
         "location": "Turin",
