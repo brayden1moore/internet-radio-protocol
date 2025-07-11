@@ -88,9 +88,9 @@ def write_main_page(streams):
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
         <link rel="manifest" href="/favicon/site.webmanifest" />''',
         '<meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img id="main-logo" src="assets/scudradiocenter.gif" alt="Loading" width="auto"></div>',
-        '<div class="the-header">THE<br>INTERNET RADIO<br>PROTOCOL</div>', 
+        '<div class="the-header">THE<br>INTERNET RADIO<br>PROTOCOL</div>',
+        f'<div class="the-header">{len(online)} LIVE, {len(rerun) + len(online)} ONLINE, {len(offline)} OFFLINE</div>',  
         f"I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of stations. Click a logo to tune in. Support a station if you like it. And follow me on instagram, <a target='_blank' href='https://www.instagram.com/scudhouse/'>@scudhouse</a>. Last updated {formatted_time}.",
-        f'<div class="the-header">{len(online)} LIVE, {len(rerun) + len(online)} ONLINE, {len(offline)} OFFLINE</div>', 
         '', '',
         '<div class="streams-container">',
         ''.join([f'''<div class="a-station-container" id="{v['name']}">
