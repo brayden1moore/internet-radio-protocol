@@ -102,7 +102,7 @@ def write_main_page(streams):
             <a class="a-link support-link" target="_blank" href="{v.get('supportLink')}">SUPPORT</a>
         </div>
         <span class="now-playing"><span class="one-liner">{v.get('oneLiner')}</span></span><br>
-        Location: {v["location"]}<br>Status: {v["status"]}<br>
+        Location: <span class="location">{v["location"]}</span><br>Status: <span class="status">{v["status"]}</span><br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
         </div>
         </div>''' for v in streams]),
@@ -296,13 +296,15 @@ def write_main_page(streams):
                     const location = json[stationName]['location'];
                     const status = json[stationName]['status'];
                     const stationDiv = document.getElementById(stationName);
-
                     const currentOneLiner = stationDiv.querySelector('.one-liner').textContent;
-                    console.log(station);
-                    console.log('Current One Liner:', currentOneLiner);
-                    console.log('Pulled One Liner:', oneLiner);
-                    console.log(currentOneLiner.includes(oneLiner));
                     
+                    if (!currentOneLiner.includes(oneLiner)) {
+                        stationDiv.querySelector('.one-liner').textContent = oneLiner;
+                        stationDiv.querySelector('.location').textContent = location;
+                        stationDiv.querySelector('.status').textContent = status;
+
+                        calculateMarquees();
+                    };
                 });
             })
             .catch(function(error) {
