@@ -283,18 +283,12 @@ def write_main_page(streams):
             })
             .then(function(response) { return response.json(); })
             .then(function(json) {
-                console.log('Response type:', typeof json);
-                console.log('Response data:', json);
-                
-                // Check if it's an array
-                if (Array.isArray(json)) {
-                    json.forEach(function(station) {
-                        const stationDiv = document.getElementById(station.name);
-                        console.log(stationDiv);
-                    });
-                } else {
-                    console.error('Response is not an array:', json);
-                }
+                Object.keys(json).forEach(function(stationName) {
+                    const station = json[stationName];
+                    const stationDiv = document.getElementById(stationName);
+                    console.log('Station:', stationName);
+                    console.log('Station div:', stationDiv);
+                });
             })
             .catch(function(error) {
                 console.error('Fetch error:', error);
