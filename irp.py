@@ -136,6 +136,12 @@ def write_main_page(streams):
         backface-visibility: hidden;
         }
 
+        .flash {
+            background-color: black !important;
+            color: white !important;
+            transition: background-color 0.3s ease-out, color 0.3s ease-out;
+        }
+
         .stream-name {background-color:#000000 !important; color:#FFFFFF !important}
         .links {display:flex; margin-top: 10px; margin-bottom: 8px;}
         .a-link {font-size: 8pt !important; margin-right: 10px;}
@@ -315,6 +321,10 @@ def write_main_page(streams):
                     hour12: true
                 });
                 lastUpdated.textContent = formatter.format(now) + ' (pacific)';
+                lastUpdated.classList.add('flash');
+                setTimeout(function() {
+                    lastUpdated.classList.remove('flash');
+                }, 1000);
 
             })
             .catch(function(error) {
