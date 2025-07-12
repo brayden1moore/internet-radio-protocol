@@ -294,6 +294,7 @@ def write_main_page(streams):
                     const currentOneLiner = stationDiv.querySelector('.one-liner').textContent;
                     console.log(station);
                     console.log('Current One Liner:', currentOneLiner);
+                    console.log('Pulled One Liner:', oneLiner);
                     console.log(currentOneLiner.includes(oneLiner));
                     
                 });
