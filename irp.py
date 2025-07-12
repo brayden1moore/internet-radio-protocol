@@ -307,7 +307,18 @@ def write_main_page(streams):
                     };
                 });
 
-                const 
+                const lastUpdated = document.querySelector(.last-updated);
+                const now = new Date();
+                const formatter = new Intl.DateTimeFormat('en-US', {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
+                });
+                lastUpdated.textContent = formatter.format(now) + ' (pacific)';
+
             })
             .catch(function(error) {
                 console.error('Fetch error:', error);
