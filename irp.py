@@ -69,10 +69,13 @@ def write_main_page(streams):
         one_liner = v.get('oneLiner') or 'no data'
         one_liner = one_liner.lower()
         if v['status'] == 'Offline':
+            v['status'] = 'Offline'
             offline.append(v)
         elif any(i in one_liner for i in ['(r)','re-run','re-wav','restream','playlist']):
+            ['status'] = 'Online'
             rerun.append(v)
         else:
+            v['status'] = 'Live'
             online.append(v)
 
     now = datetime.now(ZoneInfo('America/Los_Angeles'))
