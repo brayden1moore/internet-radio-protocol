@@ -137,9 +137,12 @@ def write_main_page(streams):
         }
 
         .flash {
-            background-color: black !important;
-            color: white !important;
-            transition: background-color 0.3s ease-out, color 0.3s ease-out;
+        background-color: black !important;
+        color: white !important;
+        }
+
+        .flash-out {
+        transition: background-color 1s ease-out, color 1s ease-out;
         }
 
         .stream-name {background-color:#000000 !important; color:#FFFFFF !important}
@@ -323,8 +326,13 @@ def write_main_page(streams):
                 lastUpdated.textContent = formatter.format(now) + ' (pacific)';
                 lastUpdated.classList.add('flash');
                 setTimeout(function() {
+                    lastUpdated.classList.add('flash-out');
                     lastUpdated.classList.remove('flash');
-                }, 1000);
+                }, 100); 
+                    
+                setTimeout(function() {
+                    lastUpdated.classList.remove('flash-out');
+                }, 1100);
 
             })
             .catch(function(error) {
