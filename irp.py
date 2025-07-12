@@ -313,7 +313,7 @@ def write_main_page(streams):
                     if (status === 'Offline') {
                         offline++;
                     }
-                    else if (rerunStrs.Contains(oneLiner.Split(" ")) {
+                    else if (rerunStrs.Contains(oneLiner.Split(" "))) {
                         rerun++;
                     }
                     else {
