@@ -69,13 +69,10 @@ def write_main_page(streams):
         one_liner = v.get('oneLiner') or 'no data'
         one_liner = one_liner.lower()
         if v['status'] == 'Offline':
-            v['status'] = 'Offline'
             offline.append(v)
         elif any(i in one_liner for i in ['(r)','re-run','re-wav','restream','playlist']):
-            ['status'] = 'Online'
             rerun.append(v)
         else:
-            v['status'] = 'Live'
             online.append(v)
 
     now = datetime.now(ZoneInfo('America/Los_Angeles'))
@@ -234,7 +231,7 @@ def write_main_page(streams):
             const computedStyle = window.getComputedStyle(originalSpan);
             const marginRight = parseFloat(computedStyle.marginRight) || 0;
             const totalWidth = originalSpan.offsetWidth + marginRight;
-            const duration = totalWidth / 50; // Adjust speed as needed
+            const duration = totalWidth / 25; // Adjust speed as needed
             
             const uid = Math.random().toString(36).substr(2, 5);
             const animName = `scroll-oneliner-${direction}-${uid}`;
