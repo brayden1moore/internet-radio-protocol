@@ -278,15 +278,26 @@ def write_main_page(streams):
         });
 
         function getUpdatedInfo() {
-            fetch('https://internetradioprotocol.org/info', { 
-            method: 'GET'
+            fetch('https://internetradioprotocol.org/info', {
+                method: 'GET'
             })
             .then(function(response) { return response.json(); })
             .then(function(json) {
-                json.forEach(function(station) {
+                console.log('Response type:', typeof json);
+                console.log('Response data:', json);
+                
+                // Check if it's an array
+                if (Array.isArray(json)) {
+                    json.forEach(function(station) {
                         const stationDiv = document.getElementById(station.name);
                         console.log(stationDiv);
-                });            
+                    });
+                } else {
+                    console.error('Response is not an array:', json);
+                }
+            })
+            .catch(function(error) {
+                console.error('Fetch error:', error);
             });
         }
 
