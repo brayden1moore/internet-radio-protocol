@@ -325,6 +325,8 @@ def write_main_page(streams):
             });
         }
 
+        setInterval(getUpdatedInfo, 30000);
+
         </script>
         ''']
     )
