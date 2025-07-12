@@ -139,7 +139,7 @@ def write_main_page(streams):
         .stream-name {background-color:#000000 !important; color:#FFFFFF !important}
         .links {display:flex; margin-top: 10px; margin-bottom: 8px;}
         .a-link {font-size: 8pt !important; margin-right: 10px;}
-        .support-link {background-color:#FFFF00; border: 1px solid #000000;}
+        .support-link {background-color:#FFFF00;}
         #main-logo {height: 225px;}
         .a-station-container {cursor:default; background-color: #FFFFFF; color:#000000; height: 90px; padding: 10px; overflow-x:hidden; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
         .a-logo {width:90px; height:90px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
