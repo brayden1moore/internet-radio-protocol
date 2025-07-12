@@ -317,7 +317,7 @@ def write_main_page(streams):
                     minute: '2-digit',
                     hour12: true
                 });
-                lastUpdated.textContent = formatter.format(now) + ' (paific)';
+                lastUpdated.textContent = formatter.format(now) + ' (pacific)';
 
             })
             .catch(function(error) {
