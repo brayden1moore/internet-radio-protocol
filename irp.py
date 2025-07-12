@@ -846,7 +846,10 @@ class Stream:
             info = requests.get(self.info_link).json()
             self.now_playing = info['program']
             self.now_playing_artist = info['presenter']
-            self.now_playing_subtitle = info['title'] + ' by ' + info['artist']
+            try:
+                self.now_playing_subtitle = info['title'] + ' by ' + info['artist']
+            except:
+                self.now_playing_subtitle = info['title']
             try:
                 self.show_logo = info['program_image'].replace('\/','/')
             except:
