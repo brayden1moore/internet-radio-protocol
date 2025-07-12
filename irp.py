@@ -286,7 +286,7 @@ def write_main_page(streams):
             .then(function(json) {
                 Object.keys(json).forEach(function(stationName) {
                     const station = json[stationName];
-                    const oneLiner = json[stationName]['oneLiner'].unescape();
+                    const oneLiner = unescape(json[stationName]['oneLiner']);
                     const location = json[stationName]['location'];
                     const status = json[stationName]['status'];
                     const stationDiv = document.getElementById(stationName);
