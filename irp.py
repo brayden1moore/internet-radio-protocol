@@ -284,10 +284,6 @@ def write_main_page(streams):
             getUpdatedInfo();
         });
 
-        window.addEventListener('resize', ()=> {
-            calculateMarquees();
-        });
-
         function decodeHtmlEntities(text) {
             const textarea = document.createElement('textarea');
             textarea.innerHTML = text;
