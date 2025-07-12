@@ -292,7 +292,7 @@ def write_main_page(streams):
                     const stationDiv = document.getElementById(stationName);
 
                     const currentOneLiner = stationDiv.querySelector('.one-liner').textContent;
-                    console.log('Current One Liner:', currentOneLiner.textContent);
+                    console.log('Current One Liner:', currentOneLiner);
                     console.log(currentOneLiner.includes(oneLiner));
                     
                 });
