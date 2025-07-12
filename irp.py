@@ -280,7 +280,7 @@ def write_main_page(streams):
         });
 
         function getUpdatedInfo() {
-            fetch('http://internetradioprotocol.org/info', { 
+            fetch('https://internetradioprotocol.org/info', { 
             method: 'GET'
             })
             .then(function(response) { return response.json(); })
