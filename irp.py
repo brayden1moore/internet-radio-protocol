@@ -179,10 +179,8 @@ def write_main_page(streams):
                 const logo = container.querySelector('.a-logo');
                 const nowPlaying = container.querySelector('.now-playing');
                 const oneLiner = container.querySelector('.one-liner');
-
                 const width = (container.offsetWidth - logo.offsetWidth - (nowPlaying.offsetWidth - oneLiner.offsetWidth)) + 'px';
                 needsMarquee = (container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth) < 20;
-                console.log(width);
                 if (needsMarquee) {
                     setupOneLinerMarquee(oneLiner, width, 'left');
                 };
@@ -285,7 +283,10 @@ def write_main_page(streams):
             })
             .then(function(response) { return response.json(); })
             .then(function(json) {
-                console.log(json['BFF.fm']['oneLiner'])
+                for (var station of json) {
+                    const stationDiv = document.getElementById(station.name);
+                    console.log(stationDiv);
+                }                
             });
         }
 
