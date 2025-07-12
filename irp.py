@@ -286,7 +286,6 @@ def write_main_page(streams):
                 json.forEach(function(station) {
                         const stationDiv = document.getElementById(station.name);
                         console.log(stationDiv);
-                    });
                 });            
             });
         }
