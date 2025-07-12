@@ -283,6 +283,7 @@ def write_main_page(streams):
             })
             .then(function(response) { return response.json(); })
             .then(function(json) {
+                console.log(json);
                 for (var station of json) {
                     const stationDiv = document.getElementById(station.name);
                     console.log(stationDiv);
