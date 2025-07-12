@@ -89,7 +89,7 @@ def write_main_page(streams):
         <link rel="manifest" href="/favicon/site.webmanifest" />''',
         '<meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img id="main-logo" src="assets/scudradiocenter.gif" alt="Loading" width="auto"></div>',
         '<div class="the-header">THE<br>INTERNET RADIO<br>PROTOCOL</div>',
-        f"I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of stations. Click a logo to tune in. Support a station if you like it. And follow me on instagram, <a target='_blank' href='https://www.instagram.com/scudhouse/'>@scudhouse</a>. Last updated <span class='last-updated'>{formatted_time}</span>. {len(rerun) + len(online)} ONLINE, {len(online)} LIVE, {len(offline)} OFFLINE.",
+        f"I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of stations. Click a logo to tune in. Support a station if you like it. And follow me on instagram, <a target='_blank' href='https://www.instagram.com/scudhouse/'>@scudhouse</a>. Last updated <span class='last-updated'>{formatted_time}</span>. <span class='live-count'>{len(rerun) + len(online)} ONLINE, {len(online)} LIVE, {len(offline)} OFFLINE</span>.",
         '', '',
         '<div class="streams-container">',
         ''.join([f'''<div class="a-station-container" id="{v['name']}">
@@ -296,6 +296,11 @@ def write_main_page(streams):
             })
             .then(function(response) { return response.json(); })
             .then(function(json) {
+
+                var rerun = 0;
+                var live = 0;
+                var offline = 0;
+
                 Object.keys(json).forEach(function(stationName) {
                     const station = json[stationName];
                     const oneLiner = decodeHtmlEntities(json[stationName]['oneLiner']);
@@ -304,6 +309,17 @@ def write_main_page(streams):
                     const stationDiv = document.getElementById(stationName);
                     const currentOneLiner = stationDiv.querySelector('.one-liner').textContent;
                     
+                    rerunStrs = ['(r)','re-run','re-wav','restream','playlist']
+                    if (status === 'Offline') {
+                        offline++;
+                    }
+                    else if (rerunStrs.Contains(oneLiner.Split(" ")) {
+                        rerun++;
+                    }
+                    else {
+                        live++;
+                    }
+
                     if (!currentOneLiner.includes(oneLiner)) {
                         stationDiv.querySelector('.one-liner').textContent = oneLiner;
                         stationDiv.querySelector('.location').textContent = location;
@@ -323,6 +339,10 @@ def write_main_page(streams):
                     minute: '2-digit',
                     hour12: true
                 });
+
+                liveCount = document.querySelector('.live-count');
+                liveCount.textContent = `${live+rerun} ONLINE, ${live} LIVE, ${offline} OFFLINE`; 
+
                 lastUpdated.textContent = formatter.format(now) + ' (pacific)';
                 lastUpdated.classList.add('flash');
                 setTimeout(function() {
