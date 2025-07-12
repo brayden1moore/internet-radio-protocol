@@ -992,7 +992,7 @@ async def main_loop():
             log.writelines(error_lines)
 
         write_main_page(updated)
-        await asyncio.sleep(60)
+        await asyncio.sleep(30)
 
 if __name__ == '__main__':
     asyncio.run(main_loop())
