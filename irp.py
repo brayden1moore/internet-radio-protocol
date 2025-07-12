@@ -99,7 +99,6 @@ def write_main_page(streams):
         <div class="links">
             <a class="a-link" target="_blank" href="{v['streamLink']}">STREAM</a>
             <a class="a-link" target="_blank" href="{v['mainLink']}">WEBSITE</a>
-            <a class="a-link" target="_blank" href="{v['infoLink']}">INFO</a>
             <a class="a-link support-link" target="_blank" href="{v.get('supportLink')}">SUPPORT</a>
         </div>
         <span class="now-playing"><span class="one-liner">{v.get('oneLiner')}</span></span><br>
