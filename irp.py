@@ -278,6 +278,12 @@ def write_main_page(streams):
             getUpdatedInfo();
         });
 
+        function decodeHtmlEntities(text) {
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = text;
+            return textarea.value;
+        }
+
         function getUpdatedInfo() {
             fetch('https://internetradioprotocol.org/info', {
                 method: 'GET'
