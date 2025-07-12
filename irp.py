@@ -307,7 +307,7 @@ def write_main_page(streams):
                     };
                 });
 
-                const lastUpdated = document.querySelector(.last-updated);
+                const lastUpdated = document.querySelector('.last-updated');
                 const now = new Date();
                 const formatter = new Intl.DateTimeFormat('en-US', {
                     weekday: 'short',
