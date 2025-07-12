@@ -212,6 +212,7 @@ def write_main_page(streams):
             `;
             
             const originalSpan = document.createElement('span');
+            originalSpan.classList.add('marqueeOneLiner');
             originalSpan.textContent = text;
             originalSpan.style.cssText = `
                 display: inline-block;
@@ -285,9 +286,15 @@ def write_main_page(streams):
             .then(function(json) {
                 Object.keys(json).forEach(function(stationName) {
                     const station = json[stationName];
+                    const oneLiner = json[stationName]['oneLiner'];
+                    const location = json[stationName]['location'];
+                    const status = json[stationName]['status'];
                     const stationDiv = document.getElementById(stationName);
-                    console.log('Station:', stationName);
-                    console.log('Station div:', stationDiv);
+
+                    const currentOneLiner = stationDiv.querySelector('.one-liner');
+                    console.log('Current One Liner:', currentOneLiner.textContent);
+                    console.log('Pulled One Liner:', oneLiner);
+                    
                 });
             })
             .catch(function(error) {
