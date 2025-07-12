@@ -298,7 +298,7 @@ def write_main_page(streams):
                     const stationDiv = document.getElementById(stationName);
                     const currentOneLiner = stationDiv.querySelector('.one-liner').textContent;
                     
-                    if (currentOneLiner.includes(oneLiner)) {
+                    if (!currentOneLiner.includes(oneLiner)) {
                         stationDiv.querySelector('.one-liner').textContent = oneLiner;
                         stationDiv.querySelector('.location').textContent = location;
                         stationDiv.querySelector('.status').textContent = status;
