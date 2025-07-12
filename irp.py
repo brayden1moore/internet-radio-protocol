@@ -141,7 +141,7 @@ def write_main_page(streams):
         }
 
         .stream-name {background-color:#000000 !important; color:#FFFFFF !important}
-        .links {display:flex; margin-top: 10px; margin-bottom: 10px;}
+        .links {display:flex; margin-top: 10px; margin-bottom: 8px;}
         .a-link {font-size: 8pt !important; margin-right: 10px;}
         .support-link {background-color:#FFFF00; border: 1px solid #000000;}
         #main-logo {height: 225px;}
