@@ -101,7 +101,7 @@ def write_main_page(streams):
             <a class="a-link" target="_blank" href="{v['mainLink']}">WEBSITE</a>
             <a class="a-link support-link" target="_blank" href="{v.get('supportLink')}">SUPPORT</a>
         </div>
-        <span class="now-playing"><span class="one-liner">{v.get('oneLiner')}</span></span><br>
+        Playing: <span class="now-playing"><span class="one-liner">{v.get('oneLiner')}</span></span><br>
         Location: <span class="location">{v["location"]}</span><br>Status: <span class="status">{v["status"]}</span><br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
         </div>
