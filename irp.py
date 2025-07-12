@@ -285,7 +285,7 @@ def write_main_page(streams):
             })
             .then(function(response) { return response.json(); })
             .then(function(json) {
-                console.log(json)
+                console.log(json['BFF.fm']['oneLiner'])
             });
         }
 
