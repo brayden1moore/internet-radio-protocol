@@ -99,6 +99,7 @@ def write_main_page(streams):
         <div class="links">
             <a class="a-link" target="_blank" href="{v['streamLink']}">STREAM</a>
             <a class="a-link" target="_blank" href="{v['mainLink']}">WEBSITE</a>
+            <a class="a-link info-link" target="_blank" href="{v['infoLink']}">INFO</a>
             <a class="a-link support-link" target="_blank" href="{v.get('supportLink')}">SUPPORT</a>
         </div>
         Playing: <span class="now-playing"><span class="one-liner">{v.get('oneLiner')}</span></span><br>
@@ -149,6 +150,7 @@ def write_main_page(streams):
         .links {display:flex; margin-top: 10px; margin-bottom: 8px;}
         .a-link {font-size: 8pt !important; margin-right: 10px;}
         .support-link {background-color:#FFFF00; border: 1px solid #000000;}
+        .info-link {display:none}
         #main-logo {height: 225px;}
         .a-station-container {cursor:default; background-color: #FFFFFF; color:#000000; height: 90px; padding: 10px; overflow-x:hidden; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
         .a-logo {width:90px; height:90px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
@@ -163,6 +165,7 @@ def write_main_page(streams):
         .streams-container {display: grid; grid-template-columns: 1fr; gap: 20px; margin-top:30px; margin-bottom:30px;}
         @media (orientation: landscape) 
         {
+        .info-link {display:block}
         body{font-size: 12pt;} 
         .a-link {font-size: 10pt !important;}
         .a-station-container {height:110px;} 
