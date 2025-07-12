@@ -291,9 +291,9 @@ def write_main_page(streams):
                     const status = json[stationName]['status'];
                     const stationDiv = document.getElementById(stationName);
 
-                    const currentOneLiner = stationDiv.querySelector('.one-liner');
+                    const currentOneLiner = stationDiv.querySelector('.one-liner').textContent;
                     console.log('Current One Liner:', currentOneLiner.textContent);
-                    console.log('Pulled One Liner:', oneLiner);
+                    console.log(currentOneLiner.includes(oneLiner));
                     
                 });
             })
