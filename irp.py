@@ -300,7 +300,6 @@ def write_main_page(streams):
                 var rerun = 0;
                 var live = 0;
                 var offline = 0;
-
                 Object.keys(json).forEach(function(stationName) {
                     const station = json[stationName];
                     const oneLiner = decodeHtmlEntities(json[stationName]['oneLiner']);
@@ -309,24 +308,24 @@ def write_main_page(streams):
                     const stationDiv = document.getElementById(stationName);
                     const currentOneLiner = stationDiv.querySelector('.one-liner').textContent;
                     
-                    rerunStrs = ['(r)','re-run','re-wav','restream','playlist']
+                    const rerunStrs = ['(r)', 're-run', 're-wav', 'restream', 'playlist'];
+                    
                     if (status === 'Offline') {
                         offline++;
                     }
-                    else if (rerunStrs.Contains(oneLiner.Split(" "))) {
+                    else if (rerunStrs.some(str => oneLiner.toLowerCase().includes(str.toLowerCase()))) {
                         rerun++;
                     }
                     else {
                         live++;
                     }
-
+                    
                     if (!currentOneLiner.includes(oneLiner)) {
                         stationDiv.querySelector('.one-liner').textContent = oneLiner;
                         stationDiv.querySelector('.location').textContent = location;
                         stationDiv.querySelector('.status').textContent = status;
-
                         calculateMarquees();
-                    };
+                    }
                 });
 
                 const lastUpdated = document.querySelector('.last-updated');
