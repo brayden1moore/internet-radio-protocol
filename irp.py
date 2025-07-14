@@ -907,6 +907,17 @@ class Stream:
                 self.now_playing = None
                 self.status = 'Offline'
 
+        elif self.name == 'Subtle Radio':
+            info = requests.get(self.info_link).json()
+            try:
+                self.now_playing = info['shows']['current']['name']
+                self.now_playing_description = info['shows']['current']['description']
+                self.additional_info = info['tracks']['current']['name']
+                self.status = 'Online'
+            except:
+                self.now_playing = None
+                self.status = 'Offline'
+
 
     def guess_shazam(self):
         self.shazam_guess = "Unknown"
