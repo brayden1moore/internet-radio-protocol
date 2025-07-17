@@ -21,7 +21,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://stream.bff.fm/1/mp3.mp3",
-        "supportLink": "https://bff.fm/donate"
+        "supportLink": "https://bff.fm/donate",
+        "hidden": false
     },
     "Bloop Radio": {
         "about": "Family Operated Online Underground Radio Station based in the heart of Central London. Specialising in Electronic Music that broadcasts nothing but exclusive shows from London based Residents & Guests DJs.",
@@ -45,7 +46,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://radio.canstream.co.uk:8058/live.mp3",
-        "supportLink": "https://blooplondonshop.com"
+        "supportLink": "https://blooplondonshop.com",
+        "hidden": false
     },
     "Clyde Built Radio": {
         "about": "Clyde Built Radio is a non-profit community radio station highlighting Glasgow\u2019s music, arts and culture communities to the rest of the world.",
@@ -69,7 +71,8 @@
         "soundcloudLink": null,
         "status": "Offline",
         "streamLink": "https://clydebuiltradio.out.airtime.pro/clydebuiltradio_a",
-        "supportLink": "https://www.clydebuiltradio.com/support"
+        "supportLink": "https://www.clydebuiltradio.com/support",
+        "hidden": false
     },
     "Do!!You!!! World": {
         "about": "",
@@ -93,7 +96,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://doyouworld.out.airtime.pro/doyouworld_a",
-        "supportLink": "https://doyou.world/collections/memberships"
+        "supportLink": "https://doyou.world/collections/memberships",
+        "hidden": false
     },
     "Dublab": {
         "about": "dublab is a Los Angeles-based, community-supported internet radio station and creative collective dedicated to the growth of positive music, arts, and culture.",
@@ -117,7 +121,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://dublab.out.airtime.pro/dublab_a",
-        "supportLink": "https://www.dublab.com/support/memberships"
+        "supportLink": "https://www.dublab.com/support/memberships",
+        "hidden": false
     },
     "Fault Radio": {
         "about": "Fault Radio is the ultimate advocate for our local community, acting as a dynamic bridge between the Bay Area\u2019s thriving arts scene and the broader music world.",
@@ -141,7 +146,8 @@
         "soundcloudLink": "https://soundcloud.com/faultradio",
         "status": "Offline",
         "streamLink": "https://player.twitch.tv/?autoplay=1&channel=Faultradio",
-        "supportLink": "https://www.faultradio.com/donate"
+        "supportLink": "https://www.faultradio.com/donate",
+        "hidden": true
     },
     "HKCR": {
         "about": "Founded in 2016, Hong Kong Community Radio (HKCR) is a community platform and independent radio station comprised of creators, musicians, artists and fans with aims to broadcast and support independent works as an open platform.",
@@ -165,7 +171,8 @@
         "soundcloudLink": "https://soundcloud.com/hkcrlive",
         "status": "Online",
         "streamLink": "https://stream.hkcr.live/hls/stream_high.m3u8",
-        "supportLink": "https://www.patreon.com/hkcr"
+        "supportLink": "https://www.patreon.com/hkcr",
+        "hidden": false
     },
     "HydeFM": {
         "about": "HydeFM is a community-based multi-genre online radio station broadcasting out of San Francisco, CA.",
@@ -189,7 +196,8 @@
         "soundcloudLink": null,
         "status": "Offline",
         "streamLink": "https://media.evenings.co/s/DReMy100B",
-        "supportLink": "https://www.flipcause.com/secure/cause_pdetails/MTcwMDMx"
+        "supportLink": "https://www.flipcause.com/secure/cause_pdetails/MTcwMDMx",
+        "hidden": false
     },
     "Internet Public Radio": {
         "about": "Internet Public Radio is an independent cultural platform and radio station curated by local and international DJs, musicians and visual artists.",
@@ -213,7 +221,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://c11.radioboss.fm:18270/stream",
-        "supportLink": "https://www.internetpublicradio.live"
+        "supportLink": "https://www.internetpublicradio.live",
+        "hidden": false
     },
     "KEXP": {
         "about": "KEXP is an international community of music lovers and music makers, and a nonprofit organization fostering relationship and community building through broadcast, online, and in-person music experiences.",
@@ -237,7 +246,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://kexp-mp3-128.streamguys1.com/kexp128.mp3",
-        "supportLink": "https://www.kexp.org/donate/"
+        "supportLink": "https://www.kexp.org/donate/",
+        "hidden": false
     },
     "KJazz": {
         "about": "KKJZ 88.1 FM (\u201cKJazz\u201d) is the #1 full-time mainstream jazz station in the United States and one of the top ranked public radio stations in the country.",
@@ -261,7 +271,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://das-edge11-live365-dal03.cdnstream.com/a49833/playlist.m3u8",
-        "supportLink": "https://kkjz.secureallegiance.com/kkjz/WebModule/Donate.aspx?P=WEB2020&PAGETYPE=PLG&CHECK=RmCkD65dLKTtDFdmd%2bo4ruzWDeZ%2beA1M"
+        "supportLink": "https://kkjz.secureallegiance.com/kkjz/WebModule/Donate.aspx?P=WEB2020&PAGETYPE=PLG&CHECK=RmCkD65dLKTtDFdmd%2bo4ruzWDeZ%2beA1M",
+        "hidden": false
     },
     "KQED": {
         "about": "KQED serves the people of Northern California with a community-supported alternative to commercial media.",
@@ -285,7 +296,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://streams.kqed.org/kqedradio?onsite=true",
-        "supportLink": "https://donate.kqed.org/donatetoday"
+        "supportLink": "https://donate.kqed.org/donatetoday",
+        "hidden": false
     },
     "Kiosk Radio": {
         "about": "Kiosk Radio is an online community radio and streaming platform broadcasting 24/7 from a wooden kiosk in the heart of Brussels\u2019 historic 'Parc Royal'. The radio was founded in 2017 and broadcasts a wide range of music genres, from jazz to experimental, from rock to electronic music.",
@@ -309,7 +321,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://kioskradiobxl.out.airtime.pro/kioskradiobxl_b",
-        "supportLink": "https://shop.kioskradio.com"
+        "supportLink": "https://shop.kioskradio.com",
+        "hidden": false
     },
     "Kool FM": {
         "about": "Kool FM, also known as Kool London, is a former London pirate radio station that now broadcasts on DAB and online, playing jungle, drum and bass, and old skool. Kool is generally regarded as being instrumental in the development of the jungle music scene.",
@@ -333,7 +346,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://admin.stream.rinse.fm/proxy/kool/stream",
-        "supportLink": "https://www.rinse.fm/shop/"
+        "supportLink": "https://www.rinse.fm/shop/",
+        "hidden": false
     },
     "LYL Radio": {
         "about": "Broadcasting live from Unit\u00e9 Centrale in Lyon, La Tour Orion in Paris, Brasserie Atlas in Brussels and Les Ateliers de la Ville in Marseille.",
@@ -357,7 +371,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://radio.lyl.live/hls/live.m3u8",
-        "supportLink": "https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=C37FVDHHSZCA6"
+        "supportLink": "https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=C37FVDHHSZCA6",
+        "hidden": false
     },
     "Lower Grand Radio": {
         "about": "If you would like to do a show, please contact us at lowergrandshows@gmail.com All ideas are welcome. Please include any links or information about a type of show you are thinking. Please be specific!",
@@ -381,7 +396,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://media.evenings.co/s/g1b9EBY39",
-        "supportLink": "https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=7QPWGHQ5QLXWC&source=url&ssrt=1752175580020"
+        "supportLink": "https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=7QPWGHQ5QLXWC&source=url&ssrt=1752175580020",
+        "hidden": false
     },
     "Monotonic Radio": {
         "about": "Above the bar underground music.",
@@ -405,7 +421,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://monotonicradio.com/stream",
-        "supportLink": "https://venmo.com/?txn=pay&audience=public&recipients=miles-barrow-1&note=Support%20Monotonic%20Radio"
+        "supportLink": "https://venmo.com/?txn=pay&audience=public&recipients=miles-barrow-1&note=Support%20Monotonic%20Radio",
+        "hidden": false
     },
     "Mutant Radio": {
         "about": "Mutant Radio is a media platform that focuses on various directions: mixes, interviews, educational shows, live performances and discusssion broadcasts that are either live-streamed or filmed and streamed later on. It gathers various artists, DJs, and interesting personalities that have an opportunity to focus on the subject of their preference and their interest. What is unique about Mutant Radio is that it is mobile. The physical station is a fully-equipped caravan-wagon that is based in Tbilisi yet also streams from other regions and special locations around Georgia. Apart from the live streams, Mutant Radio also has an open-air cafe, where like-minded people have an opportunity to enjoy quality music and a friendly vibe.",
@@ -429,7 +446,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://listen.radioking.com/radio/282820/stream/328621",
-        "supportLink": "https://mutantradio.bandcamp.com/album/mutant-fundraising-compilation"
+        "supportLink": "https://mutantradio.bandcamp.com/album/mutant-fundraising-compilation",
+        "hidden": false
     },
     "NTS 1": {
         "about": "NTS provides curious minds with a home for music discovery. Built by music lovers, for music lovers.",
@@ -453,7 +471,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://stream-relay-geo.ntslive.net/stream",
-        "supportLink": "https://www.nts.live/supporters"
+        "supportLink": "https://www.nts.live/supporters",
+        "hidden": false
     },
     "NTS 2": {
         "about": "NTS provides curious minds with a home for music discovery. Built by music lovers, for music lovers.",
@@ -477,7 +496,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://stream-relay-geo.ntslive.net/stream2",
-        "supportLink": "https://www.nts.live/supporters"
+        "supportLink": "https://www.nts.live/supporters",
+        "hidden": false
     },
     "Radio Alhara": {
         "about": "Palestine community radio.",
@@ -525,7 +545,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://rblmedia.out.airtime.pro/rblmedia_a",
-        "supportLink": "https://www.patreon.com/rblmedia"
+        "supportLink": "https://www.patreon.com/rblmedia",
+        "hidden": false
     },
     "Radio Quantica": {
         "about": "R\u00e1dio Qu\u00e2ntica is a Lisbon-based community radio station established in 2015, and developed with a diverse group of artists and crews \u2013 a safe haven where the voices of underground artists and activists can be heard.",
@@ -549,7 +570,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://libretime.radioquantica.com/main.mp3",
-        "supportLink": "https://www.paypal.com/donate?token=TeUgFAbv6YKrSZK1gda3T4X8YpPd-X6rKNAA0aRHgjwm8Gab8dfjw4L6MtTxqDQn3OPeH1o6p8VCRY7c"
+        "supportLink": "https://www.paypal.com/donate?token=TeUgFAbv6YKrSZK1gda3T4X8YpPd-X6rKNAA0aRHgjwm8Gab8dfjw4L6MtTxqDQn3OPeH1o6p8VCRY7c",
+        "hidden": false
     },
     "Radio Sygma": {
         "about": "radio.syg.ma is a community platform for mixes, podcasts, live recordings and releases by independent musicians, sound artists and collectives.",
@@ -573,7 +595,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://radio.syg.ma/audio.mp3",
-        "supportLink": "https://radio.syg.ma/donate"
+        "supportLink": "https://radio.syg.ma/donate",
+        "hidden": false
     },
     "Rinse FR": {
         "about": "Based in Paris, London, and all over the world with its online platforms, Rinse is a radio station but not only: label, management, curation, cultural events.",
@@ -597,7 +620,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://radio10.pro-fhi.net/flux-trmqtiat/stream",
-        "supportLink": "https://www.rinse.fm/shop/"
+        "supportLink": "https://www.rinse.fm/shop/",
+        "hidden": false
     },
     "Rinse UK": {
         "about": "London-based community radio station, licensed for 'young people living and/or working within the central, east and south London areas'. It plays garage, grime, dubstep, house, jungle, UK funky and other dance music genres popular in the United Kingdom.",
@@ -621,7 +645,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://admin.stream.rinse.fm/proxy/rinse_uk/stream",
-        "supportLink": "https://www.rinse.fm/shop/"
+        "supportLink": "https://www.rinse.fm/shop/",
+        "hidden": false
     },
     "SF 10-33": {
         "about": "Ambient music mixed with the sounds of San Francisco public safety radio traffic.",
@@ -645,7 +670,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://ice2.somafm.com/sf1033-128-mp3",
-        "supportLink": "https://somafm.com/support/"
+        "supportLink": "https://somafm.com/support/",
+        "hidden": true
     },
     "SWU FM": {
         "about": "Tasked with celebrating Bristol's music culture on air, SWU FM took to the airwaves on 87.7FM for 27 days in May 2016. These historic sets from the pilot broadcast shaped the station and paved the way for SWU to secure a permanent space on the dial (103.7FM) in 2020.",
@@ -669,7 +695,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://admin.stream.rinse.fm/proxy/swu/stream",
-        "supportLink": "https://www.rinse.fm/shop/"
+        "supportLink": "https://www.rinse.fm/shop/",
+        "hidden": false
     },
     "Skylab Radio": {
         "about": "Welcome to Skylab Radio. We're an online radio station based in Melbourne, Australia. At the core we are motivated to giving a platform to presenters that don't already have one. Skylab celebrates the eclectic music, artistic flair and cultural inclusiveness canvassing this city and abroad.",
@@ -693,7 +720,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://stream.skylab-radio.com/live",
-        "supportLink": "https://www.skylab-radio.com/subscribe"
+        "supportLink": "https://www.skylab-radio.com/subscribe",
+        "hidden": false
     },
     "SomaFM Live": {
         "about": "Broadcasting from a converted warehouse in San Francisco, our high quality internet broadcasts reach around the world. Rusty Hodge, SomaFM's founder, had been experimenting with online radio since 1995. After helping other companies with their streaming media operations, he decided that no one was going to create the online radio station he wanted to listen to, so he did it himself.",
@@ -717,7 +745,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://ice2.somafm.com/live-128-mp3",
-        "supportLink": "https://somafm.com/support/"
+        "supportLink": "https://somafm.com/support/",
+        "hidden": true
     },
     "Subtle Radio": {
         "about": "We Are Various is an online community radio station currently transmitting from inside Witzli Poetzli, Trix & Het Bos. Beats and pixels. Demos and expos. Rewinds and flashlights. Camera and musica obscura.",
@@ -741,7 +770,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://subtle.out.airtime.pro/subtle_a",
-        "supportLink": "https://www.subtle.store/supporters"
+        "supportLink": "https://www.subtle.store/supporters",
+        "hidden": false
     },
     "SutroFM": {
         "about": "Online DIY radio based in the SF Bay Area.",
@@ -765,7 +795,8 @@
         "soundcloudLink": "https://soundcloud.com/sutrofm",
         "status": "Offline",
         "streamLink": "https://media.evenings.co/s/7Lo66BLQe",
-        "supportLink": "https://donate.stripe.com/28o2ai08vd4qfmMfZ1"
+        "supportLink": "https://donate.stripe.com/28o2ai08vd4qfmMfZ1",
+        "hidden": false
     },
     "The Lot Radio": {
         "about": "We are an independent, non-profit, online radio station live streaming 24/7 from a reclaimed shipping container on an empty lot in NYC. Expect a continuous stream of the best and most varied music New York City has to offer.",
@@ -789,7 +820,8 @@
         "soundcloudLink": "https://www.soundcloud.com/perkopair",
         "status": "Online",
         "streamLink": "https://sea-prod-catalyst-0.lp-playback.studio/hls/video+85c28sa2o8wppm58/0_1/index.m3u8",
-        "supportLink": "https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=TNGKXZ2B2Z6LL&source=url&ssrt=1752175817476"
+        "supportLink": "https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=TNGKXZ2B2Z6LL&source=url&ssrt=1752175817476",
+        "hidden": false
     },
     "Voices Radio": {
         "about": "Previously a nomadic club series called Ossia that threw parties up and down the country over the last decade, headlined by the likes of Leon Vynehall, Chaos In The CBD, and Shanti Celeste, we rebranded as Voices in 2020 as a platform to tackle social issues through panels and events. Having released a series of podcasts over lockdown, it was a natural next step to start an online radio station, further spotlighting the community work of the network of organisers we'd met through our conversations.",
@@ -813,7 +845,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://voicesradio.out.airtime.pro/voicesradio_a",
-        "supportLink": "https://shop.voicesradio.co.uk"
+        "supportLink": "https://shop.voicesradio.co.uk",
+        "hidden": false
     },
     "WNYU": {
         "about": "WNYU is NYU's radio station that is completely operated by NYU students. WNYU broadcasts on 89.1 FM weekdays from 4:00PM to 1:00AM, and on the Internet 24 hours a day, 7 days a week.",
@@ -837,7 +870,8 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "http://cinema.acs.its.nyu.edu:8000/wnyu128.mp3",
-        "supportLink": "https://wnyu.org/contacts/send-us-music"
+        "supportLink": "https://wnyu.org/contacts/send-us-music",
+        "hidden": false
     },
     "We Are Various": {
         "about": "We Are Various is an online community radio station currently transmitting from inside Witzli Poetzli, Trix & Het Bos. Beats and pixels. Demos and expos. Rewinds and flashlights. Camera and musica obscura.",
@@ -861,6 +895,7 @@
         "soundcloudLink": null,
         "status": "Online",
         "streamLink": "https://azuracast.wearevarious.com/listen/we_are_various/live.mp3",
-        "supportLink": "https://wearevarious.com/support-wav/"
+        "supportLink": "https://wearevarious.com/support-wav/",
+        "hidden": false
     }
 }

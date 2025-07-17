@@ -106,7 +106,7 @@ def write_main_page(streams):
         Location: <span class="location">{v["location"]}</span><br>Status: <span class="status">{v["status"]}</span><br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
         </div>
-        </div>''' for v in streams]),
+        </div>''' for v in streams if v['hidden'] != True]),
         '</div>',
         '',
         '',
@@ -189,7 +189,6 @@ def write_main_page(streams):
                 const nowPlaying = container.querySelector('.now-playing');
                 const oneLiner = container.querySelector('.one-liner');
                 const width = (container.offsetWidth - logo.offsetWidth - (nowPlaying.offsetWidth - oneLiner.offsetWidth)) + 'px';
-                console.log(nowPlaying);
                 console.log((container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth));
                 needsMarquee = (container.offsetWidth - logo.offsetWidth - nowPlaying.offsetWidth) < 30;
                 if (needsMarquee) {
@@ -245,7 +244,7 @@ def write_main_page(streams):
             const computedStyle = window.getComputedStyle(originalSpan);
             const marginRight = parseFloat(computedStyle.marginRight) || 0;
             const totalWidth = originalSpan.offsetWidth + marginRight;
-            const duration = totalWidth / 25; // Adjust speed as needed
+            const duration = totalWidth / 25; 
             
             const uid = Math.random().toString(36).substr(2, 5);
             const animName = `scroll-oneliner-${direction}-${uid}`;
@@ -417,6 +416,7 @@ class Stream:
         self.shazam_guess = None
         self.one_liner = None
         self.support_link = None
+        self.hidden = None
 
         if isinstance(from_dict, dict):
             self.name = from_dict.get('name')
@@ -441,6 +441,7 @@ class Stream:
             self.shazam_guess = from_dict.get('shazamGuess')
             self.one_liner = self.one_liner
             self.support_link = from_dict.get('supportLink')
+            self.hidden = from_dict.get('hidden')
 
     def to_dict(self):
         return {
@@ -471,7 +472,8 @@ class Stream:
 
             "lastUpdated": self.last_updated,
 
-            "oneLiner":self.one_liner
+            "oneLiner":self.one_liner,
+            "hidden":self.hidden
         }
     
     def update(self):
