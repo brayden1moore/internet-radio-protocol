@@ -933,7 +933,7 @@ class Stream:
                 self.status = "Online"
             except:
                 pass
-            self.now_playing_description = info.get('description')
+            self.now_playing_description = info.get('video_description')
 
 
     def guess_shazam(self):
