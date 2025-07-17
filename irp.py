@@ -106,7 +106,7 @@ def write_main_page(streams):
         Location: <span class="location">{v["location"]}</span><br>Status: <span class="status">{v["status"]}</span><br>
         <audio id="{v['name']}-audio" style="width:40px;" data-src="{v["streamLink"]}"></audio>
         </div>
-        </div>''' for v in streams if v['hidden'] != True]),
+        </div>''' for v in streams if v.get('hidden') != True]),
         '</div>',
         '',
         '',
