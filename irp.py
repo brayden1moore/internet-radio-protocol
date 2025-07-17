@@ -310,25 +310,28 @@ def write_main_page(streams):
                     const location = json[stationName]['location'];
                     const status = json[stationName]['status'];
                     const stationDiv = document.getElementById(stationName);
-                    const currentOneLiner = stationDiv.querySelector('.one-liner').textContent;
-                    
-                    const rerunStrs = ['(r)', 're-run', 're-wav', 'restream', 'playlist'];
-                    
-                    if (status === 'Offline') {
-                        offline++;
-                    }
-                    else if (rerunStrs.some(str => oneLiner.toLowerCase().includes(str.toLowerCase()))) {
-                        rerun++;
-                    }
-                    else {
-                        live++;
-                    }
-                    
-                    if (!currentOneLiner.includes(oneLiner)) {
-                        stationDiv.querySelector('.one-liner').textContent = oneLiner;
-                        stationDiv.querySelector('.location').textContent = location;
-                        stationDiv.querySelector('.status').textContent = status;
-                        calculateMarquees();
+
+                    if (stationDiv) {
+                        const currentOneLiner = stationDiv.querySelector('.one-liner').textContent;
+                        
+                        const rerunStrs = ['(r)', 're-run', 're-wav', 'restream', 'playlist'];
+                        
+                        if (status === 'Offline') {
+                            offline++;
+                        }
+                        else if (rerunStrs.some(str => oneLiner.toLowerCase().includes(str.toLowerCase()))) {
+                            rerun++;
+                        }
+                        else {
+                            live++;
+                        }
+                        
+                        if (!currentOneLiner.includes(oneLiner)) {
+                            stationDiv.querySelector('.one-liner').textContent = oneLiner;
+                            stationDiv.querySelector('.location').textContent = location;
+                            stationDiv.querySelector('.status').textContent = status;
+                            calculateMarquees();
+                        }
                     }
                 });
 
