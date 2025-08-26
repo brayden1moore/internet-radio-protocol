@@ -100,7 +100,7 @@ def write_main_page(streams):
             <a class="a-link" target="_blank" href="{v['streamLink']}">STREAM</a>
             <a class="a-link" target="_blank" href="{v['mainLink']}">WEBSITE</a>
             <a class="a-link info-link" target="_blank" href="{v['infoLink']}">INFO</a>
-            <a class="a-link support-link" target="_blank" href="{v.get('supportLink')}">SUPPORT</a>
+            <a class="a-link support-link" target="_blank" href="{v.get('supportLink')}">DONATE</a>
         </div>
         <span class="now-playing">Playing: <span class="one-liner">{v.get('oneLiner')}</span></span><br>
         Location: <span class="location">{v["location"]}</span><br>Status: <span class="status">{v["status"]}</span><br>
@@ -482,7 +482,7 @@ class Stream:
         if "internetradioprotocol.org" not in self.logo:
             self.logo = "https://internetradioprotocol.org/" + self.logo
 
-        if self.name in ['HydeFM','SutroFM','Lower Grand Radio']:
+        if self.name in ['HydeFM','SutroFM','Lower Grand Radio','Vestiges']:
             info = requests.get(self.info_link).json()
             self.now_playing = None
             self.now_playing_artist = None
@@ -496,6 +496,16 @@ class Stream:
                 self.additional_info = f"{info['listeners']} listener{s(info['listeners'])}" # listener count 
             except:
                 self.additional_info = None
+            try:
+                self.show_logo = info['image']
+            except:
+                self.show_logo = None
+            try:
+                self.now_playing_description_long = clean_text(info['description'])
+                self.now_playing_description = clean_text(info['description'])[:44] + '...'
+            except:
+                self.now_playing_description_long = None
+                self.now_playing_description = None
             self.status = "Online" if info['online'] == True else "Offline"
             if self.status == "Offline":
                 self.now_playing = None
@@ -736,6 +746,12 @@ class Stream:
             soup = BeautifulSoup(webpage, 'html.parser')
             self.now_playing = soup.find_all("a", "noDec")[1].get_text() # host name
             self.now_playing_artist = None
+
+        elif self.name == "Particle FM":
+            info = requests.get(self.info_link).json()[0]
+            self.now_playing_additional_info = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
+            rerun = ' (R)' if info['live']['is_live'] else ''
+            self.now_playing = info['now_playing']['song']['title'] + rerun
 
         elif self.name == 'KEXP':
             now_utc = datetime.now(timezone.utc)
