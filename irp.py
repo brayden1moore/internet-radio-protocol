@@ -741,6 +741,12 @@ class Stream:
             self.additional_info = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
             self.now_playing = info['now_playing']['song']['title'] # simple show title
 
+        elif self.name == 'KWSX':
+            info = requests.get(self.info_link).json()
+            self.status = 'Online' if info['is_online'] == True else 'Offline'
+            self.additional_info = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
+            self.now_playing = info['now_playing']['song']['text'] # simple show title
+
         elif self.name == 'KJazz':
             webpage = requests.get(self.main_link).text
             soup = BeautifulSoup(webpage, 'html.parser')
@@ -950,6 +956,7 @@ class Stream:
             except:
                 pass
             self.now_playing_description = info.get('video_description')
+             
 
 
     def guess_shazam(self):
