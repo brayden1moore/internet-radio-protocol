@@ -974,7 +974,7 @@
     "streamLink": "https://azuracast.wearevarious.com/listen/we_are_various/live.mp3",
     "supportLink": "https://wearevarious.com/support-wav/"
   },
-  "N10.AS": {
+  "n10.as": {
     "about": "montreal based online radio station, broadcasting 24/7/365 - providing a platform for folks to create, connect and contribute to the greater community.",
     "bandcampLink": null,
     "hidden": false,
@@ -984,7 +984,7 @@
     "location": "Montreal",
     "logo": "https://internetradioprotocol.org/logos/n10as.png",
     "mainLink": "https://n10.as",
-    "name": "n10.as Radio",
+    "name": "n10.as",
     "nowPlaying": "",
     "nowPlayingAdditionalInfo": "",
     "nowPlayingArtist": null,
