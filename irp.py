@@ -926,6 +926,11 @@ class Stream:
             info = requests.get(self.info_link).json()
             self.now_playing = info['title']
 
+        elif self.name == 'n10.as Radio':
+            info = requests.get(self.info_link).json()
+            self.now_playing = info['currentShow']['name']
+            self.additional_info = 'Next: ' + info['nextShow']['name']
+
         elif self.name == 'Radio Banda Larga':
             info = requests.get(self.info_link).json()
             try:
