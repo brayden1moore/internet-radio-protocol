@@ -1036,7 +1036,6 @@ async def main_loop():
         tasks = [process_stream(name, val) for name, val in stream_json.items()]
         results = await asyncio.gather(*tasks)
 
-        results = await asyncio.gather(*tasks)
         processing_time = time.time() - start_time
         print(f"Update cycle took {processing_time:.2f} seconds")
 
