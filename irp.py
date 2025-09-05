@@ -1009,17 +1009,19 @@ class Stream:
         self.one_liner = return_string
 
 async def process_stream(name, value):
+    start_time = time.time()
     stream = Stream(from_dict=value)
     try:
         stream.update()
 
         stream.shazam_guess = None
-        #loop = asyncio.get_event_loop()
-        #await loop.run_in_executor(None, stream.guess_shazam)
-
         stream.update_one_line()
         updated_dict = stream.to_dict()
         stream.set_last_updated()
+
+        processing_time = time.time() - start_time
+        print(f"{name} took {processing_time:.2f} seconds")
+        
         return (stream.name, stream.to_dict())
     except Exception:
         error = f'[{datetime.now()}] Error updating {stream.name}:\n{traceback.format_exc()}\n'
@@ -1037,7 +1039,6 @@ async def main_loop():
         results = await asyncio.gather(*tasks)
 
         processing_time = time.time() - start_time
-        print(f"Update cycle took {processing_time:.2f} seconds")
 
         error_lines = []
         updated = {}
