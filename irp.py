@@ -947,7 +947,7 @@ class Stream:
             try:
                 self.now_playing = info['shows']['current']['name']
                 self.now_playing_description = info['shows']['current']['description']
-                self.additional_info = info['tracks']['current']['name']
+                self.additional_info = info['tracks']['current']['name'].lstrip(' - ').replace('.mp3','')
                 self.status = 'Online'
             except:
                 self.now_playing = None
