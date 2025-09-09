@@ -87,7 +87,7 @@ def write_main_page(streams):
         <link rel="shortcut icon" href="/favicon/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
         <link rel="manifest" href="/favicon/site.webmanifest" />''',
-        '<meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title></head><body style="font-family:Andale Mono; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img id="main-logo" src="assets/scudradiocenter.gif" alt="Loading" width="auto"></div>',
+        '<meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title></head><body style="font-family:Archivo Light; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img id="main-logo" src="assets/scudradiocenter.gif" alt="Loading" width="auto"></div>',
         '<div class="the-header">THE<br>INTERNET RADIO<br>PROTOCOL</div>',
         f"I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of stations. Click a logo to tune in. Support a station if you like it. And follow me on instagram, <a target='_blank' href='https://www.instagram.com/scud.works/'>@scud.works</a>. Last updated <span class='last-updated'>{formatted_time}</span>. <span class='live-count'>{len(rerun) + len(online)} ONLINE, {len(online)} LIVE, {len(offline)} OFFLINE</span>.",
         '', '',
@@ -156,13 +156,17 @@ def write_main_page(streams):
         .a-station-container {cursor:default; background-color: #FFFFFF; color:#000000; height: 90px; padding: 10px; overflow-x:hidden; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
         .a-logo {width:90px; height:90px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
         body {background-color: #FFFF00; font-size: 10pt;}
-        .the-header {font-family: "Arial Black"; font-size: 18pt; line-height:1em; margin-bottom:20px;}
-        .a-station {font-family: "Andale Mono"; font-size:8pt; white-space: nowrap; flex-shrink: 0;}
-        @font-face {font-family: "Arial Black";src: url("assets/Arial Black.ttf") format("truetype");}
+        .the-header {font-family: "Archivo ExtraBold"; font-size: 18pt; line-height:1em; margin-bottom:20px;}
+        .a-station {font-family: "Archivo Light"; font-size:8pt; white-space: nowrap; flex-shrink: 0;}
+        
+        @font-face {font-family: "Archivo ExtraBold";src: url("assets/Archivo-ExtraBold.ttf") format("truetype");}
+        
         a {font-size: 10pt; color:#000000; border-bottom: 1px solid black; text-decoration: none;}
         a:hover {background-color: #000000; color:#FFFFFF}
-        @font-face {font-family: "Andale Mono";src: url("assets/andalemono.ttf") format("truetype");}
-        @keyframes pulse{0%{background:#ffffff}50%{background:#ddd}100%{background:##ffffff}}.pulsing{animation:pulse 1s infinite}
+       
+        @font-face {font-family: "Archivo Light";src: url("assets/Archivo-Light.ttf") format("truetype");}
+       
+         @keyframes pulse{0%{background:#ffffff}50%{background:#ddd}100%{background:##ffffff}}.pulsing{animation:pulse 1s infinite}
         .streams-container {display: grid; grid-template-columns: 1fr; gap: 20px; margin-top:30px; margin-bottom:30px;}
         @media (orientation: landscape) 
         {
