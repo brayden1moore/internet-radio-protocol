@@ -155,7 +155,7 @@ def write_main_page(streams):
         #main-logo {height: 225px;}
         .a-station-container {cursor:default; background-color: #FFFFFF; color:#000000; height: 90px; padding: 10px; overflow-x:hidden; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
         .a-logo {width:90px; height:90px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
-        body {background-color: #FFFF00; font-size: 10pt;}
+        body {background-color: #FFFFFF; font-size: 10pt;}
         .the-header {font-family: "Archivo ExtraBold"; font-size: 18pt; line-height:1em; margin-bottom:20px;}
         .a-station {font-family: "Archivo Light"; font-size:8pt; white-space: nowrap; flex-shrink: 0;}
         
