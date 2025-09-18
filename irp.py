@@ -91,6 +91,7 @@ def write_main_page(streams):
         <div style="display:flex; justify-content:center" id="main-logo">
         <img  class="logo" src="assets/irplogo.png" alt="Logo" width="auto">
         <img class="logo-rev" src="assets/irplogoreversed.png" alt="Logo" width="auto">
+        <img class="logo-center" src="assets/irplogocenter.png" alt="Logo" width="auto">
         </div>''',
         '<div class="the-header">THE<br>INTERNET RADIO<br>PROTOCOL</div>',
         f"I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of stations. Click a logo to tune in. Support a station if you like it. And follow me on instagram, <a target='_blank' href='https://www.instagram.com/scud.works/'>@scud.works</a>.<br><br>Last updated <span class='last-updated'>{formatted_time}</span>. <span class='live-count'>{len(rerun) + len(online)} ONLINE, {len(online)} LIVE, {len(offline)} OFFLINE</span>.",
@@ -124,6 +125,12 @@ def write_main_page(streams):
             position: absolute;
             height: 175px;
             z-index: 10;
+        }
+
+        .logo-center {
+            z-index: 100;
+            height: 175px;
+            position: absolute;
         }
         
         #main-logo .logo {
