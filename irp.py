@@ -127,11 +127,11 @@ def write_main_page(streams):
         }
         
         #main-logo .logo {
-            animation: logoFade 5s infinite;
+            animation: logoFade 10s infinite;
         }
 
         #main-logo .logo-rev {
-            animation: logoFadeRev 5s infinite;
+            animation: logoFadeRev 10s infinite;
         }
 
         @keyframes logoFade {
