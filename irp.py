@@ -143,13 +143,17 @@ def write_main_page(streams):
 
         @keyframes logoFade {
             0% { opacity: 1; }
+            49% { opacity: 1; }   
             50% { opacity: 0; }   
+            99% { opacity: 0; }   
             100% { opacity: 1; }  
         }
 
         @keyframes logoFadeRev {
             0% { opacity: 0; }
+            49% { opacity: 0; } 
             50% { opacity: 1; }   
+            99% { opacity: 1; }   
             100% { opacity: 0; }   
         }
 
