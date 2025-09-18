@@ -1,6 +1,6 @@
 {
   "name": "Internet Radio Protocol",
-  "short_name": "Radio",
+  "short_name": "IRP",
   "icons": [
     {
       "src": "/favicon/web-app-manifest-192x192.png",
@@ -9,13 +9,13 @@
       "purpose": "maskable"
     },
     {
-      "src": "/favicon/web-app-manifest-512x512.png",
+      "src": "/favicon//web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#ffff00",
+  "background_color": "#ffff00",
   "display": "standalone"
 }
