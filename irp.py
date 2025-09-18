@@ -87,7 +87,11 @@ def write_main_page(streams):
         <link rel="shortcut icon" href="/favicon/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
         <link rel="manifest" href="/favicon/site.webmanifest" />''',
-        '<meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title></head><body style="font-family:Archivo Light; padding:10vw; padding-top:10px;"><div style="display:flex; justify-content:center"><img id="main-logo" src="assets/irplogo.png" alt="Loading" width="auto"></div>',
+        '''<meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><title>Internet Radio Protocol</title></head><body style="font-family:Archivo Light; padding:10vw; padding-top:10px;">
+        <div style="display:flex; justify-content:center" id="main-logo">
+        <img  class="logo" src="assets/irplogo.png" alt="Logo" width="auto">
+        <img class="logo-rev" src="assets/irplogoreversed.png" alt="Logo" width="auto">
+        </div>''',
         '<div class="the-header">THE<br>INTERNET RADIO<br>PROTOCOL</div>',
         f"I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of stations. Click a logo to tune in. Support a station if you like it. And follow me on instagram, <a target='_blank' href='https://www.instagram.com/scud.works/'>@scud.works</a>.<br><br>Last updated <span class='last-updated'>{formatted_time}</span>. <span class='live-count'>{len(rerun) + len(online)} ONLINE, {len(online)} LIVE, {len(offline)} OFFLINE</span>.",
         '', '',
@@ -116,6 +120,30 @@ def write_main_page(streams):
         <a href="https://www.instagram.com/p/scud.works/" target="_blank" style="border:none !important; height:250px;"><img height=250px style="border: 1px solid black;" src="assets/srback.JPG"></a>''',
         '</body></html>',
         '''<style>
+
+        #main-logo .logo {
+            animation: logoFade 5s infinite;
+        }
+
+        #main-logo .logo-rev {
+            animation: logoFadeRev 5s infinite;
+        }
+
+        @keyframes logoFade {
+            0% { opacity: 1; }
+            40% { opacity: 1; }   
+            50% { opacity: 0; }   
+            90% { opacity: 0; }   
+            100% { opacity: 1; }  
+        }
+
+        @keyframes logoFadeRev {
+            0% { opacity: 0; }
+            40% { opacity: 0; } 
+            50% { opacity: 1; }   
+            90% { opacity: 1; }   
+            100% { opacity: 0; }   
+        }
 
         .one-liner {
         will-change: transform;
@@ -185,6 +213,7 @@ def write_main_page(streams):
         "<script>document.querySelectorAll('.last-updated').forEach(el => {const utcStr = el.dataset.utc;if (utcStr) {const date = new Date(utcStr);if (!isNaN(date)) {el.textContent = date.toLocaleString();}}});</script>",
         '''
         <script>
+
 
         function calculateMarquees() {
             const stationContainers = document.querySelectorAll('.a-station-container');
