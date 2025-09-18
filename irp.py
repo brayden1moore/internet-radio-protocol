@@ -120,7 +120,12 @@ def write_main_page(streams):
         <a href="https://www.instagram.com/p/scud.works/" target="_blank" style="border:none !important; height:250px;"><img height=250px style="border: 1px solid black;" src="assets/srback.JPG"></a>''',
         '</body></html>',
         '''<style>
-
+        .logo {
+            position: absolute;
+            height: 175px;
+            z-index: 10;
+        }
+        
         #main-logo .logo {
             animation: logoFade 5s infinite;
         }
