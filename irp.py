@@ -181,7 +181,7 @@ def write_main_page(streams):
         .streams-container {grid-template-columns: 1fr 1fr;} 
         .the-header{
             font-size: 28pt;
-            letter-spacing: 0.93em;
+            letter-spacing: -0.07em;
             line-height: 0.75em;
         } .a-station {font-size:10pt;} 
         .a-logo {width:110px; height:110px;} a {font-size: 12pt}
