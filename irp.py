@@ -156,7 +156,7 @@ def write_main_page(streams):
         .a-link {font-size: 8pt !important; margin-right: 10px;}
         .support-link {background-color:#FFFF00; border: 1px solid #000000;}
         .info-link {display:none}
-        #main-logo {height: 175px;}
+        #main-logo {height: 100px; margin-top: 20px; margin-bottom: 20px;}
         .a-station-container {cursor:default; background-color: #FFFFFF; color:#000000; height: 90px; padding: 10px; overflow-x:hidden; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
         .a-logo {width:90px; height:90px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
         body {background-color: #FFFFFF; font-size: 10pt;}
@@ -181,7 +181,7 @@ def write_main_page(streams):
         .streams-container {grid-template-columns: 1fr 1fr;} 
         .the-header{font-size: 28pt;} .a-station {font-size:10pt;} 
         .a-logo {width:110px; height:110px;} a {font-size: 12pt}
-        #main-logo {height: 225px;}
+        #main-logo {height: 175px;}
         }
         </style>''',
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
