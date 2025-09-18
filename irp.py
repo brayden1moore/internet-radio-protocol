@@ -160,7 +160,7 @@ def write_main_page(streams):
         .a-station-container {cursor:default; background-color: #FFFFFF; color:#000000; height: 90px; padding: 10px; overflow-x:hidden; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
         .a-logo {width:90px; height:90px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
         body {background-color: #FFFFFF; font-size: 10pt;}
-        .the-header {font-family: "Archivo ExtraBold"; font-size: 18pt; line-height:0.8em; margin-bottom:20px;}
+        .the-header {font-family: "Archivo ExtraBold"; font-size: 24pt; line-height:0.75em; letter-spacing:-0.07em; margin-bottom:20px;}
         .a-station {font-family: "Archivo Light"; font-size:8pt; white-space: nowrap; flex-shrink: 0;}
         
         @font-face {font-family: "Archivo ExtraBold";src: url("assets/Archivo-ExtraBold.ttf") format("truetype");}
@@ -180,9 +180,7 @@ def write_main_page(streams):
         .a-station-container {height:110px;} 
         .streams-container {grid-template-columns: 1fr 1fr;} 
         .the-header{
-            font-size: 28pt;
-            letter-spacing: -0.07em;
-            line-height: 0.75em;
+            font-size: 38pt;
         } .a-station {font-size:10pt;} 
         .a-logo {width:110px; height:110px;} a {font-size: 12pt}
         #main-logo {height: 175px;}
