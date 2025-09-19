@@ -91,8 +91,8 @@ def write_main_page(streams):
         ''',
         '''
         <div class="the-header" style="display:flex; align-items:center;">
-        <img src="assets/ears.gif" height="200px" style="margin-left:-40px">
-        <p style="margin-left:-20px">Internet Radio<br>Protocol</p></div>
+        <img id="main-logo" src="assets/ears.gif">
+        <p id="title">Internet Radio<br>Protocol</p></div>
         ''',
         f"I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of stations. Click a logo to tune in. Support a station if you like it. And follow me on instagram, <a target='_blank' href='https://www.instagram.com/scud.works/'>@scud.works</a>.<br><br>Last updated <span class='last-updated'>{formatted_time}</span>. <span class='live-count'>{len(rerun) + len(online)} ONLINE, {len(online)} LIVE, {len(offline)} OFFLINE</span>.",
         '', '',
@@ -121,6 +121,10 @@ def write_main_page(streams):
         <a href="https://www.instagram.com/p/scud.works/" target="_blank" style="border:none !important; height:250px;"><img height=250px style="border: 1px solid black;" src="assets/srback.JPG"></a>''',
         '</body></html>',
         '''<style>
+
+        #title {
+            margin-left: -15px;
+        }
         
 
         .one-liner {
@@ -158,11 +162,11 @@ def write_main_page(streams):
         .a-link {font-size: 8pt !important; margin-right: 10px;}
         .support-link {background-color:#FFFF00; border: 1px solid #000000;}
         .info-link {display:none}
-        #main-logo {height: 100px; margin-top: 20px; margin-bottom: 20px;}
+        #main-logo {height: 130px; margin-left: -30px;}
         .a-station-container {cursor:default; background-color: #FFFFFF; color:#000000; height: 90px; padding: 10px; overflow-x:hidden; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
         .a-logo {width:90px; height:90px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
         body {background-color: #FFFFFF; font-size: 10pt;}
-        .the-header {font-family: "Archivo ExtraBold"; font-size: 24pt; line-height:0.75em; letter-spacing:-0.07em; margin-bottom:20px;}
+        .the-header {font-family: "Archivo ExtraBold"; font-size: 24pt; line-height:0.75em; letter-spacing:-0.07em; margin-header:-15px;}
         .a-station {font-family: "Archivo Light"; font-size:8pt; white-space: nowrap; flex-shrink: 0;}
         
         @font-face {font-family: "Archivo ExtraBold";src: url("assets/Archivo-ExtraBold.ttf") format("truetype");}
@@ -185,7 +189,8 @@ def write_main_page(streams):
             font-size: 38pt;
         } .a-station {font-size:10pt;} 
         .a-logo {width:110px; height:110px;} a {font-size: 12pt}
-        #main-logo {height: 175px;}
+        #main-logo {height: 200px; margin-left: -40px;}
+        #title {margin-left: -20px;}
         }
         </style>''',
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
