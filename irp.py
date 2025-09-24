@@ -590,20 +590,23 @@ class Stream:
             
         elif self.name == 'WNYU':
             schedule = requests.get(self.info_link).json()
-            id = schedule[0]['id']
-            description_url = f'https://wnyu.org/v1/schedule/{id}'
-            info = requests.get(description_url).json()
-            self.now_playing = clean_text(schedule[0]['program']['name']) # show name like "The New Evening Show"
-            self.additional_info = ', '.join([i.title() for i in info['episode']['genre_list']]) # genre list if provided
-            self.show_logo = info['episode']['program']['image']['large']['url'] or self.show_logo # show-specific logo if provided
+
+            self.now_playing = info['metadata']['playlist_title']
+            self.now_playing_artist = info['metadata']['dj']
+            self.show_logo = info['playlist']['image']
+
+            self.now_playing_additional_info = info['metadata']['release_title'] 
+            if info['metadata'][['artist_name']:
+                self.now_playing_additional_info += ' by ' + info['metadata']['artist_name']
+            if info['metadata'][['release_year']:
+                self.now_playing_additional_info += + " (" + str(info['metadata']['release_year']) + ")"
+
             try:
-                self.now_playing_description_long = clean_text(info['episode']['description']) # blurb like "An eclectic mix of rock and related music. Etc etc"
-                self.now_playing_description = clean_text(self.now_playing_description_long)[:44] + '...' # first sentence of the blurb
+                self.now_playing_description_long = clean_text(info['playlist']['description'])
+                self.now_playing_description = clean_text(info['playlist']['description'])[:44] + '...'
             except:
                 self.now_playing_description_long = None
                 self.now_playing_description = None
-                pass
-
 
         elif self.name == 'Voices Radio': 
             info = requests.get(self.info_link).json()
