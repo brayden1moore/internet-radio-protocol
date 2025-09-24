@@ -589,7 +589,7 @@ class Stream:
 
             
         elif self.name == 'WNYU':
-            schedule = requests.get(self.info_link).json()
+            info = requests.get(self.info_link).json()
 
             self.now_playing = info['metadata']['playlist_title']
             self.now_playing_artist = info['metadata']['dj']
