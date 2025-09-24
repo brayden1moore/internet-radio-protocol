@@ -869,21 +869,21 @@ class Stream:
                 self.status = 'Offline'
         
         elif self.name == 'Skylab Radio':
-            info = requests.get(self.info_link).json()['current']
+            info = requests.get(self.info_link).json()
 
             self.now_playing = None
-            self.now_playing_artist = None
+            self.now_playing_additional_info = None
             self.show_logo = None
             self.status = "Offline"
 
             try:
                 self.status = "Online"
-                self.now_playing = info['metadata']['track_title']
-                self.now_playing_artist = info['metadata']['artist_name']
+                self.now_playing = info['currentShow']['name']
+                self.now_playing_additional_info = info['current']['track_title'] + ' by '+ info['current']['artist_name']
             except:
                 try:
                     self.status = "Online"
-                    self.now_playing = info['name']
+                    self.now_playing = info['currentShow']['name']
                 except:
                     pass
 
