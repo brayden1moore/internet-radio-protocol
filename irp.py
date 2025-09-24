@@ -599,7 +599,7 @@ class Stream:
             if info['metadata']['artist_name']:
                 self.now_playing_additional_info += ' by ' + info['metadata']['artist_name']
             if info['metadata']['release_year']:
-                self.now_playing_additional_info += + " (" + str(info['metadata']['release_year']) + ")"
+                self.now_playing_additional_info += " (" + str(info['metadata']['release_year']) + ")"
 
             try:
                 self.now_playing_description_long = clean_text(info['playlist']['description'])
