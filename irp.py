@@ -881,12 +881,12 @@ class Stream:
 
             try:
                 self.status = "Online"
-                self.now_playing = info['currentShow']['name']
+                self.now_playing = info['currentShow'][0]['name']
                 self.now_playing_additional_info = info['current']['track_title'] + ' by '+ info['current']['artist_name']
             except:
                 try:
                     self.status = "Online"
-                    self.now_playing = info['currentShow']['name']
+                    self.now_playing = info['currentShow'][0]['name']
                 except:
                     pass
 
