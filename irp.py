@@ -596,9 +596,9 @@ class Stream:
             self.show_logo = info['playlist']['image']
 
             self.now_playing_additional_info = info['metadata']['release_title'] 
-            if info['metadata'][['artist_name']:
+            if info['metadata']['artist_name']:
                 self.now_playing_additional_info += ' by ' + info['metadata']['artist_name']
-            if info['metadata'][['release_year']:
+            if info['metadata']['release_year']:
                 self.now_playing_additional_info += + " (" + str(info['metadata']['release_year']) + ")"
 
             try:
