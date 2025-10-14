@@ -277,7 +277,9 @@ def write_main_page(streams):
         playRandomTextElement.addEventListener('click', function() {
             const previewSpan = playRandomTextElement.querySelector('span');
             const id = previewSpan.id.replace('previewFor-', '');
-            document.getElementById(id).scrollIntoView();
+            element = document.getElementById(id)
+            const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
+            window.scrollTo({top: y, behavior: 'smooth'});
         });
 
         function calculateMarquees() {
