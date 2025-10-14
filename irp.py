@@ -147,6 +147,10 @@ def write_main_page(streams):
             margin-right: 8px;
         }
 
+        #play-random-text {
+            cursor: pointer;
+        }
+
         #title {
             margin-left: -15px;
         }
@@ -263,7 +267,7 @@ def write_main_page(streams):
             }
             toggleAudio(id, true);
             const playRandomText = document.getElementById('play-random-text');
-            playRandomText.innerHTML = `<span id="previewFor-${id}">${id}: ${oneLiner}</span>`;
+            playRandomText.innerHTML = `<span style="border-bottom: 1px solid black;" id="previewFor-${id}">${id}: ${oneLiner}</span>`;
         }
 
         const playRandomButton = document.getElementById('play-random-button');
