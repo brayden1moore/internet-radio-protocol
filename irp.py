@@ -139,7 +139,7 @@ def write_main_page(streams):
         #play-random-button {
             cursor:pointer;
             height: 16px;
-            width: 78px;
+            width: auto;
             background-color: yellow;
             border: 1px solid black;
             padding: 5px;
@@ -240,6 +240,7 @@ def write_main_page(streams):
             const stationContainers = document.querySelectorAll('.a-station-container');
             const idList = Array.from(stationContainers).map(container => container.id);
             let oneLiner = '';
+            id = '';
             while (alreadyPlaying) {
                 let choice = Math.floor(Math.random() * idList.length);
                 let id = idList[choice];
