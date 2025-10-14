@@ -240,20 +240,23 @@ def write_main_page(streams):
             const stationContainers = document.querySelectorAll('.a-station-container');
             const idList = Array.from(stationContainers).map(container => container.id);
             let oneLiner = '';
-            id = '';
+            let id = '';
             while (alreadyPlaying) {
                 let choice = Math.floor(Math.random() * idList.length);
-                let id = idList[choice];
+                id = idList[choice];
                 alreadyPlaying = !document.getElementById(`${id}-audio`).paused;
-                container = document.getElementById(id);
-                oneLiner = container.querySelector('.one-liner');
+                if (!alreadyPlaying) {
+                        const container = document.getElementById(id);
+                        oneLiner = container.querySelector('.one-liner').textContent;
+                }
             }
             toggleAudio(id);
             const playRandomText = document.getElementById('play-random-text');
             playRandomText.innerHTML = `${id}: ${oneLiner}`;
         }
+
         const playRandomButton = document.getElementById('play-random-button');
-        playRandomButton.addEventListener('click',playRandom());
+        playRandomButton.addEventListener('click', playRandom);
 
         function calculateMarquees() {
             const stationContainers = document.querySelectorAll('.a-station-container');
