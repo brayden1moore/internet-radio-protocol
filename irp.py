@@ -134,6 +134,7 @@ def write_main_page(streams):
         #play-random {
             margin-top: 25px;
             display: flex;
+            align-items: center;
         }
 
         #play-random-button {
@@ -143,6 +144,7 @@ def write_main_page(streams):
             background-color: yellow;
             border: 1px solid black;
             padding: 5px;
+            margin-right: 8px;
         }
 
         #title {
@@ -218,17 +220,26 @@ def write_main_page(streams):
         </style>''',
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
         '''<script>
-        function toggleAudio(id){
+        function toggleAudio(id, random=false){
             let a=document.getElementById(`${id}-audio`),d=document.getElementById(id),isPlaying=d.style.backgroundColor==='yellow';
             document.querySelectorAll('audio').forEach(e=>{e.pause();
             e.removeAttribute('src');e.load();e.parentElement.parentElement.style.backgroundColor='white';
             e.parentElement.parentElement.classList.remove('pulsing')});
+
+            const randomButton = document.getElementById('play-random-button');
+
             if(!isPlaying){
                 a.src=a.dataset.src;
                 a.load();
                 d.classList.add('pulsing');
+                if (random) {
+                    randomButton.classList.add('pulsing');
+                }
                 a.play().then(()=>{
                     d.classList.remove('pulsing');
+                    if (random) {
+                        randomButton.classList.remove('pulsing');
+                    }
                     d.style.backgroundColor='yellow'}).catch(e=>{
                         console.error(e);d.classList.remove('pulsing')})}}</script>''',        
         "<script>document.querySelectorAll('.last-updated').forEach(el => {const utcStr = el.dataset.utc;if (utcStr) {const date = new Date(utcStr);if (!isNaN(date)) {el.textContent = date.toLocaleString();}}});</script>",
