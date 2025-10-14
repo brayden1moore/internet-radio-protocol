@@ -96,6 +96,15 @@ def write_main_page(streams):
         ''',
         f"I love internet radio, so I'm putting it all in one place, like radio-radio. The Internet Radio Protocol is a simple, standardized hub of real-time now playing data and direct streaming links for an ever-expanding list of stations. Click a logo to tune in. Support a station if you like it. And follow me on instagram, <a target='_blank' href='https://www.instagram.com/scud.works/'>@scud.works</a>.<br><br>Last updated <span class='last-updated'>{formatted_time}</span>. <span class='live-count'>{len(rerun) + len(online)} ONLINE, {len(online)} LIVE, {len(offline)} OFFLINE</span>.",
         '', '',
+        '''
+        <div id="play-random">
+            <div id="play-random-button">
+            ▶ RANDOM
+            </div>
+            <div id="play-random-text">
+            </div>
+        </div>
+        ''',
         '<div class="streams-container">',
         ''.join([f'''<div class="a-station-container" id="{v['name']}">
         <img class="a-logo"  onclick="toggleAudio('{v['name']}')" src="{v["logo"]}"  />
@@ -121,6 +130,20 @@ def write_main_page(streams):
         <a href="https://www.instagram.com/scud.works/" target="_blank" style="border:none !important; height:250px;"><img height=250px style="border: 1px solid black;" src="assets/srback.JPG"></a>''',
         '</body></html>',
         '''<style>
+
+        #play-random {
+            margin-top: 25px;
+            display: flex;
+        }
+
+        #play-random-button {
+            cursor:pointer;
+            height: 16px;
+            width: 78px;
+            background-color: yellow;
+            border: 1px solid black;
+            padding: 5px;
+        }
 
         #title {
             margin-left: -15px;
@@ -194,11 +217,42 @@ def write_main_page(streams):
         }
         </style>''',
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
-        "<script>function toggleAudio(id){let a=document.getElementById(`${id}-audio`),d=document.getElementById(id),isPlaying=d.style.backgroundColor==='yellow';document.querySelectorAll('audio').forEach(e=>{e.pause();e.removeAttribute('src');e.load();e.parentElement.parentElement.style.backgroundColor='white';e.parentElement.parentElement.classList.remove('pulsing')});if(!isPlaying){a.src=a.dataset.src;a.load();d.classList.add('pulsing');a.play().then(()=>{d.classList.remove('pulsing');d.style.backgroundColor='yellow'}).catch(e=>{console.error(e);d.classList.remove('pulsing')})}}</script>",        
+        '''<script>
+        function toggleAudio(id){
+            let a=document.getElementById(`${id}-audio`),d=document.getElementById(id),isPlaying=d.style.backgroundColor==='yellow';
+            document.querySelectorAll('audio').forEach(e=>{e.pause();
+            e.removeAttribute('src');e.load();e.parentElement.parentElement.style.backgroundColor='white';
+            e.parentElement.parentElement.classList.remove('pulsing')});
+            if(!isPlaying){
+                a.src=a.dataset.src;
+                a.load();
+                d.classList.add('pulsing');
+                a.play().then(()=>{
+                    d.classList.remove('pulsing');
+                    d.style.backgroundColor='yellow'}).catch(e=>{
+                        console.error(e);d.classList.remove('pulsing')})}}</script>''',        
         "<script>document.querySelectorAll('.last-updated').forEach(el => {const utcStr = el.dataset.utc;if (utcStr) {const date = new Date(utcStr);if (!isNaN(date)) {el.textContent = date.toLocaleString();}}});</script>",
         '''
         <script>
 
+        function playRandom() {
+            let alreadyPlaying = true;
+            const stationContainers = document.querySelectorAll('.a-station-container');
+            const idList = Array.from(stationContainers).map(container => container.id);
+            let oneLiner = '';
+            while (alreadyPlaying) {
+                let choice = Math.floor(Math.random() * idList.length);
+                let id = idList[choice];
+                alreadyPlaying = !document.getElementById(`${id}-audio`).paused;
+                container = document.getElementById(id);
+                oneLiner = container.querySelector('.one-liner');
+            }
+            toggleAudio(id);
+            const playRandomText = document.getElementById('play-random-text');
+            playRandomText.innerHTML = `${id}: ${oneLiner}`;
+        }
+        const playRandomButton = document.getElementById('play-random-button');
+        playRandomButton.addEventListener('click',playRandom());
 
         function calculateMarquees() {
             const stationContainers = document.querySelectorAll('.a-station-container');
