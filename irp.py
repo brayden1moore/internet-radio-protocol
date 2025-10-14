@@ -278,6 +278,7 @@ def write_main_page(streams):
             const previewSpan = playRandomTextElement.querySelector('span');
             const id = previewSpan.id.replace('previewFor-', '');
             element = document.getElementById(id)
+            const yOffset = -10; 
             const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
             window.scrollTo({top: y, behavior: 'smooth'});
         });
