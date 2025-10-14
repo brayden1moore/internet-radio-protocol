@@ -261,7 +261,7 @@ def write_main_page(streams):
                         oneLiner = container.querySelector('.one-liner').textContent;
                 }
             }
-            toggleAudio(id);
+            toggleAudio(id, true);
             const playRandomText = document.getElementById('play-random-text');
             playRandomText.innerHTML = `${id}: ${oneLiner}`;
         }
