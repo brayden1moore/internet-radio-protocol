@@ -263,11 +263,18 @@ def write_main_page(streams):
             }
             toggleAudio(id, true);
             const playRandomText = document.getElementById('play-random-text');
-            playRandomText.innerHTML = `${id}: ${oneLiner}`;
+            playRandomText.innerHTML = `<span id="previewFor-${id}">${id}: ${oneLiner}</span>`;
         }
 
         const playRandomButton = document.getElementById('play-random-button');
         playRandomButton.addEventListener('click', playRandom);
+
+        const playRandomTextElement = document.getElementById('play-random-text');
+        playRandomTextElement.addEventListener('click', function() {
+            const previewSpan = playRandomTextElement.querySelector('span');
+            const id = previewSpan.id.replace('previewFor-', '');
+            document.getElementById(id).scrollIntoView();
+        });
 
         function calculateMarquees() {
             const stationContainers = document.querySelectorAll('.a-station-container');
