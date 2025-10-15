@@ -99,7 +99,7 @@ def write_main_page(streams):
         '''
         <div id="play-random">
             <div id="play-random-button">
-            ▶ RANDOM
+            ▶RANDOM
             </div>
             <div id="play-random-text">
             </div>
@@ -139,7 +139,7 @@ def write_main_page(streams):
 
         #play-random-button {
             cursor:pointer;
-            height: 16px;
+            height: auto;
             width: auto;
             background-color: yellow;
             border: 1px solid black;
