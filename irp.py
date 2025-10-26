@@ -15,6 +15,7 @@ import time
 import json
 import re
 import io
+import os
 
 logging.disable()
 
@@ -1113,12 +1114,19 @@ class Stream:
             self.now_playing_description = info.get('video_description')
              
         elif self.name == 'HKCR':
-            try:
-                info = requests.get(self.info_link).json()
-                self.now_playing = str(info)
-            except:
-                self.now_playing = 'Archives'
-
+            stream_url = self.stream_link
+            tmp_file = tempfile.mktemp(suffix='.jpg')
+            
+            subprocess.run([
+                'ffmpeg', '-i', stream_url, '-frames:v', '1',
+                '-vf', 'crop=in_w*0.5:in_h*0.035:in_w*0.035:in_h*0.035,eq=contrast=4.0,format=gray',
+                tmp_file, '-hide_banner', '-y'
+            ], capture_output=True)
+            
+            result = subprocess.run(['tesseract', tmp_file, 'stdout'],
+                                capture_output=True, text=True)
+            os.remove(tmp_file)
+            self.now_playing = result.stdout.strip()
 
     def guess_shazam(self):
         self.shazam_guess = "Unknown"
