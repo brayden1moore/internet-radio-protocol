@@ -741,6 +741,17 @@ class Stream:
                     self.now_playing_artist = None
                     self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','')) # show name like "The Do!You!!! Breakfast Show w/ Charlemagne Eagle"
 
+        elif self.name == 'Radio Raheem': 
+            info = requests.get(self.info_link).json()
+
+            if not info['shows']['current']:
+                self.status = 'Offline'
+                self.now_playing = None
+                self.now_playing_artist = None
+            else:
+                self.status = 'Online'
+                self.now_playing = clean_text(info['shows']['current']['name']) # show name like "The Do!You!!! Breakfast Show"
+
         elif self.name == 'Radio Quantica':
             info = requests.get(self.info_link).json()
 
