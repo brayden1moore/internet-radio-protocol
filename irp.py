@@ -960,7 +960,10 @@ class Stream:
             info = requests.post(self.info_link,data={"variables":{},"query":"{\n  onair {\n    title\n    hls\n    __typename\n  }\n}\n"})
             try:
                 self.now_playing = info.json()['data']['onair']['title']
-                self.status = 'Online'
+                if "WE'LL BE BACK" not in self.now_playing:
+                    self.status = 'Online'
+                else:
+                    self.status = 'Offline'
             except:
                 self.now_playing = None
                 self.status = 'Offline'
