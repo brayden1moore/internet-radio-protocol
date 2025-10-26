@@ -195,8 +195,8 @@ def write_main_page(streams):
         }
 
         .flash {
-        background-color: black !important;
-        color: white !important;
+        background-color: white !important;
+        color: black !important;
         }
 
         .flash-out {
