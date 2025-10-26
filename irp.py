@@ -1126,7 +1126,7 @@ class Stream:
             result = subprocess.run(['tesseract', tmp_file, 'stdout'],
                                 capture_output=True, text=True)
             os.remove(tmp_file)
-            self.now_playing = result.stdout.strip()
+            self.now_playing = result.stdout.strip().strip('-')
 
     def guess_shazam(self):
         self.shazam_guess = "Unknown"
