@@ -134,6 +134,7 @@ def write_main_page(streams):
 
         .insta-link {
             color: white !important;
+            border-bottom: 1px white solid !important;
         }
         .insta-link:hover {
             color: black !important;
