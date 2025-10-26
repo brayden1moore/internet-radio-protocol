@@ -1080,6 +1080,12 @@ class Stream:
                 pass
             self.now_playing_description = info.get('video_description')
              
+        elif self.name == 'HKCR':
+            info = requests.get(self.info_link).json()
+            try:
+                self.now_playing = str(info)
+            except:
+                self.now_playing = 'Archives'
 
 
     def guess_shazam(self):
