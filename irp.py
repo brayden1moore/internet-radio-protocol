@@ -1081,8 +1081,8 @@ class Stream:
             self.now_playing_description = info.get('video_description')
              
         elif self.name == 'HKCR':
-            info = requests.get(self.info_link).json()
             try:
+                info = requests.get(self.info_link).json()
                 self.now_playing = str(info)
             except:
                 self.now_playing = 'Archives'
