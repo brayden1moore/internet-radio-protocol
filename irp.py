@@ -1119,7 +1119,7 @@ class Stream:
             
             subprocess.run([
                 'ffmpeg', '-i', stream_url, '-frames:v', '1',
-                '-vf', 'crop=in_w*0.5:in_h*0.035:in_w*0.035:in_h*0.035,eq=contrast=4.0,format=gray',
+                '-vf', 'crop=in_w*0.5:in_h*0.035:in_w*0.035:in_h*0.035,eq=contrast=10.0,format=gray',
                 tmp_file, '-hide_banner', '-y'
             ], capture_output=True)
             
