@@ -1023,5 +1023,30 @@
         "status": "Offline",
         "streamLink": "https://radioraheem.out.airtime.pro/radioraheem_a",
         "supportLink": "https://gigastock.net/collections/radio-raheem"
+    },
+    "Stegi Radio": {
+        "about": "STEGI.RADIO is Onassis Stegi’s online radio station, broadcasting 24 hours a day, 7 days a week. Based in Athens but looking beyond geographical borders and boundaries, STEGI.RADIO focuses on musical and cultural communities and music creation; it seeks novel ideas and sounds that reflect the new musical production as well as its historical course, creating an ever-expanding network between the cities of the Mediterranean and the rest of the globe.",
+        "bandcampLink": null,
+        "hidden": false,
+        "infoLink": "https://movementathens.airtime.pro/api/live-info-v2",
+        "instaLink": "https://www.instagram.com/stegiradio/",
+        "lastUpdated": "2025-10-26 21:54:47.187018+00:00",
+        "location": "Athens",
+        "logo": "https://internetradioprotocol.org/logos/stegi.png",
+        "mainLink": "https://stegi.radio",
+        "name": "Stegi Radio",
+        "nowPlaying": null,
+        "nowPlayingAdditionalInfo": null,
+        "nowPlayingArtist": null,
+        "nowPlayingDescription": null,
+        "nowPlayingDescriptionLong": null,
+        "nowPlayingSubtitle": null,
+        "oneLiner": null,
+        "shazamGuess": null,
+        "showLogo": null,
+        "soundcloudLink": null,
+        "status": "Online",
+        "streamLink": "https://movementathens.out.airtime.pro/movementathens_a",
+        "supportLink": "mailto:info@stegi.radio"
     }
 }

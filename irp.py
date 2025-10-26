@@ -770,6 +770,17 @@ class Stream:
                 self.status = 'Online'
                 self.now_playing = clean_text(info['shows']['current']['name']) # show name like "The Do!You!!! Breakfast Show"
 
+        elif self.name == 'Stegi Radio': 
+            info = requests.get(self.info_link).json()
+
+            if not info['shows']['current']:
+                self.status = 'Offline'
+                self.now_playing = None
+                self.now_playing_artist = None
+            else:
+                self.status = 'Online'
+                self.now_playing = clean_text(info['shows']['current']['name']) # show name like "The Do!You!!! Breakfast Show"
+
         elif self.name == 'Radio Quantica':
             info = requests.get(self.info_link).json()
 
