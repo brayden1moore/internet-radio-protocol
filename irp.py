@@ -77,7 +77,7 @@ def write_main_page(streams):
             online.append(v)
 
     now = datetime.now(ZoneInfo('America/Los_Angeles'))
-    formatted_time = now.strftime('%a %b %d %I:%M %p').lstrip('0')
+    formatted_time = now.strftime('%a, %b %d at %I:%M %p').lstrip('0')
     
     random.shuffle(online)
     streams =  online + rerun + offline
@@ -268,39 +268,37 @@ def write_main_page(streams):
         '''<script>
 
         function distributeFavorites(favorites) {
-        const favoriteDiv = document.getElementById('favorites-container');
-        if (favorites.length == 0) {
-            favoriteDiv.style.display = "none";
-        } else {
-            favoriteDiv.style.display = "grid";
-        }
-        
-        favoriteDiv.innerHTML = '';
-        const allStations = document.querySelectorAll('.a-station-container');
-        
-        allStations.forEach((station) => {
-            station.style.display = 'flex';
-        });
-        
-        favorites.forEach((station) => {
-            let stationDiv = document.getElementById(station);
-            if (!stationDiv) return;
+            const favoriteDiv = document.getElementById('favorites-container');
+            if (favorites.length == 0) {
+                favoriteDiv.style.display = "none";
+            } else {
+                favoriteDiv.style.display = "grid";
+            }
             
-            let clonedStation = stationDiv.cloneNode(true);
+            favoriteDiv.innerHTML = '';
+            const allStations = document.querySelectorAll('.a-station-container');
             
-            let favoriteStar = clonedStation.querySelector('.favorite-star-favorited');
-            let favoriteOutline = clonedStation.querySelector('.favorite-star');
+            allStations.forEach((station) => {
+                station.style.display = 'flex';
+            });
+            
+            favorites.forEach((station) => {
+                let stationDiv = document.getElementById(station);
+                let clonedStation = stationDiv.cloneNode(true);
+                
+                let favoriteStar = clonedStation.querySelector('.favorite-star-favorited');
+                let favoriteOutline = clonedStation.querySelector('.favorite-star');
 
-            if (favoriteStar) {
-            favoriteStar.style.opacity = '1';
-            }
-            if (favoriteOutline) {
-            favoriteOutline.style.opacity = '1';
-            }
-            
-            favoriteDiv.appendChild(clonedStation);
-            stationDiv.style.display = "none";
-        });
+                if (favoriteStar) {
+                    favoriteStar.style.opacity = '1';
+                }
+                    if (favoriteOutline) {
+                    favoriteOutline.style.opacity = '1';
+                }
+                
+                favoriteDiv.appendChild(clonedStation);
+                stationDiv.style.display = "none";
+            });
         }
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         distributeFavorites(favorites);
