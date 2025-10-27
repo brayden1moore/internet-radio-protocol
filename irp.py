@@ -362,7 +362,7 @@ def write_main_page(streams):
             scrollContainer.offsetHeight;
             
             const computedStyle = window.getComputedStyle(originalSpan);
-            const marginRight = parseFloat(computedStyle.marginRight) || 0;
+            const marginRight = parseFloat(computedStyle.marginRight) || "10px";
             const totalWidth = originalSpan.offsetWidth + marginRight;
             const duration = totalWidth / 25; 
             
