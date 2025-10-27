@@ -143,6 +143,7 @@ def write_main_page(streams):
         }
 
         #intro-div {
+            margin-bottom: -5px;
             border: 1px solid black;
             padding: 10px;
             background-color: black;
