@@ -527,7 +527,9 @@ def write_main_page(streams):
             
             const allFavoriteStations = favoriteDiv.querySelectorAll('.a-station-container');
             allFavoriteStations.forEach((station) => {
-                originalContainer.appendChild(station);
+                //originalContainer.appendChild(station);
+                originalContainer.insertBefore(station, container.originalContainer);
+
                 let favoriteStar = station.querySelector('.favorite-star-favorited');
                 let favoriteOutline = station.querySelector('.favorite-star');
                 
