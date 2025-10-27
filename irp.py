@@ -107,8 +107,11 @@ def write_main_page(streams):
             </div>
         </div>
         ''',
-        '<div class="streams-container">',
+        '<div class="streams-container" id="favorites-container"></div>'
+        '<div class="streams-container" id="streams-container">',
         ''.join([f'''<div class="a-station-container" id="{v['name']}">
+<p class="favorite-star-favorited" id="{v['name']}-favorite" style="position: absolute; top: 10px; right: 10px; margin: 0; cursor: pointer; z-index: 10;">★</p>
+ <p class="favorite-star" onClick="toggleFavorite('{v['name']}')"  id="{v['name']}-favorite-outline" style="position: absolute; top: 10px; right: 10px; margin: 0; cursor: pointer; z-index: 11;">☆</p>
         <img class="a-logo"  onclick="toggleAudio('{v['name']}')" src="{v["logo"]}"  />
         <div class="a-station">
         <a class="stream-name" target="_blank" href="{v['mainLink']}">{v['name']}</a>
@@ -210,8 +213,28 @@ def write_main_page(streams):
         .a-link {font-size: 8pt !important; margin-right: 10px;}
         .support-link {background-color:#FFFF00; border: 1px solid #000000;}
         .info-link {display:none}
+
+        #favorites-container {
+            padding-bottom: 30px;
+            border-bottom: solid black 1px;
+        }
+
+        .favorite-star-favorited {
+            font-size: 14pt;
+            opacity: 0;
+            color: yellow;
+        }
+        
+        .favorite-star {
+            font-size: 14pt;
+            opacity: 0.1;
+        }
+        .favorite-star:hover {
+            opacity: 1;
+        }
+
         #main-logo {height: 130px; margin-left: -30px;}
-        .a-station-container {cursor:default; background-color: #FFFFFF; color:#000000; height: 90px; padding: 10px; overflow-x:hidden; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
+        .a-station-container {position:relative; cursor:default; background-color: #FFFFFF; color:#000000; height: 90px; padding: 10px; overflow-x:hidden; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
         .a-logo {width:90px; height:90px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
         body {background-color: #FFFFFF; font-size: 10pt;}
         .the-header {font-family: "Archivo ExtraBold"; font-size: 24pt; line-height:0.75em; letter-spacing:-0.05em; margin-top:25px;}
@@ -243,6 +266,58 @@ def write_main_page(streams):
         </style>''',
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
         '''<script>
+
+        function distributeFavorites(favorites) {
+        const favoriteDiv = document.getElementById('favorites-container');
+        if (favorites.length == 0) {
+            favoriteDiv.style.display = "none";
+        } else {
+            favoriteDiv.style.display = "grid";
+        }
+        
+        favoriteDiv.innerHTML = '';
+        const allStations = document.querySelectorAll('.a-station-container');
+        
+        allStations.forEach((station) => {
+            station.style.display = 'flex';
+        });
+        
+        favorites.forEach((station) => {
+            let stationDiv = document.getElementById(station);
+            if (!stationDiv) return;
+            
+            let clonedStation = stationDiv.cloneNode(true);
+            
+            let favoriteStar = clonedStation.querySelector('.favorite-star-favorited');
+            let favoriteOutline = clonedStation.querySelector('.favorite-star');
+
+            if (favoriteStar) {
+            favoriteStar.style.opacity = '1';
+            }
+            if (favoriteOutline) {
+            favoriteOutline.style.opacity = '1';
+            }
+            
+            favoriteDiv.appendChild(clonedStation);
+            stationDiv.style.display = "none";
+        });
+        }
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        distributeFavorites(favorites);
+
+        function toggleFavorite(id) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const index = favorites.indexOf(id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            console.log(favorites);
+            distributeFavorites(favorites);
+        }
+
         function toggleAudio(id, random=false){
             let a=document.getElementById(`${id}-audio`),d=document.getElementById(id),isPlaying=d.style.backgroundColor==='yellow';
             document.querySelectorAll('audio').forEach(e=>{e.pause();
@@ -415,72 +490,75 @@ def write_main_page(streams):
             return textarea.value;
         }
 
+        function populateStations(data) {
+            var rerun = 0;
+            var live = 0;
+            var offline = 0;
+
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+            Object.keys(data).forEach(function(stationName) {
+                const station = data[stationName];
+                const oneLiner = decodeHtmlEntities(data[stationName]['oneLiner']);
+                const location = data[stationName]['location'];
+                const status = data[stationName]['status'];
+                const stationDiv = document.getElementById(stationName);
+                
+                if (stationDiv) {
+                    const currentOneLiner = stationDiv.querySelector('.one-liner').textContent;
+                    const rerunStrs = ['(r)', 're-run', 're-wav', 'restream', 'playlist'];
+                    
+                    if (status === 'Offline') {
+                        offline++;
+                    }
+                    else if (rerunStrs.some(str => oneLiner.toLowerCase().includes(str.toLowerCase()))) {
+                        rerun++;
+                    }
+                    else {
+                        live++;
+                    }
+                    
+                    if (!currentOneLiner.includes(oneLiner)) {
+                        stationDiv.querySelector('.one-liner').textContent = oneLiner;
+                        stationDiv.querySelector('.location').textContent = location;
+                        stationDiv.querySelector('.status').textContent = status;
+                        calculateMarquees();
+                    }
+                }
+            });
+            
+            const liveCount = document.querySelector('.live-count');
+            liveCount.textContent = `${live + rerun} online, ${live} live, ${offline} offline`;
+            
+            const lastUpdated = document.querySelector('.last-updated');
+            const now = new Date();
+            const formatter = new Intl.DateTimeFormat('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+            
+            lastUpdated.textContent = formatter.format(now);
+            lastUpdated.classList.add('flash');
+            setTimeout(function() {
+                lastUpdated.classList.add('flash-out');
+                lastUpdated.classList.remove('flash');
+            }, 100);
+            setTimeout(function() {
+                lastUpdated.classList.remove('flash-out');
+            }, 1100);
+        }
+
         function getUpdatedInfo() {
             fetch('https://internetradioprotocol.org/info', {
                 method: 'GET'
             })
             .then(function(response) { return response.json(); })
             .then(function(json) {
-
-                var rerun = 0;
-                var live = 0;
-                var offline = 0;
-                Object.keys(json).forEach(function(stationName) {
-                    const station = json[stationName];
-                    const oneLiner = decodeHtmlEntities(json[stationName]['oneLiner']);
-                    const location = json[stationName]['location'];
-                    const status = json[stationName]['status'];
-                    const stationDiv = document.getElementById(stationName);
-
-                    if (stationDiv) {
-                        const currentOneLiner = stationDiv.querySelector('.one-liner').textContent;
-                        
-                        const rerunStrs = ['(r)', 're-run', 're-wav', 'restream', 'playlist'];
-                        
-                        if (status === 'Offline') {
-                            offline++;
-                        }
-                        else if (rerunStrs.some(str => oneLiner.toLowerCase().includes(str.toLowerCase()))) {
-                            rerun++;
-                        }
-                        else {
-                            live++;
-                        }
-                        
-                        if (!currentOneLiner.includes(oneLiner)) {
-                            stationDiv.querySelector('.one-liner').textContent = oneLiner;
-                            stationDiv.querySelector('.location').textContent = location;
-                            stationDiv.querySelector('.status').textContent = status;
-                            calculateMarquees();
-                        }
-                    }
-                });
-
-                const lastUpdated = document.querySelector('.last-updated');
-                const now = new Date();
-                const formatter = new Intl.DateTimeFormat('en-US', {
-                    weekday: 'short',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    hour12: true
-                });
-
-                liveCount = document.querySelector('.live-count');
-                liveCount.textContent = `${live+rerun} online, ${live} live, ${offline} offline`; 
-
-                lastUpdated.textContent = formatter.format(now);
-                lastUpdated.classList.add('flash');
-                setTimeout(function() {
-                    lastUpdated.classList.add('flash-out');
-                    lastUpdated.classList.remove('flash');
-                }, 100); 
-                    
-                setTimeout(function() {
-                    lastUpdated.classList.remove('flash-out');
-                }, 1100);
-
+                populateStations(json);
             })
             .catch(function(error) {
                 console.error('Fetch error:', error);
