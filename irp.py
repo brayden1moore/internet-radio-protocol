@@ -232,7 +232,7 @@ def write_main_page(streams):
         body{font-size: 12pt;} 
         .a-link {font-size: 10pt !important;}
         .a-station-container {height:110px;} 
-        .streams-container {grid-template-columns: 1fr 1fr;} 
+        .streams-container {grid-template-columns: 1fr 1fr 1fr;} 
         .the-header{
             font-size: 38pt;
         } .a-station {font-size:10pt;} 
