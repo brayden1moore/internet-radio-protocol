@@ -212,9 +212,6 @@ def write_main_page(streams):
         .info-link {display:none}
         #main-logo {height: 130px; margin-left: -30px;}
         .a-station-container {cursor:default; background-color: #FFFFFF; color:#000000; height: 90px; padding: 10px; overflow-x:hidden; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
-        .a-station-container:hover {
-            background-color: #ddd;
-        }
         .a-logo {width:90px; height:90px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
         body {background-color: #FFFFFF; font-size: 10pt;}
         .the-header {font-family: "Archivo ExtraBold"; font-size: 24pt; line-height:0.75em; letter-spacing:-0.05em; margin-top:25px;}
