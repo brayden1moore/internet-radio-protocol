@@ -461,7 +461,7 @@ def write_main_page(streams):
                     weekday: 'short',
                     month: 'short',
                     day: 'numeric',
-                    hour: '2-digit',
+                    hour: '1-digit',
                     minute: '2-digit',
                     hour12: true
                 });
