@@ -461,15 +461,15 @@ def write_main_page(streams):
                     weekday: 'short',
                     month: 'short',
                     day: 'numeric',
-                    hour: '1-digit',
+                    hour: 'numeric',
                     minute: '2-digit',
                     hour12: true
                 });
 
                 liveCount = document.querySelector('.live-count');
-                liveCount.textContent = `${live+rerun} ONLINE, ${live} LIVE, ${offline} OFFLINE`; 
+                liveCount.textContent = `${live+rerun} online, ${live} live, ${offline} offline.`; 
 
-                lastUpdated.textContent = formatter.format(now) + ' (pacific)';
+                lastUpdated.textContent = formatter.format(now);
                 lastUpdated.classList.add('flash');
                 setTimeout(function() {
                     lastUpdated.classList.add('flash-out');
