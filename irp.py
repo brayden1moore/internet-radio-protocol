@@ -267,55 +267,6 @@ def write_main_page(streams):
         #'<script id="cid0020000408410894191" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 277px;height: 408px;">{"handle":"internetradioprotoco","arch":"js","styles":{"a":"000000","b":100,"c":"FFFFFF","d":"FFFFFF","k":"000000","l":"000000","m":"000000","n":"FFFFFF","p":"10","q":"000000","r":100,"fwtickm":1}}</script>'
         '''<script>
 
-        function distributeFavorites(favorites) {
-            const favoriteDiv = document.getElementById('favorites-container');
-            if (favorites.length == 0) {
-                favoriteDiv.style.display = "none";
-            } else {
-                favoriteDiv.style.display = "grid";
-            }
-            
-            favoriteDiv.innerHTML = '';
-            const allStations = document.querySelectorAll('.a-station-container');
-            
-            allStations.forEach((station) => {
-                station.style.display = 'flex';
-            });
-            
-            favorites.forEach((station) => {
-                let stationDiv = document.getElementById(station);
-                let clonedStation = stationDiv.cloneNode(true);
-                
-                let favoriteStar = clonedStation.querySelector('.favorite-star-favorited');
-                let favoriteOutline = clonedStation.querySelector('.favorite-star');
-
-                if (favoriteStar) {
-                    favoriteStar.style.opacity = '1';
-                }
-                    if (favoriteOutline) {
-                    favoriteOutline.style.opacity = '1';
-                }
-                
-                favoriteDiv.appendChild(clonedStation);
-                stationDiv.style.display = "none";
-            });
-            getUpdatedInfo();
-        }
-        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        distributeFavorites(favorites);
-
-        function toggleFavorite(id) {
-            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            const index = favorites.indexOf(id);
-            if (index > -1) {
-                favorites.splice(index, 1);
-            } else {
-                favorites.push(id);
-            }
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            console.log(favorites);
-            distributeFavorites(favorites);
-        }
 
         function toggleAudio(id, random=false){
             let a=document.getElementById(`${id}-audio`),d=document.getElementById(id),isPlaying=d.style.backgroundColor==='yellow';
@@ -564,6 +515,56 @@ def write_main_page(streams):
             });
         }
 
+                function distributeFavorites(favorites) {
+            const favoriteDiv = document.getElementById('favorites-container');
+            if (favorites.length == 0) {
+                favoriteDiv.style.display = "none";
+            } else {
+                favoriteDiv.style.display = "grid";
+            }
+            
+            favoriteDiv.innerHTML = '';
+            const allStations = document.querySelectorAll('.a-station-container');
+            
+            allStations.forEach((station) => {
+                station.style.display = 'flex';
+            });
+            
+            favorites.forEach((station) => {
+                let stationDiv = document.getElementById(station);
+                let clonedStation = stationDiv.cloneNode(true);
+                
+                let favoriteStar = clonedStation.querySelector('.favorite-star-favorited');
+                let favoriteOutline = clonedStation.querySelector('.favorite-star');
+
+                if (favoriteStar) {
+                    favoriteStar.style.opacity = '1';
+                }
+                    if (favoriteOutline) {
+                    favoriteOutline.style.opacity = '1';
+                }
+                
+                favoriteDiv.appendChild(clonedStation);
+                stationDiv.style.display = "none";
+            });
+            getUpdatedInfo();
+        }
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        distributeFavorites(favorites);
+
+        function toggleFavorite(id) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const index = favorites.indexOf(id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            console.log(favorites);
+            distributeFavorites(favorites);
+        }
+        
         setInterval(getUpdatedInfo, 30000);
 
         </script>
