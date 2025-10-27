@@ -376,6 +376,7 @@ def write_main_page(streams):
                 styleElement.textContent = `
                 @keyframes ${animName} {
                     0% { transform: translateX(0px); }
+                    20% { transform: translateX(0px); }
                     100% { transform: translateX(-50%); }
                 }
                 `;
