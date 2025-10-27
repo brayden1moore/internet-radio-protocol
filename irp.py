@@ -515,40 +515,50 @@ def write_main_page(streams):
             });
         }
 
-                function distributeFavorites(favorites) {
+        function distributeFavorites(favorites) {
             const favoriteDiv = document.getElementById('favorites-container');
+            const originalContainer = document.getElementById('streams-container');
+            
             if (favorites.length == 0) {
                 favoriteDiv.style.display = "none";
             } else {
                 favoriteDiv.style.display = "grid";
             }
             
-            favoriteDiv.innerHTML = '';
-            const allStations = document.querySelectorAll('.a-station-container');
+            const allFavoriteStations = favoriteDiv.querySelectorAll('.a-station-container');
+            allFavoriteStations.forEach((station) => {
+                originalContainer.appendChild(station);
+                let favoriteStar = station.querySelector('.favorite-star-favorited');
+                let favoriteOutline = station.querySelector('.favorite-star');
+                
+                if (favoriteStar) favoriteStar.style.opacity = '0';
+                if (favoriteOutline) favoriteOutline.style.opacity = '0.1';
+            });
             
+            const allStations = document.querySelectorAll('.a-station-container');
             allStations.forEach((station) => {
                 station.style.display = 'flex';
             });
             
-            favorites.forEach((station) => {
-                let stationDiv = document.getElementById(station);
-                let clonedStation = stationDiv.cloneNode(true);
-                
-                let favoriteStar = clonedStation.querySelector('.favorite-star-favorited');
-                let favoriteOutline = clonedStation.querySelector('.favorite-star');
+            favorites.forEach((stationId) => {
+                let stationDiv = document.getElementById(stationId);
+                if (stationDiv) {
+                    
+                    let favoriteStar = stationDiv.querySelector('.favorite-star-favorited');
+                    let favoriteOutline = stationDiv.querySelector('.favorite-star');
+                    
+                    if (favoriteStar) favoriteStar.style.opacity = '1';
+                    if (favoriteOutline) favoriteOutline.style.opacity = '1';
 
-                if (favoriteStar) {
-                    favoriteStar.style.opacity = '1';
+                    console.log(favoriteStar);
+
+                    favoriteDiv.appendChild(stationDiv);
                 }
-                    if (favoriteOutline) {
-                    favoriteOutline.style.opacity = '1';
-                }
-                
-                favoriteDiv.appendChild(clonedStation);
-                stationDiv.style.display = "none";
             });
+            
             getUpdatedInfo();
         }
+
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         distributeFavorites(favorites);
 
@@ -564,7 +574,7 @@ def write_main_page(streams):
             console.log(favorites);
             distributeFavorites(favorites);
         }
-        
+
         setInterval(getUpdatedInfo, 30000);
 
         </script>
