@@ -467,7 +467,7 @@ def write_main_page(streams):
                 });
 
                 liveCount = document.querySelector('.live-count');
-                liveCount.textContent = `${live+rerun} online, ${live} live, ${offline} offline.`; 
+                liveCount.textContent = `${live+rerun} online, ${live} live, ${offline} offline`; 
 
                 lastUpdated.textContent = formatter.format(now);
                 lastUpdated.classList.add('flash');
