@@ -299,6 +299,7 @@ def write_main_page(streams):
                 favoriteDiv.appendChild(clonedStation);
                 stationDiv.style.display = "none";
             });
+            getUpdatedInfo();
         }
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         distributeFavorites(favorites);
