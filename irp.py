@@ -1222,11 +1222,11 @@ class Stream:
         elif self.name == 'CKUT':
             info = requests.get(self.info_link).json()
             self.now_playing = info['program']['title_html']
-            self.now_playing_description_long = clean_text(info['program']['description'])
+            self.now_playing_description_long = clean_text(info['program']['description_html'])
             if len(self.now_playing_description_long) > 44:
-                self.now_playing_description = clean_text(info['program']['description'])[:44] + '...'
+                self.now_playing_description = clean_text(info['program']['description_html'])[:44] + '...'
             else: 
-                self.now_playing_description = clean_text(info['program']['description'])
+                self.now_playing_description = clean_text(info['program']['description_html'])
 
 
     def guess_shazam(self):
