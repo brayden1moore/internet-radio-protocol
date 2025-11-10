@@ -1219,6 +1219,16 @@ class Stream:
             os.remove(tmp_file)
             self.now_playing = result.stdout.strip().strip('-').strip("'").strip(':').strip('Live - ')
 
+        elif self.name == 'CKUT':
+            info = requests.get(self.info_link).json()
+            self.now_playing = info['program']['title_html']
+            self.now_playing_description_long = clean_text(info['program']['description'])
+            if len(self.now_playing_description_long) > 44:
+                self.now_playing_description = clean_text(info['program']['description'])[:44] + '...'
+            else: 
+                self.now_playing_description = clean_text(info['program']['description'])
+
+
     def guess_shazam(self):
         self.shazam_guess = "Unknown"
         try:
