@@ -1011,8 +1011,7 @@ class Stream:
 
         elif self.name == 'KEXP':
             now_utc = datetime.now(timezone.utc)
-            info = requests.get(self.info_link)
-            print(info.text)
+            info = requests.get(self.info_link, timeout=3)
             song = info.json()['results'][0]
             show_uri = song['show_uri']
             show = requests.get(show_uri).json()
@@ -1233,10 +1232,11 @@ class Stream:
                 tmp_file, '-hide_banner', '-y'
             ], capture_output=True)
             
-            result = subprocess.run(['tesseract', tmp_file, 'stdout'],
-                                capture_output=True, text=True)
-            os.remove(tmp_file)
-            self.now_playing = result.stdout.strip().strip('-').strip("'").strip(':').strip('Live - ')
+            if os.path.exists(tmp_file):
+                result = subprocess.run(['tesseract', tmp_file, 'stdout'],
+                                    capture_output=True, text=True)
+                os.remove(tmp_file)
+                self.now_playing = result.stdout.strip().strip('-').strip("'").strip(':').strip('Live - ')
 
         elif self.name == 'CKUT':
             info = requests.get(self.info_link).json()
