@@ -1307,6 +1307,30 @@ async def process_stream(name, value):
         error = f'[{datetime.now()}] Error updating {stream.name}:\n{traceback.format_exc()}\n'
         return (stream.name, value, error)
 
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+def send_email(contents):
+    if isinstance(contents, list):
+        body = '\n'.join(contents)
+    else:
+        bdy = contents
+
+    msg = MIMEMultipart()
+    msg['From'] = 'brayden@braydenmoore.com'
+    msg['To'] = 'brayden@braydenmoore.com'
+    msg['Subject'] = 'New Error(s) On IRP'
+    msg.attach(MIMEText(body, 'plain'))
+
+    try:
+        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+            server.starttls()
+            server.login("brayden@braydenmoore.com", os.environ.get('GMAIL_PASS'))
+            server.send_message(msg)
+    except:
+        pass
+
 async def main_loop():
     while True:
         start_time = time.time()
@@ -1335,6 +1359,8 @@ async def main_loop():
             json.dump(updated, f, indent=4, sort_keys=True, default=str)
 
         with open('errorlog.txt', 'w') as log:
+            if error_lines > len(log.split('\n')):
+                send_email(error_lines)
             log.writelines(error_lines)
 
         write_main_page(updated)
