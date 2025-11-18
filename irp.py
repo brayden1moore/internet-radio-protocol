@@ -1333,8 +1333,6 @@ def send_email(contents):
         print('Email Failed')
         print(e)
 
-send_email('Hello!')
-
 async def main_loop():
     while True:
         start_time = time.time()
@@ -1368,9 +1366,6 @@ async def main_loop():
         except FileNotFoundError:
             existing_lines = ['']
 
-        print(error_lines)
-        print(existing_lines)
-        send_email(error_lines)
         if len(error_lines) >= len(existing_lines):
             send_email(error_lines)
 
