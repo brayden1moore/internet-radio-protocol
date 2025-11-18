@@ -694,7 +694,16 @@ class Stream:
         if "internetradioprotocol.org" not in self.logo:
             self.logo = "https://internetradioprotocol.org/" + self.logo
 
-        if self.name in ['HydeFM','SutroFM','Lower Grand Radio','Vestiges']:
+        if self.name == 'HydeFM':
+            info = requests.get(self.info_link).json()
+            try:
+                self.now_playing = info['shows']['current']['name']
+                self.status = "Online"
+            except:
+                self.now_playing = None
+                self.status = "Offline"
+                
+        if self.name in ['SutroFM','Lower Grand Radio','Vestiges']:
             info = requests.get(self.info_link).json()
             self.now_playing = None
             self.now_playing_artist = None
