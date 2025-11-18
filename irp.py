@@ -1315,14 +1315,14 @@ def send_email(contents):
     if isinstance(contents, list):
         body = '\n'.join(contents)
     else:
-        bdy = contents
+        body = contents
 
     msg = MIMEMultipart()
     msg['From'] = 'brayden@braydenmoore.com'
     msg['To'] = 'brayden@braydenmoore.com'
     msg['Subject'] = 'New Error(s) On IRP'
     msg.attach(MIMEText(body, 'plain'))
-
+    
     try:
         with smtplib.SMTP('smtp.gmail.com', 587) as server:
             server.starttls()
@@ -1332,7 +1332,6 @@ def send_email(contents):
     except Exception as e:
         print('Email Failed')
         print(e)
-        pass
 
 async def main_loop():
     while True:
