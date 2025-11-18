@@ -1358,10 +1358,17 @@ async def main_loop():
         with open('info.json', 'w') as f:
             json.dump(updated, f, indent=4, sort_keys=True, default=str)
 
+        try:
+            with open('errorlog.txt', 'r') as log:
+                existing_lines = log.read().split('\n')
+        except FileNotFoundError:
+            existing_lines = []
+
+        if len(error_lines) >= len(existing_lines):
+            send_email(error_lines)
+
         with open('errorlog.txt', 'w') as log:
-            if error_lines == len(log.split('\n')):
-                send_email(error_lines)
-            log.writelines(error_lines)
+            log.write('\n'.join(error_lines))
 
         write_main_page(updated)
         await asyncio.sleep(30)
