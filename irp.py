@@ -1012,7 +1012,7 @@ class Stream:
         elif self.name == 'KEXP':
             now_utc = datetime.now(timezone.utc)
             info = requests.get(self.info_link)
-            print(info)
+            print(info.text)
             song = info.json()['results'][0]
             show_uri = song['show_uri']
             show = requests.get(show_uri).json()
