@@ -1083,8 +1083,12 @@ class Stream:
                         pass
 
         elif self.name == 'Radio Sygma':
-            info = requests.get(self.info_link).json()
-            self.now_playing = info['tracks']['current']['metadata']['track_title']
+            try:
+                info = requests.get(self.info_link).json()
+                self.now_playing = info['tracks']['current']['metadata']['track_title']
+            except:
+                self.now_playing = None
+                self.status = "Offline"
 
         elif self.name == 'LYL Radio':
             info = requests.post(self.info_link,data={"variables":{},"query":"{\n  onair {\n    title\n    hls\n    __typename\n  }\n}\n"})
