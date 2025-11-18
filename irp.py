@@ -1328,6 +1328,7 @@ def send_email(contents):
             server.starttls()
             server.login("brayden@braydenmoore.com", os.environ.get('GMAIL_PASS'))
             server.send_message(msg)
+            print('EmailSent')
     except Exception as e:
         print('Email Failed')
         print(e)
