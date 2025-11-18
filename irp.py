@@ -1369,6 +1369,7 @@ async def main_loop():
 
         print(error_lines)
         print(existing_lines)
+        send_email(error_lines)
         if len(error_lines) >= len(existing_lines):
             send_email(error_lines)
 
