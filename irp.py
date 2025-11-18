@@ -1364,7 +1364,7 @@ async def main_loop():
             with open('errorlog.txt', 'r') as log:
                 existing_lines = log.read().split('\n')
         except FileNotFoundError:
-            existing_lines = []
+            existing_lines = ['']
 
         print(error_lines)
         print(existing_lines)
