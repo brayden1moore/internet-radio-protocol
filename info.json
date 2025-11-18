@@ -203,7 +203,7 @@
         "about": "HydeFM is a community-based multi-genre online radio station broadcasting out of San Francisco, CA.",
         "bandcampLink": null,
         "hidden": false,
-        "infoLink": "https://hydefm.com/wp-json/hydefm/v1/live-info",
+        "infoLink": "https://hydefmradio.airtime.pro/api/live-info-v2",
         "instaLink": null,
         "lastUpdated": "2025-11-18 03:20:17.749379+00:00",
         "location": "San Francisco",
