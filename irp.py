@@ -1381,14 +1381,14 @@ async def main_loop():
         except FileNotFoundError:
             existing_lines = ['']
 
-        if len(error_lines) >= len(existing_lines):
+        if len(error_lines) > len(existing_lines):
             send_email(error_lines)
 
         with open('errorlog.txt', 'w') as log:
             log.write('\n'.join(error_lines))
 
         write_main_page(updated)
-        await asyncio.sleep(30)
+        await asyncio.sleep(40)
 
 if __name__ == '__main__':
     asyncio.run(main_loop())
