@@ -1322,11 +1322,14 @@ def send_email(contents):
     msg['To'] = 'brayden@braydenmoore.com'
     msg['Subject'] = 'New Error(s) On IRP'
     msg.attach(MIMEText(body, 'plain'))
+
+    passw = os.environ.get('GMAIL_PASS')
+    print(passw)
     
     try:
         with smtplib.SMTP('smtp.gmail.com', 587) as server:
             server.starttls()
-            server.login("brayden@braydenmoore.com", os.environ.get('GMAIL_PASS'))
+            server.login("brayden@braydenmoore.com", passw)
             server.send_message(msg)
             print('EmailSent')
     except Exception as e:
