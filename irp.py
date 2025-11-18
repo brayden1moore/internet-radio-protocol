@@ -1316,18 +1316,16 @@ def send_email(contents):
         body = '\n'.join(contents)
     else:
         body = contents
-
+    
     msg = MIMEMultipart()
     msg['From'] = 'brayden@braydenmoore.com'
     msg['To'] = 'brayden@braydenmoore.com'
     msg['Subject'] = 'New Error(s) On IRP'
     msg.attach(MIMEText(body, 'plain'))
-
     passw = os.environ.get('GMAIL_PASS')
-    print(passw)
     
     try:
-        with smtplib.SMTP('smtp.gmail.com', 465) as server:
+        with smtplib.SMTP('smtp.gmail.com', 587) as server:  # Changed to 587
             server.starttls()
             server.login("brayden@braydenmoore.com", passw)
             server.send_message(msg)
