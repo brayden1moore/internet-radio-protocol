@@ -1359,7 +1359,7 @@ async def main_loop():
             json.dump(updated, f, indent=4, sort_keys=True, default=str)
 
         with open('errorlog.txt', 'w') as log:
-            if error_lines > len(log.split('\n')):
+            if error_lines == len(log.split('\n')):
                 send_email(error_lines)
             log.writelines(error_lines)
 
