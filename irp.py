@@ -1328,7 +1328,9 @@ def send_email(contents):
             server.starttls()
             server.login("brayden@braydenmoore.com", os.environ.get('GMAIL_PASS'))
             server.send_message(msg)
-    except:
+    except Exception as e:
+        print('Email Failed')
+        print(e)
         pass
 
 async def main_loop():
@@ -1364,6 +1366,8 @@ async def main_loop():
         except FileNotFoundError:
             existing_lines = []
 
+        print(error_lines)
+        print(existing_lines)
         if len(error_lines) >= len(existing_lines):
             send_email(error_lines)
 
