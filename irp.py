@@ -1325,8 +1325,7 @@ def send_email(contents):
     passw = os.environ.get('GMAIL_PASS')
     
     try:
-        with smtplib.SMTP('smtp.gmail.com', 587) as server: 
-            server.starttls()
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
             server.login("brayden@braydenmoore.com", passw)
             server.send_message(msg)
             print('EmailSent')
