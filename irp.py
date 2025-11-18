@@ -1325,7 +1325,7 @@ def send_email(contents):
     passw = os.environ.get('GMAIL_PASS')
     
     try:
-        with smtplib.SMTP('smtp.gmail.com', 587) as server:  # Changed to 587
+        with smtplib.SMTP('smtp.gmail.com', 587) as server: 
             server.starttls()
             server.login("brayden@braydenmoore.com", passw)
             server.send_message(msg)
@@ -1333,6 +1333,8 @@ def send_email(contents):
     except Exception as e:
         print('Email Failed')
         print(e)
+
+send_email('Hello!')
 
 async def main_loop():
     while True:
