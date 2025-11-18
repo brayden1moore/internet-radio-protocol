@@ -1327,7 +1327,7 @@ def send_email(contents):
     print(passw)
     
     try:
-        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+        with smtplib.SMTP('smtp.gmail.com', 465) as server:
             server.starttls()
             server.login("brayden@braydenmoore.com", passw)
             server.send_message(msg)
