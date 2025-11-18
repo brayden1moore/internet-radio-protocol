@@ -1011,7 +1011,9 @@ class Stream:
 
         elif self.name == 'KEXP':
             now_utc = datetime.now(timezone.utc)
-            song = requests.get(self.info_link).json()['results'][0]
+            info = requests.get(self.info_link)
+            print(info)
+            song = info.json()['results'][0]
             show_uri = song['show_uri']
             show = requests.get(show_uri).json()
 
@@ -1331,21 +1333,6 @@ def send_email(contents):
             print('EmailSent')
     except Exception as e:
         print('Email Failed')
-        print(e)
-
-def send_mailgun(contents):
-    if isinstance(contents, list):
-        body = '\n'.join(contents)
-    else:
-        body = contents
-    try: 
-          requests.post("https://api.mailgun.net/v3/sandbox2fb00d5955b54b3fa5994b83a9ff73d9.mailgun.org/messages",
-                        auth=("api", os.getenv('SB_API_KEY')),
-                        data={"from": "Internet Radio Protocol <postmaster@sandbox2fb00d5955b54b3fa5994b83a9ff73d9.mailgun.org>",
-                               "to": "Brayden Moore <brayden@braydenmoore.com>",
-                    "subject": "New Error(s) On IRP",
-                    "text": body})
-    except Exception as e:
         print(e)
 
 async def main_loop():
