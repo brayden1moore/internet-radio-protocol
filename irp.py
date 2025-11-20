@@ -1315,7 +1315,17 @@ from email.mime.multipart import MIMEMultipart
 
 def send_email(contents):
     if isinstance(contents, list):
-        body = '\n'.join(contents)
+        body = 'JSON Decode Errors: \n'
+        other_errors = '\n\nOther Errors: \n'
+        for i in contents:
+            if 'JSONDecodeError' in i:
+                name = i.split(':')[0].split('Error updating ')[1]
+                body += f'- {name}\n'
+            else:
+                other_errors += i
+
+        body = body + other_errors
+    
     else:
         body = contents
     
