@@ -18,6 +18,37 @@ import os
 
 logging.disable()
 
+def extract_value(json, location, sub_location=None, rule=None):
+
+    '''
+    W.I.P. function for extracting information from json given locations and rules.
+    '''
+
+    try:
+        value = json[location[0]]
+        if len(location) > 1:
+            for idx, i in enumerate(location[1:]):
+                if idx != len(location) - 1: # if not last key in list
+                    value = value[i] # go one layer deeper
+        
+        if rule == 'list':
+            if sub_location:
+                value_list = []
+                for v in value:
+                    value_in_list = v[sub_location[0]]
+                    if len(sub_location) > 1:
+                        for idx, i in enumerate(sub_location[1:]):
+                            if idx != len(sub_location) - 1: # if not last key in list
+                                value_in_list = value_in_list[i] # go one layer deeper
+                    value_list.append(value_in_list)   
+            else:
+                value_list = value
+            value = ', '.join(value_list)
+            
+        return value
+    except KeyError:
+        return None
+
 def clean_text(text):
 
     '''
@@ -141,37 +172,6 @@ class Stream:
             "hidden":self.hidden
         }
 
-        
-    def extract_value(json, location, sub_location=None, rule=None):
-
-        '''
-        W.I.P. function for extracting information from json given locations and rules.
-        '''
-
-        try:
-            value = json[location[0]]
-            if len(location) > 1:
-                for idx, i in enumerate(location[1:]):
-                    if idx != len(location) - 1: # if not last key in list
-                        value = value[i] # go one layer deeper
-            
-            if rule == 'list':
-                if sub_location:
-                    value_list = []
-                    for v in value:
-                        value_in_list = v[sub_location[0]]
-                        if len(sub_location) > 1:
-                            for idx, i in enumerate(sub_location[1:]):
-                                if idx != len(sub_location) - 1: # if not last key in list
-                                    value_in_list = value_in_list[i] # go one layer deeper
-                        value_list.append(value_in_list)   
-                else:
-                    value_list = value
-                value = ', '.join(value_list)
-                
-            return value
-        except KeyError:
-            return None
     
     def update(self):
 
@@ -734,11 +734,11 @@ class Stream:
 
         elif self.name == 'KUSF':
             info = requests.get(self.info_link).json()
-            self.now_playing = self.extract_value(info, ['now','title'])
-            self.now_playing_description = self.extract_value(info, ['now','short_description'])
-            self.now_playing_description_long = self.extract_value(info, ['now','full_description'])
-            self.now_playing_artist = self.extract_value(info, ['now','hosts',0,'display_name'])
-            self.additional_info = self.extract_value(json=info, location=['now','categories'], sub_location=['title'], rule='list')
+            self.now_playing = extract_value(info, ['now','title'])
+            self.now_playing_description = extract_value(info, ['now','short_description'])
+            self.now_playing_description_long = extract_value(info, ['now','full_description'])
+            self.now_playing_artist = extract_value(info, ['now','hosts',0,'display_name'])
+            self.additional_info = extract_value(json=info, location=['now','categories'], sub_location=['title'], rule='list')
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
