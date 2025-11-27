@@ -18,6 +18,38 @@ import os
 
 logging.disable()
 
+def clean_text(text):
+
+    '''
+    Barebones text processing.
+    '''
+    
+    cleaned_text = re.sub(r'<[^>]+>', '', text
+                        ).replace('\xa0',' '
+                        ).replace('\n',' '
+                        ).replace('\r',''
+                        ).replace('&amp;','&'
+                        ).replace('  ',' '
+                        ).replace('\u2019', "'"
+                        ).replace('\u2013', "-"
+                        ).replace('&#039;',"'"
+                        ).replace('\u201c',"'"
+                        ).replace('\u201d',"'"
+                        ).replace('"',"'"
+                        ).strip()
+    return cleaned_text
+
+def s(number):
+
+    '''
+    Function for pluralizing counts.
+    '''
+
+    if number == 1:
+        return ''
+    else:
+        return 's'
+
 class Stream:
 
     '''
@@ -108,38 +140,7 @@ class Stream:
             "oneLiner":self.one_liner,
             "hidden":self.hidden
         }
-    
-    def clean_text(text):
 
-        '''
-        Barebones text processing.
-        '''
-        
-        cleaned_text = re.sub(r'<[^>]+>', '', text
-                            ).replace('\xa0',' '
-                            ).replace('\n',' '
-                            ).replace('\r',''
-                            ).replace('&amp;','&'
-                            ).replace('  ',' '
-                            ).replace('\u2019', "'"
-                            ).replace('\u2013', "-"
-                            ).replace('&#039;',"'"
-                            ).replace('\u201c',"'"
-                            ).replace('\u201d',"'"
-                            ).replace('"',"'"
-                            ).strip()
-        return cleaned_text
-    
-    def s(number):
-
-        '''
-        Function for pluralizing counts.
-        '''
-
-        if number == 1:
-            return ''
-        else:
-            return 's'
         
     def extract_value(json, location, sub_location=None, rule=None):
 
@@ -210,8 +211,8 @@ class Stream:
             except:
                 self.show_logo = None
             try:
-                self.now_playing_description_long = self.clean_text(info['description'])
-                self.now_playing_description = self.clean_text(info['description'])[:44] + '...'
+                self.now_playing_description_long = clean_text(info['description'])
+                self.now_playing_description = clean_text(info['description'])[:44] + '...'
             except:
                 self.now_playing_description_long = None
                 self.now_playing_description = None
@@ -226,14 +227,14 @@ class Stream:
             result_idx = 0 if self.name == 'NTS 1' else 1
 
             now = info['results'][result_idx]['now']
-            self.now_playing = self.clean_text(now['broadcast_title']) # show name like "In Focus: Timbaland"
+            self.now_playing = clean_text(now['broadcast_title']) # show name like "In Focus: Timbaland"
             self.location = now['embeds']['details']['location_long'] # location like "New York"
             if not self.location:
                 self.location = 'London'
             self.show_logo = now['embeds']['details']['media']['background_large'] or self.show_logo # show-specific logo if provided
             try:
-                self.now_playing_description_long =  self.clean_text(now['embeds']['details']['description']) # full description
-                self.now_playing_description =  self.clean_text(now['embeds']['details']['description'])[:44] + '...' # abridged description
+                self.now_playing_description_long =  clean_text(now['embeds']['details']['description']) # full description
+                self.now_playing_description =  clean_text(now['embeds']['details']['description'])[:44] + '...' # abridged description
             except:
                 self.now_playing_description_long = None
                 self.now_playing_description = None
@@ -270,8 +271,8 @@ class Stream:
                     except:
                         self.show_logo = None
                     try:
-                        self.now_playing_description_long = self.clean_text(program['description']) # long description of the show
-                        self.now_playing_description = self.clean_text(program['description'])[:44] + '...'  # abridged description
+                        self.now_playing_description_long = clean_text(program['description']) # long description of the show
+                        self.now_playing_description = clean_text(program['description'])[:44] + '...'  # abridged description
                     except:
                         self.now_playing_description_long = None
                         self.now_playing_description = None
@@ -292,8 +293,8 @@ class Stream:
                 self.now_playing_additional_info += " (" + str(info['metadata']['release_year']) + ")"
 
             try:
-                self.now_playing_description_long = self.clean_text(info['playlist']['description'])
-                self.now_playing_description = self.clean_text(info['playlist']['description'])[:44] + '...'
+                self.now_playing_description_long = clean_text(info['playlist']['description'])
+                self.now_playing_description = clean_text(info['playlist']['description'])[:44] + '...'
             except:
                 self.now_playing_description_long = None
                 self.now_playing_description = None
@@ -307,11 +308,11 @@ class Stream:
             else:
                 self.status = 'Online'
                 try:
-                    self.now_playing_artist = self.clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # just artist name if possible like "Willow"
-                    self.now_playing = self.clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[0]) # just show name if posible like "Wispy"
+                    self.now_playing_artist = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # just artist name if possible like "Willow"
+                    self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[0]) # just show name if posible like "Wispy"
                 except:
                     self.now_playing_artist = None
-                    self.now_playing = self.clean_text(info['shows']['current']['name'].replace(' - ','').replace('.mp3','')) # full title like "Wispy w/ Willow"
+                    self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ','').replace('.mp3','')) # full title like "Wispy w/ Willow"
 
 
         elif self.name == 'Kiosk Radio': 
@@ -322,14 +323,14 @@ class Stream:
                 self.now_playing_artist = None
                 self.now_playing_subtitle = None
             else:
-                self.now_playing  = self.clean_text(info['shows']['current']['name']) # broadcast name like "Staff Picks" or "Piffy (live)"
+                self.now_playing  = clean_text(info['shows']['current']['name']) # broadcast name like "Staff Picks" or "Piffy (live)"
                 self.status = 'Online'
                 try:
-                    self.now_playing_artist  = self.clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # artist names like "Fa_Fane & F.M."
-                    self.now_playing_subtitle = self.clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[0]) # episode title "Delodio"
+                    self.now_playing_artist  = clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # artist names like "Fa_Fane & F.M."
+                    self.now_playing_subtitle = clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[0]) # episode title "Delodio"
                 except:
                     self.now_playing_artist = None
-                    self.now_playing_subtitle = self.clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','')) # full title like "Badlcukwind plays Drowned By Locals"'
+                    self.now_playing_subtitle = clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','')) # full title like "Badlcukwind plays Drowned By Locals"'
 
 
         elif self.name == 'Do!!You!!! World': 
@@ -342,11 +343,11 @@ class Stream:
             else:
                 self.status = 'Online'
                 try:
-                    self.now_playing_artist = self.clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # artist name like "Charlemagne Eagle"
-                    self.now_playing = self.clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split('w/')[0]) # show name like "The Do!You!!! Breakfast Show"
+                    self.now_playing_artist = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # artist name like "Charlemagne Eagle"
+                    self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split('w/')[0]) # show name like "The Do!You!!! Breakfast Show"
                 except:
                     self.now_playing_artist = None
-                    self.now_playing = self.clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','')) # show name like "The Do!You!!! Breakfast Show w/ Charlemagne Eagle"
+                    self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','')) # show name like "The Do!You!!! Breakfast Show w/ Charlemagne Eagle"
 
         elif self.name == 'Radio Raheem': 
             info = requests.get(self.info_link).json()
@@ -357,7 +358,7 @@ class Stream:
                 self.now_playing_artist = None
             else:
                 self.status = 'Online'
-                self.now_playing = self.clean_text(info['shows']['current']['name']) # show name like "The Do!You!!! Breakfast Show"
+                self.now_playing = clean_text(info['shows']['current']['name']) # show name like "The Do!You!!! Breakfast Show"
 
         elif self.name == 'Stegi Radio': 
             info = requests.get(self.info_link).json()
@@ -368,7 +369,7 @@ class Stream:
                 self.now_playing_artist = None
             else:
                 self.status = 'Online'
-                self.now_playing = self.clean_text(info['shows']['current']['name']) # show name like "The Do!You!!! Breakfast Show"
+                self.now_playing = clean_text(info['shows']['current']['name']) # show name like "The Do!You!!! Breakfast Show"
 
         elif self.name == 'Radio Quantica':
             info = requests.get(self.info_link).json()
@@ -425,15 +426,15 @@ class Stream:
                     self.now_playing = event['summary']
                     try:
                         description_lines = event['description'].replace('&nbsp;','<br>').replace('\n','<br>').split('<br>')
-                        self.now_playing_description_long = self.clean_text(description_lines[0]) # long desc 
+                        self.now_playing_description_long = clean_text(description_lines[0]) # long desc 
                         self.now_playing_description = self.now_playing_description_long[:44] + '...'# short desc like "A late night special with Kem Kem playing from the heart ..."
-                        self.additional_info = self.clean_text(description_lines[-1]) # genre list like "World, Jazz, Afrobeats, Electronic"
+                        self.additional_info = clean_text(description_lines[-1]) # genre list like "World, Jazz, Afrobeats, Electronic"
                         
                         self.insta_link = None
                         self.bandcamp_link = None
                         self.soundcloud_link = None
                         for l in description_lines:
-                            l = self.clean_text(l)
+                            l = clean_text(l)
                             if 'instagram.' in l.lower():
                                 self.insta_link = l
                             elif 'bandcamp.' in l.lower():
@@ -462,8 +463,8 @@ class Stream:
                     self.now_playing_subtitle = program['episodeTitle'] # specific episode title like "Gina McCarthy on Cutting Everything but Emissions"
                     self.additional_info = program['programSource'] # sometimes NPR or BBC
                     try:
-                        self.now_playing_description = self.clean_text(program['programDescription'])[:44] + '...' # series description like "The Trump administration has been dismantlin..."
-                        self.now_playing_description_long = self.clean_text(program['programDescription']) # full series description
+                        self.now_playing_description = clean_text(program['programDescription'])[:44] + '...' # series description like "The Trump administration has been dismantlin..."
+                        self.now_playing_description_long = clean_text(program['programDescription']) # full series description
                     except:
                         self.now_playing_description = None
                         self.now_playing_description_long = None
@@ -725,11 +726,11 @@ class Stream:
         elif self.name == 'CKUT':
             info = requests.get(self.info_link).json()
             self.now_playing = info['program']['title_html']
-            self.now_playing_description_long = self.clean_text(info['program']['description_html'])
+            self.now_playing_description_long = clean_text(info['program']['description_html'])
             if len(self.now_playing_description_long) > 44:
-                self.now_playing_description = self.clean_text(info['program']['description_html'])[:44] + '...'
+                self.now_playing_description = clean_text(info['program']['description_html'])[:44] + '...'
             else: 
-                self.now_playing_description = self.clean_text(info['program']['description_html'])
+                self.now_playing_description = clean_text(info['program']['description_html'])
 
         elif self.name == 'KUSF':
             info = requests.get(self.info_link).json()
