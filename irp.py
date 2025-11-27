@@ -738,7 +738,7 @@ class Stream:
             self.now_playing_description = self.extract_value(info, ['now','short_description'])
             self.now_playing_description_long = self.extract_value(info, ['now','full_description'])
             self.now_playing_artist = self.extract_value(info, ['now','hosts',0,'display_name'])
-            self.additional_info = self.extract_value(info, ['now','categories'], ['title'], rule='list')
+            self.additional_info = self.extract_value(info, location=['now','categories'], sub_location=['title'], rule='list')
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
