@@ -748,7 +748,7 @@ class Stream:
             self.now_playing,
             self.now_playing_artist,
             self.now_playing_subtitle,
-            #self.additional_info,
+            self.additional_info,
         ]
         return_string = " - ".join(p for p in parts if p)
         if len(return_string) > 100:
