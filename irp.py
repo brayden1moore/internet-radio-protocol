@@ -79,7 +79,7 @@ def extract_value(json, location, sub_location=None, rule=None):
 
         if rule == 'shorten':
             if isinstance(value, str):
-                if len(str) > 44:
+                if len(value) > 44:
                     value = value[:41] + '...'
 
         if rule == 'listeners':
