@@ -832,8 +832,7 @@ def write_main_page(streams):
         '',
         '',
         'You can access this information and more in JSON format at <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>. If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden@braydenmoore.com">brayden@braydenmoore.com</a> or open an issue on Github <a target="_blank" href="https://github.com/brayden1moore/internet-radio-protocol">github.com/brayden1moore/internet-radio-protocol</a>. Also, check out the tuner I am making:<br><br><br>',
-        '''<a href="https://www.instagram.com/scud.works/" target="_blank" style="border:none !important; height:250px;"><img height=250px style="border: 1px solid black;" src="assets/srhand.JPG"></a>
-        <a href="https://www.instagram.com/scud.works/" target="_blank" style="border:none !important; height:250px;"><img height=250px style="border: 1px solid black;" src="assets/srback.JPG"></a>''',
+        '''<a href="https://www.instagram.com/scud.works/" target="_blank" style="border:none !important; height:250px;"><img height=250px style="border: 1px solid black;" src="assets/sr.JPG"></a>''',
         '</body></html>',
         '''<style>
 
