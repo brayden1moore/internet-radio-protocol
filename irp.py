@@ -227,6 +227,7 @@ class Stream:
             self.show_logo = extract_value(now, ['embeds','details','media','background_large'])
             self.now_playing_description_long =  extract_value(now, ['embeds','details','description']) # full description
             self.now_playing_description =  extract_value(now, ['embeds','details','description'], rule='shorten') # abridged description
+            self.now_playing_subtitle = extract_value(now, ['embeds', 'details','moods'], sub_location=['value'], rule='list')
             self.additional_info = extract_value(now, ['embeds', 'details','genres'], sub_location=['value'], rule='list')
 
             self.insta_link = None
