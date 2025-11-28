@@ -556,6 +556,7 @@ class Stream:
             try:
                 info = requests.get(self.info_link).json()
                 self.now_playing = info['tracks']['current']['metadata']['track_title']
+                self.status = "Online"
             except:
                 self.now_playing = None
                 self.status = "Offline"
