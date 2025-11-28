@@ -18,37 +18,6 @@ import os
 
 logging.disable()
 
-def extract_value(json, location, sub_location=None, rule=None):
-
-    '''
-    W.I.P. function for extracting information from json given locations and rules.
-    '''
-
-    try:
-        value = json[location[0]]
-        if len(location) > 1:
-            for idx, i in enumerate(location[1:]):
-                if idx != len(location) - 1: # if not last key in list
-                    value = value[i] # go one layer deeper
-        
-        if rule == 'list':
-            if sub_location:
-                value_list = []
-                for v in value:
-                    value_in_list = v[sub_location[0]]
-                    if len(sub_location) > 1:
-                        for idx, i in enumerate(sub_location[1:]):
-                            if idx != len(sub_location) - 1: # if not last key in list
-                                value_in_list = value_in_list[i] # go one layer deeper
-                    value_list.append(value_in_list)   
-            else:
-                value_list = value
-            value = ', '.join(value_list)
-            
-        return value
-    except KeyError:
-        return None
-
 def clean_text(text):
 
     '''
@@ -80,6 +49,50 @@ def s(number):
         return ''
     else:
         return 's'
+
+def extract_value(json, location, sub_location=None, rule=None):
+
+    '''
+    W.I.P. function for extracting information from json given locations and rules.
+    '''
+
+    try:
+        value = json[location[0]]
+        if len(location) > 1:
+            for idx, i in enumerate(location[1:]):
+                if idx != len(location) - 1: # if not last key in list
+                    value = value[i] # go one layer deeper
+        
+        if rule == 'list':
+            if sub_location:
+                value_list = []
+                for v in value:
+                    value_in_list = v[sub_location[0]]
+                    if len(sub_location) > 1:
+                        for idx, i in enumerate(sub_location[1:]):
+                            if idx != len(sub_location) - 1: # if not last key in list
+                                value_in_list = value_in_list[i] # go one layer deeper
+                    value_list.append(value_in_list)   
+            else:
+                value_list = value
+            value = ', '.join(value_list)
+
+        if rule == 'shorten':
+            if isinstance(value, str):
+                if len(str) > 44:
+                    value = value[:41] + '...'
+
+        if rule == 'listeners':
+            if value:
+                value = f"{str(value)} listener{s(value)}"
+            
+        if isinstance(value, str):
+            return clean_text(value)
+        else:
+            return value
+    
+    except KeyError:
+        return None
 
 class Stream:
 
@@ -185,66 +198,28 @@ class Stream:
 
         if self.name == 'HydeFM':
             info = requests.get(self.info_link).json()
-            try:
-                self.now_playing = info['shows']['current']['name']
-                self.status = "Online"
-            except:
-                self.now_playing = None
-                self.status = "Offline"
+            self.now_playing = extract_value(info, ['shows','current','name'])
+            self.status = "Online" if self.now_playing else "Offline"
                 
         if self.name in ['SutroFM','Lower Grand Radio','Vestiges']:
             info = requests.get(self.info_link).json()
-            self.now_playing = None
-            self.now_playing_artist = None
-            try: 
-                self.now_playing_artist = info['name'].strip().split(' w/ ')[1] # artist name like "Vitamin 1K (Benji)"
-                self.now_playing = info['name'].strip().split(' w/ ')[0] # show name like "Super Supplement"
-            except:
-                self.now_playing = info.get('name', self.name).strip() # full title like "Super Supplement w/ Vitamin 1k (Benji)"
-                self.now_playing_artist = None
-            try:
-                self.additional_info = f"{info['listeners']} listener{s(info['listeners'])}" # listener count 
-            except:
-                self.additional_info = None
-            try:
-                self.show_logo = info['image']
-            except:
-                self.show_logo = None
-            try:
-                self.now_playing_description_long = clean_text(info['description'])
-                self.now_playing_description = clean_text(info['description'])[:44] + '...'
-            except:
-                self.now_playing_description_long = None
-                self.now_playing_description = None
+            self.now_playing = extract_value(info, ['name'])
+            self.additional_info = extract_value(info, ['listeners'], rule='listeners')
+            self.show_logo = extract_value(info, ['image'])
+            self.now_playing_description_long = extract_value(info, ['description'])
+            self.now_playing_description = extract_value(info, ['description'], rule='shorten')
             self.status = "Online" if info['online'] == True else "Offline"
-            if self.status == "Offline":
-                self.now_playing = None
-                self.now_playing_artist = None
-                self.additional_info = None
 
         elif 'NTS' in self.name:
             info = requests.get(self.info_link).json()
             result_idx = 0 if self.name == 'NTS 1' else 1
-
             now = info['results'][result_idx]['now']
-            self.now_playing = clean_text(now['broadcast_title']) # show name like "In Focus: Timbaland"
-            self.location = now['embeds']['details']['location_long'] # location like "New York"
-            if not self.location:
-                self.location = 'London'
-            self.show_logo = now['embeds']['details']['media']['background_large'] or self.show_logo # show-specific logo if provided
-            try:
-                self.now_playing_description_long =  clean_text(now['embeds']['details']['description']) # full description
-                self.now_playing_description =  clean_text(now['embeds']['details']['description'])[:44] + '...' # abridged description
-            except:
-                self.now_playing_description_long = None
-                self.now_playing_description = None
-                pass
-            
-            genres = []
-            for g in now['embeds']['details']['genres']:
-                genres.append(g['value'].strip())
-
-            self.additional_info = ', '.join(genres) # genre list if provided
+            self.now_playing = extract_value(now, ['broadcast_title'])  # show name like "In Focus: Timbaland"
+            self.location = extract_value(now, ['embeds','details','location_long']) or 'London' # location like "New York"
+            self.show_logo = extract_value(now, ['embeds','details','media','background_large'])
+            self.now_playing_description_long =  extract_value(now, ['embeds','details','description']) # full description
+            self.now_playing_description =  extract_value(now, ['embeds','details','description'], rule='shorten') # abridged description
+            self.additional_info = extract_value(now, ['embeds', 'details','genres'], rule='list')
 
             self.insta_link = None
             self.bandcamp_link = None
@@ -256,7 +231,6 @@ class Stream:
                     self.bandcamp_link = l
                 elif 'soundcloud.' in l.lower():
                     self.soundcloud_link = l
-
 
         elif self.name == 'Dublab':
             now = datetime.now(timezone.utc)
@@ -278,7 +252,6 @@ class Stream:
                         self.now_playing_description = None
                         pass
 
-            
         elif self.name == 'WNYU':
             info = requests.get(self.info_link).json()
 
@@ -314,7 +287,6 @@ class Stream:
                     self.now_playing_artist = None
                     self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ','').replace('.mp3','')) # full title like "Wispy w/ Willow"
 
-
         elif self.name == 'Kiosk Radio': 
             info = requests.get(self.info_link).json()
             if not info['shows']['current']:
@@ -331,7 +303,6 @@ class Stream:
                 except:
                     self.now_playing_artist = None
                     self.now_playing_subtitle = clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','')) # full title like "Badlcukwind plays Drowned By Locals"'
-
 
         elif self.name == 'Do!!You!!! World': 
             info = requests.get(self.info_link).json()
@@ -735,6 +706,7 @@ class Stream:
         elif self.name == 'KUSF':
             info = requests.get(self.info_link).json()
             self.now_playing = extract_value(info, ['now','title'])
+            self.now_playing_subtitle = extract_value(info, ['Track','title'])
             self.now_playing_description = extract_value(info, ['now','short_description'])
             self.now_playing_description_long = extract_value(info, ['now','full_description'])
             self.now_playing_artist = extract_value(info, ['now','hosts',0,'display_name'])
