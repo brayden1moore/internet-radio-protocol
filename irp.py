@@ -1368,7 +1368,7 @@ async def main_loop():
         except FileNotFoundError:
             existing_lines = ['']
 
-        if ' '.join(error_lines) != ' '.join(existing_lines):
+        if len(' '.join(error_lines)) != len(' '.join(existing_lines)):
             send_email(error_lines)
 
         with open('errorlog.txt', 'w') as log:
