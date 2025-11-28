@@ -58,13 +58,13 @@ def extract_value(json, location, sub_location=None, rule=None):
 
     try:
         value = json[location[0]]
-        if not value:
-            return None
         
         if len(location) > 1:
             for idx, i in enumerate(location[1:]):
                 if idx != len(location) - 1: # if not last key in list
                     value = value[i] # go one layer deeper
+                    if not value:
+                        return None
         
         if rule == 'list':
             if sub_location:
