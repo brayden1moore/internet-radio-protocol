@@ -75,6 +75,7 @@ def extract_value(json, location, sub_location=None, rule=None):
                     value_list.append(value_in_list)   
             else:
                 value_list = value
+            logging.info(value_list)
             value = ', '.join(value_list)
 
         if rule == 'shorten':
