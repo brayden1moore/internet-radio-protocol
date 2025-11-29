@@ -373,10 +373,10 @@
                 else {
                     live++;
                 }
-                calculateMarquees();
                 if (hidden != true) {
                     container.appendChild(stationDiv);
                 }
+            
             });
             
             const liveCount = document.querySelector('.live-count');
@@ -402,6 +402,8 @@
             setTimeout(function() {
                 lastUpdated.classList.remove('flash-out');
             }, 1100);
+
+            calculateMarquees();
         }
 
         function getUpdatedInfo() {
@@ -477,7 +479,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            calculateMarquees();
+            //calculateMarquees();
             getUpdatedInfo();
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
             distributeFavorites(favorites);
