@@ -754,7 +754,7 @@ class Stream:
                     self.now_playing = event['summary']
 
         elif self.name == 'Noods Radio':
-            info = requests.get(self.info_link)
+            info = requests.get(self.info_link).json()
             self.now_playing = extract_value(info, ['result','title'])
 
     def set_last_updated(self):
