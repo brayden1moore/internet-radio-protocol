@@ -1126,5 +1126,29 @@
     "status": "Online",
     "streamLink": "https://noods-radio.radiocult.fm/stream?_ic2=1764380384069",
     "supportLink": "https://noodsradio.com/luvers"
+  },
+  "Radio Punctum": {
+    "about": "Founded in 2015, Radio Punctum is a DIY listener supported, advertising free radio platform based in Prague, Czechia. We support our network of local and non-local music enthusiasts, DJs, talk show hosts, and live musicians with a radio platform that celebrates and reflects their diversity, both online and in person at Tendance Listening Bar. All shows are archived on our website.",
+    "bandcampLink": "https://punctumtapes.bandcamp.com",
+    "hidden": false,
+    "infoLink": "https://radiopunctum.cz/api/radio/programme/playingnow/",
+    "instaLink": "https://www.instagram.com/radio_punctum/",
+    "lastUpdated": "2025-11-29 01:28:04.293101+00:00",
+    "location": "Prague",
+    "logo": "https://internetradioprotocol.org/logos/punctum.jpg",
+    "mainLink": "https://radiopunctum.cz",
+    "name": "Radio Punctum",
+    "nowPlaying": null,
+    "nowPlayingAdditionalInfo": null,
+    "nowPlayingArtist": null,
+    "nowPlayingDescription": null,
+    "nowPlayingDescriptionLong": null,
+    "nowPlayingSubtitle": null,
+    "oneLiner": null,
+    "showLogo": null,
+    "soundcloudLink": "https://soundcloud.com/radiopunctum",
+    "status": "Online",
+    "streamLink": "https://radiopunctum.cz:8001/radio",
+    "supportLink": "https://buymeacoffee.com/radiopunctum"
   }
 }

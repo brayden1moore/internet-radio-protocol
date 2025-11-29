@@ -757,6 +757,11 @@ class Stream:
             info = requests.get(self.info_link).json()
             self.now_playing = extract_value(info, ['result','content','title'])
 
+        elif self.name == 'Radio Punctum':
+            info = requests.get(self.info_link).json()
+            self.now_playing = extract_value(info, ['data','title'])
+            self.now_playing_artist = extract_value(info, ['data','artists'], ['name'], rule='list')
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
