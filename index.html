@@ -348,7 +348,6 @@
                 let existingStation = document.getElementById(stationName);
                 if (existingStation) {
                     existingOneLiner = existingStation.querySelector('.one-liner').textContent;
-                    console.log(existingOneLiner, oneLiner);
                     if (!String(existingOneLiner).includes(oneLiner)) {
                         existingOneLiner = oneLiner;
                         updatedOneLiners.push(existingStation);
