@@ -381,7 +381,7 @@
                             container.appendChild(stationDiv);
                         }
                         else {
-                            container.insertBefore(stationDiv, container.firstChild);
+                            container.insertBefore(stationDiv, container.childNodes[offline]);
                         }
                     }
                     updatedOneLiners.push(stationDiv);
