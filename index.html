@@ -376,11 +376,14 @@
                             stationDiv.classList.add('offline');
                             container.appendChild(stationDiv);
                         }
-                        else if (rerunStrs.some(str => oneLiner.toLowerCase().includes(str.toLowerCase()))) {
-                            rerun++;
-                        }
                         else {
-                            live++;
+                            if (rerunStrs.some(str => oneLiner.toLowerCase().includes(str.toLowerCase()))) {
+                                rerun++;
+                            }
+                            else {
+                                live++;
+                            }
+                            container.insertBefore(stationDiv, container.firstChild);
                         }
                     }
                 }
