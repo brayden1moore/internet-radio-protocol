@@ -810,7 +810,7 @@ def write_main_page(streams):
         <p id="title">Internet Radio<br>Protocol</p></div>
         ''',
         '<div id="intro-div">'
-        f"The Internet Radio Protocol is a standardized hub of real-time now playing data and direct streaming links for a ever-expanding, curated list of stations. Click a logo to tune in. Support a station if you like it. And follow me on instagram, <a class='insta-link' target='_blank' href='https://www.instagram.com/scud.works/'>@scud.works</a>.</div><br><br>Last updated <span class='last-updated'>{formatted_time}</span>. <span class='live-count'>{len(rerun) + len(online)} online, {len(online)} live, {len(offline)} offline</span>.",
+        f"The Internet Radio Protocol is a standardized hub of real-time now playing data and direct streaming links for a ever-expanding, curated list of stations. Click a logo to tune in. Support a station if you like it. And follow me on instagram, <a class='insta-link' target='_blank' href='https://www.instagram.com/scud.works/'>@scud.works</a>.</div><br><br>Last updated <span class='last-updated'>{formatted_time}</span>. <span class='live-count'>{len(offline) + len(online)} total, {len(rerun) + len(online)} online, {len(online)} live, {len(offline)} offline</span>.",
         '',
         '''
         <div id="play-random">
@@ -1193,7 +1193,7 @@ def write_main_page(streams):
             });
             
             const liveCount = document.querySelector('.live-count');
-            liveCount.textContent = `${live + rerun} online, ${live} live, ${offline} offline`;
+            liveCount.textContent = `${live + offline} total, ${live + rerun} online, ${live} live, ${offline} offline`;
             
             const lastUpdated = document.querySelector('.last-updated');
             const now = new Date();
