@@ -722,6 +722,36 @@ class Stream:
             self.now_playing_artist = extract_value(info, ['now','hosts',0,'display_name'])
             self.additional_info = extract_value(json=info, location=['now','categories'], sub_location=['title'], rule='list')
 
+        elif self.name == 'Shared Frequencies':
+            info = requests.get(self.info_link).json()
+            self.now_playing = extract_value(info, ['current','metadata','track_title'])
+            self.now_playing_artist = extract_value(info, ['current','metadata','artist_name'])
+
+        elif self.name == 'Radio Nopal':
+            calendar_id = self.info_link
+            api_key = 'AIzaSyD7jIVZog7IC--y1RBCiLuUmxEDeBH9wDA'
+            url = f'https://www.googleapis.com/calendar/v3/calendars/{calendar_id}/events'
+            params = {
+                'key': api_key,
+                'maxResults': 3,
+                'singleEvents': True,
+                'orderBy': 'startTime',
+                'timeMin': time_minus_1hr
+            }
+
+            response = requests.get(url, params=params)
+            data = response.json()
+
+            for event in data.get('items', []):
+                end_time_str = event['end']['dateTime']
+                end_time = datetime.fromisoformat(end_time_str)
+                start_time_str = event['start']['dateTime']
+                start_time = datetime.fromisoformat(start_time_str)
+                now_utc = datetime.now(timezone.utc)
+
+                if end_time > now_utc > start_time:
+                    self.now_playing = extract_value(event, ['summary'])
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
