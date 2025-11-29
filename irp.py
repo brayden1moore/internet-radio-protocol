@@ -750,7 +750,7 @@ class Stream:
                 now_utc = datetime.now(timezone.utc)
 
                 if end_time > now_utc > start_time:
-                    self.now_playing = extract_value(event, ['summary'])
+                    self.now_playing = event['summary']
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
