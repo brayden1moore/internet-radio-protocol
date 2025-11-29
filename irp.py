@@ -769,8 +769,8 @@ class Stream:
         
         elif self.name == 'stayfm':
             info = requests.get(self.info_link).json()
-            self.now_playing = extract_value(info, ['title'])
-            self.now_playing_artist = extract_value(info, ['host'])
+            self.now_playing = extract_value(info, ['showQueued','title'])
+            self.now_playing_artist = extract_value(info, ['showQueued','host'])
             if info['onair'] == 'archive':
                 self.stream_link = info['streamArchive']
             else:
