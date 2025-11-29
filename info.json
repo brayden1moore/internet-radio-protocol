@@ -1198,5 +1198,29 @@
     "status": "Online",
     "streamLink": "https://stayfm.com:8443/archive",
     "supportLink": "https://www.paypal.com/paypalme/radiostayfm"
+  },
+  "Oroko Radio": {
+    "about": "Oroko is a not-for-profit independent internet radio station based in Accra, Ghana. We aim to connect, inspire and empower through conversation, collaboration and community.",
+    "bandcampLink": null,
+    "hidden": false,
+    "infoLink": "https://api.radiocult.fm/api/station/Oroko%20Radio/schedule/live",
+    "instaLink": "https://www.instagram.com/orokoradio/",
+    "lastUpdated": "2025-11-29 01:28:04.293101+00:00",
+    "location": "Accra",
+    "logo": "https://internetradioprotocol.org/logos/oroko.png",
+    "mainLink": "https://oroko.live",
+    "name": "Oroko Radio",
+    "nowPlaying": null,
+    "nowPlayingAdditionalInfo": null,
+    "nowPlayingArtist": null,
+    "nowPlayingDescription": null,
+    "nowPlayingDescriptionLong": null,
+    "nowPlayingSubtitle": null,
+    "oneLiner": null,
+    "showLogo": null,
+    "soundcloudLink": null,
+    "status": "Online",
+    "streamLink": "https://oroko-radio.radiocult.fm/stream",
+    "supportLink": "https://oroko.live/support"
   }
 }

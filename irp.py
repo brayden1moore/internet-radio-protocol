@@ -776,6 +776,12 @@ class Stream:
             else:
                 self.stream_link = info['streamLive']
 
+        elif self.name == 'Oroko Radio':
+            info = requests.get(self.info_link).json()
+            self.now_playing = extract_value(info, ['result','metadata','title'])
+            self.now_playing_artist = extract_value(info, ['result','metadata','artist'])
+            self.show_logo = extract_value(info, ['result','metadata','artwork','default'])
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
