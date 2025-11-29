@@ -1174,5 +1174,29 @@
     "status": "Online",
     "streamLink": "https://radio80k.out.airtime.pro/radio80k_a",
     "supportLink": "https://www.paypal.com/paypalme/support80000"
+  },
+  "stayfm": {
+    "about": "Founded in 2018, initially out of the desire to create an open space for audio of all kinds, stayfm has been organized as a non-profit association since 2019. Since then we are a non-commercial & independent community radio. All broadcasts are produced by club members and/or invited guests. Our goal is to promote the participation of citizens in the urban art and cultural landscape. We would like to offer DJs and musicians as well as interested (young) moderators and curators an infrastructure through which they can reach their communities of interest, share musical, artistic & socio-political topics & help shape the local media landscape.",
+    "bandcampLink": null,
+    "hidden": false,
+    "infoLink": "https://stayfm.com/api/v1",
+    "instaLink": "https://www.instagram.com/radiostayfm",
+    "lastUpdated": "2025-11-29 01:28:04.293101+00:00",
+    "location": "Augsburg",
+    "logo": "https://internetradioprotocol.org/logos/stayfm.jpg",
+    "mainLink": "https://stayfm.com",
+    "name": "stayfm",
+    "nowPlaying": null,
+    "nowPlayingAdditionalInfo": null,
+    "nowPlayingArtist": null,
+    "nowPlayingDescription": null,
+    "nowPlayingDescriptionLong": null,
+    "nowPlayingSubtitle": null,
+    "oneLiner": null,
+    "showLogo": null,
+    "soundcloudLink": "https://hearthis.at/stayfm/",
+    "status": "Online",
+    "streamLink": "https://stayfm.com:8443/archive",
+    "supportLink": "https://www.paypal.com/paypalme/radiostayfm"
   }
 }

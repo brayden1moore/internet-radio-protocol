@@ -766,6 +766,15 @@ class Stream:
             info = requests.get(self.info_link).json()
             self.now_playing = extract_value(info, ['currentShow',0,'name'])
             self.status = "Online" if self.now_playing else "Offline"
+        
+        elif self.name == 'stayfm':
+            info = requests.get(self.info_link).json()
+            self.now_playing = extract_value(info, ['title'])
+            self.now_playing_artist = extract_value(info, ['host'])
+            if info['onair'] == 'archive':
+                self.stream_link = info['streamArchive']
+            else:
+                self.stream_link = info['streamLive']
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
