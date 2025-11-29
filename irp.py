@@ -731,6 +731,7 @@ class Stream:
             calendar_id = self.info_link
             api_key = 'AIzaSyD7jIVZog7IC--y1RBCiLuUmxEDeBH9wDA'
             url = f'https://www.googleapis.com/calendar/v3/calendars/{calendar_id}/events'
+            time_minus_1hr = (datetime.now(timezone.utc) - timedelta(hours=1)).replace(microsecond=0).isoformat()
             params = {
                 'key': api_key,
                 'maxResults': 3,
