@@ -1193,7 +1193,7 @@ def write_main_page(streams):
             });
             
             const liveCount = document.querySelector('.live-count');
-            liveCount.textContent = `${live + offline} total, ${live + rerun} online, ${live} live, ${offline} offline`;
+            liveCount.textContent = `${live + offline + rerun} total, ${live + rerun} online, ${live} live, ${offline} offline`;
             
             const lastUpdated = document.querySelector('.last-updated');
             const now = new Date();
