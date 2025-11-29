@@ -373,7 +373,7 @@
                 else {
                     live++;
                 }
-                //calculateMarquees();
+                calculateMarquees();
                 if (hidden != true) {
                     container.appendChild(stationDiv);
                 }
@@ -412,6 +412,10 @@
             .then(function(json) {
                 populateStations(json);
             })
+            .then(() => {
+                let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+                distributeFavorites(favorites);
+            })
             .catch(function(error) {
                 console.error('Fetch error:', error);
             });
@@ -429,7 +433,6 @@
             
             const allFavoriteStations = favoriteDiv.querySelectorAll('.a-station-container');
             allFavoriteStations.forEach((station) => {
-                //originalContainer.appendChild(station);
                 originalContainer.insertBefore(station, originalContainer.firstChild);
 
                 let favoriteStar = station.querySelector('.favorite-star-favorited');
@@ -470,12 +473,11 @@
                 favorites.push(id);
             }
             localStorage.setItem('favorites', JSON.stringify(favorites));
-            console.log(favorites);
             distributeFavorites(favorites);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            //calculateMarquees();
+            calculateMarquees();
             getUpdatedInfo();
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
             distributeFavorites(favorites);
