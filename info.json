@@ -1102,5 +1102,29 @@
     "status": "Online",
     "streamLink": "https://n10as.radiocult.fm/stream",
     "supportLink": "https://www.patreon.com/n10as"
+  },
+  "Noods Radio": {
+    "about": "Born from Sunday morning sessions in 2015, Noods Radio began as a means to share music and bring people together. Since then Noods has become home to an array of misfits, collectors and selectors from around the globe. Tune in with open ears. No playlists, no ads, just the people.",
+    "bandcampLink": "https://dummyhand.bandcamp.com",
+    "hidden": false,
+    "infoLink": "https://api.radiocult.fm/api/station/noods-radio/schedule/live",
+    "instaLink": "https://www.instagram.com/noodsradio/",
+    "lastUpdated": "2025-11-29 01:28:04.293101+00:00",
+    "location": "Bristol",
+    "logo": "https://internetradioprotocol.org/logos/noods.webp",
+    "mainLink": "https://noodsradio.com",
+    "name": "Noods Radio",
+    "nowPlaying": null,
+    "nowPlayingAdditionalInfo": null,
+    "nowPlayingArtist": null,
+    "nowPlayingDescription": null,
+    "nowPlayingDescriptionLong": null,
+    "nowPlayingSubtitle": null,
+    "oneLiner": null,
+    "showLogo": null,
+    "soundcloudLink": "https://www.mixcloud.com/NoodsRadio/",
+    "status": "Online",
+    "streamLink": "https://noods-radio.radiocult.fm/stream?_ic2=1764380384069",
+    "supportLink": "https://noodsradio.com/luvers"
   }
 }

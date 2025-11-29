@@ -753,6 +753,10 @@ class Stream:
                 if end_time > now_utc > start_time:
                     self.now_playing = event['summary']
 
+        elif self.name == 'Noods Radio':
+            info = requests.get(self.info_link)
+            self.now_playing = extract_value(info, ['result','title'])
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
