@@ -762,6 +762,11 @@ class Stream:
             self.now_playing = extract_value(info, ['data','title'])
             self.now_playing_artist = extract_value(info, ['data','artists'], ['name'], rule='list')
 
+        elif self.name == 'Radio 80000':
+            info = requests.get(self.info_link).json()
+            self.now_playing = extract_value(info, ['currentShow',0,'name'])
+            self.status = "Online" if self.now_playing else "Offline"
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 

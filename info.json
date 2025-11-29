@@ -1150,5 +1150,29 @@
     "status": "Online",
     "streamLink": "https://radiopunctum.cz:8001/radio",
     "supportLink": "https://buymeacoffee.com/radiopunctum"
+  },
+  "Radio 80000": {
+    "about": "Radio 80000 is a non-commercial community radio, streaming live every day from 8am till midnight from ZIRKA in the north of Munich. Founded in 2015, it has evolved to a platform promoting collaboration and cultural expression through music, dialogue and events throughout Germany. DJs, musicians, producers, journalists and music lovers present an individual idea of radio that goes beyond algorithms and commercial playlists. By highlighting local scenes and welcoming guests from around the world, we aim to create a community of like-minded individuals. The studio serves as a real life meeting point for everyone to listen and hang out.",
+    "bandcampLink": null,
+    "hidden": false,
+    "infoLink": "https://radio80k.airtime.pro/api/live-info",
+    "instaLink": "https://www.instagram.com/radio80000/",
+    "lastUpdated": "2025-11-29 01:28:04.293101+00:00",
+    "location": "Munich",
+    "logo": "https://internetradioprotocol.org/logos/80000.jpg",
+    "mainLink": "https://www.radio80k.de/",
+    "name": "Radio 80000",
+    "nowPlaying": null,
+    "nowPlayingAdditionalInfo": null,
+    "nowPlayingArtist": null,
+    "nowPlayingDescription": null,
+    "nowPlayingDescriptionLong": null,
+    "nowPlayingSubtitle": null,
+    "oneLiner": null,
+    "showLogo": null,
+    "soundcloudLink": "https://soundcloud.com/radio80000",
+    "status": "Online",
+    "streamLink": "https://radio80k.out.airtime.pro/radio80k_a",
+    "supportLink": "https://www.paypal.com/paypalme/support80000"
   }
 }
