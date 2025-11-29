@@ -912,7 +912,7 @@ async def main_loop():
         with open('errorlog.txt', 'w') as log:
             log.write('\n'.join(error_lines))
 
-        write_main_page(updated)
+        #write_main_page(updated)
         await asyncio.sleep(40)
 
 if __name__ == '__main__':
