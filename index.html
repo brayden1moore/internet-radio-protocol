@@ -215,8 +215,8 @@
             window.scrollTo({top: y, behavior: 'smooth'});
         });
 
-        function calculateMarquees() {
-            const stationContainers = document.querySelectorAll('.a-station-container');
+        function calculateMarquees(stationContainers) {
+            //const stationContainers = document.querySelectorAll('.a-station-container');
             let needsMarquee = false;
             stationContainers.forEach((container) => {
                 const logo = container.querySelector('.a-logo');
@@ -330,6 +330,7 @@
             var offline = 0;
 
             const container = document.getElementById('streams-container');
+            const updatedOneLiners = [];
 
             Object.keys(data).forEach(function(stationName) {
                 const station = data[stationName];
@@ -346,7 +347,12 @@
 
                 let existingStation = document.getElementById(stationName);
                 if (existingStation) {
-                    existingStation.querySelector('.one-liner').textContent = oneLiner;
+                    existingOneLiner = existingStation.querySelector('.one-liner').textContent;
+                    console.log(existingOneLiner, oneLiner);
+                    if (!existingOneLiner.includes(oneLiner)) {
+                        existingOneLiner = oneLiner;
+                        updatedOneLiners.push(existingStation);
+                    };
                     existingStation.querySelector('.status').textContent = status;
                     existingStation.querySelector('.location').textContent = location;
                 }
@@ -379,6 +385,8 @@
                             container.insertBefore(stationDiv, container.firstChild);
                         }
                     }
+
+                    updatedOneLiners.push(stationDiv);
                 }
 
                 if (hidden != true) {
@@ -421,7 +429,7 @@
                 lastUpdated.classList.remove('flash-out');
             }, 1100);
 
-            calculateMarquees();
+            calculateMarquees(updatedOneLiners);
         }
 
         function getUpdatedInfo() {
