@@ -1067,10 +1067,6 @@
             `;
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            //calculateMarquees();
-            getUpdatedInfo();
-        });
 
         function decodeHtmlEntities(text) {
             const textarea = document.createElement('textarea');
@@ -1099,7 +1095,9 @@
                 const rerunStrs = ['(r)', 're-run', 're-wav', 'restream', 'playlist'];
 
                 const stationDiv = document.createElement('div')
-                stationDiv.innerHTML = `<div class="a-station-container" id="${stationName}">
+                stationDiv.classList.add('a-station-container');
+                stationDiv.id = stationName
+                stationDiv.innerHTML = `
                 <p class="favorite-star-favorited" id="${stationName}-favorite" style="position: absolute; top: 10px; right: 10px; margin: 0; cursor: pointer; z-index: 10;">★</p>
                 <p class="favorite-star" onClick="toggleFavorite('${stationName}')"  id="${stationName}-favorite-outline" style="position: absolute; top: 10px; right: 10px; margin: 0; cursor: pointer; z-index: 11;">☆</p>
                 <img class="a-logo"  onclick="toggleAudio('${stationName}')" src="${logo}"  />
@@ -1114,7 +1112,6 @@
                 <span class="now-playing">Playing: <span class="one-liner">${oneLiner}</span></span><br>
                 Location: <span class="location">${location}</span><br>Status: <span class="status">${status}</span><br>
                 <audio id="${stationName}-audio" style="width:40px;" data-src="${streamLink}"></audio>
-                </div>
                 </div>`
                 if (status === 'Offline') {
                     offline++;
@@ -1215,9 +1212,6 @@
             getUpdatedInfo();
         }
 
-        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        distributeFavorites(favorites);
-
         function toggleFavorite(id) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
             const index = favorites.indexOf(id);
@@ -1230,6 +1224,13 @@
             console.log(favorites);
             distributeFavorites(favorites);
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            //calculateMarquees();
+            getUpdatedInfo();
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            distributeFavorites(favorites);
+        });
         setInterval(getUpdatedInfo, 30000);
 
         </script>
