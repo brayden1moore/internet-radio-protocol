@@ -15,8 +15,9 @@
             <div id="play-random-text">
             </div>
         </div>
-        <div class="streams-container" id="favorites-container"></div><div class="streams-container" id="streams-container">
-        </div>You can access this information and more in JSON format at <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>. If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden@braydenmoore.com">brayden@braydenmoore.com</a> or open an issue on Github <a target="_blank" href="https://github.com/brayden1moore/internet-radio-protocol">github.com/brayden1moore/internet-radio-protocol</a>. Also, check out the tuner I am making:<br><br><br><a href="https://www.instagram.com/scud.works/" target="_blank" style="border:none !important; height:250px;"><img height=250px style="border: 1px solid black;" src="assets/sr.JPG"></a></body></html><style>
+        <div class="streams-container" id="favorites-container"></div>
+        <div class="streams-container" id="streams-container"></div>
+        You can access this information and more in JSON format at <a href="https://internetradioprotocol.org/info">internetradioprotocol.org/info</a>. If you have any questions, comments, or radio station addition suggestions, please email <a href="mailto:brayden@braydenmoore.com">brayden@braydenmoore.com</a> or open an issue on Github <a target="_blank" href="https://github.com/brayden1moore/internet-radio-protocol">github.com/brayden1moore/internet-radio-protocol</a>. Also, check out the tuner I am making:<br><br><br><a href="https://www.instagram.com/scud.works/" target="_blank" style="border:none !important; height:250px;"><img height=250px style="border: 1px solid black;" src="assets/sr.JPG"></a></body></html><style>
 
         .insta-link {
             color: white !important;
@@ -341,40 +342,47 @@
                 const donateLink = data[stationName]['donateLink'];
                 const logo = data[stationName]['logo'];
                 const hidden = data[stationName]['hidden'];
-
                 const rerunStrs = ['(r)', 're-run', 're-wav', 'restream', 'playlist'];
 
-                const stationDiv = document.createElement('div')
-                stationDiv.classList.add('a-station-container');
-                stationDiv.id = stationName
-                stationDiv.innerHTML = `
-                <p class="favorite-star-favorited" id="${stationName}-favorite" style="position: absolute; top: 10px; right: 10px; margin: 0; cursor: pointer; z-index: 10;">★</p>
-                <p class="favorite-star" onClick="toggleFavorite('${stationName}')"  id="${stationName}-favorite-outline" style="position: absolute; top: 10px; right: 10px; margin: 0; cursor: pointer; z-index: 11;">☆</p>
-                <img class="a-logo"  onclick="toggleAudio('${stationName}')" src="${logo}"  />
-                <div class="a-station">
-                <a class="stream-name" target="_blank" href="${mainLink}">${stationName}</a>
-                <div class="links">
-                    <a class="a-link" target="_blank" href="${streamLink}">STREAM</a>
-                    <a class="a-link" target="_blank" href="${mainLink}">WEBSITE</a>
-                    <a class="a-link info-link" target="_blank" href="${infoLink}">INFO</a>
-                    <a class="a-link support-link" target="_blank" href="${donateLink}">DONATE</a>
-                </div>
-                <span class="now-playing">Playing: <span class="one-liner">${oneLiner}</span></span><br>
-                Location: <span class="location">${location}</span><br>Status: <span class="status">${status}</span><br>
-                <audio id="${stationName}-audio" style="width:40px;" data-src="${streamLink}"></audio>
-                </div>`
-                if (status === 'Offline') {
-                    offline++;
-                    stationDiv.classList.add('offline');
-                }
-                else if (rerunStrs.some(str => oneLiner.toLowerCase().includes(str.toLowerCase()))) {
-                    rerun++;
+                let existingStation = document.getElementById(stationName);
+                if (existingStation) {
+                    existingStation.querySelector('.one-liner').textContent = oneLiner;
+                    existingStation.querySelector('.status').textContent = status;
+                    existingStation.querySelector('.location').textContent = location;
                 }
                 else {
-                    live++;
-                }
-                if (hidden != true) {
-                    container.appendChild(stationDiv);
+                    const stationDiv = document.createElement('div')
+                    stationDiv.classList.add('a-station-container');
+                    stationDiv.id = stationName
+                    stationDiv.innerHTML = `
+                    <p class="favorite-star-favorited" id="${stationName}-favorite" style="position: absolute; top: 10px; right: 10px; margin: 0; cursor: pointer; z-index: 10;">★</p>
+                    <p class="favorite-star" onClick="toggleFavorite('${stationName}')"  id="${stationName}-favorite-outline" style="position: absolute; top: 10px; right: 10px; margin: 0; cursor: pointer; z-index: 11;">☆</p>
+                    <img class="a-logo"  onclick="toggleAudio('${stationName}')" src="${logo}"  />
+                    <div class="a-station">
+                    <a class="stream-name" target="_blank" href="${mainLink}">${stationName}</a>
+                    <div class="links">
+                        <a class="a-link" target="_blank" href="${streamLink}">STREAM</a>
+                        <a class="a-link" target="_blank" href="${mainLink}">WEBSITE</a>
+                        <a class="a-link info-link" target="_blank" href="${infoLink}">INFO</a>
+                        <a class="a-link support-link" target="_blank" href="${donateLink}">DONATE</a>
+                    </div>
+                    <span class="now-playing">Playing: <span class="one-liner">${oneLiner}</span></span><br>
+                    Location: <span class="location">${location}</span><br>Status: <span class="status">${status}</span><br>
+                    <audio id="${stationName}-audio" style="width:40px;" data-src="${streamLink}"></audio>
+                    </div>`
+                    if (hidden != true) {
+                        if (status === 'Offline') {
+                            offline++;
+                            stationDiv.classList.add('offline');
+                            container.appendChild(stationDiv);
+                        }
+                        else if (rerunStrs.some(str => oneLiner.toLowerCase().includes(str.toLowerCase()))) {
+                            rerun++;
+                        }
+                        else {
+                            live++;
+                        }
+                    }
                 }
             
             });
