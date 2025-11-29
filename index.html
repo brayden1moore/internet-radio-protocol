@@ -340,6 +340,7 @@
                 const infoLink = data[stationName]['infoLink'];
                 const donateLink = data[stationName]['donateLink'];
                 const logo = data[stationName]['logo'];
+                const hidden = data[stationName]['hidden'];
 
                 const rerunStrs = ['(r)', 're-run', 're-wav', 'restream', 'playlist'];
 
@@ -373,7 +374,8 @@
                     live++;
                 }
                 //calculateMarquees();
-                container.appendChild(stationDiv);
+                if (hidden !== true):
+                    container.appendChild(stationDiv);
 
             });
             
