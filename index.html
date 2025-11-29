@@ -867,8 +867,13 @@
             opacity: 1;
         }
 
+
         #main-logo {height: 130px; margin-left: -30px;}
         .a-station-container {position:relative; cursor:default; background-color: #FFFFFF; color:#000000; height: 90px; padding: 10px; overflow-x:hidden; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
+        .offline {
+            opacity: 0.5;
+        }
+        
         .a-logo {width:90px; height:90px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
         body {background-color: #FFFFFF; font-size: 10pt;}
         .the-header {font-family: "Archivo ExtraBold"; font-size: 24pt; line-height:0.75em; letter-spacing:-0.05em; margin-top:25px;}
@@ -1094,16 +1099,6 @@
                 const currentOneLiner = stationDiv.querySelector('.one-liner').textContent;
                 const rerunStrs = ['(r)', 're-run', 're-wav', 'restream', 'playlist'];
 
-                if (status === 'Offline') {
-                    offline++;
-                }
-                else if (rerunStrs.some(str => oneLiner.toLowerCase().includes(str.toLowerCase()))) {
-                    rerun++;
-                }
-                else {
-                    live++;
-                }
-
                 const stationDiv = document.createElement('div')
                 stationDiv.innerHTML = `<div class="a-station-container" id="${stationName}">
                 <p class="favorite-star-favorited" id="${stationName}-favorite" style="position: absolute; top: 10px; right: 10px; margin: 0; cursor: pointer; z-index: 10;">★</p>
@@ -1122,6 +1117,16 @@
                 <audio id="${stationName}-audio" style="width:40px;" data-src="${streamLink}"></audio>
                 </div>
                 </div>`
+                if (status === 'Offline') {
+                    offline++;
+                    stationDiv.classList.add('offline');
+                }
+                else if (rerunStrs.some(str => oneLiner.toLowerCase().includes(str.toLowerCase()))) {
+                    rerun++;
+                }
+                else {
+                    live++;
+                }
                 calculateMarquees();
                 container.appendChild(stationDiv);
 
