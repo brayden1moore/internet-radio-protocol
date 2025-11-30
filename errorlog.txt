@@ -1,8 +1,8 @@
-[2025-11-30 14:25:20.158130] Error updating Dublab:
+[2025-11-30 14:30:21.732678] Error updating Dublab:
 Traceback (most recent call last):
-  File "/Users/braydenmoore/Library/Mobile Documents/com~apple~CloudDocs/Code/internet-radio-protocol/irp.py", line 832, in process_stream
+  File "/Users/braydenmoore/Library/Mobile Documents/com~apple~CloudDocs/Code/internet-radio-protocol/irp.py", line 833, in process_stream
     stream.update()
-  File "/Users/braydenmoore/Library/Mobile Documents/com~apple~CloudDocs/Code/internet-radio-protocol/irp.py", line 249, in update
+  File "/Users/braydenmoore/Library/Mobile Documents/com~apple~CloudDocs/Code/internet-radio-protocol/irp.py", line 250, in update
     if datetime.fromisoformat(program['startTime']) < now:
                               ~~~~~~~^^^^^^^^^^^^^
 KeyError: 'startTime'
