@@ -798,6 +798,27 @@ class Stream:
         self.one_liner = return_string
 
 
+def add_info_to_index(stream_json):
+    with open('index.html', 'r') as f:
+        html_content = f.read()
+
+    json_str = json.dumps(stream_json)
+    injection = f'''<!-- STATION_DATA_START -->
+                    <script>window.STATION_DATA = {json_str};</script>
+                    <!-- STATION_DATA_END -->'''
+
+    html_content = re.sub(
+        r'<!-- STATION_DATA_START -->.*?<!-- STATION_DATA_END -->',
+        '',
+        html_content,
+        flags=re.DOTALL
+    )
+
+    html_content = html_content.replace('</head>', f'{injection}\n</head>')
+    with open('index.html', 'w') as f:
+        f.write(html_content)
+
+
 async def process_stream(name, value):
 
     '''
@@ -880,6 +901,7 @@ async def main_loop():
             stream_json = json.load(f)
 
         #write_main_page(stream_json)
+        add_info_to_index(stream_json)
 
         tasks = [process_stream(name, val) for name, val in stream_json.items()]
         results = await asyncio.gather(*tasks)
