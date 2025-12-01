@@ -288,7 +288,7 @@
         
         .a-logo {width:90px; height:90px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
         body {background-color: #FFFFFF; font-size: 10pt;}
-        .the-header {font-family: "Archivo ExtraBold"; font-size: 24pt; line-height:0.75em; letter-spacing:-0.05em; margin-top:25px;}
+        .the-header {font-family: "Archivo ExtraBold"; font-size: 22pt; line-height:0.75em; letter-spacing:-0.05em; margin-top:25px;}
         .a-station {font-family: "Archivo Light"; font-size:8pt; white-space: nowrap; flex-shrink: 0;}
         
         @font-face {font-family: "Archivo ExtraBold";src: url("assets/Archivo-ExtraBold.ttf") format("truetype");}
@@ -383,19 +383,14 @@
             playerImg.src = logo;
             player.dataset.id = id;
             playerName.textContent = id;
-            oneLinerElement = playerInfo.querySelector('.one-liner');
-            oneLinerElement.textContent = oneLiner;
-            playerLocation.textContent = station.dataset.location;
-            
+
             const a=document.getElementById(`${id}-audio`);
             playerAudio.src = a.dataset.src; 
-            togglePlayer();
 
-            const width = (player.offsetWidth - playerImg.offsetWidth - (playerInfo.offsetWidth - oneLinerElement.offsetWidth)) + 'px';
-            needsMarquee = ((playerImg.offsetWidth + playerIcons.offsetWidth + playerInfo.offsetWidth)  - player.offsetWidth) < 30;
-            if (needsMarquee) {
-                //setupOneLinerMarquee(oneLinerElement, width, 'left');
-            };
+            updatePlayer(id, oneLiner, station.dataset.location);
+            updateMediaSession(oneLiner, id, logo);
+
+            togglePlayer();
         }
                         
         document.querySelectorAll('.last-updated').forEach(el => {const utcStr = el.dataset.utc;if (utcStr) {const date = new Date(utcStr);if (!isNaN(date)) {el.textContent = date.toLocaleString();}}});
@@ -601,6 +596,25 @@
 
         }
 
+        function updatePlayer(id, oneLiner, location) {
+            existingStation = document.getElementById(id);
+            oneLinerElement = playerInfo.querySelector('.one-liner');
+            existingOneLiner = decodeHtmlEntities(oneLinerElement.dataset.oneLiner)
+
+            if (existingOneLiner != oneLiner) {
+                oneLinerElement.textContent = oneLiner;
+                playerLocation.textContent = location;
+                oneLinerElement.textContent = oneLiner;
+                oneLinerElement.dataset.oneLiner = oneLiner; 
+            };
+
+            const width = (player.offsetWidth - playerImg.offsetWidth - playerIcons.offsetWidth - (playerInfo.offsetWidth - oneLinerElement.offsetWidth)) + 'px';
+            needsMarquee = (player.offsetWidth - playerImg.offsetWidth - playerInfo.offsetWidth - playerIcons.offsetWidth) < 50;
+            if (needsMarquee) {
+                setupOneLinerMarquee(oneLinerElement, width, 'left');
+            };
+        }
+
         function populateStations(data) {
             var rerun = 0;
             var live = 0;
@@ -635,6 +649,11 @@
 
                     existingStation.dataset.location = location;
                     existingStation.dataset.status = status;
+
+                    if (existingStation.id == player.dataset.id) {
+                        updatePlayer(stationName, oneLiner, location);
+                        updateMediaSession(oneLiner, stationName, logo);
+                    }
                 }
                 else {
                     const stationDiv = document.createElement('div')
@@ -718,7 +737,7 @@
             setTimeout(function() {
                 lastUpdated.classList.remove('flash-out');
             }, 1100);
-            
+
             calculateMarquees(updatedOneLiners);
         }
 
@@ -756,28 +775,50 @@
             })
         }
 
+        function updateMediaSession(title, artist, artwork) {
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                title: title,
+                artist: artist,
+                album: 'Internet Radio Protocol',
+                artwork: [
+                    { src: artwork, sizes: '96x96',   type: 'image/png' },
+                    { src: artwork, sizes: '128x128', type: 'image/png' },
+                    { src: artwork, sizes: '256x256', type: 'image/png' },
+                    { src: artwork, sizes: '512x512', type: 'image/png' }
+                ]
+                });
+
+                navigator.mediaSession.setActionHandler('play', () => {
+                togglePlayer();
+                });
+                
+                navigator.mediaSession.setActionHandler('pause', () => {
+                togglePlayer();
+                });
+            }
+        }
 
         function getUpdatedInfo() {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
             if (window.STATION_DATA) {
-                populateStations(window.STATION_DATA);
-                distributeFavorites(favorites);
+                json = window.STATION_DATA;
+                populateStations(json);
 
                 if (locationTagActive == false & statusTagActive == false) {
-                    populateTags(window.STATION_DATA);
+                    populateTags(json);
                 }
             } else {
                 fetch('https://internetradioprotocol.org/info')
                     .then(response => response.json())
                     .then(json => {
                         populateStations(json);
-                        distributeFavorites(favorites);
+                        //distributeFavorites(favorites);
                         populateTags(json);
                     })
                     .catch(error => console.error('Fetch error:', error));
             }
-
         }
 
         function distributeFavorites(favorites) {
@@ -840,6 +881,6 @@
         });
         
         getUpdatedInfo();
-        setInterval(getUpdatedInfo, 30000);
+        setInterval(getUpdatedInfo, 10000);
 
         </script>
