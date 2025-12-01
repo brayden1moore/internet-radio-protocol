@@ -84,7 +84,7 @@ def extract_value(json, location, sub_location=None, rule=None):
                 if rule == 'list':
                     value = ', '.join(value_list)
                 else:
-                    value = value
+                    value = value_list
             else:
                 value = None
 
