@@ -398,7 +398,6 @@
 
         function chooseStation(id, random=false, fromLink=false) {
             player.style.display = 'flex';
-            player.classList.add('pulsing');
 
             let d=document.getElementById(id)
             let isPlaying=d.style.backgroundColor==='yellow';
@@ -421,6 +420,7 @@
             updateMediaSession(oneLiner, id, logo);
 
             if (!fromLink) {
+                player.classList.add('pulsing');
                 togglePlayer();
             }
         }
