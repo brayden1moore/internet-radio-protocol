@@ -962,6 +962,7 @@ def main_loop():
         with open('errorlog.txt', 'w') as log:
             log.write('\n'.join(error_lines))
 
+        print('Done!')
         time.sleep(60)
 
 if __name__ == '__main__':
