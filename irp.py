@@ -665,8 +665,8 @@ class Stream:
         elif self.name == 'Radio Banda Larga':
             info = requests.get(self.info_link).json()
             try:
-                self.now_playing = info['shows']['current']['name']
-                if self.now_playing == 'ta':
+                self.now_playing = info['shows']['current']['name'].upper()
+                if self.now_playing == 'TA':
                     self.now_playing = 'Picks from the archive'
                 self.status = 'Online'
             except:
