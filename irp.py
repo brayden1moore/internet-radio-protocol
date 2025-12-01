@@ -132,6 +132,7 @@ class Stream:
         self.one_liner = None
         self.support_link = None
         self.hidden = None
+        self.listeners = None
 
         if isinstance(from_dict, dict):
             self.name = from_dict.get('name')
@@ -156,6 +157,7 @@ class Stream:
             self.one_liner = self.one_liner
             self.support_link = from_dict.get('supportLink')
             self.hidden = from_dict.get('hidden')
+            self.listeners = from_dict.get('listeners')
 
     def to_dict(self):
 
@@ -212,7 +214,8 @@ class Stream:
         if self.name in ['SutroFM','Lower Grand Radio','Vestiges']:
             info = requests.get(self.info_link).json()
             self.now_playing = extract_value(info, ['name'])
-            self.additional_info = extract_value(info, ['listeners'], rule='listeners')
+            self.additional_info = None 
+            self.listeners = extract_value(info, ['listeners'], rule='listeners')
             self.show_logo = extract_value(info, ['image'])
             self.now_playing_description_long = extract_value(info, ['description'])
             self.now_playing_description = extract_value(info, ['description'], rule='shorten')
@@ -454,13 +457,15 @@ class Stream:
         elif self.name == 'We Are Various':
             info = requests.get(self.info_link).json()
             self.status = 'Online' if info['is_online'] == True else 'Offline'
-            self.additional_info = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
+            self.additional_info = None
+            self.listeners = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
             self.now_playing = info['now_playing']['song']['title'] # simple show title
 
         elif self.name == 'KWSX':
             info = requests.get(self.info_link).json()
             self.status = 'Online' if info['is_online'] == True else 'Offline'
-            self.additional_info = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
+            self.additional_info = None 
+            self.listeners = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
             self.now_playing = info['now_playing']['song']['text'] # simple show title
 
         elif self.name == 'KJazz':
@@ -471,7 +476,8 @@ class Stream:
 
         elif self.name == "Particle FM":
             info = requests.get(self.info_link).json()[0]
-            self.now_playing_additional_info = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
+            self.now_playing_additional_info = None 
+            self.listeners = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
             rerun = ' (R)' if not info['live']['is_live'] else ''
             self.now_playing = info['now_playing']['song']['title'] + rerun
 
@@ -727,6 +733,8 @@ class Stream:
             info = requests.get(self.info_link).json()
             self.now_playing = extract_value(info, ['current','metadata','track_title'])
             self.now_playing_artist = extract_value(info, ['current','metadata','artist_name'])
+            if not self.now_playing:
+                self.status = 'Offline'
 
         elif self.name == 'Radio Nopal':
             calendar_id = self.info_link
@@ -798,6 +806,24 @@ class Stream:
             return_string = return_string[:100] + '...'
         self.one_liner = return_string
 
+        rerun_strs = ['rotazione notte','night moves','night files','repeats','(r)', 're-run', 're-wav', 'restream', 'playlist','replays','stayfmix','picks from the archive','archivo','subtle selects']
+
+        if self.status != 'Offline':
+            self.status = 'Live'
+            if any(string in self.one_liner.lower() for string in rerun_strs) or self.name == 'Monotonic Radio':
+                self.status = 'Re-Run'
+            if self.status == 'Live':
+                date1 = re.search("([0-9]{2}\/[0-9]{2}\/[0-9]{4})", self.one_liner)
+                if date1:
+                    date = datetime.strptime(date1.group(), "%d/%m/%Y")
+                    if date < datetime.now():
+                        self.status = 'Re-Run'
+                else:
+                    date2 = re.search("([0-9]{2}\.[0-9]{2}\.[0-9]{2})", self.one_liner)
+                    if date2:
+                        date = datetime.strptime(date2.group(), "%m.%d.%y")
+                        if date < datetime.now():
+                            self.status = 'Re-Run'
 
 def add_info_to_index(stream_json):
     with open('index.html', 'r') as f:
@@ -820,7 +846,7 @@ def add_info_to_index(stream_json):
         f.write(html_content)
 
 
-async def process_stream(name, value):
+def process_stream(name, value):
 
     '''
     Function for pulling existing stream info in from the dict served at /info endpoint,
@@ -885,13 +911,13 @@ def send_email(contents):
         print('Email Failed')
         print(e)
 
-async def main_loop():
+def main_loop():
 
     '''
     Loop that brings the above functions together. 
     1. Reads the current info.json 
     2. Writes the internetradioprotocol.org homepage from it
-    3. Processes each station asynchronously 
+    3. Processes each station with ThreadPoolExecutor
     4. Writes the newly gathered information to info.json
     5. Emails me the errors
     '''
@@ -901,11 +927,12 @@ async def main_loop():
         with open('info.json', 'r') as f:
             stream_json = json.load(f)
 
-        #write_main_page(stream_json)
         add_info_to_index(stream_json)
 
-        tasks = [process_stream(name, val) for name, val in stream_json.items()]
-        results = await asyncio.gather(*tasks)
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            futures = [executor.submit(process_stream, name, val) 
+                      for name, val in stream_json.items()]
+            results = [future.result() for future in futures]
 
         processing_time = time.time() - start_time
 
@@ -935,8 +962,7 @@ async def main_loop():
         with open('errorlog.txt', 'w') as log:
             log.write('\n'.join(error_lines))
 
-        #write_main_page(updated)
-        await asyncio.sleep(40)
+        time.sleep(60)
 
 if __name__ == '__main__':
     asyncio.run(main_loop())
