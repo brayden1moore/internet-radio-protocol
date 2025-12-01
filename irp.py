@@ -269,21 +269,21 @@ class Stream:
             info = requests.get(self.info_link).json()
 
             if info['metadata']:
-                self.now_playing = extract_value(['metadata','playlist_title'])
-                self.now_playing_artist = extract_value(['metadata','dj'])
-                self.now_playing_additional_info = extract_value(['metadata','release_title'])
+                self.now_playing = extract_value(info,['metadata','playlist_title'])
+                self.now_playing_artist = extract_value(info,['metadata','dj'])
+                self.now_playing_additional_info = extract_value(info,['metadata','release_title'])
             else:
-                self.now_playing = extract_value(['playlist','title'])
+                self.now_playing = extract_value(info,['playlist','title'])
 
-            self.show_logo = extract_value(['playlist','image'])
+            self.show_logo = extract_value(info,['playlist','image'])
              
             if info['metadata']['artist_name']:
-                self.now_playing_additional_info += ' by ' + extract_value(['metadata','artist_name'])
+                self.now_playing_additional_info += ' by ' + extract_value(info,['metadata','artist_name'])
             if info['metadata']['release_year']:
-                self.now_playing_additional_info += " (" + str(extract_value(['metadata','release_year'])) + ")"
+                self.now_playing_additional_info += " (" + str(extract_value(info,['metadata','release_year'])) + ")"
 
-            self.now_playing_description_long = extract_value(['playlist','description'])
-            self.now_playing_description = extract_value(['playlist','description'], rule='shorten')
+            self.now_playing_description_long = extract_value(info,['playlist','description'])
+            self.now_playing_description = extract_value(info,['playlist','description'], rule='shorten')
 
         elif self.name == 'Voices Radio': 
             info = requests.get(self.info_link).json()
