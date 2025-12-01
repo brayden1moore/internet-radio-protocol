@@ -802,8 +802,7 @@ class Stream:
             self.additional_info,
         ]
         return_string = " - ".join(p for p in parts if p)
-        if len(return_string) > 100:
-            return_string = return_string[:100] + '...'
+
         self.one_liner = return_string
 
         rerun_strs = ['rotazione notte','night moves','night files','repeats','(r)', 're-run', 're-wav', 'restream', 'playlist','replays','stayfmix','picks from the archive','archivo','subtle selects']
