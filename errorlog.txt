@@ -1,4 +1,4 @@
-[2025-12-01 15:20:15.288182] Error updating WNYU:
+[2025-12-01 15:23:30.205209] Error updating WNYU:
 Traceback (most recent call last):
   File "/Users/braydenmoore/Library/Mobile Documents/com~apple~CloudDocs/Code/internet-radio-protocol/irp.py", line 870, in process_stream
     stream.update()
