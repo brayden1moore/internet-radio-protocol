@@ -67,7 +67,7 @@ def extract_value(json, location, sub_location=None, rule=None):
                     if not value:
                         return None
         
-        if rule == 'list':
+        if rule in ['list','list_genres']:
             if sub_location:
                 value_list = []
                 for v in value:
@@ -81,7 +81,10 @@ def extract_value(json, location, sub_location=None, rule=None):
                 value_list = value
 
             if len(value_list) > 0:
-                value = ', '.join(value_list)
+                if rule == 'list':
+                    value = ', '.join(value_list)
+                else:
+                    value = value
             else:
                 value = None
 
@@ -133,6 +136,7 @@ class Stream:
         self.support_link = None
         self.hidden = None
         self.listeners = None
+        self.genres = None
 
         if isinstance(from_dict, dict):
             self.name = from_dict.get('name')
@@ -158,6 +162,7 @@ class Stream:
             self.support_link = from_dict.get('supportLink')
             self.hidden = from_dict.get('hidden')
             self.listeners = from_dict.get('listeners')
+            self.genres = from_dict.get('genres')
 
     def to_dict(self):
 
@@ -192,7 +197,9 @@ class Stream:
             "lastUpdated": self.last_updated,
 
             "oneLiner":self.one_liner,
-            "hidden":self.hidden
+            "hidden":self.hidden,
+            "listeners":self.listeners,
+            "genres":self.genres
         }
 
     
@@ -232,6 +239,7 @@ class Stream:
             self.now_playing_description =  extract_value(now, ['embeds','details','description'], rule='shorten') # abridged description
             self.now_playing_subtitle = extract_value(now, ['embeds', 'details','moods'], sub_location=['value'], rule='list')
             self.additional_info = extract_value(now, ['embeds', 'details','genres'], sub_location=['value'], rule='list')
+            self.genres = extract_value(now, ['embeds', 'details','genres'], sub_location=['value'], rule='list_genres')
 
             self.insta_link = None
             self.bandcamp_link = None
@@ -545,6 +553,7 @@ class Stream:
                 
                     try:
                         self.additional_info = ', '.join([i['title'] for i in i['parentShow'][0]['genreTag']])
+                        self.genres = extract_value(i, ['parentShow',0,'genreTag'],['title'],rule='list_genres')
                     except:
                         self.additional_info = None
                         pass
@@ -730,6 +739,7 @@ class Stream:
             self.now_playing_description_long = extract_value(info, ['now','full_description'])
             self.now_playing_artist = extract_value(info, ['now','hosts',0,'display_name'])
             self.additional_info = extract_value(json=info, location=['now','categories'], sub_location=['title'], rule='list')
+            self.genres = extract_value(json=info, location=['now','categories'], sub_location=['title'], rule='list_genres')
 
         elif self.name == 'Shared Frequencies':
             info = requests.get(self.info_link).json()
