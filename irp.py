@@ -274,6 +274,8 @@ class Stream:
                 self.now_playing_additional_info = extract_value(info,['metadata','release_title'])
             else:
                 self.now_playing = extract_value(info,['playlist','title'])
+                self.now_playing_artist = None
+                self.now_playing_additional_info = None
 
             self.show_logo = extract_value(info,['playlist','image'])
              
