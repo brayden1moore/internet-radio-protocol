@@ -841,7 +841,7 @@ def add_info_to_index(stream_json):
         flags=re.DOTALL
     )
 
-    html_content = html_content.replace('</head>', f'{injection}\n</head>')
+    html_content = html_content.replace('</head>', f'{injection}</head>')
     with open('index.html', 'w') as f:
         f.write(html_content)
 
