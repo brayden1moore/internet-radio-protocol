@@ -268,22 +268,22 @@ class Stream:
         elif self.name == 'WNYU':
             info = requests.get(self.info_link).json()
 
-            self.now_playing = info['metadata']['playlist_title']
-            self.now_playing_artist = info['metadata']['dj']
-            self.show_logo = info['playlist']['image']
+            if info['metadata']:
+                self.now_playing = extract_value(['metadata','playlist_title'])
+                self.now_playing_artist = extract_value(['metadata','dj'])
+                self.now_playing_additional_info = extract_value(['metadata','release_title'])
+            else:
+                self.now_playing = extract_value(['playlist','title'])
 
-            self.now_playing_additional_info = info['metadata']['release_title'] 
+            self.show_logo = extract_value(['playlist','image'])
+             
             if info['metadata']['artist_name']:
-                self.now_playing_additional_info += ' by ' + info['metadata']['artist_name']
+                self.now_playing_additional_info += ' by ' + extract_value(['metadata','artist_name'])
             if info['metadata']['release_year']:
-                self.now_playing_additional_info += " (" + str(info['metadata']['release_year']) + ")"
+                self.now_playing_additional_info += " (" + str(extract_value(['metadata','release_year'])) + ")"
 
-            try:
-                self.now_playing_description_long = clean_text(info['playlist']['description'])
-                self.now_playing_description = clean_text(info['playlist']['description'])[:44] + '...'
-            except:
-                self.now_playing_description_long = None
-                self.now_playing_description = None
+            self.now_playing_description_long = extract_value(['playlist','description'])
+            self.now_playing_description = extract_value(['playlist','description'], rule='shorten')
 
         elif self.name == 'Voices Radio': 
             info = requests.get(self.info_link).json()
