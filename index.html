@@ -418,7 +418,8 @@
 
             updatePlayer(id, oneLiner, station.dataset.location);
             updateMediaSession(oneLiner, id, logo);
-
+            console.log('From Link')
+            console.log(fromLink);
             if (!fromLink) {
                 player.classList.add('pulsing');
                 togglePlayer();
