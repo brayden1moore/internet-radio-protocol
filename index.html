@@ -396,7 +396,7 @@
         }
 
 
-        function chooseStation(id, random=false) {
+        function chooseStation(id, random=false, fromLink=false) {
             player.style.display = 'flex';
             player.classList.add('pulsing');
 
@@ -420,7 +420,9 @@
             updatePlayer(id, oneLiner, station.dataset.location);
             updateMediaSession(oneLiner, id, logo);
 
-            togglePlayer();
+            if (!fromLink) {
+                togglePlayer();
+            }
         }
                         
         document.querySelectorAll('.last-updated').forEach(el => {const utcStr = el.dataset.utc;if (utcStr) {const date = new Date(utcStr);if (!isNaN(date)) {el.textContent = date.toLocaleString();}}});
@@ -976,7 +978,7 @@
             let value = params.station;
             console.log(value);
             if (value) {
-                chooseStation(value);
+                chooseStation(value, fromLink=true);
             }
         });
 
