@@ -422,7 +422,13 @@ class Stream:
                         description_lines = event['description'].replace('&nbsp;','<br>').replace('\n','<br>').split('<br>')
                         self.now_playing_description_long = clean_text(description_lines[0]) # long desc 
                         self.now_playing_description = self.now_playing_description_long[:44] + '...'# short desc like "A late night special with Kem Kem playing from the heart ..."
-                        self.additional_info = clean_text(description_lines[-1]) # genre list like "World, Jazz, Afrobeats, Electronic"
+                        
+                        last_line = clean_text(description_lines[-1])  # genre list like "World, Jazz, Afrobeats, Electronic"
+                        if last_line:
+                            if '.' not in last_line:
+                                self.additional_info = last_line 
+                        else:
+                            self.additional_info = None 
                         
                         self.insta_link = None
                         self.bandcamp_link = None
