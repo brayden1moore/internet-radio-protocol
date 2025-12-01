@@ -410,7 +410,8 @@
             const station = document.getElementById(id)
             const oneLiner = station.dataset.oneLiner;
             const logo = station.querySelector('.a-logo').src;
-            $('meta[name=og\\:image]').attr('content', logo);
+            document.querySelectorAll('meta[property=og\\:image]')[0].setAttribute('content', logo)
+
 
             playerImg.src = logo;
             player.dataset.id = id;
