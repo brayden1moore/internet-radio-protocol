@@ -748,6 +748,8 @@ class Stream:
             self.now_playing_artist = extract_value(info, ['current','metadata','artist_name'])
             if not self.now_playing:
                 self.status = 'Offline'
+            else:
+                self.status = 'Live'
 
         elif self.name == 'Radio Nopal':
             calendar_id = self.info_link
