@@ -312,20 +312,15 @@ class Stream:
 
         elif self.name == 'Kiosk Radio': 
             info = requests.get(self.info_link).json()
-            if not info['shows']['current']:
+            if not info['shows']['current']['name']:
                 self.status = 'Offline'
                 self.now_playing = None
                 self.now_playing_artist = None
                 self.now_playing_subtitle = None
             else:
-                self.now_playing  = clean_text(info['shows']['current']['name']) # broadcast name like "Staff Picks" or "Piffy (live)"
+                self.now_playing  = extract_value(info, ['shows','current','name']) # broadcast name like "Staff Picks" or "Piffy (live)"
                 self.status = 'Online'
-                try:
-                    self.now_playing_artist  = clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # artist names like "Fa_Fane & F.M."
-                    self.now_playing_subtitle = clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[0]) # episode title "Delodio"
-                except:
-                    self.now_playing_artist = None
-                    self.now_playing_subtitle = clean_text(info['tracks']['current']['name'].replace(' - ',' ').replace('.mp3','')) # full title like "Badlcukwind plays Drowned By Locals"'
+                self.now_playing_subtitle = extract_value(info, ['shows','current','name']) # episode title "Delodio"
 
         elif self.name == 'Do!!You!!! World': 
             info = requests.get(self.info_link).json()
