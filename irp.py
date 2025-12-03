@@ -706,7 +706,7 @@ class Stream:
             except:
                 pass
             self.now_playing_description = info.get('video_description')
-            self.genres = extract_value(info, ['genre'], rule='list_genres')
+            self.genres = extract_value(info, ['genres'], rule='list_genres')
              
         elif self.name == 'HKCR':
             stream_url = self.stream_link
