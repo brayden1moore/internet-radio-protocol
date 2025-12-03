@@ -320,7 +320,7 @@ class Stream:
             else:
                 self.now_playing  = extract_value(info, ['shows','current','name']) # broadcast name like "Staff Picks" or "Piffy (live)"
                 self.status = 'Online'
-                self.now_playing_subtitle = extract_value(info, ['shows','current','name']) # episode title "Delodio"
+                self.now_playing_subtitle = extract_value(info, ['tracks','current','name']) # episode title "Delodio"
 
         elif self.name == 'Do!!You!!! World': 
             info = requests.get(self.info_link).json()
