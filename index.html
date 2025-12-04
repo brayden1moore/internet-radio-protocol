@@ -399,9 +399,6 @@
 
         function chooseStation(id, random=false, fromLink=false) {
             document.title = `${id} - Internet Radio Protocol`;
-            const metas = Array.from(document.getElementsByTagName('meta'))
-            const metaTitle = metas.find((m) => m.attributes[0].nodeValue === 'og:title')
-            metaTitle.attributes[1].nodeValue = `${id} - Internet Radio Protocol`;
 
             player.style.display = 'flex';
 
