@@ -410,6 +410,10 @@ class Stream:
                 start_time_str = event['start']['dateTime']
                 start_time = datetime.fromisoformat(start_time_str)
                 now_utc = datetime.now(timezone.utc)
+                self.additional_info = None 
+                self.now_playing = None
+                self.now_playing_description = None
+                self.now_playing_description_long = None                
 
                 if end_time > now_utc > start_time:
                     self.now_playing = event['summary']
@@ -422,8 +426,6 @@ class Stream:
                         if last_line:
                             if '.' not in last_line:
                                 self.additional_info = last_line 
-                        else:
-                            self.additional_info = None 
                         
                         self.insta_link = None
                         self.bandcamp_link = None
