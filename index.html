@@ -900,25 +900,25 @@
             }
         }
 
-        let firstLoad = true;
+        const firstLoad = true;
+
         function getUpdatedInfo() {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-            if (window.STATION_DATA & firstLoad) {
+            if (window.STATION_DATA) {
                 json = window.STATION_DATA;
                 populateStations(json);
 
                 if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
                     populateTags(json);
                 }
-
-                firstLoad = false;
+                
             } else {
                 fetch('https://internetradioprotocol.org/info')
                     .then(response => response.json())
                     .then(json => {
                         populateStations(json);
-                        distributeFavorites(favorites);
+                        //distributeFavorites(favorites);
                         populateTags(json);
                     })
                     .catch(error => console.error('Fetch error:', error));
