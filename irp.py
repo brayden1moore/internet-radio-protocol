@@ -902,8 +902,8 @@ def send_email(contents):
         other_errors = '\n\nOther Errors: \n'
         for i in contents:
             if 'JSONDecodeError' in i:
-                name = i.split(':')[0].split('Error updating ')
-                body += f'- {name}\n'
+                name = i#.split(':')[0].split('Error updating ')
+                body += i
             else:
                 other_errors += i
 
