@@ -402,6 +402,10 @@ class Stream:
 
             response = requests.get(url, params=params)
             data = response.json()
+            self.additional_info = None 
+            self.now_playing = None
+            self.now_playing_description = None
+            self.now_playing_description_long = None                
 
             for event in data.get('items', []):
                 end_time_str = event['end']['dateTime']
@@ -409,11 +413,7 @@ class Stream:
 
                 start_time_str = event['start']['dateTime']
                 start_time = datetime.fromisoformat(start_time_str)
-                now_utc = datetime.now(timezone.utc)
-                self.additional_info = None 
-                self.now_playing = None
-                self.now_playing_description = None
-                self.now_playing_description_long = None                
+                now_utc = datetime.now(timezone.utc)            
 
                 if end_time > now_utc > start_time:
                     self.now_playing = event['summary']
@@ -902,7 +902,7 @@ def send_email(contents):
         other_errors = '\n\nOther Errors: \n'
         for i in contents:
             if 'JSONDecodeError' in i:
-                name = i.split(':')[0].split('Error updating ')[1]
+                name = i.split(':')[0].split('Error updating ')
                 body += f'- {name}\n'
             else:
                 other_errors += i
