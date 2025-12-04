@@ -275,6 +275,8 @@ class Stream:
 
         elif self.name == 'WNYU':
             info = requests.get(self.info_link).json()
+            self.now_playing_additional_info = None
+            self.now_playing_artist = None
 
             if info['metadata']:
                 self.now_playing = extract_value(info,['metadata','playlist_title'])
@@ -282,14 +284,12 @@ class Stream:
                 self.now_playing_additional_info = extract_value(info,['metadata','release_title'])
             else:
                 self.now_playing = extract_value(info,['playlist','title'])
-                self.now_playing_artist = None
-                self.now_playing_additional_info = None
 
             self.show_logo = extract_value(info,['playlist','image'])
              
-            if info['metadata']['artist_name']:
+            if info['metadata']['artist_name'] and self.now_playing_additional_info:
                 self.now_playing_additional_info += ' by ' + extract_value(info,['metadata','artist_name'])
-            if info['metadata']['release_year']:
+            if info['metadata']['release_year'] and self.now_playing_additional_info:
                 self.now_playing_additional_info += " (" + str(extract_value(info,['metadata','release_year'])) + ")"
 
             self.now_playing_description_long = extract_value(info,['playlist','description'])
