@@ -940,47 +940,55 @@ def main_loop():
     '''
 
     while True:
-        start_time = time.time()
-        with open('info.json', 'r') as f:
-            stream_json = json.load(f)
-
-        add_info_to_index(stream_json)
-
-        with ThreadPoolExecutor(max_workers=10) as executor:
-            futures = [executor.submit(process_stream, name, val) 
-                      for name, val in stream_json.items()]
-            results = [future.result() for future in futures]
-
-        processing_time = time.time() - start_time
-
-        error_lines = []
-        updated = {}
-
-        for result in results:
-            if len(result) == 3:
-                name, val, err = result
-                error_lines.append(err)
-            else:
-                name, val = result
-            updated[name] = val
-
-        with open('info.json', 'w') as f:
-            json.dump(updated, f, indent=4, sort_keys=True, default=str)
-
         try:
-            with open('errorlog.txt', 'r') as log:
-                existing_lines = log.read().split('\n')
-        except FileNotFoundError:
-            existing_lines = ['']
+            start_time = time.time()
+            with open('info.json', 'r') as f:
+                stream_json = json.load(f)
 
-        if len(' '.join(error_lines)) != len(' '.join(existing_lines)):
-            send_email(error_lines)
+            add_info_to_index(stream_json)
 
-        with open('errorlog.txt', 'w') as log:
-            log.write('\n'.join(error_lines))
+            with ThreadPoolExecutor(max_workers=10) as executor:
+                futures = [executor.submit(process_stream, name, val) 
+                        for name, val in stream_json.items()]
+                results = [future.result() for future in futures]
 
-        print('Done!')
-        time.sleep(60)
+            processing_time = time.time() - start_time
+
+            error_lines = []
+            updated = {}
+
+            for result in results:
+                if len(result) == 3:
+                    name, val, err = result
+                    error_lines.append(err)
+                else:
+                    name, val = result
+                updated[name] = val
+
+            with open('info.json', 'w') as f:
+                json.dump(updated, f, indent=4, sort_keys=True, default=str)
+
+            try:
+                with open('errorlog.txt', 'r') as log:
+                    existing_lines = log.read().split('\n')
+            except FileNotFoundError:
+                existing_lines = ['']
+
+            if len(' '.join(error_lines)) != len(' '.join(existing_lines)):
+                send_email(error_lines)
+
+            with open('errorlog.txt', 'w') as log:
+                log.write('\n'.join(error_lines))
+
+            print('Done!')
+            time.sleep(60)
+        except KeyboardInterrupt:
+            print("Shutting down gracefully...")
+            break
+        except Exception as e:
+            print(f"Error in main loop: {e}")
+            traceback.print_exc()
+            time.sleep(60)    
 
 if __name__ == '__main__':
-    asyncio.run(main_loop())
+    main_loop()
