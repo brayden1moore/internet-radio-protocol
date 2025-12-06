@@ -902,10 +902,11 @@
 
         const firstLoad = true;
 
+
         function getUpdatedInfo(from_endpoint=true) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-            if (window.STATION_DATA & from_endpoint==false) {
+            if (window.STATION_DATA && from_endpoint == false) {
                 console.log('pulling from index.html')
                 json = window.STATION_DATA;
                 populateStations(json);
@@ -963,8 +964,6 @@
                     favoriteDiv.appendChild(stationDiv);
                 }
             });
-            
-            //getUpdatedInfo();
         }
 
         function toggleFavorite(id) {
