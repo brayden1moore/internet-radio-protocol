@@ -902,10 +902,10 @@
 
         const firstLoad = true;
 
-        function getUpdatedInfo(fetch=true) {
+        function getUpdatedInfo(from_endpoint=true) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-            if (window.STATION_DATA & fetch==false) {
+            if (window.STATION_DATA & from_endpoint==false) {
                 json = window.STATION_DATA;
                 populateStations(json);
 
@@ -1010,7 +1010,7 @@
           });
       });
         
-        getUpdatedInfo(fetch=false);
+        getUpdatedInfo(from_endpoint=false);
         setInterval(getUpdatedInfo, 10000);
 
         </script>
