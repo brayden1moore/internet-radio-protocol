@@ -906,6 +906,7 @@
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
             if (window.STATION_DATA & from_endpoint==false) {
+                console.log('pulling from index.html')
                 json = window.STATION_DATA;
                 populateStations(json);
 
@@ -1011,6 +1012,7 @@
       });
         
         getUpdatedInfo(from_endpoint=false);
+
         setTimeout(() => {
             setInterval(getUpdatedInfo, 10000);
         }, 15000);
