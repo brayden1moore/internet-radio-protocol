@@ -1011,6 +1011,8 @@
       });
         
         getUpdatedInfo(from_endpoint=false);
-        setInterval(getUpdatedInfo, 10000);
+        setTimeout(() => {
+            setInterval(getUpdatedInfo, 10000);
+        }, 15000);
 
         </script>
