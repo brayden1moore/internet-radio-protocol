@@ -709,6 +709,8 @@
                 if (existingStation) {
                     existingOneLiner = decodeHtmlEntities(existingStation.dataset.oneLiner);
                     if (existingOneLiner != oneLiner) {
+                        console.log(existingOneLiner);
+                        console.log(oneLiner);
                         existingStation.querySelector('.one-liner').textContent = oneLiner;
                         existingStation.dataset.oneLiner = oneLiner; 
                         updatedOneLiners.push(existingStation);
