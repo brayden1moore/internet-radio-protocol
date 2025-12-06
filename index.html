@@ -710,7 +710,7 @@
                     existingOneLiner = decodeHtmlEntities(existingStation.dataset.oneLiner)
                     if (existingOneLiner != oneLiner) {
                         console.log(existingStation);
-                        existingStation.querySelector('.oneLiner').innerHTML = oneLiner;
+                        existingStation.querySelector('.one-liner').textContent = oneLiner;
                         existingStation.dataset.oneLiner = oneLiner; 
                         updatedOneLiners.push(existingStation);
                     };
@@ -748,7 +748,7 @@
                         <a class="a-link info-link" target="_blank" href="${infoLink}">Info</a>
                         <a class="a-link support-link" target="_blank" href="${donateLink}">Donate</a>
                     </div>
-                    <span class="now-playing">Playing: <span class="one-liner">${oneLiner}</span></span><br>
+                    <span class="now-playing">Playing: <span id="${stationName}-oneLiner" class="one-liner">${oneLiner}</span></span><br>
                     Location: <span class="location">${location}</span><br>Status: <span class="status">${status}</span><br>
                     <audio id="${stationName}-audio" style="width:40px;" data-src="${streamLink}"></audio>
                     </div>`
