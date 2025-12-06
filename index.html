@@ -708,7 +708,6 @@
                 const existingStation = document.getElementById(stationName);
                 if (existingStation) {
                     existingOneLiner = decodeHtmlEntities(existingStation.dataset.oneLiner);
-                    oneLiner = decodeHtmlEntities(oneLiner);
                     if (existingOneLiner != oneLiner) {
                         existingStation.querySelector('.one-liner').textContent = oneLiner;
                         existingStation.dataset.oneLiner = oneLiner; 
