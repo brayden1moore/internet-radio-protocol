@@ -889,26 +889,28 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-def send_email(contents):
+def send_email(error_dict):
 
     '''
     Function for emailing myself errors.
     '''
 
-    if isinstance(contents, list):
-        body = 'JSON Decode Errors: \n'
-        other_errors = '\n\nOther Errors: \n'
-        for i in contents:
-            if 'JSONDecodeError' in i:
-                name = i#.split(':')[0].split('Error updating ')
-                body += i
+    if isinstance(error_dict, dict):
+        other_errors = 'Errors: \n'
+        json_errors = '\n\nJSON Decode Errors: \n'
+        timeout_errors = '\n\nTimeout Errors: \n'
+        for name, err in error_dict.items():
+            if 'JSONDecodeError' in err:
+                json_errors += name + '\n'
+            elif 'ReadTimeoutError' in err:
+                timeout_errors += name + '\n'
             else:
-                other_errors += i
+                other_errors += f'\n\n{name}: \n {err}'
 
-        body = body + other_errors
+        body = other_errors + json_errors + timeout_errors
     
     else:
-        body = contents
+        body = '\n'.join([val for _,val in error_dict.items()])
     
     msg = MIMEMultipart()
     msg['From'] = 'brayden@braydenmoore.com'
@@ -952,13 +954,13 @@ def main_loop():
 
             processing_time = time.time() - start_time
 
-            error_lines = []
+            error_dict = {}
             updated = {}
 
             for result in results:
                 if len(result) == 3:
                     name, val, err = result
-                    error_lines.append(err)
+                    error_dict[name] = err
                 else:
                     name, val = result
                 updated[name] = val
@@ -971,9 +973,10 @@ def main_loop():
                     existing_lines = log.read().split('\n')
             except FileNotFoundError:
                 existing_lines = ['']
-
+            
+            error_lines = [val for key, val in error_dict.items()]
             if len(' '.join(error_lines)) != len(' '.join(existing_lines)):
-                send_email(error_lines)
+                send_email(error_dict)
 
             with open('errorlog.txt', 'w') as log:
                 log.write('\n'.join(error_lines))
