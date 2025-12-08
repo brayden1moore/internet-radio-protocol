@@ -451,7 +451,7 @@ class Stream:
         elif self.name == 'KQED':
             today = date.today().isoformat()
             epoch_time = int(time.time())
-            info = requests.get(self.info_link, timeout=5 + today).json()
+            info = requests.get(self.info_link + today, timeout=5).json()
             programs = info['data']['attributes']['schedule']
 
             for program in programs:
