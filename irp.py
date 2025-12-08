@@ -874,9 +874,7 @@ def process_stream(name, value):
     stream = Stream(from_dict=value)
     try:
         stream.update()
-
         stream.update_one_line()
-        updated_dict = stream.to_dict()
         stream.set_last_updated()
 
         processing_time = time.time() - start_time
