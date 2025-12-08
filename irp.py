@@ -214,7 +214,7 @@ class Stream:
             self.logo = "https://internetradioprotocol.org/" + self.logo
 
         if self.name == 'HydeFM':
-            info = requests.get(self.info_link, timeout=5, timeout=5).json()
+            info = requests.get(self.info_link, timeout=5).json()
             self.now_playing = extract_value(info, ['shows','current','name'])
             self.status = "Online" if self.now_playing else "Offline"
                 
@@ -496,7 +496,7 @@ class Stream:
 
         elif self.name == 'KEXP':
             now_utc = datetime.now(timezone.utc)
-            info = requests.get(self.info_link, timeout=5, timeout=3)
+            info = requests.get(self.info_link, timeout=5)
             song = info.json()['results'][0]
             show_uri = song['show_uri']
             show = requests.get(show_uri).json()
