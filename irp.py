@@ -922,7 +922,7 @@ def send_email(error_dict):
     else:
         body = '\n'.join([val for _,val in error_dict.items()])
     
-    if need_to_send:
+    if need_to_send == True:
         msg = MIMEMultipart()
         msg['From'] = 'brayden@braydenmoore.com'
         msg['To'] = 'brayden@braydenmoore.com'
