@@ -894,6 +894,11 @@ def send_email(error_dict):
     '''
     Function for emailing myself errors.
     '''
+    has_other_errors = False
+    has_json_errors = False
+    has_timeout_errors = False
+
+    need_to_send = False
 
     if isinstance(error_dict, dict):
         other_errors = 'Errors: \n'
@@ -902,31 +907,37 @@ def send_email(error_dict):
         for name, err in error_dict.items():
             if 'JSONDecodeError' in err:
                 json_errors += name + '\n'
+                has_json_errors = True
             elif 'ReadTimeoutError' in err:
                 timeout_errors += name + '\n'
+                has_timeout_errors = True
             else:
                 other_errors += f'\n\n{name}: \n {err}'
+                has_other_errors = True
 
         body = other_errors + json_errors + timeout_errors
+        if (has_other_errors==True) or (has_json_errors==False & has_other_errors==False & has_timeout_errors==False):
+            need_to_send = True
     
     else:
         body = '\n'.join([val for _,val in error_dict.items()])
     
-    msg = MIMEMultipart()
-    msg['From'] = 'brayden@braydenmoore.com'
-    msg['To'] = 'brayden@braydenmoore.com'
-    msg['Subject'] = 'New Error(s) On IRP'
-    msg.attach(MIMEText(body, 'plain'))
-    passw = os.environ.get('GMAIL_PASS')
-    
-    try:
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-            server.login("brayden@braydenmoore.com", passw)
-            server.send_message(msg)
-            print('EmailSent')
-    except Exception as e:
-        print('Email Failed')
-        print(e)
+    if need_to_send:
+        msg = MIMEMultipart()
+        msg['From'] = 'brayden@braydenmoore.com'
+        msg['To'] = 'brayden@braydenmoore.com'
+        msg['Subject'] = 'New Error(s) On IRP'
+        msg.attach(MIMEText(body, 'plain'))
+        passw = os.environ.get('GMAIL_PASS')
+
+        try:
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+                server.login("brayden@braydenmoore.com", passw)
+                server.send_message(msg)
+                print('EmailSent')
+        except Exception as e:
+            print('Email Failed')
+            print(e)
 
 def main_loop():
 
