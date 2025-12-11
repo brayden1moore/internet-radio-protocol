@@ -916,7 +916,7 @@ def send_email(error_dict):
                 has_other_errors = True
 
         body = other_errors + json_errors + timeout_errors
-        if (has_other_errors==True) or (has_json_errors==False & has_other_errors==False & has_timeout_errors==False):
+        if (has_other_errors==True):
             need_to_send = True
     
     else:
