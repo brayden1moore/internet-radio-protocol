@@ -798,8 +798,6 @@
                             offliners.push(stationDiv);
                         }
                         else {
-                            const delay = container.children.length * 50;
-                            stationDiv.style.animationDelay = `${delay}ms`;
                             container.appendChild(stationDiv);
                         }
                     }
@@ -984,6 +982,9 @@
             
             const allFavoriteStations = favoriteDiv.querySelectorAll('.a-station-container');
             allFavoriteStations.forEach((station) => {
+                
+                const delay = originalContainer.children.length * 50;
+                station.style.animationDelay = `${delay}ms`;
                 originalContainer.insertBefore(station, originalContainer.firstChild);
                 
                 station.dataset.favorited = 'false';
@@ -993,6 +994,7 @@
                 
                 if (favoriteStar) favoriteStar.style.opacity = '0';
                 if (favoriteOutline) favoriteOutline.style.opacity = '0.2';
+
             });
             
             favorites.forEach((stationId) => {
@@ -1006,6 +1008,8 @@
                     if (favoriteStar) favoriteStar.style.opacity = '1';
                     if (favoriteOutline) favoriteOutline.style.opacity = '1';
 
+                    const delay = favoriteDiv.children.length * 50;
+                    stationDiv.style.animationDelay = `${delay}ms`;
                     favoriteDiv.appendChild(stationDiv);
                 }
             });
