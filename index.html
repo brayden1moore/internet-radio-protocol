@@ -984,7 +984,7 @@
         const firstLoad = true;
         function getUpdatedInfo(from_endpoint=true) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            let info = JSON.parse(localStorage.getItem('info')) || {};
+            let info = JSON.parse(localStorage.getItem('info'));
 
             if (info && from_endpoint == false) {
                 console.log('pulling from cache')
