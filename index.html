@@ -940,8 +940,6 @@
         }
 
         const firstLoad = true;
-
-
         function getUpdatedInfo(from_endpoint=true) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
@@ -959,13 +957,17 @@
                     .then(response => response.json())
                     .then(json => {
                         populateStations(json);
-                        distributeFavorites(favorites);
+                        if (firstLoad) {
+                            distributeFavorites(favorites);
+                        }
                         if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
                             populateTags(json);
                         }
                     })
                     .catch(error => console.error('Fetch error:', error));
             }
+
+            firstLoad = false;
         }
 
         function distributeFavorites(favorites) {
