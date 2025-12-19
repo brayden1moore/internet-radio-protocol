@@ -983,7 +983,7 @@
             const allFavoriteStations = favoriteDiv.querySelectorAll('.a-station-container');
             allFavoriteStations.forEach((station) => {
                 
-                const delay = originalContainer.children.length * 50;
+                const delay = 50;
                 station.style.animationDelay = `${delay}ms`;
                 originalContainer.insertBefore(station, originalContainer.firstChild);
                 
@@ -1008,7 +1008,7 @@
                     if (favoriteStar) favoriteStar.style.opacity = '1';
                     if (favoriteOutline) favoriteOutline.style.opacity = '1';
 
-                    const delay = favoriteDiv.children.length * 50;
+                    const delay = 50;
                     stationDiv.style.animationDelay = `${delay}ms`;
                     favoriteDiv.appendChild(stationDiv);
                 }
