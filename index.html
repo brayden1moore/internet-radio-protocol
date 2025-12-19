@@ -654,22 +654,21 @@
 
             let thisTagList;
             theseTags.forEach(thisTag => {
+                if (thisTag.dataset.type == 'location') {
+                    locationTagActive = true;
+                    thisTagList = activeLocationTags;
+                }
+                else if (thisTag.dataset.type == 'status') {
+                    statusTagActive = true;
+                    thisTagList = activeStatusTags;
+                }   
+                else if (thisTag.dataset.type == 'genre') {
+                    genreTagActive = true;
+                    thisTagList = activeGenreTags;
+                }   
+
                 if (thisTag.classList.contains('active-tag')) {
-                    if (thisTag.dataset.type == 'location') {
-                        locationTagActive = true;
-                        activeLocationTags.push(thisTag.id.replace('-tag',''));
-                        thisTagList = activeLocationTags;
-                    }
-                    else if (thisTag.dataset.type == 'status') {
-                        statusTagActive = true;
-                        activeStatusTags.push(thisTag.id.replace('-tag',''));
-                        thisTagList = activeStatusTags;
-                    }   
-                    else if (thisTag.dataset.type == 'genre') {
-                        genreTagActive = true;
-                        activeGenreTags.push(thisTag.id.replace('-tag',''));
-                        thisTagList = activeGenreTags;
-                    }                                             
+                    thisTagList.push(thisTag.id.replace('-tag',''));               
                 }
             });
 
