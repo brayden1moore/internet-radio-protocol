@@ -984,10 +984,11 @@
         const firstLoad = true;
         function getUpdatedInfo(from_endpoint=true) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            let info = JSON.parse(localStorage.getItem('info')) || {};
 
-            if (window.STATION_DATA && from_endpoint == false) {
-                console.log('pulling from index.html')
-                json = window.STATION_DATA;
+            if (info && from_endpoint == false) {
+                console.log('pulling from cache')
+                json = info;
                 populateStations(json);
 
                 if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
@@ -1005,6 +1006,7 @@
                         if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
                             populateTags(json);
                         }
+                        localStorage.setItem('info', JSON.stringify(json));
                     })
                     .catch(error => console.error('Fetch error:', error));
             }
