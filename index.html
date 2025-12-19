@@ -653,38 +653,47 @@
             statusTagActive = false;
             genreTagActive = false;
 
-            let thisTagList;
             theseTags.forEach(thisTag => {
                 if (thisTag.dataset.type == 'location') {
                     if (thisTag.classList.contains('active-tag')) {
                         locationTagActive = true;
                         activeLocationTags.push(thisTag.id.replace('-tag',''));               
                     }      
-                    thisTagList = activeLocationTags;
                 }
                 else if (thisTag.dataset.type == 'status') {
                     if (thisTag.classList.contains('active-tag')) {
                         statusTagActive = true;
                         activeStatusTags.push(thisTag.id.replace('-tag',''));               
                     }            
-                    thisTagList = activeStatusTags;           
                 }   
                 else if (thisTag.dataset.type == 'genre') {
                     if (thisTag.classList.contains('active-tag')) {
                         genreTagActive = true;
                         activeGenreTags.push(thisTag.id.replace('-tag',''));               
                     }         
-                    thisTagList = activeGenreTags;               
                 }   
             });
 
+            // Determine which list to use based on the clicked tag type
+            let thisTagList;
+            if (tagType == 'location') {
+                thisTagList = activeLocationTags;
+            } else if (tagType == 'status') {
+                thisTagList = activeStatusTags;
+            } else if (tagType == 'genre') {
+                thisTagList = activeGenreTags;
+            }
+
             // update tags in row
             tagsInRow.forEach(tagInRow => {
-                if ((!thisTagList.includes(tagInRow.id.replace('-tag',''))) && (thisTagList.length >0)) {
+                if ((!thisTagList.includes(tagInRow.id.replace('-tag',''))) && (thisTagList.length > 0)) {
                     tagInRow.classList.add('inactive-tag');
                     console.log('made inactive');
+                } else {
+                    // Remove inactive-tag if it should be active
+                    tagInRow.classList.remove('inactive-tag');
                 }
-            })
+            });
             
             // update station divs
             stations.forEach(station => {
