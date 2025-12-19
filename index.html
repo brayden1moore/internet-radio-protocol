@@ -1008,7 +1008,7 @@
                 }
                 
             } else {
-                fetch('https://internetradioprotocol.org/info')
+                fetch(`https://internetradioprotocol.org/info?cacheBust=${Math.random()}`)
                     .then(response => response.json())
                     .then(json => {
                         populateStations(json);
