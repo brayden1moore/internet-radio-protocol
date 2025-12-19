@@ -365,6 +365,11 @@
         #main-logo {height: 144px; margin-left:-15px}
         #title {margin-left: 0px;}
         }
+
+        @media (orientation: landscape) 
+        {
+            .streams-container {grid-template-columns: 1fr 1fr 1fr 1fr;} 
+        }
         </style><script>
 
         const player = document.getElementById('player');
