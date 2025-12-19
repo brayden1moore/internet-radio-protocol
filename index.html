@@ -61,6 +61,22 @@
         <!--Lastly, check out the tuner I am making:<br><br><a href="https://www.instagram.com/scud.works/" target="_blank" style="border:none !important; height:250px;"><img height="auto" width="100%" style="border: 1px solid black;" src="assets/sr.JPG"></a>-->
         Last updated <span class='last-updated'></span><span class='live-count'></span></body></html><style>
 
+    
+    @keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    }
+
+.a-station-container {
+    animation: fadeIn 0.5s ease-out;
+}
+            
         #player-icons {
             margin-right: 15px;
             z-index: 2000;
@@ -304,7 +320,9 @@
         #main-logo {height: 100px; margin-left: -13px;
             animation: rotate 6s linear infinite;
         }
-        .a-station-container {position:relative; 
+        .a-station-container {
+            animation: fadeIn 0.5s ease-out forwards;
+            position:relative; 
             border-radius: 0px;
               user-select: none;
             -webkit-user-select: none;
@@ -692,7 +710,7 @@
             };
         }
 
-        function populateStations(data, fromHTML) {
+        function populateStations(data) {
             var rerun = 0;
             var live = 0;
             var offline = 0;
@@ -780,6 +798,8 @@
                             offliners.push(stationDiv);
                         }
                         else {
+                            const delay = container.children.length * 50;
+                            stationDiv.style.animationDelay = `${delay}ms`;
                             container.appendChild(stationDiv);
                         }
                     }
