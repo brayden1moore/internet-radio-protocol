@@ -675,7 +675,8 @@
 
             // update tags in row
             tagsInRow.forEach(tagInRow => {
-                if (!thisTagList.includes(tagInRow.id.replace('-tag',''))) {
+                tagInRow.classList.remove('inactive-tag');
+                if ((!thisTagList.includes(tagInRow.id.replace('-tag',''))) && (thisTagList.length >0)) {
                     tagInRow.classList.add('inactive-tag');
                 }
             })
