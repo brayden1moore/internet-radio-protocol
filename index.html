@@ -656,31 +656,30 @@
             let thisTagList;
             theseTags.forEach(thisTag => {
                 if (thisTag.dataset.type == 'location') {
-                    locationTagActive = true;
-                    thisTagList = activeLocationTags;
                     if (thisTag.classList.contains('active-tag')) {
+                        locationTagActive = true;
                         activeLocationTags.push(thisTag.id.replace('-tag',''));               
-                    }                    
+                    }      
+                    thisTagList = activeLocationTags;
                 }
                 else if (thisTag.dataset.type == 'status') {
-                    statusTagActive = true;
-                    thisTagList = activeStatusTags;
                     if (thisTag.classList.contains('active-tag')) {
+                        statusTagActive = true;
                         activeStatusTags.push(thisTag.id.replace('-tag',''));               
-                    }                       
+                    }            
+                    thisTagList = activeStatusTags;           
                 }   
                 else if (thisTag.dataset.type == 'genre') {
-                    genreTagActive = true;
-                    thisTagList = activeGenreTags;
                     if (thisTag.classList.contains('active-tag')) {
+                        genreTagActive = true;
                         activeGenreTags.push(thisTag.id.replace('-tag',''));               
-                    }                        
+                    }         
+                    thisTagList = activeGenreTags;               
                 }   
             });
 
             // update tags in row
             tagsInRow.forEach(tagInRow => {
-                tagInRow.classList.remove('inactive-tag');
                 if ((!thisTagList.includes(tagInRow.id.replace('-tag',''))) && (thisTagList.length >0)) {
                     tagInRow.classList.add('inactive-tag');
                     console.log('made inactive');
