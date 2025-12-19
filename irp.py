@@ -956,7 +956,7 @@ def main_loop():
             with open('info.json', 'r') as f:
                 stream_json = json.load(f)
 
-            #add_info_to_index(stream_json)
+            add_info_to_index(stream_json)
 
             with ThreadPoolExecutor(max_workers=10) as executor:
                 futures = [executor.submit(process_stream, name, val) 
