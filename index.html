@@ -658,19 +658,24 @@
                 if (thisTag.dataset.type == 'location') {
                     locationTagActive = true;
                     thisTagList = activeLocationTags;
+                    if (thisTag.classList.contains('active-tag')) {
+                        activeLocationTags.push(thisTag.id.replace('-tag',''));               
+                    }                    
                 }
                 else if (thisTag.dataset.type == 'status') {
                     statusTagActive = true;
                     thisTagList = activeStatusTags;
+                    if (thisTag.classList.contains('active-tag')) {
+                        activeStatusTags.push(thisTag.id.replace('-tag',''));               
+                    }                       
                 }   
                 else if (thisTag.dataset.type == 'genre') {
                     genreTagActive = true;
                     thisTagList = activeGenreTags;
+                    if (thisTag.classList.contains('active-tag')) {
+                        activeGenreTags.push(thisTag.id.replace('-tag',''));               
+                    }                        
                 }   
-
-                if (thisTag.classList.contains('active-tag')) {
-                    activeLocationTags.push(thisTag.id.replace('-tag',''));               
-                }
             });
 
             // update tags in row
