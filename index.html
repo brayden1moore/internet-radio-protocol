@@ -410,6 +410,14 @@
         }
         </style><script>
 
+        window.addEventListener('load', () => {
+            const navigationType = performance.getEntriesByType('navigation')[0]?.type;
+            if (navigationType === 'reload') {
+                localStorage.removeItem('info');
+                console.log('Info deleted due to page refresh');
+            }
+        });
+
         const player = document.getElementById('player');
         const playerImg = document.getElementById('player-img');
         const playerName = document.getElementById('player-name');
@@ -985,7 +993,6 @@
             }
         }
 
-        const firstLoad = true;
         function getUpdatedInfo(from_endpoint=true) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
             let info = JSON.parse(localStorage.getItem('info'));
@@ -1014,8 +1021,6 @@
                     })
                     .catch(error => console.error('Fetch error:', error));
             }
-
-            firstLoad = false;
         }
 
         function distributeFavorites(favorites) {
