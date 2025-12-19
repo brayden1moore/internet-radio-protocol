@@ -993,6 +993,7 @@
             }
         }
 
+        let firstLoad = true;
         function getUpdatedInfo(from_endpoint=true) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
             let info = JSON.parse(localStorage.getItem('info'));
@@ -1021,6 +1022,8 @@
                     })
                     .catch(error => console.error('Fetch error:', error));
             }
+
+            firstLoad = false;
         }
 
         function distributeFavorites(favorites) {
