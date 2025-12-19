@@ -185,6 +185,9 @@
         .active-tag {
             opacity: 1 !important;
         }
+        .inactive-tag {
+            opacity: 0.5 !important;
+        }
         .status-tag {
             background-color: #FF4747;
         }
@@ -206,7 +209,7 @@
             padding-bottom: 7px;
             padding-left: 9px;
             padding-right: 9px;
-            margin-bottom: 9px;
+            margin-bottom: 4px;
         }
         .tag:hover {
             opacity: 0.7;
@@ -630,7 +633,8 @@
         function toggleTag(tag) {
             const tagType = tag.dataset.type;
             const stations = document.querySelectorAll('.a-station-container');
-            const theseTags = document.querySelectorAll(`.tag`);
+            const theseTags = document.querySelectorAll(`.tag`)
+            const tagsInRow = document.querySelectorAll(`.${tagType}-tag`);
 
             // update tag divs
             if (tag.classList.contains('active-tag')) {
@@ -647,22 +651,34 @@
             locationTagActive = false;
             statusTagActive = false;
             genreTagActive = false;
+
+            let thisTagList;
             theseTags.forEach(thisTag => {
                 if (thisTag.classList.contains('active-tag')) {
                     if (thisTag.dataset.type == 'location') {
                         locationTagActive = true;
                         activeLocationTags.push(thisTag.id.replace('-tag',''));
+                        thisTagList = activeLocationTags;
                     }
                     else if (thisTag.dataset.type == 'status') {
                         statusTagActive = true;
                         activeStatusTags.push(thisTag.id.replace('-tag',''));
+                        thisTagList = activeStatusTags;
                     }   
                     else if (thisTag.dataset.type == 'genre') {
                         genreTagActive = true;
                         activeGenreTags.push(thisTag.id.replace('-tag',''));
+                        thisTagList = activeGenreTags;
                     }                                             
                 }
             });
+
+            // update tags in row
+            tagsInRow.forEach(tagInRow => {
+                if (!thisTagList.includes(tagInRow.id.replace('-tag',''))) {
+                    tagInRow.classList.add('inactive-tag');
+                }
+            })
             
             // update station divs
             stations.forEach(station => {
