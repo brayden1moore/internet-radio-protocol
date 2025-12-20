@@ -1076,6 +1076,10 @@
                 navigator.mediaSession.setActionHandler('pause', () => {
                 togglePlayer();
                 });
+
+                navigator.mediaSession.setActionHandler('seekforward', () => {
+                playRandom();
+                });
             }
         }
 
