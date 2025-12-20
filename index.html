@@ -879,15 +879,17 @@
                             container.appendChild(stationDiv);
                         }
                         stationTags = stationDiv.querySelector('.station-tag-div');
-                        genreList = genres.split(',');
-                        genreList.forEach(genre => {
-                            const genreTag = document.createElement('div');
-                            genreTag.classList.add('station-tag');
-                            genreTag.classList.add('genre-station-tag');
-                            genreTag.textContent = genre;
-                            stationTags.appendChild(genreTag);
+                        if (genres) {
+                            genreList = genres.split(',');
+                            genreList.forEach(genre => {
+                                const genreTag = document.createElement('div');
+                                genreTag.classList.add('station-tag');
+                                genreTag.classList.add('genre-station-tag');
+                                genreTag.textContent = genre;
+                                stationTags.appendChild(genreTag);
 
-                        });
+                            });
+                        }
                     }
 
                     updatedOneLiners.push(stationDiv);
