@@ -522,8 +522,8 @@
 
         let currentPositionInPrev = 0;
         let previousStations = [];
-        function chooseStation(id, random=false, fromLink=false) {
-            if (player.dataset.id) {
+        function chooseStation(id, random=false, fromLink=false, fromHistory=false) {
+            if (player.dataset.id && !fromHistory) {
                 previousStations.push(player.dataset.id);
             }
             document.title = `${id} - Internet Radio Protocol`;
@@ -1086,14 +1086,14 @@
                         playRandom();
                     }
                     else {
-                        chooseStation(previousStations[currentPositionInPrev])
+                        chooseStation(previousStations[currentPositionInPrev], fromHistory=true)
                     }
                     currentPositionInPrev += 1;
                 });
 
                 navigator.mediaSession.setActionHandler('previoustrack', () => {
                     if (currentPositionInPrev >= 0) {
-                        chooseStation(previousStations[currentPositionInPrev]);
+                        chooseStation(previousStations[currentPositionInPrev], fromHistory=true);
                     }
                     else {
                         playRandom();
