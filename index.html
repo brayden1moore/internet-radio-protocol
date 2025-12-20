@@ -804,6 +804,10 @@
             return 0; 
             });
 
+            if (shuffle==true) {
+                keys.sort(() => Math.random() - 0.5);
+            }
+
             const container = document.getElementById('streams-container');
             const updatedOneLiners = [];
             const offliners = [];
@@ -1049,10 +1053,14 @@
                 fetch(`https://internetradioprotocol.org/info?cacheBust=${Math.random()}`)
                     .then(response => response.json())
                     .then(json => {
-                        populateStations(json);
                         if (firstLoad) {
+                            populateStations(json, shuffle=true);
                             distributeFavorites(favorites, shuffle=true);
                         }
+                        else {
+                            populateStations(json);
+                        }
+                        
                         if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
                             populateTags(json);
                         }
