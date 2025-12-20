@@ -520,10 +520,11 @@
             }
         }
 
-        let previousStation;
+        let currentPositionInPrev = 0;
+        let previousStations = [];
         function chooseStation(id, random=false, fromLink=false) {
             if (player.dataset.id) {
-                previousStation = player.dataset.id;
+                previousStations.push(player.dataset.id);
             }
             document.title = `${id} - Internet Radio Protocol`;
 
@@ -1081,12 +1082,22 @@
                 });
 
                 navigator.mediaSession.setActionHandler('nexttrack', () => {
-                playRandom();
+                    if (currentPositionInPrev > previousStations.length+1) {
+                        playRandom();
+                    }
+                    else {
+                        currentPositionInPrev += 1;
+                        chooseStation(previousStations[currentPositionInPrev])
+                    }
                 });
 
                 navigator.mediaSession.setActionHandler('previoustrack', () => {
-                if (previousStation) {
-                    chooseStation(previousStation);
+                if (currentPositionInPrev >= 0) {
+                    currentPositionInPrev -= 1;
+                    chooseStation(previousStations[currentPositionInPrev]);
+                }
+                else {
+                    playRandom();
                 }
                 });                
             }
