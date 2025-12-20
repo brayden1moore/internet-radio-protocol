@@ -442,7 +442,7 @@
             '"Bringing it all together (bringing it all together) -Ween"',
             '"I listen to the radio every day" -Cooper B. Handy'
         ]
-        introDiv.textContent = introList[Math.floor(Math.random() * array.length)];
+        introDiv.textContent = introList[Math.floor(Math.random() * introList.length)];
 
         const player = document.getElementById('player');
         const playerImg = document.getElementById('player-img');
