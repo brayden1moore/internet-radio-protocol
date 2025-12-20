@@ -880,8 +880,7 @@
                         }
                         stationTags = stationDiv.querySelector('.station-tag-div');
                         if (genres) {
-                            genreList = genres.split(',');
-                            genreList.forEach(genre => {
+                            genres.forEach(genre => {
                                 const genreTag = document.createElement('div');
                                 genreTag.classList.add('station-tag');
                                 genreTag.classList.add('genre-station-tag');
