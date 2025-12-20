@@ -31,7 +31,7 @@
                 <div id="player-info-div">
                     <div id="player-name"></div>
                     <div id="player-info"><span class="one-liner"></span></div>
-                    <div id="player-location"></div>
+                    <div id="player-tags"></div>
                 </div>
                 <audio id="player-audio" style="width:40px;" data-src=""></audio>
             </div>
@@ -461,7 +461,7 @@
         const playerImg = document.getElementById('player-img');
         const playerName = document.getElementById('player-name');
         const playerInfo = document.getElementById('player-info');
-        const playerLocation = document.getElementById('player-location');
+        const playerTags= document.getElementById('player-tags');
         const playerAudio = document.getElementById('player-audio');
         const playerIcons = document.getElementById('player-icons');
         const playIcon = document.getElementById('play-icon');
@@ -794,7 +794,7 @@
 
             if (existingOneLiner != oneLiner) {
                 oneLinerElement.textContent = oneLiner;
-                playerLocation.textContent = location;
+                playerTags.innerHTML = existingStation.querySelector(".station-tag-div");
                 oneLinerElement.textContent = oneLiner;
                 oneLinerElement.dataset.oneLiner = oneLiner; 
             };
