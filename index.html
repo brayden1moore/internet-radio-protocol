@@ -544,7 +544,7 @@
             const idList = Array.from(stationContainers).map(container => container.id);
             let oneLiner = '';
             let id = '';
-            while (alreadyPlaying && offline) {
+            while (alreadyPlaying || offline) {
                 let choice = Math.floor(Math.random() * idList.length);
                 id = idList[choice];
                 alreadyPlaying = !document.getElementById(`${id}-audio`).paused;
