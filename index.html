@@ -337,12 +337,17 @@
             animation: rotate 6s linear infinite;
         }
 
-        .station-location-tag {
+        .station-tag {
             font-size: 8pt;
             border:1px solid black;
-            background-color:#00BBFF;
             padding: 3px;
         }
+        .station-tag-location {
+            background-color:#00BBFF;
+        }
+        .station-tag-status {
+            background-color:#FF4747;
+        }        
         .a-station-container {
             animation: fadeIn 0.5s ease-out forwards;
             position:relative; 
@@ -851,7 +856,7 @@
                         <a class="a-link support-link" target="_blank" href="${donateLink}">Donate</a>
                     </div>
                     <span class="now-playing"><span id="${stationName}-oneLiner" class="one-liner">${oneLiner}</span></span><br>
-                    <span class="location station-location-tag">${location}</span><br>Status: <span class="status">${status}</span><br>
+                    <span class="location location-station-tag station-tag">${location}</span><br><span class="status station-tag status-station-tag">${status}</span><br>
                     <audio id="${stationName}-audio" style="width:40px;" data-src="${streamLink}"></audio>
                     </div>`
 
