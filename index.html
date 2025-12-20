@@ -520,8 +520,11 @@
             }
         }
 
-
+        let previousStation;
         function chooseStation(id, random=false, fromLink=false) {
+            if (player.dataset.id) {
+                previousStation = player.dataset.id;
+            }
             document.title = `${id} - Internet Radio Protocol`;
 
             player.style.display = 'flex';
@@ -1077,9 +1080,15 @@
                 togglePlayer();
                 });
 
-                navigator.mediaSession.setActionHandler('seekforward', () => {
+                navigator.mediaSession.setActionHandler('nexttrack', () => {
                 playRandom();
                 });
+
+                navigator.mediaSession.setActionHandler('previoustrack', () => {
+                if (previousStation) {
+                    chooseStation(previousStation);
+                }
+                });                
             }
         }
 
