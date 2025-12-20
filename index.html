@@ -351,7 +351,10 @@
         }
         .status-station-tag {
             background-color:#FF4747;
-        }        
+        }       
+        .genre-station-tag {
+            background-color:#00E7C0;
+        }     
         .a-station-container {
             animation: fadeIn 0.5s ease-out forwards;
             position:relative; 
@@ -838,7 +841,7 @@
                     }
                 }
                 else {
-                    const stationDiv = document.createElement('div')
+                    const stationDiv = document.createElement('div');
                     stationDiv.classList.add('a-station-container');
                     stationDiv.dataset.location = location;
                     stationDiv.dataset.status = status;
@@ -875,6 +878,16 @@
                         else {
                             container.appendChild(stationDiv);
                         }
+                        stationTags = stationDiv.querySelector('.station-tag-div');
+                        genreList = genres.split(',');
+                        genreList.forEach(genre => {
+                            const genreTag = document.createElement('div');
+                            genreTag.classList.add('station-tag');
+                            genreTag.classList.add('genre-station-tag');
+                            genreTag.textContent = genre;
+                            stationTags.appendChild(genreTag);
+
+                        });
                     }
 
                     updatedOneLiners.push(stationDiv);
