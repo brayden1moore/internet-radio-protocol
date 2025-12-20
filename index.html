@@ -410,7 +410,7 @@
 
         @media (orientation: landscape) 
         {
-            .streams-container {grid-template-columns: 1fr 1fr 1fr 1fr;} 
+            .streams-container {grid-template-columns: 1fr 1fr 1fr;} 
         }
         </style><script>
 
@@ -766,7 +766,7 @@
             };
         }
 
-        function populateStations(data) {
+        function populateStations(data, shuffle=false) {
             var rerun = 0;
             var live = 0;
             var offline = 0;
@@ -1017,7 +1017,7 @@
                     .then(json => {
                         populateStations(json);
                         if (firstLoad) {
-                            distributeFavorites(favorites);
+                            distributeFavorites(favorites, shuffle=true);
                         }
                         if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
                             populateTags(json);
