@@ -552,12 +552,10 @@
                 if (!alreadyPlaying && !offline) {
                         const container = document.getElementById(id);
                         oneLiner = container.dataset.oneLiner;
-                        status = container.dataset.status;
-                        if (status == "Offline") {
-                            alreadyPlaying = true;
-                        }
                 }
             }
+            console.log(alreadyPlaying);
+            console.log(offline);
             chooseStation(id, true);
         }
 
