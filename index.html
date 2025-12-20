@@ -794,7 +794,7 @@
 
             if (existingOneLiner != oneLiner) {
                 oneLinerElement.textContent = oneLiner;
-                playerTags = existingStation.querySelector(".station-tag-div");
+                playerTags.innerHTML = existingStation.querySelector(".station-tag-div").cloneNode();
                 oneLinerElement.textContent = oneLiner;
                 oneLinerElement.dataset.oneLiner = oneLiner; 
             };
