@@ -1082,23 +1082,23 @@
                 });
 
                 navigator.mediaSession.setActionHandler('nexttrack', () => {
-                    if (currentPositionInPrev > previousStations.length+1) {
+                    if (currentPositionInPrev >= previousStations.length) {
                         playRandom();
                     }
                     else {
-                        currentPositionInPrev += 1;
                         chooseStation(previousStations[currentPositionInPrev])
                     }
+                    currentPositionInPrev += 1;
                 });
 
                 navigator.mediaSession.setActionHandler('previoustrack', () => {
-                if (currentPositionInPrev >= 0) {
+                    if (currentPositionInPrev >= 0) {
+                        chooseStation(previousStations[currentPositionInPrev]);
+                    }
+                    else {
+                        playRandom();
+                    }
                     currentPositionInPrev -= 1;
-                    chooseStation(previousStations[currentPositionInPrev]);
-                }
-                else {
-                    playRandom();
-                }
                 });                
             }
         }
