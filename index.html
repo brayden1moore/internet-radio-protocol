@@ -1046,7 +1046,8 @@
             if (info && from_endpoint == false) {
                 console.log('pulling from cache')
                 json = info;
-                populateStations(json);
+                
+                populateStations(json, shuffle=firstLoad);
 
                 if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
                     populateTags(json);
