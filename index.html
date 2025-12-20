@@ -341,6 +341,7 @@
             font-size: 8pt;
             border:1px solid black;
             padding: 3px;
+            margin-right: 4px;
         }
         .station-tag-div {
             display: flex;
@@ -860,8 +861,8 @@
                     </div>
                     <span class="now-playing"><span id="${stationName}-oneLiner" class="one-liner">${oneLiner}</span>
                     <div class="station-tag-div">
-                        <div class="location location-station-tag station-tag">${location}</div>
                         <div class="status station-tag status-station-tag">${status}</div>
+                        <div class="location location-station-tag station-tag">${location}</div>
                     </div>
                     <audio id="${stationName}-audio" style="width:40px;" data-src="${streamLink}"></audio>
                     </div>`
