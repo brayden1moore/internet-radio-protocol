@@ -578,6 +578,8 @@
                 const oneLinerContentWidth = oneLiner.scrollWidth;
                 const needsMarquee = oneLinerContentWidth > availableWidth;
                 
+                console.log(oneLiner);
+                console.log(needsMarquee);
                 if (needsMarquee) {
                     const width = availableWidth + 'px';
                     setupOneLinerMarquee(oneLiner, width, 'left');
