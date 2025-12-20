@@ -19,7 +19,7 @@
             <div id="play-random-button"><img id="shuffle" src="/assets/shuffle.png"></div>
             <div id="play-random-text">
             </div>
-            <div id="intro-div">What's the matter Spotify boy, afraid you might hear something?</div>
+            <div id="intro-div"></div>
         </div>
         <div id="player">
             <div id="player-icons">
@@ -435,6 +435,9 @@
             .streams-container {grid-template-columns: 1fr 1fr 1fr;} 
         }
         </style><script>
+
+        const introDiv = document.getElementById('intro-div');
+        introDiv.textContent = "What's the matter Spotify boy, afraid you might hear something?";
 
         const player = document.getElementById('player');
         const playerImg = document.getElementById('player-img');
