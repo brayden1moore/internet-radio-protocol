@@ -539,15 +539,17 @@
 
         function playRandom() {
             let alreadyPlaying = true;
+            let offline = true;
             const stationContainers = document.querySelectorAll('.a-station-container');
             const idList = Array.from(stationContainers).map(container => container.id);
             let oneLiner = '';
             let id = '';
-            while (alreadyPlaying) {
+            while (alreadyPlaying && offline) {
                 let choice = Math.floor(Math.random() * idList.length);
                 id = idList[choice];
                 alreadyPlaying = !document.getElementById(`${id}-audio`).paused;
-                if (!alreadyPlaying) {
+                offline = document.getElementById(id).dataset.status == "Offline";
+                if (!alreadyPlaying && !offline) {
                         const container = document.getElementById(id);
                         oneLiner = container.dataset.oneLiner;
                         status = container.dataset.status;
