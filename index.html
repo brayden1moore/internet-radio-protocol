@@ -336,6 +336,12 @@
         #main-logo {height: 100px; margin-left: -13px;
             animation: rotate 6s linear infinite;
         }
+
+        .station-location-tag {
+            border:1px solid black;
+            background-color: #FF4747;
+            padding: 3px;
+        }
         .a-station-container {
             animation: fadeIn 0.5s ease-out forwards;
             position:relative; 
@@ -844,7 +850,7 @@
                         <a class="a-link support-link" target="_blank" href="${donateLink}">Donate</a>
                     </div>
                     <span class="now-playing"><span id="${stationName}-oneLiner" class="one-liner">${oneLiner}</span></span><br>
-                    Location: <span class="location">${location}</span><br>Status: <span class="status">${status}</span><br>
+                    <span class="location station-location-tag">${location}</span><br>Status: <span class="status">${status}</span><br>
                     <audio id="${stationName}-audio" style="width:40px;" data-src="${streamLink}"></audio>
                     </div>`
 
