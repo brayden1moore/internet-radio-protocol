@@ -437,7 +437,10 @@
         </style><script>
 
         const introDiv = document.getElementById('intro-div');
-        introDiv.textContent = "What's the matter Spotify boy, afraid you might hear something?";
+        const introList = [
+            "What's the matter Spotify boy, afraid you might hear something?"
+        ]
+        introDiv.textContent = introList[Math.floor(Math.random() * array.length)];
 
         const player = document.getElementById('player');
         const playerImg = document.getElementById('player-img');
