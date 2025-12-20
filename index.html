@@ -804,8 +804,10 @@
             return 0; 
             });
 
-            if (shuffle==true) {
-                keys.sort(() => Math.random() - 0.5);
+            if (shuffle == true) {
+                for (let i = keys.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [keys[i], keys[j]] = [keys[j], keys[i]]; 
             }
 
             const container = document.getElementById('streams-container');
@@ -1055,12 +1057,12 @@
                     .then(json => {
                         if (firstLoad) {
                             populateStations(json, shuffle=true);
-                            distributeFavorites(favorites, shuffle=true);
+                            distributeFavorites(favorites);
                         }
                         else {
                             populateStations(json);
                         }
-                        
+
                         if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
                             populateTags(json);
                         }
