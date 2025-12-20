@@ -434,14 +434,6 @@
         }
         </style><script>
 
-        window.addEventListener('load', () => {
-            const navigationType = performance.getEntriesByType('navigation')[0]?.type;
-            if (navigationType === 'reload') {
-                localStorage.removeItem('info');
-                console.log('Info deleted due to page refresh');
-            }
-        });
-
         const player = document.getElementById('player');
         const playerImg = document.getElementById('player-img');
         const playerName = document.getElementById('player-name');
