@@ -342,6 +342,9 @@
             border:1px solid black;
             padding: 3px;
         }
+        .station-tag-div {
+            display: flex;
+        }
         .location-station-tag {
             background-color:#00BBFF;
         }
@@ -855,8 +858,11 @@
                         <a class="a-link info-link" target="_blank" href="${infoLink}">Info</a>
                         <a class="a-link support-link" target="_blank" href="${donateLink}">Donate</a>
                     </div>
-                    <span class="now-playing"><span id="${stationName}-oneLiner" class="one-liner">${oneLiner}</span></span><br>
-                    <span class="location location-station-tag station-tag">${location}</span><br><span class="status station-tag status-station-tag">${status}</span><br>
+                    <span class="now-playing"><span id="${stationName}-oneLiner" class="one-liner">${oneLiner}</span>
+                    <div class="station-tag-div">
+                        <div class="location location-station-tag station-tag">${location}</div>
+                        <div class="status station-tag status-station-tag">${status}</div>
+                    </div>
                     <audio id="${stationName}-audio" style="width:40px;" data-src="${streamLink}"></audio>
                     </div>`
 
