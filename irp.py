@@ -504,7 +504,7 @@ class Stream:
             self.now_playing_artist = ', '.join(show['host_names']) # concatenation of host names
             self.now_playing = show['program_name'] # concatenation of host names show name
             self.additional_info = None
-            self.genres = extract_value(show, ['program_tags'], rule='list_genres')
+            self.genres = show['program_tags'].split(',')
             self.show_logo = show['program_image_uri'] # show logo if provided
             self.now_playing_subtitle = None
             if song['play_type'] == 'trackplay':
