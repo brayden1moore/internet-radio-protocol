@@ -238,7 +238,7 @@ class Stream:
             self.now_playing_description_long =  extract_value(now, ['embeds','details','description']) # full description
             self.now_playing_description =  extract_value(now, ['embeds','details','description'], rule='shorten') # abridged description
             self.now_playing_subtitle = extract_value(now, ['embeds', 'details','moods'], sub_location=['value'], rule='list')
-            self.additional_info = extract_value(now, ['embeds', 'details','genres'], sub_location=['value'], rule='list')
+            #self.additional_info = extract_value(now, ['embeds', 'details','genres'], sub_location=['value'], rule='list')
             self.genres = extract_value(now, ['embeds', 'details','genres'], sub_location=['value'], rule='list_genres')
 
             self.insta_link = None
@@ -275,22 +275,22 @@ class Stream:
 
         elif self.name == 'WNYU':
             info = requests.get(self.info_link, timeout=10).json()
-            self.now_playing_additional_info = None
+            self.additional_info = None
             self.now_playing_artist = None
 
             if info['metadata']:
                 self.now_playing = extract_value(info,['metadata','playlist_title'])
                 self.now_playing_artist = extract_value(info,['metadata','dj'])
-                self.now_playing_additional_info = extract_value(info,['metadata','release_title'])
+                self.additional_info = extract_value(info,['metadata','release_title'])
             else:
                 self.now_playing = extract_value(info,['playlist','title'])
 
             self.show_logo = extract_value(info,['playlist','image'])
              
-            if info['metadata']['artist_name'] and self.now_playing_additional_info:
-                self.now_playing_additional_info += ' by ' + extract_value(info,['metadata','artist_name'])
-            if info['metadata']['release_year'] and self.now_playing_additional_info:
-                self.now_playing_additional_info += " (" + str(extract_value(info,['metadata','release_year'])) + ")"
+            if info['metadata']['artist_name'] and self.additional_info:
+                self.additional_info += ' by ' + extract_value(info,['metadata','artist_name'])
+            if info['metadata']['release_year'] and self.additional_info:
+                self.additional_info += " (" + str(extract_value(info,['metadata','release_year'])) + ")"
 
             self.now_playing_description_long = extract_value(info,['playlist','description'])
             self.now_playing_description = extract_value(info,['playlist','description'], rule='shorten')
@@ -489,7 +489,7 @@ class Stream:
 
         elif self.name == "Particle FM":
             info = requests.get(self.info_link, timeout=10).json()[0]
-            self.now_playing_additional_info = None 
+            self.additional_info = None 
             self.listeners = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
             rerun = ' (R)' if not info['live']['is_live'] else ''
             self.now_playing = info['now_playing']['song']['title'] + rerun
@@ -503,7 +503,8 @@ class Stream:
 
             self.now_playing_artist = ', '.join(show['host_names']) # concatenation of host names
             self.now_playing = show['program_name'] # concatenation of host names show name
-            self.now_playing_additional_info = show['program_tags'] # genre list
+            self.additional_info = None
+            self.genres = extract_value(show, ['program_tags'], rule='list_genres')
             self.show_logo = show['program_image_uri'] # show logo if provided
             self.now_playing_subtitle = None
             if song['play_type'] == 'trackplay':
@@ -553,9 +554,11 @@ class Stream:
                 if (episode_time <= now_utc <= episode_end) & (episode_date.date() == now_utc.date()):
                     self.now_playing = i['title']
                     self.now_playing_subtitle = i['subtitle']
-                
+                    self.genres = None
+                    self.additional_info = None
+
                     try:
-                        self.additional_info = ', '.join([i['title'] for i in i['parentShow'][0]['genreTag']])
+                        #self.additional_info = ', '.join([i['title'] for i in i['parentShow'][0]['genreTag']])
                         self.genres = extract_value(i, ['parentShow',0,'genreTag'],['title'],rule='list_genres')
                     except:
                         self.additional_info = None
@@ -598,14 +601,14 @@ class Stream:
             info = requests.get(self.info_link, timeout=10).json()
 
             self.now_playing = None
-            self.now_playing_additional_info = None
+            self.additional_info = None
             self.show_logo = None
             self.status = "Offline"
 
             try:
                 self.status = "Online"
                 self.now_playing = info['currentShow'][0]['name']
-                self.now_playing_additional_info = info['current']['track_title'] + ' by '+ info['current']['artist_name']
+                self.additional_info = info['current']['track_title'] + ' by '+ info['current']['artist_name']
             except:
                 try:
                     self.status = "Online"
@@ -742,7 +745,7 @@ class Stream:
             self.now_playing_description = extract_value(info, ['now','short_description'])
             self.now_playing_description_long = extract_value(info, ['now','full_description'])
             self.now_playing_artist = extract_value(info, ['now','hosts',0,'display_name'])
-            self.additional_info = extract_value(json=info, location=['now','categories'], sub_location=['title'], rule='list')
+            self.additional_info = None #extract_value(json=info, location=['now','categories'], sub_location=['title'], rule='list')
             self.genres = extract_value(json=info, location=['now','categories'], sub_location=['title'], rule='list_genres')
 
         elif self.name == 'Shared Frequencies':
@@ -819,7 +822,7 @@ class Stream:
             self.now_playing_subtitle,
             self.additional_info,
         ]
-        return_string = " - ".join(p for p in parts if p)
+        return_string = " - ".join(p for p in parts if p).replace(' -- ',' - ')
 
         self.one_liner = return_string
 
@@ -956,7 +959,7 @@ def main_loop():
             with open('info.json', 'r') as f:
                 stream_json = json.load(f)
 
-            #add_info_to_index(stream_json)
+            add_info_to_index(stream_json)
 
             with ThreadPoolExecutor(max_workers=10) as executor:
                 futures = [executor.submit(process_stream, name, val) 
