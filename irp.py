@@ -822,7 +822,7 @@ class Stream:
             self.now_playing_subtitle,
             self.additional_info,
         ]
-        return_string = " - ".join(p for p in parts if p).replace(' -- ',' - ')
+        return_string = " - ".join(p for p in parts if p).replace(' - - ',' - ')
 
         self.one_liner = return_string
 
