@@ -839,7 +839,7 @@
                 oneLinerElement.dataset.oneLiner = oneLiner; 
             };
 
-            const width = player.offsetWidth - shareIconDiv.offsetWidth - playerImg.offsetWidth - playerIcons.offsetWidth - 80 + 'px';
+            const width = player.offsetWidth - shareIconDiv.offsetWidth - playerImg.offsetWidth - playerIcons.offsetWidth - 80;
             needsMarquee = oneLinerElement.scrollWidth > width;
 
             console.log("WIDTH");
@@ -848,7 +848,7 @@
             console.log(playerInfo.scrollWidth);            
 
             if (needsMarquee) {
-                setupOneLinerMarquee(oneLinerElement, width, 'left');
+                setupOneLinerMarquee(oneLinerElement, width + 'px', 'left');
             };
 
             playerInfo.style.width = width;
