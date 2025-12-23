@@ -1324,7 +1324,7 @@
       const copiedText = document.getElementById("copied");
 
       shareIcon.addEventListener("click", function() {
-          const id = player.getAttribute("data-id").replace(" ","%20");
+          const id = player.getAttribute("data-id").replaceAll(" ","%20");
           const urlToCopy = `${window.location.origin}/?station=${id}`;
           
           navigator.clipboard.writeText(urlToCopy).then(() => {
