@@ -839,11 +839,14 @@
                 oneLinerElement.dataset.oneLiner = oneLiner; 
             };
 
-            const width = (player.offsetWidth - shareIconDiv.offsetWidth - playerImg.offsetWidth - playerIcons.offsetWidth - (playerInfo.offsetWidth - oneLinerElement.offsetWidth)) + 'px';
-            needsMarquee = (player.offsetWidth - shareIconDiv.offsetWidth - playerImg.offsetWidth - playerInfo.offsetWidth - playerIcons.offsetWidth) < 50;
+            const width = player.offsetWidth - shareIconDiv.offsetWidth - playerImg.offsetWidth - playerIcons.offsetWidth - 80 + 'px';
+            needsMarquee = oneLinerElement.offsetWidth > width;
+
             if (needsMarquee) {
                 setupOneLinerMarquee(oneLinerElement, width, 'left');
             };
+
+            playerInfo.style.width = width;
         }
 
         function orderStations(by, keys=null) {
