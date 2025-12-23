@@ -1158,16 +1158,15 @@
                     toggleTag(genreTag);
                 });
             });
-
-            // add event listener to statuses
-            const statusTags = document.querySelectorAll('.status-tag');
-            statusTags.forEach(status => {
-                status.addEventListener('click',function() {
-                    toggleTag(status);
-                });
-            })
         }
         
+        // add event listener to statuses
+        const statusTags = document.querySelectorAll('.status-tag');
+        statusTags.forEach(status => {
+            status.addEventListener('click',function() {
+                toggleTag(status);
+            });
+        })
 
         function updateMediaSession(title, artist, artwork) {
             if ('mediaSession' in navigator) {
