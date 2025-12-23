@@ -17,7 +17,7 @@
 -Radio</p></div>
         <div id="play-random">
             <!--<div id="play-random-button">&#x25b6;&#xfe0e;</div>-->
-            <div id="play-random-button"><img id="shuffle" src="/assets/shuffle.png"></div>
+            <div id="play-random-button"><img id="shuffle" src="assets/shuffle.png"></div>
             <div id="play-random-text">
             </div>
             <div id="intro-div"></div>
@@ -55,6 +55,10 @@
         </div>
 
         <div class="streams-container" id="favorites-container"></div>
+
+        <div id="change-sort-button" onclick="sortStations(true)">
+            <img id="change-sort-icon">
+        </div>
         
         <div class="streams-container" id="streams-container"></div>
     Up-to-the-minute information and direct stream links for the world's best internet radio stations. Click a logo to tune in, donate to a station if you like it, and follow me on Instagram, <a class='insta-link' target='_blank' href='https://www.instagram.com/scud.works/'>@scud.works</a>.<br><br>
@@ -65,6 +69,20 @@
         
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
+
+    #change-sort-button {
+        margin-top: 20px;
+        margin-left: -2px;
+    }
+
+    #change-sort-icon {
+        cursor: pointer;
+        height: 25px;
+        opacity: 0.2;
+    }
+    #change-sort-icon:hover{
+        opacity: 1;
+    }
 
     #scud-logo {
         height: 40px;
@@ -335,7 +353,7 @@
         }
 
         .big-top-margin {
-            margin-top: 45px !important;
+            margin-top: 15px !important;
         }
 
         .favorite-star-favorited {
@@ -419,7 +437,7 @@
             }
         }
          @keyframes pulse{0%{background:#ffffff}50%{background:#ddd}100%{background:#ffffff}}.pulsing{animation:pulse 1s infinite}
-        .streams-container {display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 20px; margin-bottom:20px;}
+        .streams-container {display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 5px; margin-bottom:15px;}
         @media (min-aspect-ratio: 8/10) 
         {
 
@@ -491,7 +509,6 @@
         playerIcons.addEventListener('click', togglePlayer);
 
         function togglePlayer() {
-            console.log(playerAudio.paused);
             document.querySelectorAll('.a-station-container').forEach(station=>{
                 station.style.backgroundColor='white';
                 station.classList.remove('pulsing')
@@ -552,8 +569,6 @@
 
             updatePlayer(id, oneLiner, station.dataset.location);
             updateMediaSession(oneLiner, id, logo);
-            console.log('From Link')
-            console.log(fromLink);
             if (!fromLink) {
                 player.classList.add('pulsing');
                 togglePlayer();
@@ -579,8 +594,6 @@
                         oneLiner = container.dataset.oneLiner;
                 }
             }
-            console.log(alreadyPlaying);
-            console.log(offline);
             chooseStation(id, true);
         }
 
@@ -607,9 +620,6 @@
                 const oneLinerContentWidth = oneLiner.scrollWidth;
                 const needsMarquee = oneLinerContentWidth > availableWidth;
                 
-                console.log(oneLiner);
-                console.log(availableWidth);
-                console.log(oneLinerContentWidth);
                 if (needsMarquee) {
                     const width = availableWidth + 'px';
                     setupOneLinerMarquee(oneLiner, width, 'left');
@@ -781,7 +791,6 @@
             tagsInRow.forEach(tagInRow => {
                 if ((!thisTagList.includes(tagInRow.id.replace('-tag',''))) && (thisTagList.length > 0)) {
                     tagInRow.classList.add('inactive-tag');
-                    console.log('made inactive');
                 } else {
                     // Remove inactive-tag if it should be active
                     tagInRow.classList.remove('inactive-tag');
@@ -831,29 +840,109 @@
             };
         }
 
-        function populateStations(data, shuffle=false) {
+        function orderStations(by, keys=null) {
+            const icon = document.getElementById('change-sort-icon');
+            icon.src = 'assets/' + by + '.png';
+
+            container = document.getElementById('streams-container');
+            if (keys) {
+                stations = keys;
+            }
+            else {
+                stations = Array.from(container.querySelectorAll('.a-station-container')); 
+            }
+
+            container.innerHTML = "";
+            console.log(stations);
+            
+            if (by=='random') {
+                for (let i = stations.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [stations[i], stations[j]] = [stations[j], stations[i]]; 
+                }
+            }
+            else if (by=='ascending') {
+                let lowerA, lowerB;
+                stations.sort((a, b) => {
+                    if (keys) {
+                        lowerA = a.toLowerCase();
+                        lowerB = b.toLowerCase();
+                    }
+                    else {
+                        lowerA = a.id.toLowerCase();
+                        lowerB = b.id.toLowerCase();
+                    }
+
+                    if (lowerA < lowerB) {
+                        return -1;
+                    }
+                    if (lowerA > lowerB) {
+                        return 1;
+                    }
+                    return 0; 
+                });
+            }
+            else if (by=='descending') {
+                stations.sort((a, b) => {
+                    let lowerA, lowerB;
+                    if (keys) {
+                        lowerA = a.toLowerCase();
+                        lowerB = b.toLowerCase();
+                    }
+                    else {
+                        lowerA = a.id.toLowerCase();
+                        lowerB = b.id.toLowerCase();
+                    }
+                    if (lowerA > lowerB) {
+                        return -1;
+                    }
+                    if (lowerA < lowerB) {
+                        return 1;
+                    }
+                    return 0; 
+                });                
+            }
+            
+            if (keys) {
+                return stations;
+            }
+            else {
+                stations.forEach((station) => {
+                    console.log(station);
+                    container.appendChild(station);
+                })
+            }
+
+            localStorage.setItem('sortOrder',by);
+        }
+
+        function sortStations(toggle=false) {
+            currentOrder = localStorage.getItem('sortOrder') || 'random';
+            if (toggle) {
+                if (currentOrder=='random') {
+                    orderStations('ascending');
+                }
+                else if (currentOrder=='ascending') {
+                    orderStations('descending');
+                }
+                else if (currentOrder=='descending') {
+                    orderStations('random');
+                }
+            }
+            else {
+                orderStations(currentOrder);
+            }
+        }
+
+        function populateStations(data, needSort=false) {
             var rerun = 0;
             var live = 0;
             var offline = 0;
-
             const keys = Object.keys(data);
-            keys.sort((a, b) => {
-            const lowerA = a.toLowerCase();
-            const lowerB = b.toLowerCase();
-            if (lowerA < lowerB) {
-                return -1;
-            }
-            if (lowerA > lowerB) {
-                return 1;
-            }
-            return 0; 
-            });
 
-            if (shuffle == true) {
-                for (let i = keys.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [keys[i], keys[j]] = [keys[j], keys[i]]; 
-                }
+            if (needSort) {
+                currentOrder = localStorage.getItem('sortOrder') || 'random';
+                orderStations(currentOrder, keys);
             }
 
             const container = document.getElementById('streams-container');
@@ -1107,10 +1196,9 @@
             let info = JSON.parse(localStorage.getItem('info'));
 
             if (info && from_endpoint == false) {
-                console.log('pulling from cache')
                 json = info;
                 
-                populateStations(json, shuffle=firstLoad);
+                populateStations(json, needSort=firstLoad);
 
                 if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
                     populateTags(json);
@@ -1121,7 +1209,7 @@
                     .then(response => response.json())
                     .then(json => {
                         if (firstLoad) {
-                            populateStations(json, shuffle=true);
+                            populateStations(json, needSort=true);
                             distributeFavorites(favorites);
                         }
                         else {
@@ -1203,7 +1291,6 @@
                 get: (searchParams, prop) => searchParams.get(prop),
             });
             let value = params.station;
-            console.log(value);
             if (value) {
                 chooseStation(value, false , true);
             }
