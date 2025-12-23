@@ -840,7 +840,7 @@
             };
 
             const width = player.offsetWidth - shareIconDiv.offsetWidth - playerImg.offsetWidth - playerIcons.offsetWidth - 80 + 'px';
-            needsMarquee = oneLinerElement.offsetWidth > width;
+            needsMarquee = oneLinerElement.scrollWidth > width;
 
             if (needsMarquee) {
                 setupOneLinerMarquee(oneLinerElement, width, 'left');
