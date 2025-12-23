@@ -978,7 +978,9 @@
                         existingStation.querySelector('.location').textContent = location;
 
                         stationTags = existingStation.querySelector('.station-tag-div');
-                        stationTags.innerHTML = '';
+                        stationTags.innerHTML = `
+                                <div class="status station-tag status-station-tag">${status}</div>
+                                <div class="location location-station-tag station-tag">${location}</div>`;
                         if (genres) {
                             genres.forEach(genre => {
                                 const genreTag = document.createElement('div');
