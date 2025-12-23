@@ -970,9 +970,23 @@
                         existingStation.querySelector('.one-liner').textContent = oneLiner;
                         existingStation.dataset.oneLiner = oneLiner; 
                         updatedOneLiners.push(existingStation);
+
+                        existingStation.querySelector('.status').textContent = status;
+                        existingStation.querySelector('.location').textContent = location;
+
+                        stationTags = existingStation.querySelector('.station-tag-div');
+                        stationTags.innerHTML = '';
+                        if (genres) {
+                            genres.forEach(genre => {
+                                const genreTag = document.createElement('div');
+                                genreTag.classList.add('station-tag');
+                                genreTag.classList.add('genre-station-tag');
+                                genreTag.textContent = genre;
+                                stationTags.appendChild(genreTag);
+                            });
+                        }
+                        stationTags.style.width = stationDiv.offsetWidth - 120 - 20 + 'px';
                     };
-                    existingStation.querySelector('.status').textContent = status;
-                    existingStation.querySelector('.location').textContent = location;
 
                     existingStation.dataset.location = location;
                     existingStation.dataset.status = status;
