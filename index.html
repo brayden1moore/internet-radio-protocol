@@ -829,6 +829,7 @@
             existingStation = document.getElementById(id);
             oneLinerElement = playerInfo.querySelector('.one-liner');
             existingOneLiner = decodeHtmlEntities(oneLinerElement.dataset.oneLiner)
+            shareIcon = document.getElementById('share-icon');
 
             if (existingOneLiner != oneLiner) {
                 oneLinerElement.textContent = oneLiner;
@@ -837,8 +838,8 @@
                 oneLinerElement.dataset.oneLiner = oneLiner; 
             };
 
-            const width = (player.offsetWidth - playerImg.offsetWidth - playerIcons.offsetWidth - (playerInfo.offsetWidth - oneLinerElement.offsetWidth)) + 'px';
-            needsMarquee = (player.offsetWidth - playerImg.offsetWidth - playerInfo.offsetWidth - playerIcons.offsetWidth) < 50;
+            const width = (player.offsetWidth - shareIcon.offsetWidth - playerImg.offsetWidth - playerIcons.offsetWidth - (playerInfo.offsetWidth - oneLinerElement.offsetWidth)) + 'px';
+            needsMarquee = (player.offsetWidth - shareIcon.offsetWidth - playerImg.offsetWidth - playerInfo.offsetWidth - playerIcons.offsetWidth) < 50;
             if (needsMarquee) {
                 setupOneLinerMarquee(oneLinerElement, width, 'left');
             };
