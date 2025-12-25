@@ -841,9 +841,13 @@ class Stream:
                 else:
                     date2 = re.search("([0-9]{2}\.[0-9]{2}\.[0-9]{2})", self.one_liner)
                     if date2:
-                        date = datetime.strptime(date2.group(), "%m.%d.%y")
-                        if date < datetime.now():
-                            self.status = 'Re-Run'
+                        try:
+                            date = datetime.strptime(date2.group(), "%m.%d.%y")
+                        except:
+                            date = datetime.strptime(date2.group(), "%d.%m.%y")      
+                        if date:                      
+                            if date < datetime.now():
+                                self.status = 'Re-Run'
 
 def add_info_to_index(stream_json):
     with open('index.html', 'r') as f:
