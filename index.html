@@ -842,6 +842,11 @@
             const width = window.offsetWidth - shareIconDiv.offsetWidth - playerImg.offsetWidth - playerIcons.offsetWidth - 80;
             needsMarquee = playerInfo.scrollWidth > width;   
 
+            console.log('width');
+            console.log(width);
+            console.log('playerinfo width');
+            console.log(playerInfo.scrollWidth);
+
             if (needsMarquee) {
                 setupOneLinerMarquee(oneLinerElement, width + 'px', 'left');
             };
