@@ -827,11 +827,18 @@ class Stream:
                     self.status = 'Live'
             
             self.stream_link = info['streamUrl']
-            self.now_playing = extract_value(info, ['name'])
-            self.now_playing_artist = extract_value(info, ['host'])
-            self.now_playing_description = extract_value(info, ['description'], rule='shorten')
-            self.now_playing_description_long = extract_value(info, ['description'])
-            self.listeners = extract_value(info, ['listeners'])
+            if self.status == 'Offline':
+                self.now_playing = "Offline"
+                self.now_playing_artist = None
+                self.now_playing_description = None
+                self.now_playing_description_long = None
+                self.listeners = extract_value(info, ['listeners'])    
+            else:            
+                self.now_playing = extract_value(info, ['name'])
+                self.now_playing_artist = extract_value(info, ['host'])
+                self.now_playing_description = extract_value(info, ['description'], rule='shorten')
+                self.now_playing_description_long = extract_value(info, ['description'])
+                self.listeners = extract_value(info, ['listeners'])
 
 
     def set_last_updated(self):
