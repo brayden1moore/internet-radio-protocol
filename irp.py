@@ -817,10 +817,14 @@ class Stream:
 
         elif self.name == 'Desire Path Radio':
             ch2_info = requests.get(self.info_link, timeout=10).json()
+            self.status = 'Offline'
             if ch2_info['online'] == True:
                 info = ch2_info
+                self.status = 'Live'
             else:
                 info = requests.get(self.info_link.replace('-channel-2',''), timeout=10).json()
+                if info['online'] == True:
+                    self.status = 'Live'
             
             self.stream_link = info['streamUrl']
             self.now_playing = extract_value(info, ['name'])
