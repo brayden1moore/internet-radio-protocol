@@ -899,6 +899,7 @@ class Stream:
         for i in ['96','60','25','176']:
             entire_path = f'{self.name.replace(' ','_')}_{i}.pkl'
             with open(entire_path, 'wb') as f:
+                logging.info(entire_path)
                 pickle.dump(tmp[f'logo_{i}'], f)
 
 
