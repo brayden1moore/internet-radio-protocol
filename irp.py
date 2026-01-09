@@ -828,7 +828,7 @@ class Stream:
             
             self.stream_link = info['streamUrl']
             if self.status == 'Offline':
-                self.now_playing = "Offline"
+                self.now_playing = None
                 self.now_playing_artist = None
                 self.now_playing_description = None
                 self.now_playing_description_long = None
