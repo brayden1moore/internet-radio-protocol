@@ -897,7 +897,7 @@ class Stream:
 
         # save images to lib
         for i in ['96','60','25','176']:
-            entire_path = f'{self.name.replace(' ','_')}_{i}.pkl'
+            entire_path = f'logos/{self.name.replace(' ','_')}_{i}.pkl'
             with open(entire_path, 'wb') as f:
                 print(entire_path)
                 pickle.dump(tmp[f'logo_{i}'], f)
