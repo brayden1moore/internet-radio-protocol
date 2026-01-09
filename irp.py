@@ -815,6 +815,21 @@ class Stream:
             self.now_playing_artist = extract_value(info, ['result','metadata','artist'])
             self.show_logo = extract_value(info, ['result','metadata','artwork','default'])
 
+        elif self.name == 'Desire Path Radio':
+            ch2_info = requests.get(self.info_link, timeout=10).json()
+            if ch2_info['online'] == True:
+                info = ch2_info
+            else:
+                info = requests.get(self.info_link.replace('-channel-2',''), timeout=10).json()
+            
+            self.stream_link = info['streamUrl']
+            self.now_playing = extract_value(info, ['name'])
+            self.now_playing_artist = extract_value(info, ['host'])
+            self.now_playing_description = extract_value(info, ['description'], rule='shorten')
+            self.now_playing_description_long = extract_value(info, ['description'])
+            self.listeners = extract_value(info, ['listeners'])
+
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
