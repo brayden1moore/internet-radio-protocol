@@ -880,7 +880,6 @@ class Stream:
 
     def process_logos(self):
         logo_file = self.logo.replace('https://internetradioprotocol.org/','')
-        logo_name = logo_file.split('.')[0]
 
         tmp = {}
         logo = Image.open(logo_file).convert('RGB')
@@ -898,7 +897,7 @@ class Stream:
 
         # save images to lib
         for i in ['96','60','25','176']:
-            entire_path = f'{logo_name}_{i}.pkl'
+            entire_path = f'{self.name}_{i}.pkl'
             with open(entire_path, 'wb') as f:
                 pickle.dump(tmp[f'logo_{i}'], f)
 
