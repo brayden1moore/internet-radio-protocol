@@ -882,27 +882,25 @@ class Stream:
         logo_file = self.logo.replace('https://internetradioprotocol.org/','')
         logo_name = logo_file.split('.')[0]
 
-        full_img_path = f'{logo_name}_176.pkl'
-        if not os.path.exists(full_img_path):
-            tmp = {}
-            logo = Image.open(logo_file).convert('RGB')
+        tmp = {}
+        logo = Image.open(logo_file).convert('RGB')
 
-            logo_96 = logo.resize((96,  96)).convert('RGB')
-            logo_60 = logo.resize((60,  60)).convert('RGB')
-            logo_25 = logo.resize((25,  25)).convert('RGB')
-            logo_176 = logo.resize((176, 176)).convert('RGB')           
+        logo_96 = logo.resize((96,  96)).convert('RGB')
+        logo_60 = logo.resize((60,  60)).convert('RGB')
+        logo_25 = logo.resize((25,  25)).convert('RGB')
+        logo_176 = logo.resize((176, 176)).convert('RGB')           
 
-            # save images to dict
-            tmp['logo_96'] = logo_96
-            tmp['logo_60']  = logo_60
-            tmp['logo_25'] = logo_25
-            tmp['logo_176'] = logo_176
+        # save images to dict
+        tmp['logo_96'] = logo_96
+        tmp['logo_60']  = logo_60
+        tmp['logo_25'] = logo_25
+        tmp['logo_176'] = logo_176
 
-            # save images to lib
-            for i in ['96','60','25','176']:
-                entire_path = f'{logo_name}_{i}.pkl'
-                with open(entire_path, 'wb') as f:
-                    pickle.dump(tmp[f'logo_{i}'], f)
+        # save images to lib
+        for i in ['96','60','25','176']:
+            entire_path = f'{logo_name}_{i}.pkl'
+            with open(entire_path, 'wb') as f:
+                pickle.dump(tmp[f'logo_{i}'], f)
 
 
 def add_info_to_index(stream_json):
