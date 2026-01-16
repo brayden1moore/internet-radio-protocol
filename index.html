@@ -17,7 +17,7 @@
                 <div id="modal-x-container"><div id="modal-x" onClick="closeModal();">X</div></div>
                 <div id="modal-content">
                     <div id="modal-logo-container">
-                        <div class="logo-and-overlay">
+                        <div id="modal-logo-and-overlay" class="logo-and-overlay">
                             <div id="modal-play-overlay" class="play-overlay">
                                 <svg viewBox="0 0 100 100" width="60%" height="60%">
                                     <polygon points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"/>
@@ -676,6 +676,7 @@
         const modalLocation = document.getElementById('modal-station-location');
         const modalLogo = document.getElementById('modal-logo');
         const modalPlayOverlay = document.getElementById('modal-play-overlay');
+        const modalLogoAndPlayOverlay = document.getElementById('modal-logo-and-overlay');
         const modalDescription = document.getElementById('modal-description-container');
         const modalMainLink = document.getElementById('modal-main-link');
         const modalStreamLink = document.getElementById('modal-stream-link');
@@ -687,6 +688,7 @@
             modalName.textContent = station;
             modalLocation.textContent = info[station]['location'];
             modalLogo.src = info[station]['logo'];
+
             if (info[station]['about']) {
                 modalDescription.textContent = '"' + info[station]['about'] + '"';
             }
@@ -697,7 +699,7 @@
             modalSupportLink.href = info[station]['supportLink'];
 
             // set up play button
-            modalPlayOverlay.onclick = function(event) {
+            modalLogoAndPlayOverlay.onclick = function(event) {
                 chooseStation(station);
             };
         }
