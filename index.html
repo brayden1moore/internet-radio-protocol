@@ -10,6 +10,39 @@
 
 <!-- STATION_DATA_START -->
 <!-- STATION_DATA_END --></head><body style="font-family:Archivo Light; padding:5vw; padding-top:10px;">
+
+        <div id="modal-container">
+            <div id="modal-bg" onClick="closeModal();"></div>
+            <div id="modal">
+                <div id="modal-x-container"><div id="modal-x" onClick="closeModal();">X</div></div>
+                <div id="modal-content">
+                    <div id="modal-logo-container">
+                        <div class="logo-and-overlay">
+                            <div id="modal-play-overlay" class="play-overlay">
+                                <svg viewBox="0 0 100 100" width="60%" height="60%">
+                                    <polygon points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <img id="modal-logo"  src="" />
+                    </div>
+                        <div id="modal-name-and-location">
+                            <div id="modal-station-name"></div>
+                            <div id="modal-station-location"></div>
+                        </div>
+                    </div>
+                    <div id="modal-links-container">
+                            <a class="a-link" id="modal-main-link" target="_blank" href="">Website</a>
+                            <a class="a-link" id="modal-stream-link" target="_blank" href="">Stream</a>
+                            <a class="a-link info-link" id="modal-info-link" target="_blank" href="">Data</a>
+                            <a class="a-link support-link" id="modal-support-link" target="_blank" href="">Donate</a>
+                    </div>
+                    <div id="modal-description-container">
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
         
         <div class="the-header" style="display:flex; align-items:center;">
         <img id="main-logo" src="assets/ears.png">
@@ -70,6 +103,124 @@
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
 
+    .play-overlay {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+
+    .logo-and-overlay:hover .play-overlay {
+        display: flex;
+    }
+
+    #modal-station-location {
+        background-color: #00BBFF;
+        border: 1px solid black;
+        width: fit-content;
+        padding: 4px;
+        margin-top: 7px;
+    }
+
+    #modal-description-container {
+        margin-top: 16px;
+    }
+
+    .a-link {
+        font-size: 8pt !important; 
+        margin-right: 10px;
+        flex: 1;
+        text-align: center;
+        border: 1px solid black;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .support-link {background-color:#FFFF00; }
+    
+    .info-link {display:none}
+
+    #modal-links-container {
+        margin-top: 20px;
+        display: flex;
+    }
+    #modal-logo-container {
+        display: flex;
+        align-items: center;
+    }
+
+    #modal-station-name {
+        width: fit-content;
+        padding: 4px;
+        padding-right: 9px;
+        padding-left: 9px;
+        color: white;
+        background-color: black;
+        font-size: 28px;
+        /* letter-spacing: -0.06em; */
+        font-family: 'Archivo Light';
+    }
+
+    #modal-name-and-location {
+        margin-left: 10px;
+    }
+
+    #modal-content {
+        padding: 30px;
+        margin-top: -45px;
+    }
+
+    #modal-logo {
+        height: 100%;
+        width: 100%;
+    }
+
+    #modal-x-container {
+        text-align: right;
+        padding: 15px;
+        justify-content: right;
+        display: flex;
+    }
+
+    #modal-x {
+        cursor: pointer;
+        width: fit-content;
+    }
+
+    #modal-container {
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #modal-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        opacity: 0.3;
+        background-color: black;
+    }
+
+    #modal {
+        width: 80%;
+        z-index: 11;
+        height: fit-content;
+        background-color: white;
+        border: 1px solid black;
+    }
+
     #change-sort-button {
         margin-top: 20px;
         margin-left: -2px;
@@ -129,6 +280,7 @@
         color: white;
         width: fit-content;
         margin-bottom: 3px;
+        padding: 2px 4px;
     }
 
     #player-tags {
@@ -169,7 +321,7 @@
 
         #player-img {
             border: 1px solid black;
-            height: 62px;
+            height: 66px;
             margin-right: 15px;
             z-index: 1001;
         }
@@ -344,12 +496,11 @@
         }
 
         .stream-name {
+            width: fit-content;
             padding: 2px 4px;
             background-color:#000000 !important; color:#FFFFFF !important; font-size: 12pt;}
         .links {display:none; margin-top: 10px; margin-bottom: 2px;}
-        .a-link {font-size: 8pt !important; margin-right: 10px;}
-        /*.support-link {background-color:#FFFF00; }*/
-        .info-link {display:none}
+
 
         #favorites-container {
             margin-top: 20px;
@@ -406,6 +557,7 @@
             background-color:#00E7C0;
         }     
         .a-station-container {
+            cursor: pointer;
             animation: fadeIn 0.5s ease-out forwards;
             position:relative; 
             border-radius: 0px;
@@ -415,14 +567,25 @@
             -ms-user-select: none;
             isolation: isolate;
             overflow: auto;
-            cursor:default; 
             background-color: #FFFFFF; 
             color:#000000; height: 90px; padding: 10px; overflow-x:hidden; overflow-y:hidden; border:1px solid black; align-items: center; display: flex; white-space: nowrap;}
         .offline {
             opacity: 0.5;
         }
-        
-        .a-logo {border-radius:0px; width:90px; height:90px; margin-right:10px; border: 1px solid black; cursor: pointer; flex-shrink: 0;}
+        .logo-and-overlay {
+            position: relative;
+            border-radius:0px; 
+            width:90px; 
+            height:90px; 
+            margin-right:10px; 
+            border: 1px solid black; 
+            cursor: pointer; 
+            flex-shrink: 0;
+        }
+        .a-logo {
+            height: 100%;
+            width: 100%;
+        }
         body {background-color: #FFFFFF; font-size: 10pt; padding-bottom: 15vh !important;}
         .the-header {font-family: "Archivo Bold"; font-size: 40pt; line-height:0.75em; letter-spacing:-0.09em; margin-top:25px;margin-bottom:-10px;}
         .a-station {font-family: "Archivo Light"; font-size:8pt; white-space: nowrap; flex-shrink: 0;}
@@ -445,6 +608,10 @@
         .streams-container {display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 5px; margin-bottom:15px;}
         @media (min-aspect-ratio: 8/10) 
         {
+        
+        #modal {
+                width: 75%;
+        }
 
         .stream-name {
             font-size: 14pt;
@@ -460,7 +627,7 @@
         .tags-container {
             flex-wrap: nowrap;
         }
-        .info-link {display:block}
+        .info-link {display:flex}
         body{font-size: 12pt;} 
         .a-link {font-size: 10pt !important;}
         .a-station-container {height:100px;} 
@@ -471,14 +638,26 @@
         .the-header{
             margin-bottom: -20px;
             font-size: 50pt;
-        } .a-station {font-size:10pt;} 
-        .a-logo {width:100px; height:100px;} a {font-size: 12pt}
+        } .a-station {font-size:10pt;}
+        .logo-and-overlay {
+            width:100px; 
+            height:100px;
+        }
+        .a-logo {
+            width: 100%;
+            height: 100%;
+        } 
+        
+            a {font-size: 12pt}
         #main-logo {height: 105px; margin-left:-15px}
         #title {margin-left: 0px;}
         }
 
         @media (orientation: landscape) 
         {
+            #modal {
+                width: 30%;
+            }
             .streams-container {grid-template-columns: 1fr 1fr 1fr;} 
         }
 
@@ -488,11 +667,45 @@
         }
         </style><script>
 
+        const modalContainer = document.getElementById('modal-container');
+        function closeModal() {
+            modalContainer.style.display = 'none';
+        }
+
+        const modalName = document.getElementById('modal-station-name');
+        const modalLocation = document.getElementById('modal-station-location');
+        const modalLogo = document.getElementById('modal-logo');
+        const modalPlayOverlay = document.getElementById('modal-play-overlay');
+        const modalDescription = document.getElementById('modal-description-container');
+        const modalMainLink = document.getElementById('modal-main-link');
+        const modalStreamLink = document.getElementById('modal-stream-link');
+        const modalInfoLink = document.getElementById('modal-info-link');
+        const modalSupportLink = document.getElementById('modal-support-link');
+
+        function openModal(event, station) {
+            modalContainer.style.display = 'flex';
+            modalName.textContent = station;
+            modalLocation.textContent = info[station]['location'];
+            modalLogo.src = info[station]['logo'];
+            if (info[station]['about']) {
+                modalDescription.textContent = '"' + info[station]['about'] + '"';
+            }
+
+            modalMainLink.href = info[station]['mainLink'];
+            modalStreamLink.href = info[station]['streamLink'];
+            modalInfoLink.href = info[station]['infoLink'];
+            modalSupportLink.href = info[station]['supportLink'];
+
+            // set up play button
+            modalPlayOverlay.onclick = function(event) {
+                chooseStation(station);
+            };
+        }
+
         const introDiv = document.getElementById('intro-div');
         const introList = [
             `What's the matter Spotify boy, afraid you might hear something?`,
             `There is music at the bottom of the ocean.`,
-            '"Bringing it all together. Doing it on my own." -Ween',
             'The sound of the underground.',
             'The future of radio is on the internet.',
             'Are you a good listener?',
@@ -1019,15 +1232,28 @@
                     stationDiv.dataset.status = status;
                     stationDiv.dataset.oneLiner = oneLiner; 
                     stationDiv.dataset.genres = genres;
+                    stationDiv.onclick = function(event) {
+                        if (event.target.closest('.logo-and-overlay')) {
+                            return;
+                        }
+                        openModal(event, stationName);
+                    };
                     stationDiv.setAttribute('draggable', true);
                     stationDiv.id = stationName;    
                               
                     stationDiv.innerHTML = `
                     <p class="favorite-star-favorited" id="${stationName}-favorite" style="position: absolute; top: 10px; right: 10px; margin: 0; cursor: pointer; z-index: 10;">★</p>
                     <p class="favorite-star" onClick="toggleFavorite('${stationName}')"  id="${stationName}-favorite-outline" style="position: absolute; top: 10px; right: 10px; margin: 0; cursor: pointer; z-index: 11;">☆</p>
-                    <img class="a-logo"  onclick="chooseStation('${stationName}')" src="${logo}"  />
+                    <div class="logo-and-overlay">
+                        <div class="play-overlay" onclick="chooseStation('${stationName}')">
+                            <svg viewBox="0 0 100 100" width="60%" height="60%">
+                                <polygon points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <img class="a-logo"  src="${logo}"  />
+                    </div>
                     <div class="a-station">
-                    <a class="stream-name" target="_blank" href="${mainLink}">${stationName}</a>
+                    <div class="stream-name" target="_blank" href="${mainLink}">${stationName}</div>
                     <div class="links">
                         <a class="a-link" target="_blank" href="${streamLink}">Stream</a>
                         <a class="a-link" target="_blank" href="${mainLink}">Website</a>
@@ -1220,9 +1446,10 @@
         }
 
         let firstLoad = true;
+        let info;
         function getUpdatedInfo(from_endpoint=true) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            let info = JSON.parse(localStorage.getItem('info'));
+            info = JSON.parse(localStorage.getItem('info'));
 
             if (info && from_endpoint == false) {
                 json = info;
