@@ -711,6 +711,10 @@ class Stream:
             try:
                 self.now_playing = info['now_playing']
                 self.status = "Online"
+                if info['source'] == 'live':
+                    self.stream_link = 'http://monotonicradio.com:8000/stream.m3u'
+                else: 
+                    self.stream_link = 'https://monotonicradio.com/stream'
             except:
                 pass
             self.now_playing_description = info.get('video_description')
@@ -897,7 +901,7 @@ class Stream:
 
         # save images to lib
         for i in ['96','60','25','176']:
-            entire_path = f'logos/{self.name.replace(' ','_')}_{i}.pkl'
+            entire_path = f'logos/{self.name.replace(' ','_')}_{i}.png'
             with open(entire_path, 'wb') as f:
                 pickle.dump(tmp[f'logo_{i}'], f)
 
