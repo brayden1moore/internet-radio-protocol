@@ -976,6 +976,12 @@ def send_email(error_dict):
             elif 'ReadTimeoutError' in err:
                 timeout_errors += name + '\n'
                 has_timeout_errors = True
+            elif 'ConnectTimeoutError' in err:
+                timeout_errors += name + '\n'
+                has_timeout_errors = True     
+            elif 'RemoteDisconnected' in err:
+                timeout_errors += name + '\n'
+                has_timeout_errors = True                            
             else:
                 other_errors += f'\n\n{name}: \n {err}'
                 has_other_errors = True
