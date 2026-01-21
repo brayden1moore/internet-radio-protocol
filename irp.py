@@ -115,7 +115,7 @@ class Stream:
     from each station and convert it into a dict to be served at /info.
     '''
 
-    def __init__(self, from_dict=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None):
+    def __init__(self, from_dict=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False):
         # station info 
         self.name = name
         self.logo = logo
@@ -128,6 +128,7 @@ class Stream:
         self.insta_link = insta_link
         self.bandcamp_link = bandcamp_link
         self.soundcloud_link = soundcloud_link
+        self.hidden = hidden
 
         # show info
         self.status = "Online"
@@ -1039,7 +1040,8 @@ Stream(
         support_link = "https://www.faultradio.com/donate",
         insta_link = "https://www.instagram.com/its_fault_radio/",
         bandcamp_link = None,
-        soundcloud_link = "https://soundcloud.com/faultradio"
+        soundcloud_link = "https://soundcloud.com/faultradio",
+        hidden = True
 ),
 Stream(
         name = "HKCR",
@@ -1429,7 +1431,8 @@ Stream(
         support_link = "https://somafm.com/support/",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        hidden=True
 ),
 Stream(
         name = "SWU FM",
@@ -1481,7 +1484,8 @@ Stream(
         support_link = "https://somafm.com/support/",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        hidden = True
 ),
 Stream(
         name = "Stegi Radio",
@@ -1624,7 +1628,8 @@ Stream(
         support_link = "https://www.patreon.com/radioplato",
         insta_link = "https://www.instagram.com/radio_plato",
         bandcamp_link = "https://radioplato.bandcamp.com/",
-        soundcloud_link = "https://soundcloud.com/radioplato"
+        soundcloud_link = "https://soundcloud.com/radioplato",
+        hidden = True
 ),
 Stream(
         name = "Veneno",
