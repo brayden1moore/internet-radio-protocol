@@ -846,8 +846,8 @@ class Stream:
         
         elif self.name == 'Veneno':
             info = requests.get(self.info_link)
-            self.now_playing = extract_value(info, ['currentShow',0,'name'])
-            self.status = 'Live' if extract_value(info, ['currentShow',0,'auto_dj']) == False else 'Re-Run'
+            now_playing_append = ' (R)' if extract_value(info, ['currentShow',0,'auto_dj']) == True else ''
+            self.now_playing = extract_value(info, ['currentShow',0,'name']) + now_playing_append
 
 
     def set_last_updated(self):
