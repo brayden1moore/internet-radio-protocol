@@ -1410,7 +1410,7 @@
         "about": "Created in 2018, Veneno was born from the idea of ​​unifying and solidifying the most diverse cultural initiatives. Based in downtown São Paulo, the radio today broadcasts a wide range of programs, dialoguing with different aesthetics and concepts.",
         "bandcampLink": "",
         "genres": null,
-        "hidden": true,
+        "hidden": false,
         "infoLink": "https://veneno.airtime.pro/api/live-info",
         "instaLink": "https://www.instagram.com/veneno.live/",
         "lastUpdated": "",
