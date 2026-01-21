@@ -849,6 +849,11 @@ class Stream:
             now_playing_append = ' (R)' if extract_value(info, ['currentShow',0,'auto_dj']) == True else ''
             self.now_playing = extract_value(info, ['currentShow',0,'name']) + now_playing_append
 
+        elif self.name == 'Radio Relativa':
+            info = requests.get(self.info_link).json()
+            self.status = 'Live' if extract_value(info, ['status']) == 'online' else 'Offline'
+            self.now_playing = extract_value(info, ['current_track','title'])
+
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
