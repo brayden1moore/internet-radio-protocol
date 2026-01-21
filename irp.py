@@ -141,7 +141,6 @@ class Stream:
         self.show_logo = None
         self.last_updated = None
         self.one_liner = None
-        self.hidden = None
         self.listeners = None
         self.genres = None
 
