@@ -845,7 +845,7 @@ class Stream:
                 self.listeners = extract_value(info, ['listeners'])
         
         elif self.name == 'Veneno':
-            info = requests.get(self.info_link)
+            info = requests.get(self.info_link).json()
             now_playing_append = ' (R)' if extract_value(info, ['currentShow',0,'auto_dj']) == True else ''
             self.now_playing = extract_value(info, ['currentShow',0,'name']) + now_playing_append
 
