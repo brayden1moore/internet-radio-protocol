@@ -857,6 +857,23 @@ class Stream:
             self.status = 'Live' if extract_value(info, ['status']) == 'online' else 'Offline'
             self.now_playing = extract_value(info, ['current_track','title'])
 
+        elif self.name == 'Radio Vilnius':
+            info = requests.get(self.info_link).json()
+            self.now_playing = None
+            self.now_playing_artist = None
+            self.status = 'Offline'
+            self.listeners = None
+                
+            for i in info['allStats']:
+                if 'server_name' in i.keys():
+                    if i['server_name'] == 'Radio Vilnius':
+                        self.now_playing = extract_value(i, ['title'])
+                        self.now_playing_artist = extract_value(i, ['artist'])
+                        self.status = "Live"
+                        self.listeners = extract_value(i, ['listener_peak'])
+                        
+                        
+
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
@@ -1634,7 +1651,21 @@ Stream(
         insta_link = "https://www.instagram.com/relativaradio/",
         bandcamp_link = "",
         soundcloud_link = "https://soundcloud.com/radio-relativa"
-)]
+),
+Stream(
+        name = "Radio Vilnius",
+        logo = "https://internetradioprotocol.org/logos/vilnius.png",
+        location = "Vilnius",
+        info_link = "https://radiovilnius.live/?rest_route=/radio-vilnius-api/v1/stream-status",
+        stream_link = "https://transliacija.audiomastering.lt/radiovilnius-mp3",
+        main_link = "https://radiovilnius.live",
+        about = "were you ever driving at 3 in the morning down some 2 lane road & it was raining & the only thing you can get on the radio is some station out of nowhere which comes in perfectly clear & plays great music like life is but a dream du wop du wop & you just turn it up & say to yourself 'where has this track been all my life?' well that’s how we feel here at the studio everyday.",
+        support_link = "https://radiovilnius.live/support/",
+        insta_link = "https://instagram.com/radiovilnius",
+        bandcamp_link = "",
+        soundcloud_link = ""
+)
+]
 
 def add_info_to_index(stream_json):
     with open('index.html', 'r') as f:
