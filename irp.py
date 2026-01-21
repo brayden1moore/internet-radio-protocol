@@ -872,7 +872,9 @@ class Stream:
                         self.status = "Live"
                         self.listeners = extract_value(i, ['listener_peak'])
                         
-                        
+        elif self.name == 'Rukh Radio':
+            info = requests.get(self.info_link).text
+            self.now_playing = info
 
 
     def set_last_updated(self):
