@@ -1125,11 +1125,6 @@
             const width = window.innerWidth - shareIconDiv.offsetWidth - playerImg.offsetWidth - playerIcons.offsetWidth - 80;
             needsMarquee = playerInfo.scrollWidth > width;   
 
-            console.log('width');
-            console.log(width);
-            console.log('playerinfo width');
-            console.log(playerInfo.scrollWidth);
-
             if (needsMarquee) {
                 setupOneLinerMarquee(oneLinerElement, width + 'px', 'left');
             };
@@ -1150,7 +1145,6 @@
             }
 
             container.innerHTML = "";
-            console.log(stations);
             
             if (by=='random') {
                 for (let i = stations.length - 1; i > 0; i--) {
@@ -1205,7 +1199,6 @@
             }
             else {
                 stations.forEach((station) => {
-                    console.log(station);
                     container.appendChild(station);
                 })
             }
@@ -1630,12 +1623,9 @@
           const urlToCopy = `${window.location.origin}/?station=${id}`;
           
           navigator.clipboard.writeText(urlToCopy).then(() => {
-              console.log("URL copied to clipboard");
               shareIcon.className = "fa-solid fa-check";
               //copiedText.style.visibility = "visible";
-          }).catch(err => {
-              console.log("Could not copy text: ", err);
-          });
+          })
       });
         
         getUpdatedInfo(false);
