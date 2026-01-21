@@ -1668,6 +1668,19 @@ Stream(
         insta_link = "https://instagram.com/radiovilnius",
         bandcamp_link = "",
         soundcloud_link = ""
+),
+Stream(
+        name = "Rukh Radio",
+        logo = "https://internetradioprotocol.org/logos/rukh.jpg",
+        location = "Odesa",
+        info_link = "https://rukh.live/?qtproxycall=aHR0cHM6Ly9hMS5hc3VyYWhvc3RpbmcuY29tL2xpc3Rlbi9ydWtoL3JhZGlvLm1wMw%3D%3D&icymetadata=1",
+        stream_link = "https://a1.asurahosting.com/listen/rukh/radio.mp3",
+        main_link = "https://rukh.live",
+        about = "RUKH (РУХ) is a non-commercial DIY community radio that focuses on alternative and experimental music, subcultures and countercultures. Broadcasting from Odesa, Ukraine.",
+        support_link = "https://t.me/rukhlive",
+        insta_link = "https://www.instagram.com/rukh.live/",
+        bandcamp_link = "",
+        soundcloud_link = "https://www.soundcloud.com/rukh-radio"
 )
 ]
 
