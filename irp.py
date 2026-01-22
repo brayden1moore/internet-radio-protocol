@@ -741,7 +741,7 @@ class Stream:
             '''
             info = requests.get(self.info_link).json()
             if len(info) > 0:
-                self.now_playing = extract_value(info, ['title'])
+                self.now_playing = extract_value(info[0], ['title'])
             
         elif self.name == 'CKUT':
             info = requests.get(self.info_link).json()
@@ -1816,7 +1816,7 @@ def send_email(error_dict):
             with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
                 server.login("brayden@braydenmoore.com", passw)
                 server.send_message(msg)
-                print('EmailSent')
+                print('Email Sent')
         except Exception as e:
             print('Email Failed')
             print(e)
@@ -1852,9 +1852,7 @@ def main_loop():
                     error_dict[name] = err
                 else:
                     name, val = result
-                    print(val)
-                    print(val.keys())
-                    if (val['oneLiner'] != [i.one_liner for i in streams if i.name == name][0]):
+                    if (val['oneLiner'] != [i.one_liner for i in streams if i.name == name][0]) & (val['status'] != 'Offline'):
                         updated[name] = val
                     else:
                         updated[name] = [i.to_dict() for i in streams if i.name == name][0]
