@@ -457,9 +457,7 @@ class Stream:
         elif self.name == 'KQED':
             today = date.today().isoformat()
             epoch_time = int(time.time())
-            #info = requests.get(self.info_link + today + '?cachebust=' + str(random.randint(0,10000)), timeout=10).json()
-            info = requests.get(self.info_link + today + '?cachebust=' + str(random.randint(0,10000)), timeout=10).text
-            logging.info(info)
+            info = requests.get(self.info_link + today + '?cachebust=' + str(random.randint(0,10000)), timeout=10).json()
             programs = info['data']['attributes']['schedule']
 
             for program in programs:
