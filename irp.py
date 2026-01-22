@@ -1861,8 +1861,8 @@ def main_loop():
                 existing_lines = ['']
             
             error_lines = [val for key, val in error_dict.items()]
-            if len(' '.join(error_lines)) != len(' '.join(existing_lines)):
-                send_email(error_dict)
+            #if len(' '.join(error_lines)) != len(' '.join(existing_lines)):
+            send_email(error_dict)
 
             with open('errorlog.txt', 'w') as log:
                 log.write('\n'.join(error_lines))
