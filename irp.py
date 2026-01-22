@@ -1852,6 +1852,7 @@ def main_loop():
                     error_dict[name] = err
                 else:
                     name, val = result
+                    print(val.keys())
                     if (val['oneLiner'] != [i.one_liner for i in streams if i.name == name][0]):
                         updated[name] = val
                     else:
