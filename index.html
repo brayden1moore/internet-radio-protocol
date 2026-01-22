@@ -62,7 +62,7 @@
                 <div id="intro-div"></div>
             </div>
             <div id="last-up">        
-                <span id='live-count'></span>Updated <span class='last-updated'></span>
+                <span id='live-count'></span><span class='last-updated'></span>
             </div>
         </div>
 
@@ -1467,7 +1467,7 @@
                 hour12: true
             });
             
-            lastUpdated.textContent = formatter.format(now);
+            lastUpdated.textContent = 'Updated ' + formatter.format(now);
             lastUpdated.classList.add('flash');
             setTimeout(function() {
                 lastUpdated.classList.add('flash-out');
