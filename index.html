@@ -9,7 +9,7 @@
 
 
 <!-- STATION_DATA_START -->
-<!-- STATION_DATA_END --></head><body style="font-family:Archivo Light; padding:5vw; padding-top:10px;">
+<!-- STATION_DATA_END --></head><body style="font-family:Archivo Light; padding:3.9vw; padding-top: 0px;">
 
         <div id="modal-container">
             <div id="modal-bg" onClick="closeModal();"></div>
@@ -44,20 +44,25 @@
             </div>
         </div>
         
-        <div class="the-header" style="display:flex; align-items:center;">
-        <img id="main-logo" src="assets/ears.png">
-        <p id="title">On<span style="letter-spacing:-0.045em">e</span><span style="letter-spacing:-0.35em">-</span>
--Radio</p></div>
         <div id="top-bar">
-            <!--<div id="play-random-button">&#x25b6;&#xfe0e;</div>-->
+            <div class="the-header" style="display:flex; align-items:center;">
+                <img id="main-logo" src="assets/ears.png">
+                <div id="title">On<span style="letter-spacing:-0.04em">e</span><span style="letter-spacing:-0.3em">-</span>
+                -Radio</div>
+            </div>
+
+            <div id="spacer"></div>
+        </div>
+
+        <div id="second-bar">
             <div id="play-random-button">
                 <svg viewBox="0 0 100 100" width="35px" height="60%">
-                                <polygon points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"></polygon>
+                                <polygon id="play-random-triangle" points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"></polygon>
                 </svg>
                 <div id="intro-div"></div>
             </div>
-            </div>
         </div>
+
         <div id="player">
             <div id="player-icons">
                 <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 22h-24l12-20z"></path></svg>
@@ -66,9 +71,11 @@
             <div id="player-things">
                 <img id="player-img" src="">
                 <div id="player-info-div">
-                    <div id="player-name"></div>
+                    <div id="player-name-and-tags">
+                        <div id="player-name"></div>
+                        <div id="player-tags"></div>
+                    </div>
                     <div id="player-info"><span class="one-liner" style="font-size: 10pt !important;"></span></div>
-                    <div id="player-tags"></div>
                 </div>
                 <audio id="player-audio" style="width:40px;" data-src=""></audio>
             </div>
@@ -105,6 +112,12 @@
         
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
+
+
+    #player-name-and-tags {
+        display: flex;
+        margin-bottom: 5px;
+    }
 
     .play-overlay {
         display: none;
@@ -283,12 +296,13 @@
         background-color: #000000;
         color: white;
         width: fit-content;
-        margin-bottom: 3px;
+        margin-bottom: 0px;
         padding: 2px 4px;
     }
 
     #player-tags {
-        margin-top: 4px;
+        margin-left: 4px;
+        margin-top: 0px;
         display: flex;
     }
 
@@ -325,8 +339,8 @@
 
         #player-img {
             border: 1px solid black;
-            height: 66px;
-            margin-right: 15px;
+            height: 43px;
+            margin-right: 13px;
             z-index: 1001;
         }
 
@@ -336,6 +350,7 @@
         }
 
         #player-icons {
+            margin-right: 13px;
             cursor: pointer;
         }
 
@@ -354,7 +369,7 @@
             /*justify-content: space-between;*/
             cursor: default;
             align-items: center;
-            padding: 10px;
+            padding: 0px;
             padding-left: 15px;
             height: 70px;
             position: fixed;
@@ -370,7 +385,7 @@
         display: none;
         }
         .tag-container-container {
-            margin-top: 22px;
+            margin-top: 0px;
             width: 100%;
         }
         .tags-container {
@@ -437,29 +452,54 @@
         }
 
         #top-bar {
+            top: 0;
+            left:0;
+            border-bottom: 1px solid black;
+            width: 100%;
+            z-index: 100;
+            background-color: yellow;
+            position: fixed;
             margin-bottom: 25px;
             display: flex;
             align-items: center;
         }
 
+        #spacer {
+            flex: 1;
+        }
+
+        #second-bar {
+            top: 69px;
+            left: -1px;
+            position: fixed;
+            z-index: 200;
+            background-color: yellow;
+            border: 1px solid black;
+            width: 100%;
+        }
+
         #play-random-button {
+
             align-items: center;
             cursor: pointer;
-            width: auto;
+            width: fit-content;
             display: flex;
-            background-color: black;
+            background-color: yellow;
             border: 1px solid black;
-            margin-right: 8px;
+            border-bottom: none;
+            border-top: none;
+            border-left: none;
             border-radius: 0px;
             font-size: 18pt;
             opacity: 1;
             font-size: 12pt;
             padding: 2px 0px;
-            color:white;
+            padding-left: 7px;
+            color: black;
         }
         #play-random-button:hover {
-            background-color: yellow;
-            color: black;
+            background-color: black;
+            color: white;
        }
 
         #play-random-text {
@@ -545,7 +585,7 @@
         }
 
 
-        #main-logo {height: 75px; margin-left: -13px;
+        #main-logo {height: 55px; margin-left: 0px;
             animation: rotate 6s linear infinite;
         }
 
@@ -555,6 +595,8 @@
             border:1px solid black;
             padding: 3px;
             margin-right: 4px;
+            align-items: center;
+            display: flex;
         }
         .station-tag-div {
             margin-top: 5px;
@@ -641,15 +683,28 @@
             border:1px solid black;
             background-color: #FFFF00 !important;
         }
+
+        #play-random-triangle {
+            fill: black;
+        }
+        #play-random-button:hover #play-random-triangle {
+            fill: white;
+        }
     
-        body {background-color: #FFFFFF; font-size: 10pt; padding-bottom: 15vh !important;}
+        body {
+            margin-top:140px;
+            background-color: #FFFFFF; 
+            font-size: 10pt; 
+            padding-bottom: 15vh !important;
+        }
         .the-header {
             font-family: "Archivo Bold"; 
             font-size: 32pt; 
             line-height:0.75em; 
             letter-spacing:-0.09em; 
-            margin-top:25px;
-            margin-bottom:-10px;
+            margin-top:0px;
+            margin-bottom:0px;
+            padding: 7px;
         }
         .a-station {font-family: "Archivo Light"; font-size:8pt; white-space: nowrap; flex-shrink: 0;}
         
@@ -718,7 +773,7 @@
         } 
         
             a {font-size: 12pt}
-        #main-logo {height: 75px; margin-left:-9px}
+        #main-logo {height: 55px; margin-left:2px}
         #title {margin-left: 0px;}
         }
 
