@@ -283,6 +283,7 @@ class Stream:
             info = requests.get(self.info_link).json()
             self.additional_info = None
             self.now_playing_artist = None
+            self.genres = ['Student']
 
             if info['metadata']:
                 self.now_playing = extract_value(info,['metadata','playlist_title'])
@@ -746,6 +747,7 @@ class Stream:
             
         elif self.name == 'CKUT':
             info = requests.get(self.info_link).json()
+            self.genres = ['Student']
             self.now_playing = info['program']['title_html']
             self.now_playing_description_long = clean_text(info['program']['description_html'])
             if len(self.now_playing_description_long) > 44:
@@ -761,7 +763,10 @@ class Stream:
             self.now_playing_description_long = extract_value(info, ['now','full_description'])
             self.now_playing_artist = extract_value(info, ['now','hosts',0,'display_name'])
             self.additional_info = None #extract_value(json=info, location=['now','categories'], sub_location=['title'], rule='list')
-            self.genres = extract_value(json=info, location=['now','categories'], sub_location=['title'], rule='list_genres')
+            self.genres = ['Student']
+            genres = extract_value(json=info, location=['now','categories'], sub_location=['title'], rule='list_genres')
+            if genres:
+                self.genres.extend(genres)
 
         elif self.name == 'Shared Frequencies':
             info = requests.get(self.info_link).json()
@@ -833,10 +838,12 @@ class Stream:
             if ch2_info['online'] == True:
                 info = ch2_info
                 self.status = 'Live'
+                self.genres = ['Talk']
             else:
                 info = requests.get(self.info_link.replace('-channel-2','')).json()
                 if info['online'] == True:
                     self.status = 'Live'
+                    self.genres = None
             
             self.stream_link = info['streamUrl']
             if self.status == 'Offline':
