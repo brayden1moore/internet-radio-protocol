@@ -1846,7 +1846,8 @@ def main_loop():
                     error_dict[name] = err
                 else:
                     name, val = result
-                updated[name] = val
+                if val['oneLiner'] != [i['oneLiner'] for i in streams if i.name == name]:
+                    updated[name] = val
 
             with open('info.json', 'w') as f:
                 json.dump(updated, f, indent=4, sort_keys=True, default=str)
