@@ -1674,7 +1674,8 @@ Stream(
         support_link = "https://veneno.live/support-us/",
         insta_link = "https://www.instagram.com/veneno.live/",
         bandcamp_link = "",
-        soundcloud_link = ""
+        soundcloud_link = "",
+        hidden = True
 ),
 Stream(
         name = "Radio Relativa",
