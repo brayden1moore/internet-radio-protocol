@@ -875,6 +875,12 @@ class Stream:
         elif self.name == 'Rukh Radio':
             info = requests.get(self.info_link).text
             self.now_playing = info
+    
+        elif self.name == 'Pan Africa Space Station':
+            info = requests.get(self.info_link).json()
+            self.now_playing_artist = extract_value(info, ['current','metadata','artist_name'])
+            self.now_playing = extract_value(info, ['current','metadata','track_title']) or ''
+            self.now_playing = self.now_playing.replace('.mp3','')
 
 
     def set_last_updated(self):
@@ -939,7 +945,21 @@ class Stream:
 
 
 ## define streams
-streams = [Stream(
+streams = [
+Stream(
+        name = "Pan African Space Station",
+        logo = "https://internetradioprotocol.org/logos/pass.png",
+        location = "Cape Town",
+        info_link = "https://pass.airtime.pro/api/live-info",
+        stream_link = "https://pass.out.airtime.pro/pass_a",
+        main_link = "https://panafricanspacestation.org.za/",
+        about = "Founded by Chimurenga in 2008, the Pan African Space Station (PASS) is a periodic, pop-up live radio studio; a performance and exhibition space; a research platform and living archive, as well as an ongoing, internet based radio station. Copyright of all material broadcast and published is held by PASS and the individual artists and authors.",
+        support_link = "mailto:info@chimurenga.co.za",
+        insta_link = "https://www.instagram.com/chimurenga_sa/?hl=en",
+        bandcamp_link = None,
+        soundcloud_link = None
+),
+Stream(
         name = "BFF.fm",
         logo = "https://internetradioprotocol.org/logos/bff.png",
         location = "San Francisco",
