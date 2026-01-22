@@ -611,13 +611,13 @@ class Stream:
             self.status = "Offline"
 
             try:
-                self.status = "Online"
                 self.now_playing = info['currentShow'][0]['name']
                 self.additional_info = info['current']['track_title'] + ' by '+ info['current']['artist_name']
+                self.status = "Online"
             except:
                 try:
-                    self.status = "Online"
                     self.now_playing = info['currentShow'][0]['name']
+                    self.status = "Online"
                 except:
                     pass
 
