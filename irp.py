@@ -737,7 +737,7 @@ class Stream:
                 result = subprocess.run(['tesseract', tmp_file, 'stdout'],
                                     capture_output=True, text=True)
                 os.remove(tmp_file)
-                self.now_playing = result.stdout.strip().strip('-').strip("'").strip(':').strip('Live - ')
+                self.now_playing = result.stdout.strip().strip('-').strip("'").strip(':').strip('Live - ').strip('? - ')
             '''
             info = requests.get(self.info_link).json()
             if len(info) > 0:
