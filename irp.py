@@ -867,7 +867,7 @@ class Stream:
         elif self.name == 'Radio Relativa':
             info = requests.get(self.info_link).json()
             self.status = 'Live' if extract_value(info, ['status']) == 'online' else 'Offline'
-            self.now_playing = extract_value(info, ['current_track','title']).replace('Live Now - ')
+            self.now_playing = extract_value(info, ['current_track','title']).replace('Live Now - ', '')
 
         elif self.name == 'Radio Vilnius':
             info = requests.get(self.info_link).json()
