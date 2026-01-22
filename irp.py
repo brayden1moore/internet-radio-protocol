@@ -1791,9 +1791,9 @@ def send_email(error_dict):
                 has_other_errors = True
 
         body = other_errors + json_errors + timeout_errors
-        #if (has_other_errors==True):
-        #    need_to_send = True
-        need_to_send = True
+        if (has_other_errors==True):
+            need_to_send = True
+        #need_to_send = True
     
     else:
         body = '\n'.join([val for _,val in error_dict.items()])
