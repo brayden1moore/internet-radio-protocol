@@ -1864,7 +1864,7 @@ def main_loop():
             with open('errorlog.txt', 'w') as log:
                 log.write('\n'.join(error_lines))
 
-            print('Done!')
+            print(f'Done! Total time {processing_time}')
             time.sleep(60)
         except KeyboardInterrupt:
             print("Shutting down gracefully...")
