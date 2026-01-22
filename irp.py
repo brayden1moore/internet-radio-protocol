@@ -115,7 +115,7 @@ class Stream:
     from each station and convert it into a dict to be served at /info.
     '''
 
-    def __init__(self, from_dict=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False):
+    def __init__(self, from_dict=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False, genres=None):
         # station info 
         self.name = name
         self.logo = logo
@@ -129,6 +129,7 @@ class Stream:
         self.bandcamp_link = bandcamp_link
         self.soundcloud_link = soundcloud_link
         self.hidden = hidden
+        self.genres = genres
 
         # show info
         self.status = "Online"
@@ -142,7 +143,6 @@ class Stream:
         self.last_updated = None
         self.one_liner = None
         self.listeners = None
-        self.genres = None
 
         if isinstance(from_dict, dict):
             self.name = from_dict.get('name')
@@ -1141,7 +1141,8 @@ Stream(
         support_link = "https://donate.kqed.org/donatetoday",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        genres = ['Talk']
 ),
 Stream(
         name = "KUSF",
