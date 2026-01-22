@@ -723,6 +723,7 @@ class Stream:
             self.genres = extract_value(info, ['genres'], rule='list_genres')
              
         elif self.name == 'HKCR':
+            '''
             stream_url = self.stream_link
             tmp_file = tempfile.mktemp(suffix='.jpg')
             
@@ -737,7 +738,11 @@ class Stream:
                                     capture_output=True, text=True)
                 os.remove(tmp_file)
                 self.now_playing = result.stdout.strip().strip('-').strip("'").strip(':').strip('Live - ')
-
+            '''
+            info = requests.get(self.info_link).json()
+            if len(info) > 0:
+                self.now_playing = extract_value(info, ['title'])
+            
         elif self.name == 'CKUT':
             info = requests.get(self.info_link).json()
             self.now_playing = info['program']['title_html']
