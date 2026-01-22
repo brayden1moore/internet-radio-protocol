@@ -983,7 +983,8 @@ Stream(
         support_link = "https://blooplondonshop.com",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        hidden = True
 ),
 Stream(
         name = "CKUT",
@@ -1009,7 +1010,8 @@ Stream(
         support_link = "https://www.clydebuiltradio.com/support",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        hidden = True
 ),
 Stream(
         name = "Desire Path Radio",
@@ -1322,7 +1324,8 @@ Stream(
         support_link = "https://www.paypal.com/paypalme/support80000",
         insta_link = "https://www.instagram.com/radio80000/",
         bandcamp_link = None,
-        soundcloud_link = "https://soundcloud.com/radio80000"
+        soundcloud_link = "https://soundcloud.com/radio80000",
+        hidden = True
 ),
 Stream(
         name = "Radio Alhara",
@@ -1479,7 +1482,8 @@ Stream(
         support_link = "https://www.patreon.com/sharedfrequenciesradio",
         insta_link = "https://www.instagram.com/sharedfrequenciesradio/",
         bandcamp_link = None,
-        soundcloud_link = "https://soundcloud.com/sharedfrequenciesradio"
+        soundcloud_link = "https://soundcloud.com/sharedfrequenciesradio",
+        hidden = True
 ),
 Stream(
         name = "Skylab Radio",
@@ -1545,7 +1549,8 @@ Stream(
         support_link = "https://donate.stripe.com/28o2ai08vd4qfmMfZ1",
         insta_link = "https://www.instagram.com/sutrofm",
         bandcamp_link = None,
-        soundcloud_link = "https://soundcloud.com/sutrofm"
+        soundcloud_link = "https://soundcloud.com/sutrofm",
+        hidden = True
 ),
 Stream(
         name = "The Lot Radio",
@@ -1571,7 +1576,8 @@ Stream(
         support_link = "mailto:projectmehari@gmail.com",
         insta_link = "https://www.instagram.com/vestiges_life/",
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        hidden = True
 ),
 Stream(
         name = "Voices Radio",
