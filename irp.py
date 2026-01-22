@@ -876,7 +876,7 @@ class Stream:
             info = requests.get(self.info_link).text
             self.now_playing = info
     
-        elif self.name == 'Pan Africa Space Station':
+        elif self.name == 'Pan African Space Station':
             info = requests.get(self.info_link).json()
             self.now_playing_artist = extract_value(info, ['current','metadata','artist_name'])
             self.now_playing = extract_value(info, ['current','metadata','track_title']) or ''
