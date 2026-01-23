@@ -897,6 +897,7 @@
                 playIcon.style.display = 'none';
                 pauseIcon.style.display = 'block';
                 player.classList.remove('player-paused');
+                shareDiv.classList.remove('player-paused');
                 player.classList.add('pulsing');                
                 playerAudio.play().then(()=>{
                     player.classList.remove('pulsing');      
@@ -910,6 +911,7 @@
                 pauseIcon.style.display = 'none';
                 playerAudio.pause();
                 player.classList.add('player-paused');
+                shareDiv.classList.add('player-paused');
             }
         }
 
