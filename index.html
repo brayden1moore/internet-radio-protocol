@@ -123,6 +123,9 @@
     }
 
     #player-name-and-tags {
+        width: calc(100vw - 175px);
+        overflow-x: scroll;
+        display: flex;
         display: flex;
         margin-bottom: 5px;
     }
@@ -338,16 +341,17 @@
 
         #player-info-div {
             display: block;
-            overflow-x: hidden;
+            overflow-x: scroll;
         }
 
         #player-info {
+            width: fit-content;
             font-size: 10pt !important;
         }
 
         #player-img {
             border: 1px solid black;
-            height: 43px;
+            height: 45px;
             margin-right: 13px;
             z-index: 1001;
         }
@@ -363,13 +367,19 @@
         }
 
         #share-icon {
+            background-color: #00bbff;
+            display: flex;
+            align-items: center;
             position: fixed;
-            right: 5px;
+            right: 0px;
+            height: 70px;
             z-index: 20;
             cursor: pointer;
             margin-left: auto;
-            padding-right: 15px;
+            padding-right: 20px;
             font-size: 20pt;
+            padding-left: 10px;
+            width: 28px;
         }
             
         #player {
@@ -890,6 +900,7 @@
                 player.classList.add('pulsing');                
                 playerAudio.play().then(()=>{
                     player.classList.remove('pulsing');      
+                    shareDiv.classList.remove('pulsing');  
                     theStation.classList.remove('pulsing');          
                     theStation.classList.add('playing');
                 });
@@ -902,6 +913,7 @@
             }
         }
 
+        const shareDiv = document.getElementById('share-icon');
         let currentPositionInPrev = 0;
         let previousStations = [];
         function chooseStation(id, random=false, fromLink=false, fromHistory=false) {
@@ -923,7 +935,6 @@
             const logo = station.querySelector('.a-logo').src;
             document.querySelectorAll('meta[property=og\\:image]')[0].setAttribute('content', logo.replace('https://internetradioprotocol.org',''))
 
-
             playerImg.src = logo;
             player.dataset.id = id;
             playerName.textContent = id;
@@ -935,6 +946,7 @@
             updateMediaSession(oneLiner, id, logo);
             if (!fromLink) {
                 player.classList.add('pulsing');
+                shareDiv.classList.add('pulsing');
                 togglePlayer();
             }
         }
@@ -1000,7 +1012,7 @@
                 overflow: hidden;
                 white-space: nowrap;
                 display: inline-block;
-                width: ${width};
+                width: 100%;
                 position: relative;
                 top: 1px;
                 will-change: transform;
@@ -1196,16 +1208,20 @@
                 playerTags.innerHTML = existingStation.querySelector(".station-tag-div").innerHTML;
                 oneLinerElement.textContent = oneLiner;
                 oneLinerElement.dataset.oneLiner = oneLiner; 
+                
+                const width = window.innerWidth - shareIconDiv.offsetWidth - playerImg.offsetWidth - playerIcons.offsetWidth - 80;
+                console.log(width);
+                console.log(playerInfo.scrollWidth);
+                needsMarquee = playerInfo.scrollWidth > width;   
+                console.log("Needs Marquee?");
+                console.log(needsMarquee);
+
+                if (needsMarquee) {
+                    setupOneLinerMarquee(oneLinerElement, width + 'px', 'left');
+                };
             };
 
-            const width = window.innerWidth - shareIconDiv.offsetWidth - playerImg.offsetWidth - playerIcons.offsetWidth - 80;
-            needsMarquee = playerInfo.scrollWidth > width;   
-
-            if (needsMarquee) {
-                setupOneLinerMarquee(oneLinerElement, width + 'px', 'left');
-            };
-
-            playerInfo.style.width = width + 'px';
+            //playerInfo.style.width = width + 'px';
         }
 
         function orderStations(by, keys=null) {
@@ -1454,7 +1470,7 @@
             })
             
             const liveCount = document.querySelector('#live-count');
-            liveCount.textContent = `${live + offline + rerun} stations, ${live} live, ${offline} offline - `;
+            liveCount.textContent = `${live + offline + rerun} stations, ${live} live, ${offline} offline. `;
             
             const lastUpdated = document.querySelector('.last-updated');
             const now = new Date();
