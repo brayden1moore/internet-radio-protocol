@@ -899,6 +899,7 @@
                 player.classList.remove('player-paused');
                 shareDiv.classList.remove('player-paused');
                 player.classList.add('pulsing');                
+                shareDiv.classList.add('pulsing'); 
                 playerAudio.play().then(()=>{
                     player.classList.remove('pulsing');      
                     shareDiv.classList.remove('pulsing');  
