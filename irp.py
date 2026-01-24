@@ -1889,6 +1889,8 @@ def main_loop():
                             updated[name] = val
                         else:
                             updated[name] = [i.to_dict() for i in streams if i.name == name][0]
+                    else:
+                        print(val, name)
 
             with open('info.json', 'w') as f:
                 json.dump(updated, f, indent=4, sort_keys=True, default=str)
