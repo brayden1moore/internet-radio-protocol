@@ -898,9 +898,9 @@ class Stream:
             info = requests.get(self.info_link).json()
             self.status = 'Live' if info['status'] == 'online' else 'Offline'
             self.show_logo = info, ['liveNow', 'artwork']
-            self.now_playing = extract_value(info, ['title']).split(' - ')[0]
+            self.now_playing = extract_value(info, ['liveNow','title']).split(' - ')[0]
             try:
-                self.now_playing_artist = extract_value(info, ['title']).split(' - ')[1]
+                self.now_playing_artist = extract_value(info, ['liveNow','title']).split(' - ')[1]
             except:
                 self.now_playing_artist = None
 
