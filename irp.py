@@ -1884,10 +1884,11 @@ def main_loop():
                     error_dict[name] = err
                 else:
                     name, val = result
-                    if (val['oneLiner'] != [i.one_liner for i in streams if i.name == name][0]) & (val['status'] != 'Offline'):
-                        updated[name] = val
-                    else:
-                        updated[name] = [i.to_dict() for i in streams if i.name == name][0]
+                    if isinstance(val, dict):
+                        if (val['oneLiner'] != [i.one_liner for i in streams if i.name == name][0]) & (val['status'] != 'Offline'):
+                            updated[name] = val
+                        else:
+                            updated[name] = [i.to_dict() for i in streams if i.name == name][0]
 
             with open('info.json', 'w') as f:
                 json.dump(updated, f, indent=4, sort_keys=True, default=str)
