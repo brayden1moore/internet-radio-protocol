@@ -897,7 +897,7 @@ class Stream:
         elif self.name == 'Refuge Worldwide':
             info = requests.get(self.info_link).json()
             self.status = 'Live' if info['status'] == 'online' else 'Offline'
-            self.show_logo = info, ['liveNow', 'artwork']
+            self.show_logo = extract_value(info, ['liveNow', 'artwork'])
             self.now_playing = extract_value(info, ['liveNow','title']).split(' - ')[0]
             try:
                 self.now_playing_artist = extract_value(info, ['liveNow','title']).split(' - ')[1]
@@ -981,7 +981,7 @@ Stream(
         stream_link = "https://cashmereradio.out.airtime.pro/cashmereradio_b",
         main_link = "https://cashmereradio.com/",
         about = "Cashmere Radio is a not-for-profit community experimental radio station which was originally based in Lichtenberg, Berlin for the first six years of its existence before recently moving to our new studio headquarters in Wedding. The ambition of the station is to preserve and further radio and broadcasting practices by playing with the plasticity and malleability of the medium.",
-        support_link = "https://www.patreon.com/refugeworldwide",
+        support_link = "https://cashmereradio.bandcamp.com/",
         insta_link = "https://www.instagram.com/cashmere_radio/",
         bandcamp_link = "https://cashmereradio.bandcamp.com/",
         soundcloud_link = "https://www.mixcloud.com/CashmereRadio/"
