@@ -903,7 +903,12 @@ class Stream:
                 self.now_playing_artist = extract_value(info, ['liveNow','title']).split(' - ')[1]
             except:
                 self.now_playing_artist = None
-
+            
+        elif self.name == 'Cashmere Radio':
+            info = requests.get(self.info_link).json()
+            self.status = 'Live' if info['isLive']==True else 'Offline' if info['isActive']==False else 'Re-Run'
+            self.now_playing = extract_value(info, ['name'])
+            self.now_playing_description = extract_value(info, ['description'])
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
@@ -922,8 +927,8 @@ class Stream:
         rerun_strs = ['rotazione notte','night moves','night files','repeats','(r)', 're-run', 're-wav', 'restream', 'playlist','replays','stayfmix','picks from the archive','archivo','subtle selects']
 
         if self.status != 'Offline':
-            self.status = 'Live'
-            if any(string in self.one_liner.lower() for string in rerun_strs) or self.name == 'Monotonic Radio':
+            #self.status = 'Live'
+            if any(string in self.one_liner.lower() for string in rerun_strs):
                 self.status = 'Re-Run'
             if self.status == 'Live':
                 date1 = re.search("([0-9]{2}\/[0-9]{2}\/[0-9]{4})", self.one_liner)
@@ -968,6 +973,19 @@ class Stream:
 
 ## define streams
 streams = [
+Stream(
+        name = "Cashmere Radio",
+        logo = "https://internetradioprotocol.org/logos/cashmere.jpg",
+        location = "Berlin",
+        info_link = "https://cashmereradio.com/api/live/?stream=30046",
+        stream_link = "https://cashmereradio.out.airtime.pro/cashmereradio_b",
+        main_link = "https://cashmereradio.com/",
+        about = "Cashmere Radio is a not-for-profit community experimental radio station which was originally based in Lichtenberg, Berlin for the first six years of its existence before recently moving to our new studio headquarters in Wedding. The ambition of the station is to preserve and further radio and broadcasting practices by playing with the plasticity and malleability of the medium.",
+        support_link = "https://www.patreon.com/refugeworldwide",
+        insta_link = "https://www.instagram.com/cashmere_radio/",
+        bandcamp_link = "https://cashmereradio.bandcamp.com/",
+        soundcloud_link = "https://www.mixcloud.com/CashmereRadio/"
+),
 Stream(
         name = "Refuge Worldwide",
         logo = "https://internetradioprotocol.org/logos/refuge.jpg",
