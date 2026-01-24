@@ -894,6 +894,16 @@ class Stream:
             self.now_playing = extract_value(info, ['current','metadata','track_title']) or ''
             self.now_playing = self.now_playing.replace('.mp3','')
 
+        elif self.name == 'Refuge Worldwide':
+            info = requests.get(self.info_link).json()
+            self.status = 'Live' if info['status'] == 'online' else 'Offline'
+            self.show_logo = info, ['liveNow', 'artwork']
+            self.now_playing = extract_value(info, ['title']).split(' - ')[0]
+            try:
+                self.now_playing_artist = extract_value(info, ['title']).split(' - ')[1]
+            except:
+                self.now_playing_artist = None
+
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
@@ -958,6 +968,19 @@ class Stream:
 
 ## define streams
 streams = [
+Stream(
+        name = "Refuge Worldwide",
+        logo = "https://internetradioprotocol.org/logos/refuge.jpg",
+        location = "Berlin",
+        info_link = "https://refugeworldwide.com/api/schedule",
+        stream_link = "https://streaming.radio.co/s3699c5e49/listen",
+        main_link = "https://refugeworldwide.com/",
+        about = "Refuge Worldwide is a radio station, educational platform and event series, operating in Berlin Neukölln. The project started - simply named Refuge - in 2015 as a fundraising initiative working in solidarity with grassroots and non-profit organisations. Among others, we have worked with a young women’s centre, refugee housing support associations, a music school for marginalised persons, social equity groups, homelessness agencies, and a shelter for women and young persons fleeing domestic violence.",
+        support_link = "https://www.patreon.com/refugeworldwide",
+        insta_link = "https://www.instagram.com/RefugeWorldwide/",
+        bandcamp_link = None,
+        soundcloud_link = None
+),
 Stream(
         name = "Pan African Space Station",
         logo = "https://internetradioprotocol.org/logos/pass.png",
