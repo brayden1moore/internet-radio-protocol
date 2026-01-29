@@ -930,6 +930,9 @@ class Stream:
             #self.status = 'Live'
             if any(string in self.one_liner.lower() for string in rerun_strs):
                 self.status = 'Re-Run'
+            else:
+                self.status = 'Live'
+                
             if self.status == 'Live':
                 date1 = re.search("([0-9]{2}\/[0-9]{2}\/[0-9]{4})", self.one_liner)
                 if date1:
