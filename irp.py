@@ -748,6 +748,7 @@ class Stream:
         elif self.name == 'CKUT':
             info = requests.get(self.info_link).json()
             self.genres = ['Student']
+            self.status = 'Live'
             self.now_playing = info['program']['title_html']
             self.now_playing_description_long = clean_text(info['program']['description_html'])
             if len(self.now_playing_description_long) > 44:
@@ -932,7 +933,7 @@ class Stream:
                 self.status = 'Re-Run'
             else:
                 self.status = 'Live'
-                
+
             if self.status == 'Live':
                 date1 = re.search("([0-9]{2}\/[0-9]{2}\/[0-9]{4})", self.one_liner)
                 if date1:
@@ -1185,7 +1186,8 @@ Stream(
         support_link = "https://kkjz.secureallegiance.com/kkjz/WebModule/Donate.aspx?P=WEB2020&PAGETYPE=PLG&CHECK=RmCkD65dLKTtDFdmd%2bo4ruzWDeZ%2beA1M",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        genres = ['Jazz']
 ),
 Stream(
         name = "KQED",
