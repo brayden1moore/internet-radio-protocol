@@ -916,6 +916,11 @@ class Stream:
             self.now_playing = extract_value(info, ['currentShow', 0, 'name'])
             self.now_playing_description = extract_value(info, ['currentShow',0,'description'])
 
+        elif self.name == 'Worldwide FM':
+            info = requests.get(self.info_link).json()
+            self.now_playing = extract_value(info, ['currentEvent','showName'])
+            self.now_playing_artist = extract_value(info, ['currentEvent','artists'], rule='list')
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
@@ -982,6 +987,17 @@ class Stream:
 
 ## define streams
 streams = [
+Stream(
+        name = "Worldwide FM",
+        logo = "https://internetradioprotocol.org/logos/wwfm.png",
+        location = "London",
+        info_link = "https://www.worldwidefm.net/api/live/current",
+        stream_link = "https://worldwide-fm.radiocult.fm/stream",
+        main_link = "https://www.worldwidefm.net",
+        about = "Worldwide FM curates and champions underground music, stories and culture from around the world. We showcase diverse and emerging talent. We build connections between artists, listeners and music communities. Our mission is to support and encourage the development of music cultures that originate from local, independent and community-driven moments around the world. Our radio programming, content production and special projects explore and connect the evolving diversity of global creativity across music. Founded in 2016 by internationally renowned DJ and broadcaster Gilles Peterson, we’re an independent community of music lovers, creators and organisers in nearly every corner of the world.",
+        support_link = "https://www.worldwidefm.net/membership",
+        insta_link = "https://www.instagram.com/worldwide.fm"
+),
 Stream(
         name = "Soho Radio",
         logo = "https://internetradioprotocol.org/logos/soho.jpg",
