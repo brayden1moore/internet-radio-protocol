@@ -911,6 +911,11 @@ class Stream:
             self.now_playing = extract_value(info, ['name'])
             self.now_playing_description = extract_value(info, ['description'])
 
+        elif self.name == 'Soho Radio':
+            info = requests.get(self.info_link).json()
+            self.now_playing = extract_value(info, ['currentShow', 0, 'name'])
+            self.now_playing_description = extract_value(info, ['currentShow',0,'description'])
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
@@ -977,6 +982,17 @@ class Stream:
 
 ## define streams
 streams = [
+Stream(
+        name = "Soho Radio",
+        logo = "https://internetradioprotocol.org/logos/soho.jpg",
+        location = "Soho",
+        info_link = "https://sohoradiomusic.doughunt.co.uk/api/live-info",
+        stream_link = "https://sohoradiomusic.doughunt.co.uk:8010/320mp3",
+        main_link = "https://sohoradio.com/",
+        about = "From its grass-roots founding in 2014, Soho Radio has grown to be an influential voice and amplifier for music and culture, bringing together people from Soho, London, the UK and globally. We are an online radio station broadcasting 250+ shows a month live from Soho and from New York to the world.",
+        support_link = "https://sohoradiolondon.store",
+        insta_link = "https://www.instagram.com/sohoradio/"
+),
 Stream(
         name = "Cashmere Radio",
         logo = "https://internetradioprotocol.org/logos/cashmere.jpg",
