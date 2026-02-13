@@ -114,7 +114,11 @@
         <div id="text-container">
             Please donate to a station if you like it.<br>
             
-            <a target="_blank" href="https://one-radio.com/info">API</a> <a href="mailto:brayden@braydenmoore.com">Email</a>  <a target="_blank" href="https://github.com/brayden1moore/internet-radio-protocol">GitHub</a>  <a class='insta-link' target='_blank' href='https://www.instagram.com/scud.studio/'>Instagram</a>
+            <a target="_blank" href="https://one-radio.com/info">API</a> 
+            <a href="mailto:brayden@braydenmoore.com">Email</a>  
+            <a target="_blank" href="https://github.com/brayden1moore/internet-radio-protocol">GitHub</a>  
+            <a class='insta-link' target='_blank' href='https://www.instagram.com/scud.studio/'>Instagram</a>
+            <a id='dark-link' onclick="toggleDark()">Dark</a>
         </div>
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
@@ -161,6 +165,7 @@
         padding: 4px;
         margin-top: 7px;
         font-size: 10pt;
+        color: black;
     }
 
     #modal-description-container {
@@ -177,6 +182,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        background-color: white;
     }
     
     .support-link {background-color:#FFFF00; }
@@ -346,9 +352,11 @@
         display: none;
         }
 
+
         .player-paused {
-            background-color: #FFF !important;
+            background-color: var(--player-paused-color) !important;
         }
+   
 
         #player-info-div {
             display: block;
@@ -406,6 +414,7 @@
             left: 0px;
             width: 100%;
             z-index: 1000;
+            color: black;
             background-color: #00BBFF;
             border: 1px solid black;
             display: none;
@@ -576,15 +585,63 @@
         transition: background-color 1s ease-out, color 1s ease-out;
         }
 
+        .dark-scud {
+            filter:invert();
+        }
+        .dark-text-container a {
+            color: white !important;
+            border-bottom: 1px solid white;
+        }
+
+        .dark-text-container a:hover {
+            color: black !important;
+            background-color: white !important;
+            border-bottom: 1px solid white;
+        }        
+
+        .dark-top-bar {
+            border-bottom: 1px solid rgb(70,70,70) !important;
+            background-color: rgb(17, 17, 17) !important;
+            color: white !important;
+        }
+
+        .dark-play {
+            background-color: rgb(17, 17, 17) !important;
+            color: white !important;     
+            fill: white !important;   
+            border-right: 1px solid rgb(70,70,70) !important;
+        }
+
+        .dark-play:hover {
+            background-color: yellow !important;
+            color: black !important;     
+            fill: black !important;   
+        }
+        .dark-play polygon:hover {  
+            fill: black !important;   
+        }
+
+        .dark-second-bar {
+            border: 1px solid rgb(70,70,70) !important;
+            background-color: rgb(17, 17, 17) !important;
+            color: white !important;
+        }
+        
         .dark-stream-name {
+            background-color: rgb(17,17,17) !important;
             padding: 0px !important;
+        }
+        .dark-station:hover .dark-stream-name {
+            color: white;
         }
         .stream-name {
             font-family: 'Archivo Light';
             width: fit-content;
             padding: 2px 4px;
             letter-spacing: -0.05em;
-            background-color:#000000 !important; color:#FFFFFF !important; font-size: 12pt;}
+            background-color: rgb(17, 17, 17);
+            color:#FFFFFF !important; 
+            font-size: 12pt;}
         .links {display:none; margin-top: 10px; margin-bottom: 2px;}
 
 
@@ -681,20 +738,43 @@
 
         .dark-background {
             color: white;
-            background-color: #1f1f1f !important;
+            background-color: rgb(45,45,45) !important;
+        }
+        .dark-sort-icon {
+            filter: invert();
         }
         .dark-station {
             color: white;
-            background-color: #000000 !important;
-        }        
+            background-color: rgb(17, 17, 17) !important;    
+            border: none !important;    
+            box-shadow: 0 16px 17px rgba(0, 0, 0, 0.3);
+        }    
+        .dark-station:hover {  
+            background-color: yellow !important;
+            color: black !important;  
+        }
         .dark-title {
             color: #FFFFFF !important;
         }    
         .dark-favorite-star {
-            color: yellow !important;
+            color: white !important;
+        }
+        .dark-station:hover .dark-favorite-star {
+            color: black !important;
         }
         .dark-logo-overlay {
-            border-color: #1f1f1f !important; 
+            border-color: black !important; 
+        }
+        .dark-tag {
+            border-color: transparent !important;
+        }
+        .dark-modal {
+            border: 1px solid rgb(70,70,70) !important;
+            background-color: rgb(17, 17, 17) !important
+        }
+        .dark-modal-station-name {
+            padding: 0px !important;
+            background-color: transparent !important;
         }
 
         .logo-and-overlay {
@@ -745,7 +825,13 @@
         @font-face {font-family: "Archivo Bold";src: url("assets/Archivo-Bold.ttf") format("truetype");}
         @font-face {font-family: "Archivo SemiBold";src: url("assets/Archivo-SemiBold.ttf") format("truetype");}
 
-        a {font-size: 10pt; color:#000000; border-bottom: 1px solid black; text-decoration: none;}
+        a {
+            font-size: 10pt; 
+            color:#000000; 
+            border-bottom: 1px solid black; 
+            text-decoration: none;
+            cursor: pointer;
+        }
         a:hover {background-color: #000000; color:#FFFFFF}
        
         @font-face {font-family: "Archivo Light";src: url("assets/Archivo-Light.ttf") format("truetype");}
@@ -757,8 +843,41 @@
                 transform: rotate(360deg);
             }
         }
-         @keyframes pulse{0%{background:#ffffff}50%{background:#ddd}100%{background:#ffffff}}
-        .pulsing{animation:pulse 1s infinite}
+
+        :root {
+            --pulse: pulse;
+            --player-paused-color: #00bbff;
+        }
+
+         @keyframes pulse {
+            0%{
+                background:#ffffff
+            }
+            50%{
+                background:#ddd
+            }
+            100%{
+                background:#ffffff
+            }
+        }
+
+        @keyframes dark-pulse {
+            0%{
+                background: rgb(45,45,45)
+            }
+            50%{
+                background: rgb(17,17,1)
+            }
+            100%{
+                background: rgb(45,45,45)
+            }
+        }
+
+
+        .pulsing{
+            animation: var(--pulse) 1s infinite
+        } 
+
         .streams-container {display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 5px; margin-bottom:15px;}
         @media (min-aspect-ratio: 8/10) 
         {
@@ -1744,23 +1863,87 @@
 
         const titleText = document.getElementById('title');
         const mainLogo = document.getElementById('main-logo');
-        function toggleDark() {
-            document.querySelectorAll('.a-station-container').forEach(station=>{
-                station.classList.add('dark-station');
-            });     
-            document.querySelectorAll('.stream-name').forEach(station=>{
-                station.classList.add('dark-stream-name');
-            });       
-            document.querySelectorAll('.favorite-star').forEach(station=>{
-                station.classList.add('dark-favorite-star');
-            });   
-            document.querySelectorAll('.logo-and-overlay').forEach(station=>{
-                station.classList.add('dark-logo-overlay');
-            });     
-            document.body.classList.add('dark-background');
-            title.classList.add('dark-title');
-            mainLogo.src = 'assets/earswhite.png';
+        
+        let dark = localStorage.getItem('darkMode') === 'true';
+
+        function toggleDark(setDark = false) {
+            const root = document.documentElement;
+            
+            if (!dark | setDark) {
+                // make dark mode
+                document.querySelectorAll('.a-station-container').forEach(station => {
+                    station.classList.add('dark-station');
+                });
+                document.querySelectorAll('.stream-name').forEach(station => {
+                    station.classList.add('dark-stream-name');
+                });
+                document.querySelectorAll('.favorite-star').forEach(station => {
+                    station.classList.add('dark-favorite-star');
+                });
+                document.querySelectorAll('.logo-and-overlay').forEach(station => {
+                    station.classList.add('dark-logo-overlay');
+                });
+                document.querySelectorAll('.tag').forEach(station => {
+                    station.classList.add('dark-tag');
+                });
+                document.body.classList.add('dark-background');
+                document.querySelector("#change-sort-icon").classList.add('dark-sort-icon');
+                title.classList.add('dark-title');
+                document.querySelector('#top-bar').classList.add('dark-top-bar');
+                document.querySelector('#second-bar').classList.add('dark-second-bar');
+                document.querySelector('#play-random-button').classList.add('dark-play');
+                document.querySelector('#text-container').classList.add('dark-text-container');
+                document.querySelector('#play-random-triangle').classList.add('dark-play');
+                document.querySelector('#scud-logo').classList.add('dark-scud');
+                document.querySelector('#modal').classList.add('dark-modal');
+                document.querySelector('#modal-station-name').classList.add('dark-modal-station-name');
+                document.querySelector('#dark-link').textContent = 'Light';
+                mainLogo.src = 'assets/earswhite.png';
+                root.style.setProperty('--pulse', 'dark-pulse');
+                
+                dark = true;
+            } else {
+                // make light mode
+                document.querySelectorAll('.a-station-container').forEach(station => {
+                    station.classList.remove('dark-station');
+                });
+                document.querySelectorAll('.stream-name').forEach(station => {
+                    station.classList.remove('dark-stream-name');
+                });
+                document.querySelectorAll('.favorite-star').forEach(station => {
+                    station.classList.remove('dark-favorite-star');
+                });
+                document.querySelectorAll('.logo-and-overlay').forEach(station => {
+                    station.classList.remove('dark-logo-overlay');
+                });
+                document.querySelectorAll('.tag').forEach(station => {
+                    station.classList.remove('dark-tag');
+                });
+                document.body.classList.remove('dark-background');
+                document.querySelector("#change-sort-icon").classList.remove('dark-sort-icon');
+                title.classList.remove('dark-title');
+                document.querySelector('#top-bar').classList.remove('dark-top-bar');
+                document.querySelector('#second-bar').classList.remove('dark-second-bar');
+                document.querySelector('#play-random-button').classList.remove('dark-play');
+                document.querySelector('#text-container').classList.remove('dark-text-container');
+                document.querySelector('#play-random-triangle').classList.remove('dark-play');
+                document.querySelector('#scud-logo').classList.remove('dark-scud');
+                document.querySelector('#modal').classList.remove('dark-modal');
+                document.querySelector('#modal-station-name').classList.remove('dark-modal-station-name');
+                document.querySelector('#dark-link').textContent = 'Dark';
+                mainLogo.src = 'assets/ears.png'; 
+                root.style.setProperty('--pulse', 'pulse');
+                
+                dark = false;
+            }
+            
+            localStorage.setItem('darkMode', dark);
         }
-        //toggleDark();
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (dark) {
+                toggleDark(true);
+            }
+        });
 
         </script>
