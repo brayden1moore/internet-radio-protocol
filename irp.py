@@ -1920,16 +1920,17 @@ def main_loop():
         try:
             start_time = time.time()
 
+            # threaded updates
             with ThreadPoolExecutor(max_workers=10) as executor:
                 futures = [executor.submit(process_stream, stream) 
                         for stream in streams]
                 results = [future.result() for future in futures]
 
             processing_time = time.time() - start_time
-
             error_dict = {}
             updated = {}
 
+            # pull into info json and collect errors
             for result in results:
                 if len(result) == 3:
                     name, val, err = result
@@ -1947,18 +1948,24 @@ def main_loop():
             with open('info.json', 'w') as f:
                 json.dump(updated, f, indent=4, sort_keys=True, default=str)
 
-            try:
-                with open('errorlog.txt', 'r') as log:
-                    existing_lines = log.read().split('\n')
-            except FileNotFoundError:
-                existing_lines = ['']
-            
+            # email errors and save to /errors endpoint
             error_lines = [val for key, val in error_dict.items()]
-            #if len(' '.join(error_lines)) != len(' '.join(existing_lines)):
             send_email(error_dict)
-
             with open('errorlog.txt', 'w') as log:
                 log.write('\n'.join(error_lines))
+
+            # update /status endpoint
+            status = {
+                'last_updated':time.time(),
+                'errors':[key for key in error_dict.items()],
+                'total': len(updated),
+                'live': len([key for key,val in updated.items() if val['status']=='Live']),
+                're-run': len([key for key,val in updated.items() if val['status']=='Re-Run']),
+                'offline': len([key for key,val in updated.items() if val['status']=='Offline']),
+                'stations': [key for key,val in updated.items()]
+            }
+            with open('status.json', 'w') as f:
+                json.dump(status, f, indent=4, sort_keys=True, default=str)            
 
             print(f'Done! Total time {processing_time}')
             time.sleep(60)
