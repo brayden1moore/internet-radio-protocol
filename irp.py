@@ -1965,9 +1965,9 @@ def main_loop():
                 'errors': [key for key in error_dict.items()],
                 'total': len(updated),
                 'hidden': len([key for key,val in updated.items() if val['hidden']==True]),
-                'live': len([key for key,val in updated.items() if val['hidden']!=True & val['status']=='Live']),
-                're-run': len([key for key,val in updated.items() if val['hidden']!=True & val['status']=='Re-Run']),
-                'offline': len([key for key,val in updated.items() if val['hidden']!=True & val['status']=='Offline']),
+                'live': len([key for key,val in updated.items() if val['hidden']!=True and val['status']=='Live']),
+                're-run': len([key for key,val in updated.items() if val['hidden']!=True and val['status']=='Re-Run']),
+                'offline': len([key for key,val in updated.items() if val['hidden']!=True and val['status']=='Offline']),
                 'stations': [key for key,val in updated.items()]
             }
             with open('status.json', 'w') as f:
