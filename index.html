@@ -1455,27 +1455,6 @@
             localStorage.setItem('sortOrder',by);
         }
 
-        function getLastUpdate() { 
-            fetch(`https://internetradioprotocol.org/status?cacheBust=${Math.random()}`)
-                    .then(response => response.json())
-                    .then(json => {
-                        const lastUpdate = json['last_updated_epoch'];
-                        console.log(lastUpdate);
-                        const lastUpdateDate = new Date(lastUpdate * 1000);
-                        console.log(lastUpdateDate);
-                        const formatter = new Intl.DateTimeFormat('en-US', {
-                            weekday: 'short',
-                            month: 'short',
-                            day: 'numeric',
-                            hour: 'numeric',
-                            minute: '2-digit',
-                            hour12: true
-                        });
-                        console.log(formatter.format(lastUpdateDate));
-                        return formatter.format(lastUpdateDate);
-                    });
-        }
-
         function sortStations(toggle=false) {
             currentOrder = localStorage.getItem('sortOrder') || 'random';
             if (toggle) {
@@ -1650,20 +1629,35 @@
             const liveCount = document.querySelector('#live-count');
             liveCount.textContent = `${live + offline + rerun} stations, ${live} live, ${offline} offline. `;
             
-            const lastUpdatedValue = getLastUpdate();
-            console.log(lastUpdatedValue);
-            const lastUpdated = document.querySelector('.last-updated');
-            lastUpdated.textContent = 'Updated ' + lastUpdatedValue;
-            lastUpdated.classList.add('flash');
-            setTimeout(function() {
-                lastUpdated.classList.add('flash-out');
-                lastUpdated.classList.remove('flash');
-            }, 100);
-            setTimeout(function() {
-                lastUpdated.classList.remove('flash-out');
-            }, 1100);
+            fetch(`https://internetradioprotocol.org/status?cacheBust=${Math.random()}`)
+                    .then(response => response.json())
+                    .then(json => {
+                        const lastUpdate = json['last_updated_epoch'];
+                        console.log(lastUpdate);
+                        const lastUpdateDate = new Date(lastUpdate * 1000);
+                        console.log(lastUpdateDate);
+                        const formatter = new Intl.DateTimeFormat('en-US', {
+                            weekday: 'short',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true
+                        });
+                        lastUpdatedValue = formatter.format(lastUpdateDate);
+                        const lastUpdated = document.querySelector('.last-updated');
+                        lastUpdated.textContent = 'Updated ' + lastUpdatedValue;
+                        lastUpdated.classList.add('flash');
+                        setTimeout(function() {
+                            lastUpdated.classList.add('flash-out');
+                            lastUpdated.classList.remove('flash');
+                        }, 100);
+                        setTimeout(function() {
+                            lastUpdated.classList.remove('flash-out');
+                        }, 1100);
 
-            calculateMarquees(updatedOneLiners);
+                        calculateMarquees(updatedOneLiners);
+                    });
         }
 
         function populateTags(data) {
