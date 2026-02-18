@@ -1648,6 +1648,7 @@
             liveCount.textContent = `${live + offline + rerun} stations, ${live} live, ${offline} offline. `;
             
             const lastUpdatedValue = getLastUpdate();
+            const lastUpdated = document.querySelector('.last-updated');
             lastUpdated.textContent = 'Updated ' + lastUpdatedValue;
             lastUpdated.classList.add('flash');
             setTimeout(function() {
