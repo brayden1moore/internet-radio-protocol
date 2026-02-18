@@ -756,19 +756,6 @@ class Stream:
             else: 
                 self.now_playing_description = clean_text(info['program']['description_html'])
 
-        elif self.name == 'KUSF':
-            info = requests.get(self.info_link).json()
-            self.now_playing = extract_value(info, ['now','title'])
-            self.now_playing_subtitle = extract_value(info, ['Track','title'])
-            self.now_playing_description = extract_value(info, ['now','short_description'])
-            self.now_playing_description_long = extract_value(info, ['now','full_description'])
-            self.now_playing_artist = extract_value(info, ['now','hosts',0,'display_name'])
-            self.additional_info = None #extract_value(json=info, location=['now','categories'], sub_location=['title'], rule='list')
-            self.genres = ['Student']
-            genres = extract_value(json=info, location=['now','categories'], sub_location=['title'], rule='list_genres')
-            if genres:
-                self.genres.extend(genres)
-
         elif self.name == 'Shared Frequencies':
             info = requests.get(self.info_link).json()
             self.now_playing = extract_value(info, ['current','metadata','track_title'])
