@@ -921,6 +921,13 @@ class Stream:
             self.now_playing = extract_value(info, ['currentEvent','showName'])
             self.now_playing_artist = extract_value(info, ['currentEvent','artists'], rule='list')
 
+        elif self.name == 'KUSF':
+            info = requests.get(self.info_link).json()
+            self.now_playing = extract_value(info, ['show','title'])
+            self.now_playing_subtitle = extract_value(info, ['broadcast','title'])
+            self.now_playing_description = extract_value(info, ['show','summary'])
+            self.now_playing_artist = extract_value(info, ['show','users'], ['display_name'], rule='list')
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
@@ -1239,7 +1246,7 @@ Stream(
         name = "KUSF",
         logo = "https://internetradioprotocol.org/logos/kusf.png",
         location = "San Francisco",
-        info_link = "http://www.kusf.org/api/broadcasting",
+        info_link = "https://kusf.studio.creek.org/api/current?x=1&studioId=21",
         stream_link = "https://listen.kusf.org/stream",
         main_link = "http://www.kusf.org/",
         about = "KUSF is the University of San Francisco's online radio station. KUSF as an FM station was known both nationally and internationally for its innovative programming and approach to music. From 1963 until 2011, KUSF was a student-run broadcast station owned by the University of San Francisco. Following the frequency's sale, KUSF announced plans to become an online-only station.",
