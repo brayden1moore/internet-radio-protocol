@@ -15,6 +15,7 @@ import random
 import pickle
 import time
 import json
+import pytz
 import re
 import io
 import os
@@ -1955,13 +1956,18 @@ def main_loop():
                 log.write('\n'.join(error_lines))
 
             # update /status endpoint
+            now = time.time()
             status = {
-                'last_updated':time.time(),
-                'errors':[key for key in error_dict.items()],
+                'last_updated_epoch': now,
+                'last_updated_utc': datetime.fromtimestamp(now, tz=pytz.timezone('UTC')),
+                'last_updated_et': datetime.fromtimestamp(now, tz=pytz.timezone('America/New_York')),
+                'last_updated_pt': datetime.fromtimestamp(now, tz=pytz.timezone('America/Los_Angeles')),
+                'errors': [key for key in error_dict.items()],
                 'total': len(updated),
-                'live': len([key for key,val in updated.items() if val['status']=='Live']),
-                're-run': len([key for key,val in updated.items() if val['status']=='Re-Run']),
-                'offline': len([key for key,val in updated.items() if val['status']=='Offline']),
+                'hidden': len([key for key,val in updated.items() if val['hidden']==True]),
+                'live': len([key for key,val in updated.items() if val['hidden']!=True & val['status']=='Live']),
+                're-run': len([key for key,val in updated.items() if val['hidden']!=True & val['status']=='Re-Run']),
+                'offline': len([key for key,val in updated.items() if val['hidden']!=True & val['status']=='Offline']),
                 'stations': [key for key,val in updated.items()]
             }
             with open('status.json', 'w') as f:
