@@ -453,7 +453,10 @@ class Stream:
 
         elif self.name == 'Internet Public Radio':
             info = requests.get(self.info_link).json()
-            self.now_playing = info['nowplaying']
+            self.now_playing = extract_value(info, ['tracks','current','metadata','track_title'])
+            if not self.now_playing:
+                self.now_playing = extract_value(info, ['shows','current','name'])
+            self.now_playing_artist = extract_value(info, ['tracks','current','metadata','artist_name'])
             
         elif self.name == 'KQED':
             today = date.today().isoformat()
@@ -1179,8 +1182,8 @@ Stream(
         name = "Internet Public Radio",
         logo = "https://internetradioprotocol.org/logos/internet.png",
         location = "Guadalajara",
-        info_link = "https://c11.radioboss.fm/w/nowplayinginfo?u=270",
-        stream_link = "https://c11.radioboss.fm:18270/stream",
+        info_link = "https://stream-relay-geo.internetpublicradio.live/api-filtered.php?_=1771441745614",
+        stream_link = "https://stream-relay-geo.internetpublicradio.live/stream/main",
         main_link = "https://www.internetpublicradio.live",
         about = "Internet Public Radio is an independent cultural platform and radio station curated by local and international DJs, musicians and visual artists.",
         support_link = "https://www.internetpublicradio.live",
