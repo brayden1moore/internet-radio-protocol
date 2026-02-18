@@ -1459,7 +1459,7 @@
             fetch(`https://internetradioprotocol.org/status?cacheBust=${Math.random()}`)
                     .then(response => response.json())
                     .then(json => {
-                        const lastUpdate = json['last_update_epoch'];
+                        const lastUpdate = json['last_updated_epoch'];
                         const lastUpdateDate = new Date(lastUpdate * 1000);
                         const formatter = new Intl.DateTimeFormat('en-US', {
                             weekday: 'short',
