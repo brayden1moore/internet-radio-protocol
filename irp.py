@@ -1642,7 +1642,7 @@ Stream(
         logo = "https://internetradioprotocol.org/logos/thelot.jpeg",
         location = "New York",
         info_link = "thelotradio.com_j1ordgiru5n55sa5u312tjgm9k@group.calendar.google.com",
-        stream_link = "https://lax-prod-catalyst-0.lp-playback.studio/hls/video+85c28sa2o8wppm58/1_0/index.m3u8?tkn=0PXtAu1v6ORkXaY0CeQxFt",
+        stream_link = "https://nyc-prod-catalyst-0.lp-playback.studio/hls/video+85c28sa2o8wppm58/1_0/index.m3u8?tkn=1861053602",
         main_link = "https://www.thelotradio.com",
         about = "We are an independent, non-profit, online radio station live streaming 24/7 from a reclaimed shipping container on an empty lot in NYC. Expect a continuous stream of the best and most varied music New York City has to offer.",
         support_link = "https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=TNGKXZ2B2Z6LL&source=url&ssrt=1752175817476",
