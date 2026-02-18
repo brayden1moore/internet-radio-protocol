@@ -1633,9 +1633,7 @@
                     .then(response => response.json())
                     .then(json => {
                         const lastUpdate = json['last_updated_epoch'];
-                        console.log(lastUpdate);
                         const lastUpdateDate = new Date(lastUpdate * 1000);
-                        console.log(lastUpdateDate);
                         const formatter = new Intl.DateTimeFormat('en-US', {
                             weekday: 'short',
                             month: 'short',
