@@ -1971,7 +1971,7 @@ def main_loop():
                 'stations': [key for key,val in updated.items()]
             }
             with open('status.json', 'w') as f:
-                json.dump(status, f, indent=4, sort_keys=True, default=str)            
+                json.dump(status, f, indent=4, sort_keys=False, default=str)            
 
             print(f'Done! Total time {processing_time}')
             time.sleep(60)
