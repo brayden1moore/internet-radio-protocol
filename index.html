@@ -499,7 +499,7 @@
             border-bottom: 1px solid black;
             width: 100%;
             z-index: 100;
-            background-color: yellow;
+            background-color: rgb(0, 0, 0);
             position: fixed;
             margin-bottom: 25px;
             display: flex;
@@ -531,7 +531,7 @@
             cursor: pointer;
             width: fit-content;
             display: flex;
-            background-color: yellow;
+            background-color: #00bbff;
             border: 1px solid black;
             border-bottom: none;
             border-top: none;
@@ -823,6 +823,7 @@
             margin-top:0px;
             margin-bottom:0px;
             padding: 7px;
+            filter: invert();
         }
         .a-station {font-family: "Archivo Light"; font-size:8pt; white-space: nowrap; flex-shrink: 0;}
         
@@ -1918,9 +1919,9 @@
                 document.body.classList.add('dark-background');
                 document.querySelector("#change-sort-icon").classList.add('dark-sort-icon');
                 title.classList.add('dark-title');
-                document.querySelector('#top-bar').classList.add('dark-top-bar');
-                document.querySelector('#second-bar').classList.add('dark-second-bar');
-                document.querySelector('#play-random-button').classList.add('dark-play');
+                //document.querySelector('#top-bar').classList.add('dark-top-bar');
+                //document.querySelector('#second-bar').classList.add('dark-second-bar');
+                //document.querySelector('#play-random-button').classList.add('dark-play');
                 document.querySelector('#text-container').classList.add('dark-text-container');
                 document.querySelector('#play-random-triangle').classList.add('dark-play');
                 document.querySelector('#scud-logo').classList.add('dark-scud');
