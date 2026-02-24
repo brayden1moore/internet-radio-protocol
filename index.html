@@ -50,12 +50,17 @@
         
         <div id="top-bar">
             <div class="the-header" style="display:flex; align-items:center;">
-                <img id="main-logo" src="assets/ears.png">
-                <div id="title">On<span style="letter-spacing:-0.04em">e</span><span style="letter-spacing:-0.3em">-</span>
-                -Radio</div>
+                <!--<img id="main-logo" src="assets/ears.png">-->
+                <div id="title">
+                    <div id="one">One</div>
+                    <div class="dash"></div>
+                    <div id="radio">Radio</div>
+                </div>
             </div>
+        </div>
 
-            <div id="spacer"></div>
+        <div id="ear-bar">
+            <img class="main-logo" src="assets/earwhitebordered.png">
         </div>
 
         <div id="second-bar">
@@ -63,7 +68,7 @@
                 <svg viewBox="0 0 100 100" width="35px" height="60%">
                                 <polygon id="play-random-triangle" points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"></polygon>
                 </svg>
-                <div id="intro-div"></div>
+                <div id="intro-div">Play a random station</div>
             </div>
             <div id="last-up">        
                 <span id='live-count'></span><span class='last-updated'></span>
@@ -160,7 +165,7 @@
 
     #modal-station-location {
         background-color: #00BBFF;
-        border: 1px solid black;
+        border: 0.5px solid black;
         width: fit-content;
         padding: 4px;
         margin-top: 7px;
@@ -177,7 +182,7 @@
         margin-right: 10px;
         flex: 1;
         text-align: center;
-        border: 1px solid black;
+        border: 0.5px solid black;
         height: 20px;
         display: flex;
         align-items: center;
@@ -266,7 +271,7 @@
         z-index: 11;
         height: fit-content;
         background-color: white;
-        border: 1px solid black;
+        border: 0.5px solid black;
         box-shadow: 0 16px 17px rgba(0, 0, 0, 0.3);
     }
 
@@ -419,8 +424,8 @@
             width: 100%;
             z-index: 1000;
             color: black;
-            background-color: #00BBFF;
-            border: 1px solid black;
+            background-color: #00bbff;
+            border: 0.5px solid black;
             display: none;
         }
         ::-webkit-scrollbar {
@@ -466,7 +471,7 @@
             /*border-radius: 20px;*/
             color: black !important;
             opacity: 1;
-            border: 1px solid rgb(70,70,70);
+            border: 0.5px solid rgb(0, 0, 0);
             margin-right: 4px;
             padding: 6px;
             padding-bottom: 7px;
@@ -494,6 +499,7 @@
         }
 
         #top-bar {
+            height: 58px;
             top: 0;
             left:0;
             border-bottom: 1px solid black;
@@ -506,9 +512,20 @@
             align-items: center;
         }
 
-        #spacer {
-            flex: 1;
+        #ear-bar {
+            height: 58px;
+            top: 0;
+            left:0;
+            width: 100%;
+            z-index: 100;
+            position: fixed;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
+
         #last-up {
             display: flex;
             padding-left: 15px;
@@ -516,13 +533,13 @@
         #second-bar {
             align-items: center;
             display: flex;
-            top: 69px;
-            left: -1px;
+            top: 59px;
+            left: 0px;
             position: fixed;
             z-index: 200;
-            background-color: yellow;
-            border: 1px solid black;
-            color: black;
+            background-color: #00bbff;
+            border-bottom: 0.5px solid black;
+            color: rgb(0, 0, 0);
             width: 100%;
         }
 
@@ -532,17 +549,15 @@
             cursor: pointer;
             width: fit-content;
             display: flex;
-            background-color: #00bbff;
-            border: 1px solid black;
-            border-bottom: none;
-            border-top: none;
-            border-left: none;
+            background-color: lab(97.14% -21.56 94.48);
+            border: none;
             border-radius: 0px;
             font-size: 18pt;
             opacity: 1;
             font-size: 12pt;
             padding: 2px 0px;
             padding-left: 7px;
+            padding-right: 4.5px;
             color: black;
         }
         #play-random-button:hover {
@@ -555,9 +570,27 @@
         }
 
         #title {
+            width: 100%;
+            display: flex;
             margin-left: 0px;
+            align-items: center;
+        }
+
+        #one {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        #radio {
+            width: auto;
         }
         
+        .dash {
+            height: 5px;
+            background-color: white;
+            flex: 1;
+            margin-top: 2px;
+        }
 
         .one-liner {
             font-size: 8pt;
@@ -605,7 +638,7 @@
         }        
 
         .dark-top-bar {
-            border-bottom: 1px solid rgb(70,70,70) !important;
+            border-bottom: 1px solid rgb(255, 255, 255) !important;
             background-color: rgb(17, 17, 17) !important;
             color: white !important;
         }
@@ -627,8 +660,6 @@
         }
 
         .dark-second-bar {
-            border: 1px solid rgb(70,70,70) !important;
-            background-color: rgb(17, 17, 17) !important;
             color: white !important;
         }
         
@@ -653,7 +684,7 @@
         #favorites-container {
             margin-top: 20px;
             padding-bottom: 45px;
-            border-bottom: solid black 1px;
+            border-bottom: solid black 0.5px;
         }
 
         .big-top-margin {
@@ -667,6 +698,7 @@
         }
 
         .now-playing {
+            width: fit-content;
             margin-top: 4px;
         }
         
@@ -681,14 +713,20 @@
         }
 
 
-        #main-logo {height: 55px; margin-left: 0px;
-            animation: rotate 6s linear infinite;
+        .main-logo {
+            height: 45px; 
+            margin-left: 0px;
+            /*animation: rotate 6s linear infinite;*/
+        }
+
+        .main-logo:nth-child {
+            left: calc(50% - 26px);
         }
 
         .station-tag {
             color: black !important;
             font-size: 8pt;
-            border:1px solid black;
+            border:0.5px solid black;
             padding: 3px;
             margin-right: 4px;
             align-items: center;
@@ -728,10 +766,13 @@
             padding: 10px; 
             overflow-x:hidden; 
             overflow-y:hidden; 
-            border:1px dashed black; 
+            border:0.5px solid black; 
             align-items: center; 
             display: flex; 
-            white-space: nowrap;}
+            white-space: nowrap;
+            margin-left: -0.5px;
+            margin-top: -0.5px;
+        }
 
         .a-station-container:hover {
             background-color: #FFFF00;
@@ -743,15 +784,15 @@
 
         .dark-background {
             color: white;
-            background-color: rgb(45,45,45) !important;
+            background-color: rgb(0, 0, 0) !important;
         }
         .dark-sort-icon {
             filter: invert();
         }
         .dark-station {
             color: white;
-            background-color: rgb(17, 17, 17) !important;    
-            border-color:  rgb(17, 17, 17) !important;    
+            background-color: rgb(0, 0, 0) !important;    
+            border-color:  rgb(45, 45, 45) !important;    
             box-shadow: 0 16px 17px rgba(0, 0, 0, 0.3);
         }    
         .dark-station:hover {  
@@ -799,7 +840,6 @@
 
         .playing {
             color: black;
-            border:1px solid black;
             background-color: #FFFF00 !important;
         }
 
@@ -811,23 +851,29 @@
         }
     
         body {
-            margin-top:160px;
+            margin-top:145px;
             background-color: #FFFFFF; 
             font-size: 10pt; 
             padding-bottom: 15vh !important;
         }
         .the-header {
-            color: black;
-            font-family: "Archivo Bold"; 
-            font-size: 32pt; 
+            width: 100%;
+            color: white;
+            font-family: "Archivo Semibold"; 
+            font-size: 44pt; 
             line-height:0.75em; 
-            letter-spacing:-0.09em; 
+            letter-spacing:-0.06em; 
             margin-top:0px;
             margin-bottom:0px;
             padding: 7px;
-            filter: invert();
         }
-        .a-station {font-family: "Archivo Light"; font-size:8pt; white-space: nowrap; flex-shrink: 0;}
+        .a-station {
+            font-family: "Archivo Light"; 
+            font-size:8pt; 
+            white-space: nowrap; 
+            flex-shrink: 0;
+            overflow-x: hidden;
+            width: calc(100% - 112px);}
         
         @font-face {font-family: "Archivo Bold";src: url("assets/Archivo-Bold.ttf") format("truetype");}
         @font-face {font-family: "Archivo SemiBold";src: url("assets/Archivo-SemiBold.ttf") format("truetype");}
@@ -897,7 +943,13 @@
             animation: var(--pulse) 1s infinite
         } 
 
-        .streams-container {display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 5px; margin-bottom:15px;}
+        .streams-container {
+            display: grid; 
+            grid-template-columns: 1fr; 
+            gap: 0px; 
+            margin-top: 5px; 
+            margin-bottom:15px;
+        }
         @media (min-aspect-ratio: 8/10) 
         {
 
@@ -937,7 +989,7 @@
         .streams-container {grid-template-columns: 1fr 1fr;} 
         .the-header{
             margin-bottom: 0px;
-            font-size: 32pt;
+            font-size: 44pt;
         } .a-station {font-size:10pt;}
         .logo-and-overlay {
             width:100px; 
@@ -949,7 +1001,7 @@
         } 
         
             a {font-size: 12pt}
-        #main-logo {height: 55px; margin-left:2px}
+        .main-logo {height: 45px; margin-left:0px}
         #title {margin-left: 0px;}
         }
 
@@ -958,7 +1010,7 @@
             #modal {
                 width: calc(33% - 13px);
             }
-            .streams-container {grid-template-columns: 1fr 1fr 1fr;} 
+            .streams-container {grid-template-columns: 1fr 1fr 1fr 1fr;} 
         }
 
         @media (min-width: 2000px) 
@@ -990,7 +1042,7 @@
             modalLogo.src = info[station]['logo'];
 
             if (info[station]['about']) {
-                modalDescription.textContent = '"' + info[station]['about'] + '"';
+                modalDescription.textContent = info[station]['about'] + "";
             }
 
             modalMainLink.href = info[station]['mainLink'];
@@ -1017,7 +1069,7 @@
             '"I listen to the radio every day" -Cooper B. Handy',
             "For curious minds only",
         ]
-        introDiv.textContent = introList[Math.floor(Math.random() * introList.length)];
+        //introDiv.textContent = introList[Math.floor(Math.random() * introList.length)];
 
         const player = document.getElementById('player');
         const playerImg = document.getElementById('player-img');
@@ -1151,13 +1203,15 @@
                 const logo = container.querySelector('.a-logo');
                 const nowPlaying = container.querySelector('.now-playing');
                 const oneLiner = nowPlaying.querySelector('.one-liner');
+                const aStation = container.querySelector('.a-station');
                 
                 const availableWidth = container.offsetWidth - logo.offsetWidth - 10; // 30px padding
+                const stationWidth = aStation.offsetWidth;
                 const oneLinerContentWidth = oneLiner.scrollWidth;
-                const needsMarquee = oneLinerContentWidth > availableWidth;
+                const needsMarquee = oneLinerContentWidth > stationWidth;
                 
                 if (needsMarquee) {
-                    const width = availableWidth + 'px';
+                    const width = stationWidth + 'px';
                     setupOneLinerMarquee(oneLiner, width, 'left');
                 }
             });
@@ -1894,7 +1948,7 @@
         }, 1000);
 
         const titleText = document.getElementById('title');
-        const mainLogo = document.getElementById('main-logo');
+        //const mainLogo = document.getElementById('main-logo');
         
         let dark = localStorage.getItem('darkMode') === 'true';
 
@@ -1963,7 +2017,7 @@
                 document.querySelector('#modal').classList.remove('dark-modal');
                 document.querySelector('#modal-station-name').classList.remove('dark-modal-station-name');
                 document.querySelector('#dark-link').textContent = 'Dark';
-                mainLogo.src = 'assets/ears.png'; 
+                //mainLogo.src = 'assets/ears.png'; 
                 root.style.setProperty('--pulse', 'pulse');
                 
                 dark = false;
