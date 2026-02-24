@@ -111,8 +111,16 @@
 
         <div class="streams-container" id="favorites-container"></div>
 
-        <div id="change-sort-button" onclick="sortStations(true)">
-            <img id="change-sort-icon">
+        <div id="change-sort-button">
+            <img id="change-sort-icon"  onclick="sortStations(true)">
+            <div id="search-bar">
+                <div id="search-bar-and-icon">
+                    <input id="search-stations" placeholder=''></input>
+                    <img src="assets/searchicon.png">
+                </div> 
+            </div>
+
+      </div>
         </div>
         
         <div class="streams-container" id="streams-container"></div>
@@ -278,7 +286,44 @@
     #change-sort-button {
         margin-top: 20px;
         margin-left: -2px;
+        display: flex;
+        justify-content: space-between;
     }
+
+    #search-bar-and-icon {
+        display: flex;
+        align-items: end;
+    }
+
+    #search-stations {
+    background-color: rgb(233, 233, 233);
+      border: none;
+      border-bottom: 1px solid black;
+      height: 15px;
+      padding: 3px;
+      transition: 0.2s ease;
+      width: 150px;
+      font-size: 16px;
+    }
+
+    #search-stations:focus{
+      outline: none;
+      border: none;
+      border-bottom: 1px solid #00bbff;
+    }
+
+    #search-bar {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+    }
+
+    #search-bar img{
+        height: 14px;
+        margin-left: 5px;
+        width: 14px;
+    }
+
 
     #change-sort-icon {
         cursor: pointer;
@@ -2030,6 +2075,24 @@
             if (dark) {
                 toggleDark(true);
             }
+        });
+        
+        // search 
+        const searchInput = document.getElementById('search-stations');
+        const items = document.getElementsByClassName('a-station-container');
+        searchInput.addEventListener('input', function() {
+            const filter = searchInput.value.toLowerCase();
+
+            for (let i = 0; i < items.length; i++) {
+                const itemText = items[i].textContent || items[i].innerText; 
+
+                if (itemText.toLowerCase().includes(filter)) {
+                    items[i].style.display = ""; 
+                } else {
+                    items[i].style.display = "none"; 
+                }
+            }
+
         });
 
         </script>
