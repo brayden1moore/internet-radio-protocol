@@ -1244,7 +1244,8 @@ Stream(
         support_link = "https://www.givecampus.com/campaigns/7449/donations/new?pdesignation=kusf",
         insta_link = "https://www.instagram.com/kusforg",
         bandcamp_link = "https://kusforg.bandcamp.com",
-        soundcloud_link = None
+        soundcloud_link = None,
+        genres = ['Student']
 ),
 Stream(
         name = "KWSX",
