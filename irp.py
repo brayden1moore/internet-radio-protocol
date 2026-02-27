@@ -827,6 +827,7 @@ class Stream:
         elif self.name == 'Desire Path Radio':
             ch2_info = requests.get(self.info_link).json()
             self.status = 'Offline'
+            self.genres = None
             if ch2_info['online'] == True:
                 info = ch2_info
                 self.status = 'Live'
@@ -835,7 +836,6 @@ class Stream:
                 info = requests.get(self.info_link.replace('-channel-2','')).json()
                 if info['online'] == True:
                     self.status = 'Live'
-                    self.genres = None
             
             self.stream_link = info['streamUrl']
             if self.status == 'Offline':
