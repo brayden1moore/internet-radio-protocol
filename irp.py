@@ -314,11 +314,12 @@ class Stream:
                 try:
                     self.now_playing_artist = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # just artist name if possible like "Willow"
                     self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[0]) # just show name if posible like "Wispy"
-                    if self.now_playing == 'ARCHIVE':
-                        self.status = 'Re-Run'
                 except:
                     self.now_playing_artist = None
                     self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ','').replace('.mp3','')) # full title like "Wispy w/ Willow"
+
+                if self.now_playing == 'ARCHIVE':
+                    self.status = 'Re-Run'
 
         elif self.name == 'Kiosk Radio': 
             info = requests.get(self.info_link).json()
