@@ -593,7 +593,7 @@ class Stream:
             try:
                 info = requests.get(self.info_link).json()
                 self.now_playing = info['tracks']['current']['metadata']['track_title']
-                self.status = "Online"
+                self.status = "Live"
             except:
                 self.now_playing = None
                 self.status = "Offline"
@@ -621,11 +621,11 @@ class Stream:
             try:
                 self.now_playing = info['currentShow'][0]['name']
                 self.additional_info = info['current']['track_title'] + ' by '+ info['current']['artist_name']
-                self.status = "Online"
+                self.status = "Live"
             except:
                 try:
                     self.now_playing = info['currentShow'][0]['name']
-                    self.status = "Online"
+                    self.status = "Live"
                 except:
                     pass
 
@@ -720,7 +720,7 @@ class Stream:
             self.status = "Offline"
             try:
                 self.now_playing = info['now_playing']
-                self.status = "Online"
+                self.status = "Live"
                 if info['source'] == 'live':
                     self.stream_link = 'http://monotonicradio.com:8000/stream.m3u'
                 else: 
@@ -810,7 +810,7 @@ class Stream:
         elif self.name == 'Radio 80000':
             info = requests.get(self.info_link).json()
             self.now_playing = extract_value(info, ['currentShow',0,'name'])
-            self.status = "Online" if self.now_playing else "Offline"
+            self.status = "Live" if self.now_playing else "Offline"
         
         elif self.name == 'stayfm':
             info = requests.get(self.info_link).json()
