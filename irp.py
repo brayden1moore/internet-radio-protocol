@@ -1747,7 +1747,7 @@ Stream(
         insta_link = "https://www.instagram.com/radio_plato",
         bandcamp_link = "https://radioplato.bandcamp.com/",
         soundcloud_link = "https://soundcloud.com/radioplato",
-        hidden = False
+        hidden = True
 ),
 Stream(
         name = "Veneno",
