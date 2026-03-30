@@ -133,7 +133,7 @@ class Stream:
         self.genres = genres
 
         # show info
-        self.status = "Online"
+        self.status = "Live"
         self.now_playing_artist = None
         self.now_playing = None
         self.now_playing_subtitle = None
