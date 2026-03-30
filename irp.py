@@ -223,7 +223,7 @@ class Stream:
         if self.name == 'HydeFM':
             info = requests.get(self.info_link).json()
             self.now_playing = extract_value(info, ['shows','current','name'])
-            self.status = "Online" if self.now_playing else "Offline"
+            self.status = "Live" if self.now_playing else "Offline"
                 
         if self.name in ['SutroFM','Lower Grand Radio','Vestiges']:
             info = requests.get(self.info_link).json()
@@ -233,7 +233,7 @@ class Stream:
             self.show_logo = extract_value(info, ['image'])
             self.now_playing_description_long = extract_value(info, ['description'])
             self.now_playing_description = extract_value(info, ['description'], rule='shorten')
-            self.status = "Online" if info['online'] == True else "Offline"
+            self.status = "Live" if info['online'] == True else "Offline"
 
         elif 'NTS' in self.name:
             info = requests.get(self.info_link).json()
@@ -310,7 +310,7 @@ class Stream:
                 self.now_playing = None
                 self.now_playing_artist = None
             else:
-                self.status = 'Online'
+                self.status = 'Live'
                 try:
                     self.now_playing_artist = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # just artist name if possible like "Willow"
                     self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[0]) # just show name if posible like "Wispy"
@@ -330,7 +330,7 @@ class Stream:
                 self.now_playing_subtitle = None
             else:
                 self.now_playing  = extract_value(info, ['shows','current','name']) # broadcast name like "Staff Picks" or "Piffy (live)"
-                self.status = 'Online'
+                self.status = 'Live'
                 self.now_playing_subtitle = extract_value(info, ['tracks','current','name']) # episode title "Delodio"
 
         elif self.name == 'Do!!You!!! World': 
@@ -341,7 +341,7 @@ class Stream:
                 self.now_playing = None
                 self.now_playing_artist = None
             else:
-                self.status = 'Online'
+                self.status = 'Live'
                 try:
                     self.now_playing_artist = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split(' w/ ')[1]) # artist name like "Charlemagne Eagle"
                     self.now_playing = clean_text(info['shows']['current']['name'].replace(' - ',' ').replace('.mp3','').split('w/')[0]) # show name like "The Do!You!!! Breakfast Show"
@@ -357,7 +357,7 @@ class Stream:
                 self.now_playing = None
                 self.now_playing_artist = None
             else:
-                self.status = 'Online'
+                self.status = 'Live'
                 self.now_playing = clean_text(info['shows']['current']['name']) # show name like "The Do!You!!! Breakfast Show"
 
         elif self.name == 'Stegi Radio': 
@@ -368,7 +368,7 @@ class Stream:
                 self.now_playing = None
                 self.now_playing_artist = None
             else:
-                self.status = 'Online'
+                self.status = 'Live'
                 self.now_playing = clean_text(info['shows']['current']['name']) # show name like "The Do!You!!! Breakfast Show"
 
         elif self.name == 'Radio Quantica':
@@ -483,14 +483,14 @@ class Stream:
 
         elif self.name == 'We Are Various':
             info = requests.get(self.info_link).json()
-            self.status = 'Online' if info['is_online'] == True else 'Offline'
+            self.status = 'Live' if info['is_online'] == True else 'Offline'
             self.additional_info = None
             self.listeners = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
             self.now_playing = info['now_playing']['song']['title'] # simple show title
 
         elif self.name == 'KWSX':
             info = requests.get(self.info_link).json()
-            self.status = 'Online' if info['is_online'] == True else 'Offline'
+            self.status = 'Live' if info['is_online'] == True else 'Offline'
             self.additional_info = None 
             self.listeners = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
             self.now_playing = info['now_playing']['song']['text'] # simple show title
@@ -528,7 +528,7 @@ class Stream:
             info = requests.get(self.info_link).json()
             try:
                 self.now_playing = info['shows']['current']['name'] # just song name
-                self.status = 'Online'
+                self.status = 'Live'
             except:
                 self.now_playing = None
                 self.status = 'Offline'
@@ -603,7 +603,7 @@ class Stream:
             try:
                 self.now_playing = info.json()['data']['onair']['title']
                 if "WE'LL BE BACK" not in self.now_playing:
-                    self.status = 'Online'
+                    self.status = 'Live'
                 else:
                     self.status = 'Offline'
             except:
@@ -675,7 +675,7 @@ class Stream:
                 now_utc = datetime.now(timezone.utc)
 
                 if end_time > now_utc > start_time:
-                    self.status = 'Online'
+                    self.status = 'Live'
                     self.now_playing = event['summary']
         
         elif self.name == 'Radio Alhara':
@@ -698,7 +698,7 @@ class Stream:
                 self.now_playing = info['shows']['current']['name'].upper()
                 if self.now_playing == 'TA':
                     self.now_playing = 'Picks from the archive'
-                self.status = 'Online'
+                self.status = 'Live'
             except:
                 self.now_playing = None
                 self.status = 'Offline'
@@ -709,7 +709,7 @@ class Stream:
                 self.now_playing = info['shows']['current']['name']
                 self.now_playing_description = info['shows']['current']['description']
                 self.additional_info = info['tracks']['current']['name'].lstrip(' - ').replace('.mp3','')
-                self.status = 'Online'
+                self.status = 'Live'
             except:
                 self.now_playing = None
                 self.status = 'Offline'
