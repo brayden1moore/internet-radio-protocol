@@ -1415,7 +1415,7 @@ Stream(
         insta_link = "https://www.instagram.com/radio80000/",
         bandcamp_link = None,
         soundcloud_link = "https://soundcloud.com/radio80000",
-        hidden = True
+        hidden = False
 ),
 Stream(
         name = "Radio Alhara",
@@ -1746,7 +1746,7 @@ Stream(
         insta_link = "https://www.instagram.com/radio_plato",
         bandcamp_link = "https://radioplato.bandcamp.com/",
         soundcloud_link = "https://soundcloud.com/radioplato",
-        hidden = True
+        hidden = False
 ),
 Stream(
         name = "Veneno",
@@ -1760,7 +1760,7 @@ Stream(
         insta_link = "https://www.instagram.com/veneno.live/",
         bandcamp_link = "",
         soundcloud_link = "",
-        hidden = True
+        hidden = False
 ),
 Stream(
         name = "Radio Relativa",
