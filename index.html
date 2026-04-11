@@ -53,14 +53,22 @@
                 <!--<img id="main-logo" src="assets/ears.png">-->
                 <div id="title">
                     <div id="one">One</div>
-                    <div class="dash"></div>
+                    <div class="dash">
+                        <img src="assets/Squiggle.png">
+                        <img src="assets/Squiggle.png">
+                        <img src="assets/Squiggle.png">
+                        <img src="assets/Squiggle.png">
+                        <img src="assets/Squiggle.png">
+                        <img src="assets/Squiggle.png">
+                        <img src="assets/Squiggle.png">
+                    </div>
                     <div id="radio">Radio</div>
                 </div>
             </div>
         </div>
 
         <div id="ear-bar">
-            <img class="main-logo" src="assets/earwhitebordered.png">
+            <img class="main-logo" id="main-logo" src="assets/tagline1.png">
         </div>
 
         <div id="second-bar">
@@ -78,7 +86,7 @@
         <div id="player">
             <div id="player-icons">
                 <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 22h-24l12-20z"></path></svg>
-                <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" version="1.0" width="1262.000000pt" height="1280.000000pt" viewBox="0 0 1262.000000 1280.000000" preserveAspectRatio="xMidYMid meet"><g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)" fill="rgb(0,0,0,255)" stroke="#000000" stroke-width="0"><path d="M669 12214 c-59 -18 -130 -81 -160 -141 l-24 -48 0 -5650 0 -5650 23 -47 c13 -26 43 -65 67 -87 83 -77 -104 -71 2295 -71 2400 0 2212 -6 2295 71 24 23 54 62 67 87 l23 47 0 5650 0 5650 -23 47 c-13 25 -43 64 -67 87 -83 77 105 71 -2299 70 -1824 0 -2158 -3 -2197 -15z"></path><path d="M7542 12211 c-63 -22 -123 -76 -155 -141 l-22 -45 0 -5650 0 -5650 23 -47 c13 -25 43 -64 67 -87 83 -77 -105 -71 2295 -71 2399 0 2212 -6 2295 71 24 22 54 61 67 87 l23 47 0 5650 0 5650 -24 48 c-31 63 -101 123 -164 142 -44 13 -321 15 -2201 15 -2062 -1 -2153 -1 -2204 -19z"></path></g></svg>
+                <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" version="1.0" width="1262.000000pt" height="1280.000000pt" viewBox="0 0 1262.000000 1280.000000" preserveAspectRatio="xMidYMid meet"><g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)" fill="rgb(255,255,255,255)" stroke="#000000" stroke-width="0"><path d="M669 12214 c-59 -18 -130 -81 -160 -141 l-24 -48 0 -5650 0 -5650 23 -47 c13 -26 43 -65 67 -87 83 -77 -104 -71 2295 -71 2400 0 2212 -6 2295 71 24 23 54 62 67 87 l23 47 0 5650 0 5650 -23 47 c-13 25 -43 64 -67 87 -83 77 105 71 -2299 70 -1824 0 -2158 -3 -2197 -15z"></path><path d="M7542 12211 c-63 -22 -123 -76 -155 -141 l-22 -45 0 -5650 0 -5650 23 -47 c13 -25 43 -64 67 -87 83 -77 -105 -71 2295 -71 2399 0 2212 -6 2295 71 24 22 54 61 67 87 l23 47 0 5650 0 5650 -24 48 c-31 63 -101 123 -164 142 -44 13 -321 15 -2201 15 -2062 -1 -2153 -1 -2204 -19z"></path></g></svg>
             </div>
             <div id="player-things">
                 <img id="player-img" src="">
@@ -115,8 +123,8 @@
             <img id="change-sort-icon"  onclick="sortStations(true)">
             <div id="search-bar">
                 <div id="search-bar-and-icon">
-                    <input id="search-stations" placeholder=''></input>
                     <img src="assets/searchicon.png">
+                    <input id="search-stations" placeholder=''></input>
                 </div> 
             </div>
 
@@ -131,7 +139,6 @@
             <a href="mailto:brayden@braydenmoore.com">Email</a>  
             <a target="_blank" href="https://github.com/brayden1moore/internet-radio-protocol">GitHub</a>  
             <a class='insta-link' target='_blank' href='https://www.instagram.com/scud.studio/'>Instagram</a>
-            <a id='dark-link' onclick="toggleDark()">Dark</a>
         </div>
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
@@ -172,7 +179,7 @@
     }
 
     #modal-station-location {
-        background-color: #00BBFF;
+        background-color: #00acff;
         border: 0.5px solid black;
         width: fit-content;
         padding: 4px;
@@ -309,7 +316,7 @@
     #search-stations:focus{
       outline: none;
       border: none;
-      border-bottom: 1px solid #00bbff;
+      border-bottom: 1px solid #00acff;
     }
 
     #search-bar {
@@ -319,9 +326,9 @@
     }
 
     #search-bar img{
-        height: 14px;
-        margin-left: 5px;
-        width: 14px;
+        height: 20px;
+        margin-right: 5px;
+        width: 20px;
     }
 
 
@@ -440,11 +447,11 @@
         }
 
         #share-icon {
-            background-color: #00bbff;
+            background-color: #ffffff;
             display: flex;
             align-items: center;
             position: fixed;
-            right: 0px;
+            right: 5px;
             height: 70px;
             z-index: 20;
             cursor: pointer;
@@ -469,8 +476,8 @@
             width: 100%;
             z-index: 1000;
             color: black;
-            background-color: #00bbff;
-            border: 0.5px solid black;
+            background-color: #ffffff;
+            border: 1px solid black;
             display: none;
         }
         ::-webkit-scrollbar {
@@ -501,13 +508,13 @@
             opacity: 0.5 !important;
         }
         .status-tag {
-            background-color: #FF4747;
+            background-color: #ff0000;
         }
         .location-tag {
-            background-color: #00BBFF;
+            background-color: #00acff;
         }
         .genre-tag {
-            background-color: #00E7C0;
+            background-color: #ffff00;
         }
         .tag {
             height: 15px;
@@ -550,11 +557,12 @@
             border-bottom: 1px solid black;
             width: 100%;
             z-index: 100;
-            background-color: rgb(20, 20, 20);
+            background-color: rgb(255, 255, 255);
             position: fixed;
             margin-bottom: 25px;
             display: flex;
             align-items: center;
+            color: black;
         }
 
         #ear-bar {
@@ -582,8 +590,8 @@
             left: 0px;
             position: fixed;
             z-index: 200;
-            background-color: #00bbff;
-            border-bottom: 0.5px solid black;
+            background-color: #ffffff;
+            border-bottom: 1px solid black;
             color: rgb(0, 0, 0);
             width: 100%;
         }
@@ -594,7 +602,7 @@
             cursor: pointer;
             width: fit-content;
             display: flex;
-            background-color: lab(97.14% -21.56 94.48);
+            background-color: lab(100% 0.01 -0.01);
             border: none;
             border-radius: 0px;
             font-size: 18pt;
@@ -603,7 +611,7 @@
             padding: 2px 0px;
             padding-left: 7px;
             padding-right: 4.5px;
-            border-right: 0.5px solid black;
+            border-right: 1px solid black;
             color: black;
         }
         #play-random-button:hover {
@@ -623,19 +631,28 @@
         }
 
         #one {
+            background-color: white;
             width: auto;
-            margin-right: 5px;
+            margin-left: 6px;
         }
 
         #radio {
             width: auto;
+            left: calc(100% - 156px);
+            position: absolute;
         }
         
+        .dash img {
+            max-width: 1000px;
+            height: 20px;
+            opacity: 0%;
+        }
+
         .dash {
-            height: 3px;
-            background-color: white;
-            flex: 1;
-            margin-top: 2px;
+            position: absolute;
+            left: 0;
+            display: flex;
+            overflow-x: hidden;
         }
 
         .one-liner {
@@ -661,7 +678,7 @@
         }
 
         .flash {
-        background-color: #00bbff !important;
+        background-color: #ffff00 !important;
         color: black !important;
         }
 
@@ -762,7 +779,6 @@
         .main-logo {
             height: 45px; 
             margin-left: 0px;
-            /*animation: rotate 6s linear infinite;*/
         }
 
         .main-logo:nth-child {
@@ -785,13 +801,13 @@
             padding-right: 15px;
         }
         .location-station-tag {
-            background-color:#00BBFF;
+            background-color:#00acff;
         }
         .status-station-tag {
-            background-color:#FF4747;
+            background-color:#ff0000;
         }       
         .genre-station-tag {
-            background-color:#00E7C0;
+            background-color:#ffff00;
         }  
         
         .a-station-container {
@@ -912,7 +928,7 @@
         }
         .the-header {
             width: 100%;
-            color: white;
+            color: rgb(0, 0, 0);
             font-family: "Archivo Semibold"; 
             font-size: 44pt; 
             line-height:0.75em; 
@@ -956,7 +972,7 @@
 
         :root {
             --pulse: pulse;
-            --player-paused-color: #00bbff;
+            --player-paused-color: #00acff;
         }
 
          @keyframes pulse {
@@ -965,7 +981,7 @@
                 color: black;
             }
             50%{
-                background:#00BBFF;
+                background:#00acff;
                 color: black;
             }
             100%{
@@ -1760,7 +1776,7 @@
                         setTimeout(function() {
                             lastUpdated.classList.add('flash-out');
                             lastUpdated.classList.remove('flash');
-                        }, 100);
+                        }, 300);
                         setTimeout(function() {
                             lastUpdated.classList.remove('flash-out');
                         }, 1100);
@@ -2106,4 +2122,12 @@
 
         });
 
+        const mainLogo = document.getElementById('main-logo');
+        const logoTypes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        let i = 0;
+
+        setInterval(() => {
+            mainLogo.src = `assets/tagline${logoTypes[i]}.png`;
+            i = (i + 1) % logoTypes.length;
+        }, 150);
         </script>
