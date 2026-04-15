@@ -1520,7 +1520,7 @@ Stream(
 Stream(
         name = "Radio Sygma",
         logo = "https://internetradioprotocol.org/logos/sygma.png",
-        location = "International",
+        location = "Tbilisi",
         info_link = "https://radio.syg.ma/stats-icecast.json",
         stream_link = "https://radio.syg.ma/audio.mp3",
         main_link = "https://radio.syg.ma/",
