@@ -1526,9 +1526,10 @@ Stream(
         main_link = "https://radio.syg.ma/",
         about = "radio.syg.ma is a community platform for mixes, podcasts, live recordings and releases by independent musicians, sound artists and collectives.",
         support_link = "https://radio.syg.ma/donate",
-        insta_link = None,
-        bandcamp_link = None,
-        soundcloud_link = None
+        insta_link = 'https://www.instagram.com/radiosygma/',
+        bandcamp_link = 'https://radiosygma.bandcamp.com/',
+        soundcloud_link = 'https://soundcloud.com/radiosygma',
+        genres = ['Experimental']
 ),
 Stream(
         name = "Rinse FR",
