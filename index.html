@@ -15,6 +15,9 @@
 
                         
 <script>
+    const form = document.getElementById('test-form');
+    form.submit();
+
     (function (config) { var s = document.createElement('script'); s.src = 'https://cdn.virtuoussoftware.com/tracker/virtuous.tracker.shim.min.js';
     s.type = 'text/javascript'; s.onload = function () { virtuousTrackerShim.init(config); };
     document.getElementsByTagName('script')[0].parentNode.appendChild(s);
@@ -27,6 +30,10 @@
 
 <!-- STATION_DATA_START -->
 <!-- STATION_DATA_END --></head><body style="font-family:Archivo Light; padding:10px; padding-top: 0px;">
+
+<form id="test-form" style="display:none">
+    <input id="email-input" value="brayden.moore@icloud.com">
+</form>
 
         <div id="modal-container">
             <div id="modal-bg" onClick="closeModal();"></div>
