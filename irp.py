@@ -1999,9 +1999,6 @@ def main_loop():
 
             print(f'Done! Total time {processing_time}')
             time.sleep(60)
-        except KeyboardInterrupt:
-            print("Shutting down gracefully...")
-            break
         except Exception as e:
             print(f"Error in main loop: {e}")
             traceback.print_exc()
