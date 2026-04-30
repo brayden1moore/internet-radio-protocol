@@ -1975,7 +1975,7 @@ def main_loop():
 
             # email errors and save to /errors endpoint
             error_lines = [val for key, val in error_dict.items()]
-            send_email(error_dict)
+            #send_email(error_dict)
             with open('errorlog.txt', 'w') as log:
                 log.write('\n'.join(error_lines))
 
