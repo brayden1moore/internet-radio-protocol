@@ -1867,7 +1867,7 @@ def process_stream(stream):
         return (stream.name, stream.to_dict())
     except Exception:
         error = f'[{datetime.now()}] Error updating {stream.name}:\n{traceback.format_exc()}\n'
-        return (stream.name, error)
+        return (stream.name, error, 'Error')
 
 import smtplib
 from email.mime.text import MIMEText
@@ -1962,7 +1962,7 @@ def main_loop():
             # pull into info json and collect errors
             for result in results:
                 if len(result) == 3:
-                    name, val, err = result
+                    name, err, _ = result
                     error_dict[name] = err
                     if name in prior_values.keys():
                         updated[name] = prior_values[name]
