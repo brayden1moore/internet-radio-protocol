@@ -1986,7 +1986,7 @@ def main_loop():
                 'last_updated_utc': datetime.fromtimestamp(now, tz=pytz.timezone('UTC')),
                 'last_updated_et': datetime.fromtimestamp(now, tz=pytz.timezone('America/New_York')),
                 'last_updated_pt': datetime.fromtimestamp(now, tz=pytz.timezone('America/Los_Angeles')),
-                'errors': [key for key in error_dict.items()],
+                'errors': [key for key,val in error_dict.items()],
                 'total': len(updated),
                 'hidden': len([key for key,val in updated.items() if val['hidden']==True]),
                 'live': len([key for key,val in updated.items() if val['hidden']!=True and val['status']=='Live']),
