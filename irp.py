@@ -1945,6 +1945,10 @@ def main_loop():
         try:
             start_time = time.time()
 
+            # get prior vals
+            with open('info.json', 'r') as f:
+                prior_values = json.load(f)
+
             # threaded updates
             with ThreadPoolExecutor(max_workers=10) as executor:
                 futures = [executor.submit(process_stream, stream) 
@@ -1960,6 +1964,8 @@ def main_loop():
                 if len(result) == 3:
                     name, val, err = result
                     error_dict[name] = err
+                    if name in prior_values.keys():
+                        updated[name] = prior_values[name]
                 else:
                     name, val = result
                     if isinstance(val, dict):
