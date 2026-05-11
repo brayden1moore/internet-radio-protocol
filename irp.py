@@ -1209,7 +1209,7 @@ Stream(
         stream_link = "https://stream-relay-geo.internetpublicradio.live/stream/main",
         main_link = "https://www.internetpublicradio.live",
         about = "Internet Public Radio is an independent cultural platform and radio station curated by local and international DJs, musicians and visual artists.",
-        support_link = "https://www.internetpublicradio.live",
+        support_link = "https://www.internetpublicradio.live/ipr-plus",
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None
