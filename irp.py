@@ -1489,7 +1489,8 @@ Stream(
         support_link = "https://buymeacoffee.com/radiopunctum",
         insta_link = "https://www.instagram.com/radio_punctum/",
         bandcamp_link = "https://punctumtapes.bandcamp.com",
-        soundcloud_link = "https://soundcloud.com/radiopunctum"
+        soundcloud_link = "https://soundcloud.com/radiopunctum",
+        hidden = True
 ),
 Stream(
         name = "Radio Quantica",
