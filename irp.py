@@ -1966,7 +1966,7 @@ def main_loop():
                     name, err, hidden_status = result
                     error_dict[name] = err
                     if name in prior_values.keys():
-                        prior_values['hidden'] = hidden_status
+                        prior_values[name]['hidden'] = hidden_status
                         updated[name] = prior_values[name]
                 else:
                     name, val = result
