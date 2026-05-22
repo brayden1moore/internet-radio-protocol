@@ -952,7 +952,7 @@ class Stream:
             title = soup.find(attrs={'name':"description"})
             if title:
                 self.status = "Live"
-                self.now_playing = extract_value(title, ['content'])
+                self.now_playing = title['content']
             else:
                 self.status = "Offline"
                 self.now_playing = "Offline"
