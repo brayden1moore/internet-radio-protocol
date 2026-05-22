@@ -948,7 +948,7 @@ class Stream:
 
         elif self.name == 'program audio':
             resp = requests.get(self.info_link).text
-            soup = BeautifulSoup(resp, features='lxml')
+            soup = BeautifulSoup(resp, features='html.parser')
             title = soup.find(attrs={'name':"description"})
             if title:
                 self.status = "Live"
