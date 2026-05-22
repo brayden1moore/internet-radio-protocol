@@ -1636,6 +1636,7 @@
                 const donateLink = data[stationName]['supportLink'];
                 const logo = data[stationName]['logo'];
                 const hidden = data[stationName]['hidden'];
+                const tuner = data[stationName]['tuner_only'];
                 
                 const existingStation = document.getElementById(stationName);
                 if (existingStation) {
@@ -1716,7 +1717,7 @@
                     <audio id="${stationName}-audio" style="width:40px;" data-src="${streamLink}"></audio>
                     </div>`
 
-                    if (hidden != true) {
+                    if (hidden != true & tuner != true) {
                         if (status === 'Offline') {
                             stationDiv.classList.add('offline');
                             offliners.push(stationDiv);
@@ -1741,7 +1742,7 @@
                     updatedOneLiners.push(stationDiv);
                 }
 
-                if (hidden != true) {
+                if (hidden != true & tuner != true) {
                     if (status === 'Offline') {
                         offline++;
                     }
