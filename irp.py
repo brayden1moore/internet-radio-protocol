@@ -116,7 +116,7 @@ class Stream:
     from each station and convert it into a dict to be served at /info.
     '''
 
-    def __init__(self, from_dict=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False, genres=None):
+    def __init__(self, from_dict=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False, genres=None, tuner_only=False):
         # station info 
         self.name = name
         self.logo = logo
@@ -131,6 +131,7 @@ class Stream:
         self.soundcloud_link = soundcloud_link
         self.hidden = hidden
         self.genres = genres
+        self.tuner_only = tuner_only
 
         # show info
         self.status = "Live"
@@ -170,6 +171,7 @@ class Stream:
             self.hidden = from_dict.get('hidden')
             self.listeners = from_dict.get('listeners')
             self.genres = from_dict.get('genres')
+            self.tuner_only = from_dict.get('tuner_only')
 
     def to_dict(self):
 
@@ -206,7 +208,8 @@ class Stream:
             "oneLiner":self.one_liner,
             "hidden":self.hidden,
             "listeners":self.listeners,
-            "genres":self.genres
+            "genres":self.genres,
+            "tuner_only":self.tuner_only
         }
 
     
@@ -942,6 +945,18 @@ class Stream:
             self.now_playing_description = extract_value(info, ['show','summary'])
             self.now_playing_artist = extract_value(info, ['show','users'], ['display_name'], rule='list')
             self.status = "Live" if self.now_playing else "Offline"
+
+        elif self.name == 'program audio':
+            resp = requests.get(self.info_link).text
+            soup = BeautifulSoup(resp, features='lxml')
+            title = soup.find(attrs={'name':"description"})
+            if title:
+                self.status = "Live"
+                self.now_playing = extract_value(title, ['content'])
+            else:
+                self.status = "Offline"
+                self.now_playing = "Offline"
+
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
@@ -1824,6 +1839,21 @@ Stream(
         insta_link = "https://www.instagram.com/rukh.live/",
         bandcamp_link = "",
         soundcloud_link = "https://www.soundcloud.com/rukh-radio"
+)
+,
+Stream(
+        name = "program audio",
+        logo = "https://internetradioprotocol.org/logos/program.jpg",
+        location = "San Francisco",
+        info_link = "https://www.twitch.tv/program_audio",
+        stream_link = "https://www.twitch.tv/program_audio",
+        main_link = "https://program.audio",
+        about = "San Francisco-based institution. Label + Events + Radio.",
+        support_link = "https://program.audio/support/",
+        insta_link = "https://www.instagram.com/program.audio/",
+        bandcamp_link = "https://program-audio.bandcamp.com/music",
+        soundcloud_link = "https://soundcloud.com/programaudio",
+        tuner_only = True
 )
 ]
 
