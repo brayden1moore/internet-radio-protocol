@@ -1902,7 +1902,7 @@ def process_stream(stream):
         return (stream.name, stream.to_dict())
     except Exception:
         error = f'[{datetime.now()}] Error updating {stream.name}:\n{traceback.format_exc()}\n'
-        #print(stream.name, error)
+        print(stream.name, 'Error')
         return (stream.name, error, stream.hidden)
 
 import smtplib
