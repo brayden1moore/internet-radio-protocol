@@ -1902,7 +1902,7 @@ def process_stream(stream):
         return (stream.name, stream.to_dict())
     except Exception:
         error = f'[{datetime.now()}] Error updating {stream.name}:\n{traceback.format_exc()}\n'
-        print(stream.name, error)
+        #print(stream.name, error)
         return (stream.name, error, stream.hidden)
 
 import smtplib
@@ -2042,10 +2042,12 @@ def main_loop():
                 json.dump(status, f, indent=4, sort_keys=False, default=str)            
 
             print(f'Done! Total time {processing_time}')
+            print('-'*50)
             time.sleep(60)
         except Exception as e:
             print(f"Error in main loop: {e}")
             traceback.print_exc()
+            print('-'*50)
             time.sleep(60)    
 
 if __name__ == '__main__':
