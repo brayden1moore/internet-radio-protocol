@@ -1991,6 +1991,7 @@ def main_loop():
                         for stream in streams]
                 results = [future.result() for future in futures]
 
+            print('Finished updating streams!')
             processing_time = time.time() - start_time
             error_dict = {}
             updated = {}
