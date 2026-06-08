@@ -82,7 +82,12 @@ def extract_value(json, location, sub_location=None, rule=None):
                                 value_in_list = value_in_list[i] # go one layer deeper
                     value_list.append(value_in_list)   
             else:
-                value_list = value
+                if isinstance(value, list):
+                    value_list = value
+                elif isinstance(value, str):
+                    value_list = [value.title()]
+                else:
+                    value_list = [value]
 
             if len(value_list) > 0:
                 if rule == 'list':
