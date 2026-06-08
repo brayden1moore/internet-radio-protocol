@@ -874,8 +874,9 @@ class Stream:
         
         elif self.name == 'Veneno':
             info = requests.get(self.info_link).json()
-            now_playing_append = ' (R)' if extract_value(info, ['currentShow',0,'auto_dj']) == True else ''
-            self.now_playing = extract_value(info, ['currentShow',0,'name']) + now_playing_append
+            self.now_playing = extract_value(info, ['current','metadata','track_title'])
+            self.now_playing_artist = extract_value(info, ['current','metadata','artist_name'])
+            self.genres = extract_value(info, ['current','metadata','genre'], rule='list_genres')
             self.status = "Live" if self.now_playing else "Offline"
 
         elif self.name == 'Radio Relativa':
@@ -1795,8 +1796,8 @@ Stream(
         name = "Veneno",
         logo = "https://internetradioprotocol.org/logos/veneno.png",
         location = "Sao Paolo",
-        info_link = "https://veneno.airtime.pro/api/live-info",
-        stream_link = "https://veneno.out.airtime.pro/veneno_b",
+        info_link = "https://radio.veneno.live/api/live-info",
+        stream_link = "https://radio.veneno.live/stream/main",
         main_link = "https://veneno.live/",
         about = "Created in 2018, Veneno was born from the idea of ​​unifying and solidifying the most diverse cultural initiatives. Based in downtown São Paulo, the radio today broadcasts a wide range of programs, dialoguing with different aesthetics and concepts.",
         support_link = "https://veneno.live/support-us/",
@@ -2000,7 +2001,8 @@ def main_loop():
             for result in results:
                 if len(result) == 3:
                     name, err, hidden_status = result
-                    error_dict[name] = err
+                    if hidden_status != True:
+                        error_dict[name] = err
                     if name in prior_values.keys():
                         prior_values[name]['hidden'] = hidden_status
                         updated[name] = prior_values[name]
@@ -2019,7 +2021,6 @@ def main_loop():
 
             # email errors and save to /errors endpoint
             error_lines = [val for key, val in error_dict.items()]
-            #send_email(error_dict)
             with open('errorlog.txt', 'w') as log:
                 log.write('\n'.join(error_lines))
 
