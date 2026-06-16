@@ -779,7 +779,7 @@ class Stream:
 
             url = self.info_link + f"/replay-slots/range?startDate={today}&endDate={tomorrow}"
             info = requests.get(url, timeout=TIMEOUT).json()
-            for i in info.json()['slots']:
+            for i in info['slots']:
                 if (rn > datetime.fromisoformat(i['start'])) & (rn < datetime.fromisoformat(i['end'])):
                     self.now_playing = extract_value(i, ['replay', 'title'])
 
