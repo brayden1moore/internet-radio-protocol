@@ -782,6 +782,7 @@ class Stream:
             for i in info['slots']:
                 if (rn > datetime.fromisoformat(i['start'])) & (rn < datetime.fromisoformat(i['end'])):
                     self.now_playing = extract_value(i, ['replay', 'title'])
+                    self.status = 'Re-Run'
 
             if self.now_playing == None:
                 url = self.info_link + f"/schedule/range?startDate={today}&endDate={tomorrow}"
@@ -791,6 +792,7 @@ class Stream:
                     end = i['date']  + 'T' + i['endTime'] + '+00:00'
                     if (rn > datetime.fromisoformat(start)) & (rn < datetime.fromisoformat(end)):
                         self.now_playing = extract_value(i, ['title'])
+                        self.status = 'Live'
 
             
         elif self.name == 'CKUT':
