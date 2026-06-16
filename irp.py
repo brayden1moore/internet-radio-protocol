@@ -755,7 +755,7 @@ class Stream:
             self.genres = extract_value(info, ['genres'], rule='list_genres')
              
         elif self.name == 'HKCR':
-
+            '''
             stream_url = self.stream_link
             tmp_file = tempfile.mktemp(suffix='.jpg')
             self.status = 'Live'
@@ -772,10 +772,26 @@ class Stream:
                 os.remove(tmp_file)
                 self.now_playing = result.stdout.strip().strip('-').strip("'").strip(':').strip('Live - ').strip('? - ')
             '''
-            info = requests.get(self.info_link).json()
-            if len(info) > 0:
-                self.now_playing = extract_value(info[0], ['title'])
-            '''
+            rn = datetime.now(timezone.utc)
+            today = date.today().isoformat()
+            tomorrow = date.today() + timedelta(days=1)
+            self.now_playing = None
+
+            url = self.info_link + f"/replay-slots/range?startDate={today}&endDate={tomorrow}"
+            info = requests.get(url, timeout=TIMEOUT).json()
+            for i in info.json()['slots']:
+                if (rn > datetime.fromisoformat(i['start'])) & (rn < datetime.fromisoformat(i['end'])):
+                    self.now_playing = extract_value(i, ['replay', 'title'])
+
+            if self.now_playing == None:
+                url = self.info_link + f"/schedule/range?startDate={today}&endDate={tomorrow}"
+                info = requests.get(url, timeout=TIMEOUT).json()
+                for i in info:
+                    start = i['date'] + 'T' + i['startTime'] + '+00:00'
+                    end = i['date']  + 'T' + i['endTime'] + '+00:00'
+                    if (rn > datetime.fromisoformat(start)) & (rn < datetime.fromisoformat(end)):
+                        self.now_playing = extract_value(i, ['title'])
+
             
         elif self.name == 'CKUT':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
@@ -1206,7 +1222,7 @@ Stream(
         name = "HKCR",
         logo = "https://internetradioprotocol.org/logos/hkcr.jpg",
         location = "Hong Kong",
-        info_link = "https://cms.hkcr.live/schedule/current",
+        info_link = "https://cms.hkcr.live",
         stream_link = "https://stream.hkcr.live/hls/stream_high.m3u8",
         main_link = "https://hkcr.live",
         about = "Founded in 2016, Hong Kong Community Radio (HKCR) is a community platform and independent radio station comprised of creators, musicians, artists and fans with aims to broadcast and support independent works as an open platform.",
