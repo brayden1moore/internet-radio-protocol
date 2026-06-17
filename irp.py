@@ -246,7 +246,7 @@ class Stream:
             self.status = "Live" if info['online'] == True else "Offline"
 
         elif 'NTS' in self.name:
-            info = requests.get(self.info_link + '/?cacheBust=' + random.randint(0,1000000), timeout=TIMEOUT).json()
+            info = requests.get(self.info_link + '/?cacheBust=' + str(random.randint(0,1000000)), timeout=TIMEOUT).json()
             result_idx = 0 if self.name == 'NTS 1' else 1
             now = info['results'][result_idx]['now']
             self.now_playing = extract_value(now, ['broadcast_title'])  # show name like "In Focus: Timbaland"
