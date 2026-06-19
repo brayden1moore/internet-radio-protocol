@@ -55,7 +55,7 @@ def check(v):
     status = {
         '-nowPlaying':now_playing,
         'toReview':review_str,
-        'secondsSinceLastUpdated':round(seconds_since_last_update / 60, 1),
+        'minutesSinceLastUpdated':round(seconds_since_last_update / 60, 1),
         'name':v['name'],
         'hidden':hidden,
         'status':status,
