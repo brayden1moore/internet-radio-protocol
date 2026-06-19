@@ -1225,7 +1225,7 @@ Stream(
         logo = "https://internetradioprotocol.org/logos/hkcr.jpg",
         location = "Hong Kong",
         info_link = "https://cms.hkcr.live",
-        stream_link = "https://stream.hkcr.live/hls/stream_high.m3u8",
+        stream_link = "https://stream-test.hkcr.live/hls/main.m3u8",
         main_link = "https://hkcr.live",
         about = "Founded in 2016, Hong Kong Community Radio (HKCR) is a community platform and independent radio station comprised of creators, musicians, artists and fans with aims to broadcast and support independent works as an open platform.",
         support_link = "https://www.patreon.com/hkcr",
@@ -1931,67 +1931,6 @@ def process_stream(stream):
         print(stream.name, 'Error')
         return (stream.name, error, stream.hidden)
 
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-
-def send_email(error_dict):
-
-    '''
-    Function for emailing myself errors.
-    '''
-    has_other_errors = False
-    has_json_errors = False
-    has_timeout_errors = False
-
-    need_to_send = False
-
-    if isinstance(error_dict, dict):
-        other_errors = 'Errors: \n'
-        json_errors = '\n\nJSON Decode Errors: \n'
-        timeout_errors = '\n\nTimeout Errors: \n'
-        for name, err in error_dict.items():
-            if 'JSONDecodeError' in err:
-                json_errors += name + '\n'
-                has_json_errors = True
-            elif 'ReadTimeoutError' in err:
-                timeout_errors += name + '\n'
-                has_timeout_errors = True
-            elif 'ConnectTimeoutError' in err:
-                timeout_errors += name + '\n'
-                has_timeout_errors = True     
-            elif 'RemoteDisconnected' in err:
-                timeout_errors += name + '\n'
-                has_timeout_errors = True                            
-            else:
-                other_errors += f'\n\n{name}: \n {err}'
-                has_other_errors = True
-
-        body = other_errors + json_errors + timeout_errors
-        if (has_other_errors==True):
-            need_to_send = True
-        #need_to_send = True
-    
-    else:
-        body = '\n'.join([val for _,val in error_dict.items()])
-    
-    if need_to_send == True:
-        msg = MIMEMultipart()
-        msg['From'] = 'brayden@braydenmoore.com'
-        msg['To'] = 'brayden@braydenmoore.com'
-        msg['Subject'] = 'New Error(s) On IRP'
-        msg.attach(MIMEText(body, 'plain'))
-        passw = os.environ.get('GMAIL_PASS')
-
-        try:
-            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-                server.login("brayden@braydenmoore.com", passw)
-                server.send_message(msg)
-                print('Email Sent')
-        except Exception as e:
-            print('Email Failed')
-            print(e)
-
 def main_loop():
 
     '''
@@ -2000,7 +1939,7 @@ def main_loop():
     2. Writes the internetradioprotocol.org homepage from it
     3. Processes each station with ThreadPoolExecutor
     4. Writes the newly gathered information to info.json
-    5. Emails me the errors
+    5. Writes errors and status to /errors and /status
     '''
 
     while True:
@@ -2044,7 +1983,7 @@ def main_loop():
             with open('info.json', 'w') as f:
                 json.dump(updated, f, indent=4, sort_keys=True, default=str)
 
-            # email errors and save to /errors endpoint
+            # save to /errors endpoint
             error_lines = [val for key, val in error_dict.items()]
             with open('errorlog.txt', 'w') as log:
                 log.write('\n'.join(error_lines))
