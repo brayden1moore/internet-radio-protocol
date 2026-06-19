@@ -128,7 +128,8 @@ def main_loop():
             check_dict = {
                 'lastChecked': datetime.now(timezone.utc),
                 'needsReview': len(to_review.keys()),
-                'statuses':statuses,
+                'toReview':to_review,
+                'statuses':statuses
             }
 
             with open('check.json','w') as f:
