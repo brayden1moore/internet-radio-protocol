@@ -136,8 +136,9 @@ def main_loop():
 
             if len(stations)>0:
                 send_email(stations, to_review)
-        except:
-            print('Issue with checks.')
+        except Exception as e:
+            print('Issue with checks.', e)
+
 
     time.sleep(60 * 60)
     
