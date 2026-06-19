@@ -1,6 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
-from tqdm import tqdm
 import requests 
 import pprint
 import json
