@@ -1279,7 +1279,8 @@ Stream(
         support_link = "https://www.kexp.org/donate/",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        hidden=True
 ),
 Stream(
         name = "KJazz",
@@ -1293,7 +1294,8 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
-        genres = ['Jazz']
+        genres = ['Jazz'],
+        hidden=True
 ),
 Stream(
         name = "KQED",
@@ -1307,7 +1309,8 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
-        genres = ['Talk']
+        genres = ['Talk'],
+        hidden=True
 ),
 Stream(
         name = "KUSF",
