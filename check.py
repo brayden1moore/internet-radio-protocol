@@ -125,14 +125,14 @@ def main_loop():
                 del v['name']
             stations = ', '.join([k for k,_ in to_review.items()])
 
-            check = {
+            check_dict = {
                 'lastChecked': datetime.now(timezone.utc),
                 'needsReview': len(stations),
                 'statuses':statuses,
             }
 
             with open('check.json','w') as f:
-                json.dump(check, f, indent=4, sort_keys=True, default=str)
+                json.dump(check_dict, f, indent=4, sort_keys=True, default=str)
 
             if len(stations)>0:
                 send_email(stations, to_review)
