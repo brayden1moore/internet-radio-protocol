@@ -1866,7 +1866,7 @@ Stream(
         name = "Rukh Radio",
         logo = "https://internetradioprotocol.org/logos/rukh.jpg",
         location = "Odesa",
-        info_link = "https://rukh.live/?qtproxycall=aHR0cHM6Ly9hMS5hc3VyYWhvc3RpbmcuY29tL2xpc3Rlbi9ydWtoL3JhZGlvLm1wMw%3D%3D&icymetadata=1",
+        info_link = "https://rukh.live/?qtproxycall=aHR0cHM6Ly9hMS5hc3VyYWhvc3RpbmcuY29tL2xpc3Rlbi9ydWtoL3JhZGlvLm1wMw%3D%3D&icymetadata=1&_=1781900090169",
         stream_link = "https://a1.asurahosting.com/listen/rukh/radio.mp3",
         main_link = "https://rukh.live",
         about = "RUKH (РУХ) is a non-commercial DIY community radio that focuses on alternative and experimental music, subcultures and countercultures. Broadcasting from Odesa, Ukraine.",
