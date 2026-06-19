@@ -719,12 +719,17 @@ class Stream:
         elif self.name == 'Radio Banda Larga':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             try:
-                self.now_playing = info['shows']['current']['name'].upper()
-                if self.now_playing == 'TA':
-                    self.now_playing = 'Picks from the archive'
-                self.status = 'Live'
+                self.now_playing = extract_value(info, ['result','content','title'])
             except:
                 self.now_playing = None
+                self.status = 'Offline'
+            
+            try:
+                if extract_value(info, ['result','metadata']) == 'Live':
+                    self.status = 'Live'
+                else:
+                    self.status == 'Re-Run'
+            except:
                 self.status = 'Offline'
 
         elif self.name == 'Subtle Radio':
@@ -1501,8 +1506,8 @@ Stream(
         name = "Radio Banda Larga",
         logo = "https://internetradioprotocol.org/logos/rbl.png",
         location = "Turin",
-        info_link = "https://rblmedia.airtime.pro/api/live-info-v2?timezone=America/Los_Angeles",
-        stream_link = "https://rblmedia.out.airtime.pro/rblmedia_a",
+        info_link = "https://api.radiocult.fm/api/station/rblmedia-a4a44e62/schedule/live",
+        stream_link = "https://rblmedia-a4a44e62.radiocult.fm/stream",
         main_link = "https://www.rbl.media",
         about = "Radio is our primary medium, our ears our favourite tool. Other locations around the world.",
         support_link = "https://www.patreon.com/rblmedia",
