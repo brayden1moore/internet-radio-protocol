@@ -127,7 +127,7 @@ def main_loop():
 
             check_dict = {
                 'lastChecked': datetime.now(timezone.utc),
-                'needsReview': len(stations),
+                'needsReview': len(to_review.keys()),
                 'statuses':statuses,
             }
 
