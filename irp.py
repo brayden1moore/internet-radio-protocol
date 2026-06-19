@@ -1238,7 +1238,7 @@ Stream(
         logo = "https://internetradioprotocol.org/logos/hydefm.png",
         location = "San Francisco",
         info_link = "https://hydefmradio.airtime.pro/api/live-info-v2",
-        stream_link = "https://hydefmradio.out.airtime.pro/hydefmradio_a",
+        stream_link = "https://stream.hydefm.com/hls/0/stream.m3u8",
         main_link = "https://hydefm.com",
         about = "HydeFM is a community-based multi-genre online radio station broadcasting out of San Francisco, CA.",
         support_link = "https://www.every.org/hydefm?donationId=f8d1ff72-0f9a-4cfc-9055-f54389b66ca7&utm_campaign=receipts&utm_medium=email&utm_source=donation",
