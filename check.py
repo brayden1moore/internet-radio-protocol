@@ -13,7 +13,8 @@ def check(v):
     hidden = v['hidden'] 
     status = v['status']
     last_updated = v['lastUpdated']
-    seconds_since_last_update = (datetime.now(timezone.utc) - datetime.fromisoformat(last_updated)).seconds
+    now = datetime.now(timezone.utc)
+    seconds_since_last_update = (now - datetime.fromisoformat(last_updated)).seconds
 
     # check endpoint statuses
     try:
@@ -117,15 +118,21 @@ def main_loop():
             print('-'*50)
             statuses = {i[0]: i[1] for i in results}
 
-            with open('check.json','w') as f:
-                json.dump(statuses, f, indent=4, sort_keys=True, default=str)
-
             to_review = {k:v for k,v in statuses.items() if v['needsReview']==True}
             for k,v in to_review.items():
                 del v['needsReview']
                 del v['hidden']
                 del v['name']
             stations = ', '.join([k for k,_ in to_review.items()])
+
+            check = {
+                'lastChecked': datetime.now(timezone.utc),
+                'needsReview': len(stations),
+                'statuses':statuses,
+            }
+
+            with open('check.json','w') as f:
+                json.dump(check, f, indent=4, sort_keys=True, default=str)
 
             if len(stations)>0:
                 send_email(stations, to_review)
