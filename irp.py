@@ -1276,7 +1276,7 @@ Stream(
         name = "KJazz",
         logo = "https://internetradioprotocol.org/logos/kjazz.webp",
         location = "Long Beach",
-        info_link = "",
+        info_link = "https://www.kkjz.org/",
         stream_link = "https://das-edge11-live365-dal03.cdnstream.com/a49833/playlist.m3u8",
         main_link = "https://www.kkjz.org",
         about = "KKJZ 88.1 FM (“KJazz”) is the #1 full-time mainstream jazz station in the United States and one of the top ranked public radio stations in the country.",
