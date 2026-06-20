@@ -1927,7 +1927,7 @@ def get_mixtapes():
         
 
         streams.append(Stream(
-            name = 'NTS: '+ i['title'],
+            name = i['title'],
             logo = f"https://internetradioprotocol.org/logos/NTS_{i['title'].replace(' ','_')}.jpg",
             location = "International",
             info_link = "https://www.nts.live/api/v2/mixtapes",
