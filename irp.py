@@ -304,7 +304,7 @@ class Stream:
             if info['metadata']:
                 self.now_playing = extract_value(info,['metadata','playlist_title'])
                 self.now_playing_artist = extract_value(info,['metadata','dj'])
-                self.additional_info = extract_value(info,['metadata','release_title'])
+                self.now_playing_subtitle = extract_value(info,['metadata','release_title'])
             else:
                 self.now_playing = extract_value(info,['playlist','title'])
 
@@ -452,7 +452,7 @@ class Stream:
                         last_line = clean_text(description_lines[-1])  # genre list like "World, Jazz, Afrobeats, Electronic"
                         if last_line:
                             if '.' not in last_line:
-                                self.additional_info = last_line 
+                                self.now_playing_subtitle = last_line 
                         
                         self.insta_link = None
                         self.bandcamp_link = None
@@ -643,7 +643,7 @@ class Stream:
 
             try:
                 self.now_playing = info['currentShow'][0]['name']
-                self.additional_info = info['current']['track_title'] + ' by '+ info['current']['artist_name']
+                self.now_playing_subtitle = info['current']['track_title'] + ' by '+ info['current']['artist_name']
                 self.status = "Live"
             except:
                 try:
@@ -740,7 +740,7 @@ class Stream:
             try:
                 self.now_playing = info['shows']['current']['name']
                 self.now_playing_description = info['shows']['current']['description']
-                self.additional_info = info['tracks']['current']['name'].lstrip(' - ').replace('.mp3','')
+                self.now_playing_subtitle = info['tracks']['current']['name'].lstrip(' - ').replace('.mp3','')
                 self.status = 'Live'
             except:
                 self.now_playing = None
@@ -1008,7 +1008,6 @@ class Stream:
             self.now_playing,
             self.now_playing_artist,
             self.now_playing_subtitle,
-            self.additional_info,
         ]
         return_string = " - ".join(p for p in parts if p).replace(' - - ',' - ')
 
