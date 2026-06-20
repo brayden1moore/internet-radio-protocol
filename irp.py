@@ -123,7 +123,7 @@ class Stream:
     from each station and convert it into a dict to be served at /info.
     '''
 
-    def __init__(self, from_dict=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False, genres=None, tuner_only=False):
+    def __init__(self, from_dict=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False, genres=None, tuner_only=False, category=None):
         # station info 
         self.name = name
         self.logo = logo
@@ -139,6 +139,7 @@ class Stream:
         self.hidden = hidden
         self.genres = genres
         self.tuner_only = tuner_only
+        self.category = category
 
         # show info
         self.status = "Live"
@@ -179,6 +180,7 @@ class Stream:
             self.listeners = from_dict.get('listeners')
             self.genres = from_dict.get('genres')
             self.tuner_only = from_dict.get('tuner_only')
+            self.category = from_dict.get('category')
 
     def to_dict(self):
 
@@ -216,7 +218,8 @@ class Stream:
             "hidden":self.hidden,
             "listeners":self.listeners,
             "genres":self.genres,
-            "tuner_only":self.tuner_only
+            "tuner_only":self.tuner_only,
+            'category':self.category
         }
 
     
@@ -1160,7 +1163,8 @@ Stream(
         support_link = "https://ckut.ca/civicrm/contribute/transact/?reset=1&id=10",
         insta_link = "https://instagram.com/ckutmusic/",
         bandcamp_link = None,
-        soundcloud_link = "https://soundcloud.com/radiockut"
+        soundcloud_link = "https://soundcloud.com/radiockut",
+        category='Student'
 ),
 Stream(
         name = "Clyde Built Radio",
@@ -1324,7 +1328,8 @@ Stream(
         insta_link = "https://www.instagram.com/kusforg",
         bandcamp_link = "https://kusforg.bandcamp.com",
         soundcloud_link = None,
-        genres = ['Student']
+        genres = ['Student'],
+        category='Student'
 ),
 Stream(
         name = "KWSX",
@@ -1774,7 +1779,8 @@ Stream(
         support_link = "https://wnyu.org/contacts/send-us-music",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        category='Student'
 ),
 Stream(
         name = "We Are Various",
