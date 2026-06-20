@@ -135,13 +135,14 @@ def main_loop():
             with open('check.json','w') as f:
                 json.dump(check_dict, f, indent=4, sort_keys=True, default=str)
 
-            if len(stations)>0:
+            hour = datetime.now(timezone.utc).hour
+            if len(stations) > 0 and (hour >= 14 or hour < 4): 
                 send_email(stations, to_review)
+                
         except Exception as e:
             print('Issue with checks.', e)
 
-
-    time.sleep(60 * 60)
+        time.sleep(60 * 60 * 3) 
     
 if __name__ == '__main__':
     main_loop()
