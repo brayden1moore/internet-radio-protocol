@@ -1932,7 +1932,7 @@ def get_mixtapes():
             location = "International",
             info_link = "https://www.nts.live/api/v2/mixtapes",
             stream_link = i['audio_stream_endpoint'],
-            main_link = i['links'][0]['href'],
+            main_link = 'https://www.nts.live/infinite-mixtapes/' + i['mixtape_alias'],
             show_logo = i['media']['picture_medium_large'],
             about = i['description'],
             now_playing = i['subtitle'],
