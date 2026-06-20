@@ -48,8 +48,12 @@
                             <a class="a-link" id="modal-stream-link" target="_blank" href="">Stream</a>
                             <a class="a-link info-link" id="modal-info-link" target="_blank" href="">Data</a>
                     </div>
-                    <div id="modal-from-the-station">About the station</div>
-                    <div id="modal-description-container"></div>
+
+                    <div id="modal-from-the-show" class="modal-header">About the show</div>
+                    <div id="modal-subtitle-container" class="modal-description"></div>
+
+                    <div id="modal-from-the-station" class="modal-header">About the station</div>
+                    <div id="modal-description-container" class="modal-description"></div>
                 </div>
                 
             </div>
@@ -209,7 +213,7 @@
         color: black;
     }
 
-    #modal-from-the-station {
+    .modal-header {
         border:1px solid black;
         border-bottom: none;
         margin-bottom: 0px;
@@ -219,7 +223,7 @@
         color:white;
     }
 
-    #modal-description-container {
+    .modal-description {
         margin-top: 0px;
         line-height: 1.2em;
         border: 1px solid black;
@@ -1152,6 +1156,8 @@
         const modalLogo = document.getElementById('modal-logo');
         const modalPlayOverlay = document.getElementById('modal-play-overlay');
         const modalLogoAndPlayOverlay = document.getElementById('modal-logo-and-overlay');
+        const modalSubtitleHeader = document.getElementById('modal-from-the-show');
+        const modalSubtitle = document.getElementById('modal-subtitle-container');
         const modalDescription = document.getElementById('modal-description-container');
         const modalMainLink = document.getElementById('modal-main-link');
         const modalStreamLink = document.getElementById('modal-stream-link');
@@ -1167,6 +1173,25 @@
             if (info[station]['about']) {
                 modalDescription.textContent = info[station]['about'] + "";
             }
+            
+            let subtitleText = '';
+            modalSubtitleHeader.style.display = 'none';
+            modalSubtitle.style.display = 'none';
+            if (info[station]['nowPlaying'] != null) { 
+                modalSubtitle.style.display = 'block';
+                modalSubtitleHeader.style.display = 'block';
+                subtitleText = `<span style="font-family:'Archivo Semibold';">` + info[station]['nowPlaying'] + '</span>';
+            }
+            if (info[station]['nowPlayingSubtitle'] != null) { 
+                subtitleText = subtitleText + '<br>' +  info[station]['nowPlayingSubtitle'];
+            }
+            if (info[station]['nowPlayingAdditionalInfo'] != null) { 
+                subtitleText = subtitleText + '<br>' +  info[station]['nowPlayingAdditionalInfo'];
+            }
+            if (info[station]['nowPlayingDescriptionLong'] != null) { 
+                subtitleText = subtitleText + '<br>' +  info[station]['nowPlayingDescriptionLong'];
+            }            
+            modalSubtitle.innerHTML = subtitleText;
 
             modalMainLink.href = info[station]['mainLink'];
             modalStreamLink.href = info[station]['streamLink'];
