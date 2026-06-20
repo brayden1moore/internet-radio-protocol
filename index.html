@@ -133,16 +133,16 @@
             </div>
         </div>
 
-        <div id="streaming-now" class="category-header">Streaming Now</div>
+        <div id="streaming-now" class="category-header" data-controls="streams-container">Streaming Now</div>
         <div class="streams-container" id="streams-container"></div>
 
         <div id="category-container-container">
         </div>
 
-        <div id="offline-now" class="category-header">Offline</div>
+        <div id="offline-now" class="category-header" data-controls="offline-container">Offline</div>
         <div class="streams-container" id="offline-container"></div>
 
-        <div id="mixtapes-now" class="category-header">Mixtapes</div>
+        <div id="mixtapes-now" class="category-header" data-controls="mixtapes-container">Mixtapes</div>
         <div class="streams-container" id="mixtapes-container"></div>
 
         <div id="text-container">
@@ -156,12 +156,16 @@
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
     
+    .station-name-and-tag-div {
+        display: block;
+    }
 
     .category-header {
+        cursor: pointer;
         border: 1px solid black;
         font-family: 'Archivo Semibold';
         letter-spacing: -0.06em;
-        font-size: 24pt;
+        font-size: 18pt;
         margin-left: -0.5px;
         padding: 15px;
         padding-top: 10px;
@@ -270,13 +274,13 @@
         padding-left: 9px;
         color: white;
         background-color: black;
-        font-size: 28px;
+        font-size: 22px;
         letter-spacing: -0.05em;
         font-family: 'Archivo Light';
     }
 
     #modal-name-and-location {
-        margin-left: 10px;
+        margin-left: -2px;
     }
 
     #modal-content {
@@ -322,7 +326,7 @@
     }
 
     #modal {
-        font-size: 12pt;
+        font-size: 10pt;
         width: calc(100% - 37.5px);
         z-index: 11;
         height: fit-content;
@@ -673,6 +677,7 @@
             display: flex;
             margin-left: 0px;
             align-items: center;
+            justify-content: space-between;
         }
 
         #one {
@@ -684,8 +689,7 @@
         #radio {
             background-color: white;
             width: auto;
-            left: calc(100% - 150px);
-            position: absolute;
+            padding-right: 2px;
         }
         
         .dash img {
@@ -873,7 +877,7 @@
             overflow: auto;
             background-color: rgb(243,243,243); 
             color:#000000; 
-            height: 95px; 
+            height: 55px; 
             padding: 10px; 
             overflow-x:hidden; 
             overflow-y:hidden; 
@@ -883,6 +887,7 @@
             white-space: nowrap;
             margin-left: -0.5px;
             margin-top: -0.5px;
+            padding-left: 0px;
         }
 
         .a-station-container:hover {
@@ -942,15 +947,19 @@
             color: black !important;
         }
 
+        #modal-logo-and-overlay { 
+            border: 1px solid black !important;   
+        }
+
         .logo-and-overlay {
             position: relative;
             border-radius:0px; 
-            width:90px; 
-            height:90px; 
+            width:75px; 
+            height:75px; 
             margin-right:10px; 
-            border: 1px solid black; 
             cursor: pointer; 
             flex-shrink: 0;
+            border-right: 0.5px solid black;
         }
         .a-logo {
             height: 100%;
@@ -979,7 +988,7 @@
             width: 100%;
             color: rgb(0, 0, 0);
             font-family: "Archivo Semibold"; 
-            font-size: 44pt; 
+            font-size: 36pt; 
             line-height:0.75em; 
             letter-spacing:-0.06em; 
             margin-top:0px;
@@ -1067,10 +1076,22 @@
             grid-template-columns: 1fr; 
             gap: 0px; 
             margin-top: 0px; 
-            margin-bottom:25px;
+            margin-bottom:25px;           
         }
-        @media (min-aspect-ratio: 8/10) 
-        {
+    @media (min-aspect-ratio: 8/10)  {
+
+        #modal-station-name {
+            font-size: 28px;
+        }
+
+        #modal-name-and-location {
+            margin-left: -2px;
+        }
+
+
+        .category-header {
+            font-size: 24pt;
+        }
 
         #live-count {
             display: flex;
@@ -1081,6 +1102,7 @@
         }
         
         #modal {
+            font-size: 12pt;
                 width: 60%;
         }
 
@@ -1106,7 +1128,10 @@
         .a-link {
             font-size: 12pt !important;
         }
-        .a-station-container {height:105px;} 
+        .a-station-container {
+            padding-left: 10px;
+            height:105px;
+        } 
         .dragging {
             opacity: 0.5 !important;
         }
@@ -1118,6 +1143,7 @@
         .logo-and-overlay {
             width:100px; 
             height:100px;
+            border: 1px solid black; 
         }
         .a-logo {
             width: 100%;
@@ -1134,12 +1160,14 @@
             #modal {
                 width: calc(33% - 13px);
             }
-            .streams-container {grid-template-columns: 1fr 1fr 1fr 1fr;} 
+            .streams-container {grid-template-columns: 1fr 1fr 1fr;} 
         }
 
-        @media (min-width: 2000px) 
+        @media (min-width: 1500px) 
         {
-            .streams-container {grid-template-columns: 1fr 1fr 1fr 1fr} 
+            .streams-container {
+                grid-template-columns: 1fr 1fr 1fr 1fr !important;
+            } 
         }
         </style><script>
 
@@ -1772,19 +1800,21 @@
                         <img class="a-logo"  src="${logo}"  />
                     </div>
                     <div class="a-station">
-                    <div class="stream-name" target="_blank" href="${mainLink}">${stationName}</div>
-                    <div class="links">
-                        <a class="a-link" target="_blank" href="${streamLink}">Stream</a>
-                        <a class="a-link" target="_blank" href="${mainLink}">Website</a>
-                        <a class="a-link info-link" target="_blank" href="${infoLink}">Info</a>
-                        <a class="a-link support-link" target="_blank" href="${donateLink}">Donate</a>
-                    </div>
-                    <div class="now-playing"><div id="${stationName}-oneLiner" class="one-liner">${oneLiner}</div></div>
-                    <div class="station-tag-div">
-                        <div class="status station-tag status-station-tag">${status}</div>
-                        <div class="location location-station-tag station-tag">${location}</div>
-                    </div>
-                    <audio id="${stationName}-audio" style="width:40px;" data-src="${streamLink}"></audio>
+                        <div class="station-name-and-tag-div">
+                            <div class="stream-name" target="_blank" href="${mainLink}">${stationName}</div>
+                            <div class="station-tag-div">
+                                <div class="status station-tag status-station-tag">${status}</div>
+                                <div class="location location-station-tag station-tag">${location}</div>
+                            </div>
+                        </div>
+                        <div class="links">
+                            <a class="a-link" target="_blank" href="${streamLink}">Stream</a>
+                            <a class="a-link" target="_blank" href="${mainLink}">Website</a>
+                            <a class="a-link info-link" target="_blank" href="${infoLink}">Info</a>
+                            <a class="a-link support-link" target="_blank" href="${donateLink}">Donate</a>
+                        </div>
+                        <div class="now-playing"><div id="${stationName}-oneLiner" class="one-liner">${oneLiner}</div></div>
+                        <audio id="${stationName}-audio" style="width:40px;" data-src="${streamLink}"></audio>
                     </div>`
 
                     if (hidden != true & tuner != true) {
@@ -2221,4 +2251,23 @@
         }
 
         //ears();
+
+        const headers = document.querySelectorAll('.category-header');
+        headers.forEach(header => {
+            header.addEventListener('click', () => {
+                console.log(header.dataset.controls);
+                container = document.getElementById(header.dataset.controls);
+                if (container.dataset.collapsed == 'yes') {
+                    container.style.height = container.dataset.height + 'px';
+                    container.dataset.collapsed = 'no'
+                    container.style.overflowY = 'visible';
+                }
+                else {
+                    container.dataset.height = container.offsetHeight;
+                    container.style.height = '0px';
+                    container.dataset.collapsed = 'yes';
+                    container.style.overflowY = 'hidden';
+                }
+            })
+        })
         </script>
