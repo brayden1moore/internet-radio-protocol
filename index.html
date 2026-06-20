@@ -42,15 +42,14 @@
                             <div id="modal-station-location"></div>
                         </div>
                     </div>
+                    <a class="a-link support-link" id="modal-support-link" target="_blank" href="">Donate</a>
                     <div id="modal-links-container">
                             <a class="a-link" id="modal-main-link" target="_blank" href="">Website</a>
                             <a class="a-link" id="modal-stream-link" target="_blank" href="">Stream</a>
                             <a class="a-link info-link" id="modal-info-link" target="_blank" href="">Data</a>
-                            <a class="a-link support-link" id="modal-support-link" target="_blank" href="">Donate</a>
                     </div>
-                    <div id="modal-description-container">
-                        
-                    </div>
+                    <div id="modal-from-the-station">About the station</div>
+                    <div id="modal-description-container"></div>
                 </div>
                 
             </div>
@@ -210,33 +209,49 @@
         color: black;
     }
 
+    #modal-from-the-station {
+        border:1px solid black;
+        border-bottom: none;
+        margin-bottom: 0px;
+        padding: 8px;
+        margin-top: 15px;
+        background-color: #000000;
+        color:white;
+    }
+
     #modal-description-container {
-        margin-top: 16px;
+        margin-top: 0px;
+        line-height: 1.2em;
+        border: 1px solid black;
+        padding: 8px;
     }
 
     .a-link {
-        font-size: 10pt !important; 
-        margin-right: 10px;
+        font-size: 12pt !important; 
+        margin-right: 5px;
         flex: 1;
         text-align: center;
-        border: 0.5px solid black;
-        height: 20px;
+        border: 1px solid black;
+        height: 25px;
         display: flex;
         align-items: center;
         justify-content: center;
         background-color: white;
     }
-
-    .a-link:hover {
-        border-color: white !important;
+    
+    .support-link {
+        background-color:#FFFF00; 
+        margin-right: 0px;
+        margin-top: 15px;
     }
     
-    .support-link {background-color:#FFFF00; }
-    
-    .info-link {display:none}
+    .info-link {
+        display:none;
+        margin-right: 0px;
+    }
 
     #modal-links-container {
-        margin-top: 20px;
+        margin-top: 5px;
         display: flex;
     }
     #modal-logo-container {
@@ -261,7 +276,7 @@
     }
 
     #modal-content {
-        padding: 30px;
+        padding: 20px;
         margin-top: -45px;
     }
 
@@ -308,7 +323,7 @@
         z-index: 11;
         height: fit-content;
         background-color: white;
-        border: 0.5px solid black;
+        border: 1px solid black;
         box-shadow: 0 16px 17px rgba(0, 0, 0, 0.3);
     }
 
@@ -777,7 +792,7 @@
         #favorites-container {
             margin-top: 20px;
             padding-bottom: 25px;
-            border-bottom: solid black 0.5px;
+            border-bottom: solid black 1px;
         }
 
         .big-top-margin {
@@ -1079,9 +1094,14 @@
         .tags-container {
             flex-wrap: nowrap;
         }
-        .info-link {display:flex}
+        .info-link {
+            display:flex
+
+        }
         body{font-size: 12pt;} 
-        .a-link {font-size: 10pt !important;}
+        .a-link {
+            font-size: 12pt !important;
+        }
         .a-station-container {height:105px;} 
         .dragging {
             opacity: 0.5 !important;
