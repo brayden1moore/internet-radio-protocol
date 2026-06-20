@@ -2271,7 +2271,8 @@
                 console.log(header.dataset.controls);
                 container = document.getElementById(header.dataset.controls);
                 if (container.dataset.collapsed == 'yes') {
-                    container.style.height = container.dataset.height + 'px';
+                    //container.style.height = container.dataset.height + 'px';
+                    container.style.height = 'auto';
                     container.dataset.collapsed = 'no'
                     container.style.overflowY = 'visible';
                 }
