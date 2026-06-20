@@ -388,7 +388,7 @@ class Stream:
 
         elif self.name == 'Radio Quantica':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
-
+            self.status = 'Live'
             self.now_playing = info['currentShow'][0]['name'] # show name like "NIGHT MOVES"
             try:
                 self.now_playing_subtitle = info['current']['name'] # track name if provided
@@ -721,6 +721,7 @@ class Stream:
 
         elif self.name == 'Radio Banda Larga':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.status = 'Live'
             try:
                 self.now_playing = extract_value(info, ['result','content','title'])
             except:
@@ -877,6 +878,7 @@ class Stream:
             self.now_playing = extract_value(info, ['result','metadata','title'])
             self.now_playing_artist = extract_value(info, ['result','metadata','artist'])
             self.show_logo = extract_value(info, ['result','metadata','artwork','default'])
+            self.status = 'Live'
 
         elif self.name == 'Desire Path Radio':
             ch2_info = requests.get(self.info_link, timeout=TIMEOUT).json()
