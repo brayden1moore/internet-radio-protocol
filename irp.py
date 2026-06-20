@@ -123,7 +123,7 @@ class Stream:
     from each station and convert it into a dict to be served at /info.
     '''
 
-    def __init__(self, from_dict=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False, genres=None, tuner_only=False, category=None):
+    def __init__(self, from_dict=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, status=None, show_logo=None, now_playing=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False, genres=None, tuner_only=False, category=None):
         # station info 
         self.name = name
         self.logo = logo
@@ -142,14 +142,14 @@ class Stream:
         self.category = category
 
         # show info
-        self.status = "Live"
+        self.status = status
         self.now_playing_artist = None
-        self.now_playing = None
+        self.now_playing = now_playing
         self.now_playing_subtitle = None
         self.now_playing_description = None
         self.now_playing_description_long = None
         self.additional_info = None
-        self.show_logo = None
+        self.show_logo = show_logo
         self.last_updated = None
         self.one_liner = None
         self.listeners = None
@@ -248,7 +248,7 @@ class Stream:
             self.now_playing_description = extract_value(info, ['description'], rule='shorten')
             self.status = "Live" if info['online'] == True else "Offline"
 
-        elif 'NTS' in self.name:
+        elif 'NTS' in self.name and self.category != 'Mixtape':
             info = requests.get(self.info_link + '/?cacheBust=' + str(random.randint(0,1000000)), timeout=TIMEOUT).json()
             result_idx = 0 if self.name == 'NTS 1' else 1
             now = info['results'][result_idx]['now']
@@ -1434,7 +1434,7 @@ Stream(
         support_link = "https://www.nts.live/supporters",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = "https://soundcloud.com/imogensmusic"
+        soundcloud_link = None
 ),
 Stream(
         name = "NTS 2",
@@ -1906,26 +1906,49 @@ Stream(
 )
 ]
 
-def add_info_to_index(stream_json):
-    with open('index.html', 'r') as f:
-        html_content = f.read()
+def get_mixtapes():
+    mixtapes = requests.get('https://www.nts.live/api/v2/mixtapes', timeout=TIMEOUT).json()['results']
+    
+    streams = []
+    for i in mixtapes:
+        # get logo
+        if not os.path.exists(f"logos/NTS_{i['title'].replace(' ','_')}.jpg"):
+            img = Image.open(BytesIO(requests.get(i['media']['picture_medium_large']).content)).convert("RGBA")
+            w, h = img.size
+            s = min(w, h)
+            img = img.crop(((w - s) // 2, (h - s) // 2, (w + s) // 2, (h + s) // 2))
 
-    json_str = json.dumps(stream_json)
-    injection = f'''<!-- STATION_DATA_START -->
-                    <script>window.STATION_DATA = {json_str};</script>
-                    <!-- STATION_DATA_END -->'''
+            overlay = Image.open("assets/ntstransparent.png").convert("RGBA")
+            ox = (img.width - overlay.width) // 2
+            oy = (img.height - overlay.height) // 2
+            img.paste(overlay, (ox, oy), overlay)
 
-    html_content = re.sub(
-        r'<!-- STATION_DATA_START -->.*?<!-- STATION_DATA_END -->',
-        '',
-        html_content,
-        flags=re.DOTALL
-    )
+            img.convert("RGB").save(f"logos/NTS_{i['title'].replace(' ','_')}.jpg")
+        
 
-    html_content = html_content.replace('</head>', f'{injection}</head>')
-    with open('index.html', 'w') as f:
-        f.write(html_content)
+        streams.append(Stream(
+            name = 'NTS: '+ i['title'],
+            logo = f"https://internetradioprotocol.org/logos/NTS_{i['title'].replace(' ','_')}.jpg",
+            location = "International",
+            info_link = "https://www.nts.live/api/v2/mixtapes",
+            stream_link = i['audio_stream_endpoint'],
+            main_link = i['links'][0]['href'],
+            show_logo = i['media']['picture_medium_large'],
+            about = i['description'],
+            now_playing = i['subtitle'],
+            support_link =  'https://www.nts.live/supporters',
+            insta_link = "https://www.instagram.com/nts_radio/",
+            bandcamp_link = "",
+            soundcloud_link = "",
+            hidden = False,
+            status = 'Re-Run',
+            category = "Mixtape"
+        ))
 
+    return streams
+
+# add mixtapes to stream
+streams = streams + get_mixtapes()
 
 def process_stream(stream):
 

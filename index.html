@@ -134,8 +134,10 @@
         <div class="streams-container" id="streams-container"></div>
 
         <div id="category-container-container">
-
         </div>
+
+        <div id="mixtapes-now" class="category-header">NTS Mixtapes</div>
+        <div class="streams-container" id="mixtapes-container"></div>
 
         <div id="offline-now" class="category-header">Offline</div>
         <div class="streams-container" id="offline-container"></div>
@@ -1641,6 +1643,7 @@
             }
 
             const container = document.getElementById('streams-container');
+            const mixtapeContainer = document.getElementById('mixtapes-container');
             const offlineContainer = document.getElementById('offline-container');
             const updatedOneLiners = [];
             const offliners = [];
@@ -1743,6 +1746,10 @@
                             stationDiv.classList.add('offline');
                             stationDiv.dataset.container = 'offline-container';
                             offliners.push(stationDiv);
+                        }
+                        else if (category === 'Mixtape') {
+                            stationDiv.dataset.container = 'mixtapes-container'
+                            mixtapeContainer.appendChild(stationDiv);
                         }
                         else {
                             stationDiv.dataset.container = 'streams-container';
