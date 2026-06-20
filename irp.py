@@ -579,7 +579,8 @@ class Stream:
             now_utc = datetime.now(timezone.utc)
             shows = info['channels']
             episodes = [i for i in info['episodes'] if i['channel'][0]['slug'] == name_to_slug_dict[self.name]]
-
+            
+            self.now_playing = 'Playlist'
             for i in episodes:
                 episode_time = datetime.fromisoformat(i['episodeTime']) 
                 episode_date = datetime.fromisoformat(i['episodeDate']) + timedelta(minutes=60)
