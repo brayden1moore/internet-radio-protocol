@@ -799,8 +799,6 @@
 
         #favorites-container {
             margin-top: 20px;
-            padding-bottom: 25px;
-            border-bottom: solid black 1px;
         }
 
         .big-top-margin {
@@ -1077,11 +1075,20 @@
             display: grid; 
             grid-template-columns: 1fr; 
             gap: 0px; 
-            margin-top: 0px; 
+            overflow: visible;  
+            margin-top: -1px; 
+            margin-left: -0.5px;
             margin-bottom:25px;       
-            overflow: visible;    
+            border: 1px solid black; 
+            border-right: 0.5px solid black;
+            border-bottom: 0.5px solid black;
         }
     @media (min-aspect-ratio: 8/10)  {
+        .streams-container {
+            margin-top: 0px; 
+            margin-left: 0px;     
+            border: none; 
+        }
 
         #modal-station-name {
             font-size: 28px;
@@ -1138,7 +1145,10 @@
         .dragging {
             opacity: 0.5 !important;
         }
-        .streams-container {grid-template-columns: 1fr 1fr;} 
+        .streams-container {
+            grid-template-columns: 1fr 1fr;
+            border: none;
+        } 
         .the-header{
             margin-bottom: 0px;
             font-size: 44pt;
