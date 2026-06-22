@@ -179,7 +179,7 @@ class Stream:
             self.hidden = from_dict.get('hidden')
             self.listeners = from_dict.get('listeners')
             self.genres = from_dict.get('genres')
-            self.tuner_only = from_dict.get('tuner_only')
+            self.tuner_only = from_dict.get('tunerOnly')
             self.category = from_dict.get('category')
 
     def to_dict(self):
@@ -218,7 +218,7 @@ class Stream:
             "hidden":self.hidden,
             "listeners":self.listeners,
             "genres":self.genres,
-            "tuner_only":self.tuner_only,
+            "tunerOnly":self.tuner_only,
             'category':self.category
         }
 
