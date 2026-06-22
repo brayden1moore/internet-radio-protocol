@@ -1912,6 +1912,25 @@ Stream(
 
 def get_mixtapes():
     mixtapes = requests.get('https://www.nts.live/api/v2/mixtapes', timeout=TIMEOUT).json()['results']
+
+    genre_map = {
+        '4 To The Floor':['House','Techno'],
+        'Expansions':['Jazz'],
+        'Feelings':['Soul','Boogie'],
+        'Field Recordings':['Ambient','Field Recording'],
+        'Island Time':['Reggae','Dub'],
+        'Labyrinth':['Electronic','Glitch'],
+        'Low Key':['Lo-fi','Hip-Hop'],
+        'Memory Lane':['Folk','Psychedelic'],
+        'Otaku':['OST','Anime'],
+        'Poolside':['Balearic','Pop'],
+        'Rap House':['Trap','Drill'],
+        'Sheet Music':['Classical'],
+        'Slow Focus':['Ambient','Drone'],
+        'Sweat':['Dance','World'],
+        'The Pit':['Metal'],
+        'The Tube':['Post-Punk']
+    }
     
     streams = []
     for i in mixtapes:
@@ -1929,6 +1948,10 @@ def get_mixtapes():
 
             img.convert("RGB").save(f"logos/NTS_{i['title'].replace(' ','_')}.jpg")
         
+        if i['title'] in genre_map.keys():
+            genres = genre_map[i['title']]
+        else:
+            genres = None
 
         streams.append(Stream(
             name = 'NTS ' + i['title'],
@@ -1946,7 +1969,8 @@ def get_mixtapes():
             soundcloud_link = "",
             hidden = False,
             status = 'Re-Run',
-            category = "Mixtape"
+            category = "Mixtape",
+            genres=genres
         ))
 
     return streams
