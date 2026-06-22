@@ -429,10 +429,10 @@ class Stream:
             response = requests.get(url, params=params, timeout=TIMEOUT)
             data = response.json()
             self.additional_info = None 
-            self.now_playing = None
+            self.now_playing = 'Re-Run'
             self.now_playing_description = None
             self.now_playing_description_long = None   
-            self.status = 'Offline'
+            self.status = 'Re-Run'
 
             for event in data.get('items', []):
                 end_time_str = event['end']['dateTime']

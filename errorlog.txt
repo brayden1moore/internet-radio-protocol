@@ -1,0 +1,12 @@
+[2026-06-19 18:37:48.726141] Error updating KUSF:
+Traceback (most recent call last):
+  File "/Users/bmo/Library/Mobile Documents/com~apple~CloudDocs/Code/internet-radio-protocol/irp.py", line 1962, in process_stream
+    stream.update()
+    ~~~~~~~~~~~~~^^
+  File "/Users/bmo/Library/Mobile Documents/com~apple~CloudDocs/Code/internet-radio-protocol/irp.py", line 985, in update
+    self.now_playing_artist = extract_value(info, ['show','users'], ['display_name'], rule='list')
+                              ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bmo/Library/Mobile Documents/com~apple~CloudDocs/Code/internet-radio-protocol/irp.py", line 96, in extract_value
+    value = ', '.join(value_list)
+TypeError: sequence item 0: expected str instance, NoneType found
+
