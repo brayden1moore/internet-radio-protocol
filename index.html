@@ -62,6 +62,7 @@
         <div id="top-bar">
             <div class="the-header" style="display:flex; align-items:center;">
                 <!--<img id="main-logo" src="assets/ears.png">-->
+                <img id="earlogo" src="assets/earlogo.png">
                 <div id="title">
                     <div id="one">One  </div>
                     <div class="dash">
@@ -156,6 +157,15 @@
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
     
+    #earlogo {
+        padding-top: 4px;
+        height: 50px;
+        padding-right: 7px;
+        padding-bottom: 4px;
+        margin-right: 7px;
+        width: auto;
+        border-right: 1px solid black;
+    }
     .station-name-and-tag-div {
         display: block;
     }
@@ -993,7 +1003,9 @@
             letter-spacing:-0.06em; 
             margin-top:0px;
             margin-bottom:0px;
-            padding: 7px;
+            padding-top:0px;
+            padding-left: 7px;
+            padding-right: 7px;
         }
         .a-station {
             font-family: "Archivo Light"; 
@@ -1746,7 +1758,7 @@
                 const donateLink = data[stationName]['supportLink'];
                 const logo = data[stationName]['logo'];
                 const hidden = data[stationName]['hidden'];
-                const tuner = data[stationName]['tuner_only'];
+                const tuner = data[stationName]['tunerOnly'];
                 const category = data[stationName]['category'];
                 
                 const existingStation = document.getElementById(stationName);
