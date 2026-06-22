@@ -785,6 +785,7 @@ class Stream:
             today = date.today().isoformat()
             tomorrow = date.today() + timedelta(days=1)
             self.now_playing = None
+            self.status = 'Offline'
 
             url = self.info_link + f"/replay-slots/range?startDate={today}&endDate={tomorrow}"
             info = requests.get(url, timeout=TIMEOUT).json()
@@ -798,8 +799,11 @@ class Stream:
                 info = requests.get(url, timeout=TIMEOUT).json()
                 for i in info:
                     start = i['date'] + 'T' + i['startTime'] + '+00:00'
-                    end = i['date']  + 'T' + i['endTime'] + '+00:00'
-                    if (rn > datetime.fromisoformat(start)) & (rn < datetime.fromisoformat(end)):
+                    if i['startTime'] > i['endTime']:
+                        end = datetime.fromisoformat(i['date']  + 'T' + i['endTime'] + '+08:00')
+                    else:
+                        end = datetime.fromisoformat(i['date']  + 'T' + i['endTime'] + '+08:00') + timedelta(1)
+                    if (rn > datetime.fromisoformat(start)) & (rn < end):
                         self.now_playing = extract_value(i, ['title'])
                         self.status = 'Live'
 
