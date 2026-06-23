@@ -885,7 +885,7 @@ class Stream:
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.now_playing = extract_value(info, ['result','metadata','title'])
             self.now_playing_artist = extract_value(info, ['result','metadata','artist'])
-            self.show_logo = extract_value(info, ['result','metadata','artwork','default'])
+            self.show_logo = extract_value(info, ['result','metadata','artwork','512x512'])
             self.status = 'Live'
 
         elif self.name == 'Desire Path Radio':
