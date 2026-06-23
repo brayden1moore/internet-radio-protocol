@@ -235,7 +235,7 @@ class Stream:
 
         if self.name == 'HydeFM':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
-            self.now_playing = extract_value(info, ['shows','current','name'])
+            self.now_playing = extract_value(info, ['showTitle'])
             self.status = "Live" if self.now_playing else "Offline"
                 
         if self.name in ['SutroFM','Lower Grand Radio','Vestiges']:
@@ -1255,7 +1255,7 @@ Stream(
         name = "HydeFM",
         logo = "https://internetradioprotocol.org/logos/hydefm.png",
         location = "San Francisco",
-        info_link = "https://hydefmradio.airtime.pro/api/live-info-v2",
+        info_link = "https://hydefm.com/wp-json/hydefm/v1/stream-status",
         stream_link = "https://stream.hydefm.com/hls/0/stream.m3u8",
         main_link = "https://hydefm.com",
         about = "HydeFM is a community-based multi-genre online radio station broadcasting out of San Francisco, CA.",
