@@ -1007,6 +1007,30 @@ class Stream:
                 self.status = "Offline"
                 self.now_playing = "Offline"
 
+        elif self.name == 'KALX':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.now_playing = extract_value(info, ['show','title'])
+            self.now_playing_subtitle = extract_value(info, ['show','users',0,'profile_text'])
+            if self.now_playing_description:
+                self.now_playing_description = self.now_playing_subtitle.replace('<p>','').replace('</p>','')
+            if extract_value(info,['broadcast','is_archived']) == True:
+                self.status = 'Re-Run'
+            else:
+                self.status = 'Live'
+
+            self.show_logo = extract_value(info, ['show','image','url'])
+
+            try:
+                url = "https://kalx.berkeley.edu/wp-content/plugins/kalx-spinitron/now-playing.php"
+                response = requests.get(url, headers=headers).text
+                soup = BeautifulSoup(response, features='html.parser')
+                artist = soup.find_all(attrs={'class':"small-15 artist bold"})[1]
+                artist = artist.getText().strip()
+                song = soup.find(attrs={'class':"song"})
+                song.getText().strip()
+                self.now_playing_subtitle = song + ' by ' + artist
+            except:
+                self.now_playing_subtitle = None
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
@@ -1909,6 +1933,20 @@ Stream(
         bandcamp_link = "https://program-audio.bandcamp.com/music",
         soundcloud_link = "https://soundcloud.com/programaudio",
         tuner_only = True
+),
+Stream(
+        name = "KALX",
+        logo = "https://internetradioprotocol.org/logos/kalx.png",
+        location = "Berkeley",
+        info_link = "https://kalx.studio.creek.org/api/current?x=1&studioId=29",
+        stream_link = "https://stream.kalx.berkeley.edu:8443/kalx-128.mp3",
+        main_link = "https://kalx.berkeley.edu",
+        about = "KALX 90.7 FM broadcasts freeform radio 24 hours a day to a large portion of the San Francisco Bay Area. You can catch all stripes of underground music accented with news, sports and alternative informational programming.",
+        support_link = "https://kalx.berkeley.edu/donate/",
+        insta_link = "https://www.instagram.com/kalxradio/",
+        tuner_only = True,
+        genres = ['Student'],
+        category='Student'
 )
 ]
 
