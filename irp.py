@@ -876,8 +876,10 @@ class Stream:
             self.now_playing_artist = extract_value(info, ['showQueued','host'])
             if info['onair'] == 'archive':
                 self.stream_link = info['streamArchive']
+                self.status = 'Re-Run'
             else:
                 self.stream_link = info['streamLive']
+                self.status = 'Live'
 
         elif self.name == 'Oroko Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
