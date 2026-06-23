@@ -1022,7 +1022,7 @@ class Stream:
 
             try:
                 url = "https://kalx.berkeley.edu/wp-content/plugins/kalx-spinitron/now-playing.php"
-                response = requests.get(url, headers=headers, timeout=TIMEOUT).text
+                response = requests.get(url, timeout=TIMEOUT).text
                 soup = BeautifulSoup(response, features='html.parser')
                 artist = soup.find_all(attrs={'class':"small-15 artist bold"})[1]
                 artist = artist.getText().strip()
