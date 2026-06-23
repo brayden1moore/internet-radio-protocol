@@ -1947,7 +1947,7 @@ Stream(
         about = "KALX 90.7 FM broadcasts freeform radio 24 hours a day to a large portion of the San Francisco Bay Area. You can catch all stripes of underground music accented with news, sports and alternative informational programming.",
         support_link = "https://kalx.berkeley.edu/donate/",
         insta_link = "https://www.instagram.com/kalxradio/",
-        tuner_only = True,
+        tuner_only = False,
         genres = ['Student'],
         category='Student'
 )
