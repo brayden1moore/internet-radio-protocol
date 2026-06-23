@@ -1010,9 +1010,9 @@ class Stream:
         elif self.name == 'KALX':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.now_playing = extract_value(info, ['show','title'])
-            self.now_playing_subtitle = extract_value(info, ['show','users',0,'profile_text'])
+            self.now_playing_description = extract_value(info, ['show','users',0,'profile_text'])
             if self.now_playing_description:
-                self.now_playing_description = self.now_playing_subtitle.replace('<p>','').replace('</p>','')
+                self.now_playing_description = self.now_playing_description.replace('<p>','').replace('</p>','')
             if extract_value(info,['broadcast','is_archived']) == True:
                 self.status = 'Re-Run'
             else:
