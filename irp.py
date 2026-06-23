@@ -2002,7 +2002,7 @@ def get_mixtapes():
 
         streams.append(Stream(
             name = 'NTS ' + i['title'],
-            logo = f"https://internetradioprotocol.org/logos/NTS_{i['title'].replace(' ','_')}.jpg",
+            logo = f"https://internetradioprotocol.org/logos/NTS_{i['title'].replace(' ','_')}_Corner.jpg",
             location = "International",
             info_link = "https://www.nts.live/api/v2/mixtapes",
             stream_link = i['audio_stream_endpoint'],
