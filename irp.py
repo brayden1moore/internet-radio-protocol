@@ -1022,12 +1022,12 @@ class Stream:
 
             try:
                 url = "https://kalx.berkeley.edu/wp-content/plugins/kalx-spinitron/now-playing.php"
-                response = requests.get(url, headers=headers).text
+                response = requests.get(url, headers=headers, timeout=TIMEOUT).text
                 soup = BeautifulSoup(response, features='html.parser')
                 artist = soup.find_all(attrs={'class':"small-15 artist bold"})[1]
                 artist = artist.getText().strip()
                 song = soup.find(attrs={'class':"song"})
-                song.getText().strip()
+                song = song.getText().strip()
                 self.now_playing_subtitle = song + ' by ' + artist
             except:
                 self.now_playing_subtitle = None
