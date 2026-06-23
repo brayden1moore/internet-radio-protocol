@@ -1987,8 +1987,10 @@ def get_mixtapes():
             img = img.crop(((w - s) // 2, (h - s) // 2, (w + s) // 2, (h + s) // 2))
 
             overlay = Image.open("assets/ntstransparent.png").convert("RGBA")
-            ox = (img.width - overlay.width) // 2
-            oy = (img.height - overlay.height) // 2
+            overlay = overlay.resize((overlay.width // 2, overlay.height // 2))
+            margin = 20
+            ox = img.width - overlay.width - margin
+            oy = img.height - overlay.height - margin
             img.paste(overlay, (ox, oy), overlay)
 
             img.convert("RGB").save(f"logos/NTS_{i['title'].replace(' ','_')}.jpg")
