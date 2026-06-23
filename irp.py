@@ -1029,7 +1029,8 @@ class Stream:
                 song = soup.find(attrs={'class':"song"})
                 song = song.getText().strip()
                 self.now_playing_subtitle = song + ' by ' + artist
-            except:
+            except Exception as e:
+                print(e)
                 self.now_playing_subtitle = None
 
     def set_last_updated(self):
