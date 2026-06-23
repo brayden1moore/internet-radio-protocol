@@ -478,6 +478,8 @@ class Stream:
             if not self.now_playing:
                 self.now_playing = extract_value(info, ['shows','current','name'])
             self.now_playing_artist = extract_value(info, ['tracks','current','metadata','artist_name'])
+            if not self.now_playing:
+                self.status = 'Offline'
             
         elif self.name == 'KQED':
             today = date.today().isoformat()
