@@ -1058,7 +1058,7 @@ class Stream:
             if self.status == 'Live':
                 date1 = re.search("([0-9]{2}\/[0-9]{2}\/[0-9]{4})", self.one_liner)
                 if date1:
-                    date = datetime.strptime(date1.group(), "%d/%m/%Y")
+                    date = datetime.strptime(date1.group(), "%d/%m/%Y").date
                     print('DATE1',date)
                     if date < datetime.now().date():
                         self.status = 'Re-Run'
@@ -1066,9 +1066,9 @@ class Stream:
                     date2 = re.search("([0-9]{2}\.[0-9]{2}\.[0-9]{2})", self.one_liner)
                     if date2:
                         try:
-                            date = datetime.strptime(date2.group(), "%m.%d.%y")
+                            date = datetime.strptime(date2.group(), "%m.%d.%y").date
                         except:
-                            date = datetime.strptime(date2.group(), "%d.%m.%y")      
+                            date = datetime.strptime(date2.group(), "%d.%m.%y").date
                         if date:   
                             print('DATE2',date)                   
                             if date < datetime.now().date():
