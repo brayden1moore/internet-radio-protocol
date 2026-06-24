@@ -1034,7 +1034,23 @@ class Stream:
             except Exception as e:
                 print(e)
                 self.now_playing_subtitle = None
+        
+        elif self.name == 'WKCR':
+            resp = requests.get(self.info_link).text.replace('\\"', '"').replace("'", '"')
+            soup = BeautifulSoup(resp[resp.find('(')+2:-3], features='html.parser')
 
+            artist = soup.find('span', class_='artist').get_text(strip=True)
+            song = soup.find('span', class_='song').get_text(strip=True)
+
+            show_link = soup.find('td', class_='spin-time').find('a').get('href')
+            resp = requests.get(show_link).text
+            show_soup = BeautifulSoup(resp, features='html.parser')
+            show_name = show_soup.find('h3').find('a').get_text()
+
+            self.now_playing = show_name
+            self.now_playing_subtitle = f'{song} by {artist}'
+
+        
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
@@ -1952,6 +1968,21 @@ Stream(
         tuner_only = False,
         genres = ['Student'],
         category='Student'
+),
+Stream(
+        name = "WKCR",
+        logo = "https://internetradioprotocol.org/logos/wkcr.png",
+        location = "New York",
+        info_link = "https://widgets.spinitron.com/widget/now-playing-v2?callback=_spinitron09910823593912169178232477166&station=wkcr&num=1&sharing=0&player=0&cover=0&merch=0",
+        stream_link = "https://wkcr.streamguys1.com/live",
+        main_link = "https://www.cc-seas.columbia.edu/wkcr/",
+        about = "WKCR exists to preserve and share music, the arts, and history with listeners in the New York metro area and beyond, curating programming that pushes boundaries while maintaining an eye to historical and artistic value, regardless of commercial significance.",
+        support_link = "https://www.givenow.columbia.edu/?_sa=07483&_sd=411&ac=CQAU#",
+        insta_link = "https://www.instagram.com/wkcr/",
+        tuner_only = True,
+        genres = ['Student','Jazz'],
+        category = 'Student',
+        status = 'Live'
 )
 ]
 
