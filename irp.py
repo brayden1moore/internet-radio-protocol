@@ -235,6 +235,7 @@ class Stream:
 
         if self.name == 'HydeFM':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.genres = None
             self.now_playing = extract_value(info, ['showTitle'])
             self.status = "Live" if self.now_playing else "Offline"
             self.stream_link = 'https://stream.hydefm.com/hls/0/stream.m3u8'
@@ -249,6 +250,20 @@ class Stream:
                     self.stream_link = show['audio'] + f'#t={time_into}'
                     self.now_playing = 'Rerun: ' + show['title']
                     self.status = 'Re-Run'
+
+                    url = 'https://hydefm.com/archive' + show['path']
+                    soup = BeautifulSoup(requests.get(url, timeout=TIMEOUT).text, 'html.parser')
+
+                    widget_containers = soup.find_all(attrs={'class':'elementor-widget-container'})
+                    for i in widget_containers:
+                        if i.find_all(attrs={'rel':'tag'}):
+                            tags = i.find_all('a')
+                            genres = []
+                            for tag in tags:
+                                genres.append(tag.text)
+                            self.genres = genres
+                            break
+
                 except Exception as e:
                     print(e)
                 
