@@ -1979,7 +1979,7 @@ Stream(
         about = "WKCR exists to preserve and share music, the arts, and history with listeners in the New York metro area and beyond, curating programming that pushes boundaries while maintaining an eye to historical and artistic value, regardless of commercial significance.",
         support_link = "https://www.givenow.columbia.edu/?_sa=07483&_sd=411&ac=CQAU#",
         insta_link = "https://www.instagram.com/wkcr/",
-        tuner_only = True,
+        tuner_only = False,
         genres = ['Student','Jazz'],
         category = 'Student',
         status = 'Live'
