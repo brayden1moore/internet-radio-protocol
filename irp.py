@@ -1976,7 +1976,7 @@ Stream(
         info_link = "https://widgets.spinitron.com/widget/now-playing-v2?callback=_spinitron09910823593912169178232477166&station=wkcr&num=1&sharing=0&player=0&cover=0&merch=0",
         stream_link = "https://wkcr.streamguys1.com/live",
         main_link = "https://www.cc-seas.columbia.edu/wkcr/",
-        about = "WKCR exists to preserve and share music, the arts, and history with listeners in the New York metro area and beyond, curating programming that pushes boundaries while maintaining an eye to historical and artistic value, regardless of commercial significance.",
+        about = "Columbia University's student-run radio station, WKCR exists to preserve and share music, the arts, and history with listeners in the New York metro area and beyond, curating programming that pushes boundaries while maintaining an eye to historical and artistic value, regardless of commercial significance.",
         support_link = "https://www.givenow.columbia.edu/?_sa=07483&_sd=411&ac=CQAU#",
         insta_link = "https://www.instagram.com/wkcr/",
         tuner_only = False,
