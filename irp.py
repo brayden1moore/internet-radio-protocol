@@ -388,7 +388,16 @@ class Stream:
 
         elif self.name == 'Radio Quantica':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
-            self.status = 'Live'
+
+            live_link = 'https://owncast.radioquantica.com/api/status'
+            live_info = requests.get(live_link, timeout=TIMEOUT).json()
+            if live_info['online'] == True:
+                self.status = 'Live'
+                self.stream_link = 'https://lon1.digitaloceanspaces.com/radio-quantica-owncast/hls/0/stream.m3u8'
+            else:
+                self.status = 'Re-Run'
+                self.stream_link = 'https://libretime.radioquantica.com/main.mp3'
+
             self.now_playing = info['currentShow'][0]['name'] # show name like "NIGHT MOVES"
             try:
                 self.now_playing_subtitle = info['current']['name'] # track name if provided
