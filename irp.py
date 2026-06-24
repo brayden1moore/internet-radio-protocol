@@ -237,6 +237,20 @@ class Stream:
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.now_playing = extract_value(info, ['showTitle'])
             self.status = "Live" if self.now_playing else "Offline"
+            self.stream_link = 'https://stream.hydefm.com/hls/0/stream.m3u8'
+
+            if self.status == 'Offline':
+                offline_info = requests.get('https://hydefm.com/wp-json/hydefm/v1/offline-now').json()
+                try:
+                    time_into = offline_info['offset']
+                    shows = offline_info['order']
+                    show_index = offline_info['index']
+                    show = shows[show_index]
+                    self.stream_link = show['audio'] + f'#t={time_into}'
+                    self.now_playing = 'Rerun: ' + show['title']
+                    self.status = 'Re-Run'
+                except Exception as e:
+                    print(e)
                 
         if self.name in ['SutroFM','Lower Grand Radio','Vestiges']:
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
