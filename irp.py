@@ -665,7 +665,8 @@ class Stream:
                     url = 'https://radio.syg.ma/' + info['tracks']['current']['metadata']['info_url']
                     soup = BeautifulSoup(requests.get(url, timeout=TIMEOUT).text, "html.parser")
                     self.show_logo = soup.find("meta", property="og:image")['content']
-                except:
+                except Exception as e:
+                    print(e)
                     self.show_logo = None
 
             except:
