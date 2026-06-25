@@ -340,6 +340,8 @@ class Stream:
                 self.now_playing = extract_value(info,['playlist','title'])
 
             self.show_logo = extract_value(info,['playlist','image'])
+            if requests.get(self.show_logo, timeout=3).status_code != 200:
+                self.show_logo = None
              
             if info['metadata']['artist_name'] and self.additional_info:
                 self.additional_info += ' by ' + extract_value(info,['metadata','artist_name'])
