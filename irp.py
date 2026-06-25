@@ -273,6 +273,8 @@ class Stream:
             self.additional_info = None 
             self.listeners = extract_value(info, ['listeners'], rule='listeners')
             self.show_logo = extract_value(info, ['image'])
+            if self.show_logo == 'https://evenings.s3.us-east-2.amazonaws.com/images/1775972648067.jpg':
+                self.show_logo = None
             self.now_playing_description_long = extract_value(info, ['description'])
             self.now_playing_description = extract_value(info, ['description'], rule='shorten')
             self.status = "Live" if info['online'] == True else "Offline"
