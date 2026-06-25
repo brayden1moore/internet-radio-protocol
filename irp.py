@@ -385,7 +385,7 @@ class Stream:
                 if type == 'livestream':
                     self.stream_link = 'https://origin.streamnerd.nl/kioskradio/kioskradio/playlist.m3u8'
                 else:
-                    self.stream_link = 'https://origin.streamnerd.nl/kioskradio/kioskradio2/playlist.m3u8'#'https://kioskradiobxl.out.airtime.pro/kioskradiobxl_b'
+                    self.stream_link = 'https://kioskradiobxl.out.airtime.pro/kioskradiobxl_b'
 
 
         elif self.name == 'Do!!You!!! World': 
@@ -932,7 +932,7 @@ class Stream:
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.now_playing = extract_value(info, ['showQueued','title'])
             self.now_playing_artist = extract_value(info, ['showQueued','host'])
-            if info['onair'] == 'archive':
+            if info['onair'] == 'archive' or info['onair'] == 'off':
                 self.stream_link = info['streamArchive']
                 self.status = 'Re-Run'
             else:
