@@ -381,6 +381,13 @@ class Stream:
                 self.status = 'Live'
                 self.now_playing_subtitle = extract_value(info, ['tracks','current','name']) # episode title "Delodio"
 
+                type = extract_value(info, ['tracks','current','type'])
+                if type == 'livestream':
+                    self.stream_link = 'https://origin.streamnerd.nl/kioskradio/kioskradio/playlist.m3u8'
+                else:
+                    self.stream_link = 'https://origin.streamnerd.nl/kioskradio/kioskradio2/playlist.m3u8'#'https://kioskradiobxl.out.airtime.pro/kioskradiobxl_b'
+
+
         elif self.name == 'Do!!You!!! World': 
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
 
