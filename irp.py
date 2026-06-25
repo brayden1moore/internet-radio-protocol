@@ -797,11 +797,12 @@ class Stream:
             self.status = "Offline"
             try:
                 self.now_playing = info['now_playing']
-                self.status = "Live"
                 if info['source'] == 'live':
                     self.stream_link = 'http://monotonicradio.com:8000/stream.m3u'
+                    self.status = "Live"
                 else: 
                     self.stream_link = 'https://monotonicradio.com/stream'
+                    self.status = "Re-Run"
             except:
                 pass
             self.now_playing_description = info.get('video_description')
