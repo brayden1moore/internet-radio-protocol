@@ -1113,7 +1113,7 @@ class Stream:
             self.now_playing = show_name
             self.now_playing_subtitle = f'{song} by {artist}'
 
-        elif self.name == 'Datafruits':
+        elif self.name == 'Datafruits FM':
             timeout = 3
             ws = create_connection(
                     self.info_link,
@@ -2072,7 +2072,7 @@ Stream(
         status = 'Live'
 ),
 Stream(
-        name = "Datafruits",
+        name = "Datafruits FM",
         logo = "https://internetradioprotocol.org/logos/datafruits.png",
         location = "World",
         info_link = "wss://hotdog-lounge.herokuapp.com/socket/websocket?vsn=2.0.0",
