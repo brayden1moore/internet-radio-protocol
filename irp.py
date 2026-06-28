@@ -2097,7 +2097,8 @@ Stream(
         tuner_only = False,
         genres = ['Student'],
         category = 'Student',
-        status = 'Live'
+        status = 'Live',
+        hidden = True
 )
 ]
 
