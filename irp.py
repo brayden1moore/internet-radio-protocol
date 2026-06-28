@@ -1007,7 +1007,11 @@ class Stream:
             }
             info = requests.get(self.info_link, headers=headers, timeout=TIMEOUT + 10).text
             self.now_playing = info
-            self.status = "Live" if self.now_playing else "Offline"
+            if 'Account Suspended' in self.now_playing:
+                self.now_playing = 'Rukh Playlist'
+                self.status = 'Re-Run'
+            else:
+                self.status = "Live" if self.now_playing else "Offline"
     
         elif self.name == 'Pan African Space Station':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
