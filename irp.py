@@ -481,6 +481,7 @@ class Stream:
             self.additional_info = None 
             self.now_playing = 'Re-Run'
             self.now_playing_description = None
+            #self.now_playing_subtitle = None
             self.now_playing_description_long = None   
             self.status = 'Re-Run'
 
@@ -502,7 +503,7 @@ class Stream:
                         last_line = clean_text(description_lines[-1])  # genre list like "World, Jazz, Afrobeats, Electronic"
                         if last_line:
                             if '.' not in last_line:
-                                self.now_playing_subtitle = last_line 
+                                self.genres = extract_value(last_line, rule='list_genres')
                         
                         self.insta_link = None
                         self.bandcamp_link = None
