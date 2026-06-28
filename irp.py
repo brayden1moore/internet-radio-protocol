@@ -1452,7 +1452,7 @@ Stream(
         info_link = "https://stream.kwsx.online/api/nowplaying/kwsx",
         stream_link = "https://stream.kwsx.online/listen/kwsx/radio.mp3",
         main_link = "https://radio.kwsx.online",
-        about = "KWSX is the bleeding-edge of digital online radio. Created by a like-minded collective of freaks, KWSX cares to give music the space it needs to breathe. Radiation from the computer screens is boiling our eyes. Use your ears.",
+        about = "KWSX is the bleeding-edge of digital online radio. Created by a like-minded collective of freaks, KWSX cares to give music the space it needs to breathe. Radiation from computer screens is boiling our eyes. Use your ears.",
         support_link = "https://ko-fi.com/kwsxradio",
         insta_link = None,
         bandcamp_link = None,
