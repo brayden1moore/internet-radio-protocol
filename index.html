@@ -81,7 +81,7 @@
                 <svg viewBox="0 0 100 100" width="35px" height="60%">
                                 <polygon id="play-random-triangle" points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"></polygon>
                 </svg>
-                <div id="intro-div">Play a random station</div>
+                <div id="intro-div">Start listening</div>
             </div>
             <div id="last-up">        
                 <span id='live-count'></span><span class='last-updated'></span>
@@ -1321,7 +1321,10 @@
         const shareDiv = document.getElementById('share-icon');
         let currentPositionInPrev = 0;
         let previousStations = [];
+        let hasChosenOnce = false
         function chooseStation(id, random=false, fromLink=false, fromHistory=false) {
+            hasChosenOnce = true;
+            introDiv.textContent = 'Play a random station'
             if (player.dataset.id && !fromHistory) {
                 previousStations.push(player.dataset.id);
             }
@@ -1338,7 +1341,7 @@
             const station = document.getElementById(id)
             const oneLiner = station.dataset.oneLiner;
             const logo = station.querySelector('.a-logo').src;
-            document.querySelectorAll('meta[property=og\\:image]')[0].setAttribute('content', logo.replace('https://internetradioprotocol.org',''))
+            //document.querySelectorAll('meta[property=og\\:image]')[0].setAttribute('content', logo.replace('https://internetradioprotocol.org',''))
 
             playerImg.src = logo;
             player.dataset.id = id;
