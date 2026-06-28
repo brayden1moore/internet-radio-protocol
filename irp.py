@@ -1,5 +1,6 @@
 from datetime import datetime, timezone, timedelta, date
 from concurrent.futures import ThreadPoolExecutor
+from websocket import create_connection
 from bs4 import BeautifulSoup
 from zoneinfo import ZoneInfo
 from io import BytesIO
@@ -1112,6 +1113,30 @@ class Stream:
             self.now_playing = show_name
             self.now_playing_subtitle = f'{song} by {artist}'
 
+        elif self.name == 'Datafruits':
+            timeout = 3
+            ws = create_connection(
+                    self.info_link,
+                    origin="https://datafruits.fm",
+                    header=[
+                        "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.1 Safari/605.1.15",
+                        "Pragma: no-cache",
+                        "Cache-Control: no-cache",
+                    ],
+                    timeout=timeout,
+                )
+
+            try:
+                ws.send(json.dumps(["1", "1", "metadata", "phx_join", {}]))
+                received = False
+                while received == False:
+                    msg = json.loads(ws.recv())
+                    if msg[3] == "canonical_metadata":
+                        self.now_playing = msg[4]["message"]['title']
+                        received = True
+            finally:
+                ws.close()
         
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
@@ -1448,7 +1473,7 @@ Stream(
 Stream(
         name = "KWSX",
         logo = "https://internetradioprotocol.org/logos/kwsx.png",
-        location = "International",
+        location = "World",
         info_link = "https://stream.kwsx.online/api/nowplaying/kwsx",
         stream_link = "https://stream.kwsx.online/listen/kwsx/radio.mp3",
         main_link = "https://radio.kwsx.online",
@@ -2045,6 +2070,19 @@ Stream(
         genres = ['Student','Jazz'],
         category = 'Student',
         status = 'Live'
+),
+Stream(
+        name = "Datafruits",
+        logo = "https://internetradioprotocol.org/logos/datafruits.png",
+        location = "World",
+        info_link = "wss://hotdog-lounge.herokuapp.com/socket/websocket?vsn=2.0.0",
+        stream_link = "https://streampusher-relay.club/datafruits.mp3",
+        main_link = "https://datafruits.fm/",
+        about = "Datafruits is a cooperatively owned and operated free-form net radio station. This website was created by and for fans of internet radio and netlabels. Our station has little to no curation, and we believe that any song can be played.",
+        support_link = "https://datafruits.fm/support",
+        insta_link = "https://www.instagram.com/datafruits",
+        tuner_only = False,
+        status = 'Live'
 )
 ]
 
@@ -2096,7 +2134,7 @@ def get_mixtapes():
         streams.append(Stream(
             name = 'NTS ' + i['title'],
             logo = f"https://internetradioprotocol.org/logos/NTS_{i['title'].replace(' ','_')}_Corner.jpg",
-            location = "International",
+            location = "World",
             info_link = "https://www.nts.live/api/v2/mixtapes",
             stream_link = i['audio_stream_endpoint'],
             main_link = 'https://www.nts.live/infinite-mixtapes/' + i['mixtape_alias'],
