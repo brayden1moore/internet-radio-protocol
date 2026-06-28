@@ -1098,7 +1098,7 @@ class Stream:
                 print(e)
                 self.now_playing_subtitle = None
         
-        elif self.name == 'WKCR':
+        elif self.name in ['WKCR','WCFM']:
             resp = requests.get(self.info_link).text.replace('\\"', '"').replace("'", '"')
             soup = BeautifulSoup(resp[resp.find('(')+2:-3], features='html.parser')
 
@@ -2082,6 +2082,21 @@ Stream(
         support_link = "https://datafruits.fm/support",
         insta_link = "https://www.instagram.com/datafruits",
         tuner_only = False,
+        status = 'Live'
+),
+Stream(
+        name = "WCFM",
+        logo = "https://internetradioprotocol.org/logos/wcfm.png",
+        location = "Williamstown",
+        info_link = "https://widgets.spinitron.com/widget/now-playing-v2?callback=_spinitron09910823593912169178232477166&station=wcfm&num=1&sharing=0&player=0&cover=0&merch=0",
+        stream_link = "http://wcfm-streaming.williams.edu:8000/stream",
+        main_link = "https://laurenkhall.nekoweb.org/website/index.html",
+        about = "The voice of Williams College and the best alternative in the Berkshires. WCFM Williamstown is an FCC-licensed frequency-modulating station broadcasting on 91.9 MHz from the basement of Prospect House. Williams College radio has been around since 1940. It is the student-run voice of Williams College. WCFM programming is entirely free-form: DJs have complete control over their shows. They broadcast a beautiful mix of music, talk, and miscellaneous fun. WCFM is always open to new DJs and ways to interact with the Williams and Williamstown community.",
+        support_link = "https://connect.williams.edu/portal/give-williams?tab=alumni-fund&sys:gift:notes=To%20support%20WCFM%20radio&sys:gift:field:gift_af_designations=e03106f0-d718-4726-8d2d-cac9844346c7",
+        insta_link = "https://www.instagram.com/wcfmradio/",
+        tuner_only = False,
+        genres = ['Student'],
+        category = 'Student',
         status = 'Live'
 )
 ]
