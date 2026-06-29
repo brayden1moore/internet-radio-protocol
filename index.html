@@ -82,10 +82,14 @@
                                 <polygon id="play-random-triangle" points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"></polygon>
                 </svg>
                 <div id="intro-div">Start listening</div>
-            </div>
+            </div>         
             <div id="last-up">        
                 <span id='live-count'></span><span class='last-updated'></span>
             </div>
+            <a id='get-app-button' href="https://apps.apple.com/us/app/one-radio-by-scud/id6747141008" target="_blank"><div id="ios-app">
+                Get the app
+            </div></a>
+
         </div>
 
         <div id="player">
@@ -157,6 +161,25 @@
         </div>
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
+
+    #get-app-button {
+        color:#000000; 
+        border-bottom: none !important; 
+        text-decoration: none;
+        cursor: pointer;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+        margin-left: 15px;
+        padding-left: 15px;
+        padding-right: 15px;
+        height: 39px;
+        display: none;
+        align-items: center;
+    }
+
+    #get-app-button:hover {
+        color: white;
+    }
     
     #earlogo {
         padding-top: 0px;
@@ -2306,4 +2329,12 @@
                 }
             })
         })
+
+
+        // ios
+        var iOS = /(iPhone)/g.test(navigator.userAgent);
+        const getTheApp = document.getElementById('get-app-button');
+        if (iOS) {
+            getTheApp.style.display = 'flex';
+        }
         </script>
