@@ -1477,7 +1477,7 @@ Stream(
         logo = "https://internetradioprotocol.org/logos/kwsx2.png",
         location = "World",
         info_link = "https://stream.kwsx.online/api/nowplaying/kwsx",
-        stream_link = "https://stream.kwsx.online/listen/kwsx/radio.mp3",
+        stream_link = "https://stream.kwsx.online/listen/kwsx/radio-med.mp3",
         main_link = "https://radio.kwsx.online",
         about = "KWSX is the bleeding-edge of digital online radio. Created by a like-minded collective of freaks, KWSX cares to give music the space it needs to breathe. Radiation from computer screens is boiling our eyes. Use your ears.",
         support_link = "https://ko-fi.com/kwsxradio",
