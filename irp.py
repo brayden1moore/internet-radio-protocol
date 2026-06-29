@@ -481,7 +481,8 @@ class Stream:
             self.additional_info = None 
             self.now_playing = 'Re-Run'
             self.now_playing_description = None
-            #self.now_playing_subtitle = None
+            self.genres = None
+            self.now_playing_subtitle = None
             self.now_playing_description_long = None   
             self.status = 'Re-Run'
 
@@ -1473,7 +1474,7 @@ Stream(
 ),
 Stream(
         name = "KWSX",
-        logo = "https://internetradioprotocol.org/logos/kwsx.png",
+        logo = "https://internetradioprotocol.org/logos/kwsx2.png",
         location = "World",
         info_link = "https://stream.kwsx.online/api/nowplaying/kwsx",
         stream_link = "https://stream.kwsx.online/listen/kwsx/radio.mp3",
