@@ -1969,6 +1969,10 @@
             const genreTagsContainer = document.getElementById('genre-tags-container');
             genreTagsContainer.innerHTML = "";
 
+            data = Object.fromEntries(
+                Object.entries(data).filter(([key, value]) => (value.hidden != true) & (value.tunerOnly != true))
+            );
+
             const locations = [];
             const genres = [];
 
