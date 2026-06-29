@@ -255,6 +255,7 @@ class Stream:
                     url = 'https://hydefm.com/archive' + show['path']
                     soup = BeautifulSoup(requests.get(url, timeout=TIMEOUT).text, 'html.parser')
 
+                    '''
                     widget_containers = soup.find_all(attrs={'class':'elementor-widget-container'})
                     for i in widget_containers:
                         if i.find_all(attrs={'rel':'tag'}):
@@ -264,6 +265,7 @@ class Stream:
                                 genres.append(tag.text)
                             self.genres = genres
                             break
+                    '''
 
                 except Exception as e:
                     print(e)
