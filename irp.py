@@ -322,7 +322,7 @@ class Stream:
                             # https://www.google.com/url?q=https://dublab-api-1.s3.amazonaws.com/uploads/2019/06/DUBLAB-The-Sounds-of-Now-TITLE-1.jpg&sa=D&source=calendar&ust=1782000699600490&usg=AOvVaw3I11-4vMAy6SHg0irq8Sjc
                             self.show_logo = program['attachments'] 
                             if 'www.google.com/url?q=' in self.show_logo:
-                                self.show_logo = self.show_logo.split('?=')[1].split('&')[0]
+                                self.show_logo = self.show_logo.split('?q=')[1].split('&')[0]
                         except:
                             self.show_logo = None
                         try:
