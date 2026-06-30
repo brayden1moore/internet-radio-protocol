@@ -850,6 +850,7 @@ class Stream:
             today = date.today().isoformat()
             tomorrow = date.today() + timedelta(days=1)
             self.now_playing = None
+            self.show_logo = None
             self.status = 'Offline'
 
             url = self.info_link + f"/replay-slots/range?startDate={today}&endDate={tomorrow}"
@@ -858,6 +859,9 @@ class Stream:
                 if (rn > datetime.fromisoformat(i['start'])) & (rn < datetime.fromisoformat(i['end'])):
                     self.now_playing = extract_value(i, ['replay', 'title'])
                     self.status = 'Re-Run'
+                    show_id = i['show']
+                    show_info = requests.get('https://cms.hkcr.live/shows/' + show_id, timeout=3).json()
+                    self. show_logo = extract_value(show_info, ['picture','url'])
 
             if self.now_playing == None:
                 url = self.info_link + f"/schedule/range?startDate={today}&endDate={tomorrow}"
@@ -870,6 +874,7 @@ class Stream:
                         end = datetime.fromisoformat(i['date']  + 'T' + i['endTime'] + '+08:00') + timedelta(1)
                     if (rn > datetime.fromisoformat(start)) & (rn < end):
                         self.now_playing = extract_value(i, ['title'])
+                        self.show_logo = extract_value(i, ['picture','url'])
                         self.status = 'Live'
 
             
