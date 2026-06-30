@@ -276,7 +276,9 @@ class Stream:
             self.additional_info = None 
             self.listeners = extract_value(info, ['listeners'], rule='listeners')
             self.show_logo = extract_value(info, ['image'])
-            if self.show_logo == 'https://evenings.s3.us-east-2.amazonaws.com/images/1775972648067.jpg':
+
+            img = Image.open(BytesIO(requests.get(self.show_logo, timeout=3).content)).convert("RGB")
+            if (img.getpixel((0,0)) == (255, 255, 255)) and (img.getpixel((100,100)) == (255, 255, 255)):
                 self.show_logo = None
             self.now_playing_description_long = extract_value(info, ['description'])
             self.now_playing_description = extract_value(info, ['description'], rule='shorten')
