@@ -319,7 +319,10 @@ class Stream:
                         self.status = 'Live'
                         self.now_playing_artist = program['eventTitleMeta']['artist'] if program['eventTitleMeta']['artist'] else "Dublab" # artist name if provided lile "Jimmy Tamborello"
                         try:
-                            self.show_logo = program['attachments'] or self.show_logo # show-specific logo if provided
+                            # https://www.google.com/url?q=https://dublab-api-1.s3.amazonaws.com/uploads/2019/06/DUBLAB-The-Sounds-of-Now-TITLE-1.jpg&sa=D&source=calendar&ust=1782000699600490&usg=AOvVaw3I11-4vMAy6SHg0irq8Sjc
+                            self.show_logo = program['attachments'] 
+                            if 'www.google.com/url?q=' in self.show_logo:
+                                self.show_logo = self.show_logo.split('?=')[1].split('&')[0]
                         except:
                             self.show_logo = None
                         try:
