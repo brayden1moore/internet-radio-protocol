@@ -78,7 +78,7 @@
 
         <div id="second-bar">
             <div id="play-random-button">
-                <svg viewBox="0 0 100 100" width="35px" height="60%">
+                <svg viewBox="0 0 100 100" width="35px" height="80%">
                                 <polygon id="play-random-triangle" points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"></polygon>
                 </svg>
                 <div id="intro-div">Start listening</div>
@@ -115,6 +115,10 @@
         <!--<div id="intro-div">Up-to-the-minute information and direct stream links for the world's best internet radio stations. Click a logo to tune in, donate to a station if you like it, and follow me on Instagram, <a class='insta-link' target='_blank' href='https://www.instagram.com/scud.works/'>@scud.works</a>. Last updated <span class='last-updated'></span><span class='live-count'></span>.</div>-->
         
         <div class="streams-container" id="favorites-container"></div>
+
+        <div id="shows-now" class="category-header" data-controls="shows-container">Shows On Now</div>
+        <div  id="show-container-container">
+        <div  id="shows-container"></div></div>
 
         <div class="tag-container-container">
             <div class="tags-container" id="status-tags-container">
@@ -629,7 +633,7 @@
             display: flex;
             align-items: center;
             padding-right: 12px;
-            padding-left: 4px;   
+            padding-left: 0px;   
             font-size: 10pt;
         }
 
@@ -696,7 +700,7 @@
             font-size: 12pt;
             padding: 2px 0px;
             padding-left: 0px;
-            padding-right: 4.5px;
+            padding-right: 0px;
             border-right: 1px solid black;
             color: black;
             height: 34px;
@@ -899,6 +903,7 @@
         .genre-station-tag {
             background-color:#ffff00;
         }  
+
         
         .a-station-container {
             /*box-shadow: 0 6px 7px rgba(0, 0, 0, 0.1);*/
@@ -929,6 +934,116 @@
 
         .a-station-container:hover {
             background-color: #FFFF00;
+        }
+
+        .a-show-container {
+            cursor: pointer;
+            animation: fadeIn 0.5s ease-out forwards;
+            position:relative; 
+            border-radius: 0px;
+              user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            isolation: isolate;
+            overflow: auto;
+            background-color: rgb(243,243,243); 
+            color:#000000; 
+            height: 150px; 
+            padding: 0px; 
+            overflow-x:hidden; 
+            overflow-y:hidden; 
+            border:0.5px solid black; 
+            align-items: center; 
+            display: flex; 
+            white-space: nowrap;
+            margin-left: -0.5px;
+            margin-top: -0.5px;
+            padding-left: 0px;
+            justify-content: center;
+        }
+
+       #shows-container {
+            width: fit-content;
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: scroll;
+            overflow-y: hidden;
+        }
+
+        #show-container-container {
+            overflow-x: scroll;
+            margin-bottom: 25px;
+            margin-left: -0.5px;
+            border-left: 0.5px solid black;
+            border-right: 0.5px solid black;
+            border-bottom: 0.5px solid black;
+        }
+
+        .a-show-container:hover {
+            opacity: 0.5;
+        }
+
+        .show-card {
+            transition: 0.1s ease;
+            position: relative;
+            width: 200px !important;
+            height: 100%;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .show-card:hover {
+            opacity: 0.8;
+        }
+
+        .show-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .show-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 45%, transparent 100%);
+        }
+
+        .show-logo {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+        }
+
+        .show-text {
+            color: white;
+            overflow: hidden;
+        }
+
+        .show-oneliner {
+            font-size: 12pt;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.1;
+            font-family: 'Archivo SemiBold'
+        }
+
+        .show-station {
+            font-size: 10pt;
+            opacity: 0.85;
+        }
+
+        .show-img:hover {
+            opacity: 0.8;
         }
         
         .offline {
@@ -1018,7 +1133,7 @@
         }
     
         body {
-            margin-top:140px;
+            margin-top:150px;
             background-color: #FFFFFF; 
             font-size: 10pt; 
             padding-bottom: 15vh !important;
@@ -1125,6 +1240,23 @@
             border-bottom: 0.5px solid black;
         }
     @media (min-aspect-ratio: 8/10)  {
+        .a-show-container {
+            height: 200px; 
+        }
+
+        .show-oneliner {
+            font-size: 14pt;
+        }
+
+        .show-card {
+            width: 300px !important;
+        }
+
+        .show-logo {
+            width: 56px;
+            height: 56px;
+        }
+    
         #title {
             justify-content: space-between;
         }
@@ -1186,7 +1318,8 @@
         .a-station-container {
             padding-left: 10px;
             height:105px;
-        } 
+        }
+        
         .dragging {
             opacity: 0.5 !important;
         }
@@ -1219,6 +1352,7 @@
                 width: calc(33% - 13px);
             }
             .streams-container {grid-template-columns: 1fr 1fr 1fr;} 
+            
         }
 
         @media (min-width: 1500px) 
@@ -1226,6 +1360,11 @@
             .streams-container {
                 grid-template-columns: 1fr 1fr 1fr 1fr !important;
             } 
+
+
+            .a-show-container {
+                height: 200px;
+            }
         }
         </style><script>
 
@@ -1769,6 +1908,10 @@
             var rerun = 0;
             var live = 0;
             var offline = 0;
+
+            data = Object.fromEntries(
+                    Object.entries(data).filter(([key, value]) => (value.hidden != true) & (value.tunerOnly != true))
+            );
             const keys = Object.keys(data);
 
             if (needSort) {
@@ -1777,10 +1920,13 @@
             }
 
             const container = document.getElementById('streams-container');
+            const showContainer = document.getElementById('shows-container');
             const mixtapeContainer = document.getElementById('mixtapes-container');
             const offlineContainer = document.getElementById('offline-container');
             const updatedOneLiners = [];
             const offliners = [];
+
+            let showsAdded = document.querySelectorAll('.a-show-container').length;
 
             keys.forEach(function(stationName) {
                 const station = data[stationName];
@@ -1796,8 +1942,58 @@
                 const hidden = data[stationName]['hidden'];
                 const tuner = data[stationName]['tunerOnly'];
                 const category = data[stationName]['category'];
+                const showLogo = data[stationName]['showLogo'];
                 
                 const existingStation = document.getElementById(stationName);
+                const existingShow = document.getElementById(stationName + '-show');
+                if ((showLogo != null) & (category != 'Mixtape')) {
+                    if (existingShow) {
+                        existingShowOneLiner = decodeHtmlEntities(existingStation.dataset.oneLiner);
+                        if (existingShowOneLiner != oneLiner) {
+                            existingShow.dataset.oneLiner = oneLiner;
+                            const showCard = existingShow.querySelector('.show-card');
+                            console.log(showCard);
+                            showCard.querySelector('.show-overlay').querySelector('.show-text').querySelector('.show-oneliner').textContent = oneLiner;
+                            showCard.querySelector('.show-img').src = showLogo;
+                        }
+                    }
+                    else {
+                        const showDiv = document.createElement('div');
+                        showDiv.classList.add('a-show-container');
+                        showDiv.dataset.location = location;
+                        showDiv.dataset.status = status;
+                        showDiv.dataset.oneLiner = oneLiner; 
+                        showDiv.dataset.genres = genres;
+                        showDiv.onclick = function(event) {
+                            chooseStation(stationName);
+                        };
+                        showDiv.setAttribute('draggable', true);
+                        showDiv.id = stationName + '-show';    
+                        showDiv.src = showLogo;
+                                
+                        showDiv.innerHTML = `
+                            <div class="show-card" onClick="chooseStation('${stationName}')">
+                                <img class="show-img" src="${showLogo}">
+                                <div class="show-overlay">
+                                <img class="show-logo" src="${logo}">
+                                <div class="show-text">
+                                    <div class="show-oneliner">${oneLiner}</div>
+                                    <div class="show-station">${stationName}</div>
+                                </div>
+                                </div>
+                            </div>`
+
+                        showContainer.appendChild(showDiv);
+                    }
+
+                    showsAdded++
+                }
+                else {
+                    if (existingShow) {
+                        showContainer.removeChild(existingShow);
+                    }
+                }
+
                 if (existingStation) {
                     existingOneLiner = decodeHtmlEntities(existingStation.dataset.oneLiner);
                     if (existingOneLiner != oneLiner) {
@@ -2078,6 +2274,7 @@
 
             if (info && from_endpoint == false) {
                 json = info;
+
                 
                 populateStations(json, needSort=firstLoad);
 
