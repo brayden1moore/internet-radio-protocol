@@ -1155,7 +1155,7 @@ class Stream:
 
         self.one_liner = return_string
 
-        rerun_strs = ['rotazione notte','night moves','night files','repeats','(r)', 're-run', 're-wav', 'restream', 'playlist','replays','stayfmix','picks from the archive','archivo','subtle selects']
+        rerun_strs = ['rotazione notte','night moves','night files','repeats','(r)', 're-run', 're-wav', 'restream', 'playlist','replays','stayfmix','picks from the archive','archivo','subtle selects','rerun']
 
         if self.status != 'Offline':
             #self.status = 'Live'
