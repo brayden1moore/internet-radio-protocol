@@ -867,7 +867,7 @@ class Stream:
                     self.status = 'Re-Run'
                     show_id = i['show']
                     show_info = requests.get('https://cms.hkcr.live/shows/' + show_id, timeout=3).json()
-                    self.show_logo = quote(quote(extract_value(show_info, ['picture','url'])))
+                    self.show_logo = quote(extract_value(show_info, ['picture','url']))
 
             if self.now_playing == None:
                 url = self.info_link + f"/schedule/range?startDate={today}&endDate={tomorrow}"
@@ -880,7 +880,7 @@ class Stream:
                         end = datetime.fromisoformat(i['date']  + 'T' + i['endTime'] + '+08:00') + timedelta(1)
                     if (rn > datetime.fromisoformat(start)) & (rn < end):
                         self.now_playing = extract_value(i, ['title'])
-                        self.show_logo = quote(quote(extract_value(i, ['picture','url'])))
+                        self.show_logo = quote(extract_value(i, ['picture','url']))
                         self.status = 'Live'
 
             
