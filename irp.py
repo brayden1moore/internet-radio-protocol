@@ -930,6 +930,10 @@ class Stream:
 
                 if end_time > now_utc > start_time:
                     self.now_playing = event['summary']
+                    if 'Archivo' in event['description'] | '':
+                        self.stream_link = 'https://radio.mensajito.mx/nopalVentana'
+                    else:
+                        self.stream_link = 'https://radio.mensajito.mx/nopalA'
                     self.status = "Live" if self.now_playing else "Offline"
 
         elif self.name == 'Noods Radio':
