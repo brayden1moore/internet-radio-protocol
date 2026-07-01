@@ -1,7 +1,7 @@
 from datetime import datetime, timezone, timedelta, date
 from concurrent.futures import ThreadPoolExecutor
 from websocket import create_connection
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit, urlunsplit
 from bs4 import BeautifulSoup
 from zoneinfo import ZoneInfo
 from io import BytesIO
@@ -867,7 +867,7 @@ class Stream:
                     self.status = 'Re-Run'
                     show_id = i['show']
                     show_info = requests.get('https://cms.hkcr.live/shows/' + show_id, timeout=3).json()
-                    self.show_logo = quote(extract_value(show_info, ['picture','url']))
+                    self.show_logo = extract_value(show_info, ['picture','url'])
 
             if self.now_playing == None:
                 url = self.info_link + f"/schedule/range?startDate={today}&endDate={tomorrow}"
@@ -880,8 +880,12 @@ class Stream:
                         end = datetime.fromisoformat(i['date']  + 'T' + i['endTime'] + '+08:00') + timedelta(1)
                     if (rn > datetime.fromisoformat(start)) & (rn < end):
                         self.now_playing = extract_value(i, ['title'])
-                        self.show_logo = quote(extract_value(i, ['picture','url']))
+                        self.show_logo = extract_value(i, ['picture','url'])
                         self.status = 'Live'
+            
+            if self.show_logo:
+                parts = urlsplit(self.show_logo)
+                self.show_logo = urlunsplit(parts._replace(path=quote(parts.path)))
 
             
         elif self.name == 'CKUT':
