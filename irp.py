@@ -737,7 +737,7 @@ class Stream:
             except:
                 self.now_playing_subtitle = info['title']
             try:
-                self.show_logo = info['program_image'].replace('\/','/')
+                self.show_logo = None#info['program_image'].replace('\/','/')
             except:
                 self.show_logo = None
 
