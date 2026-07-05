@@ -1048,6 +1048,9 @@ class Stream:
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.status = 'Live' if info['status'] == 'online' else 'Offline'
             self.show_logo = extract_value(info, ['liveNow', 'artwork'])
+            if self.show_logo:
+                if 'default-image' in self.show_logo:
+                    self.show_logo = None
             self.now_playing = extract_value(info, ['liveNow','title']).split(' - ')[0]
             try:
                 self.now_playing_artist = extract_value(info, ['liveNow','title']).split(' - ')[1]
