@@ -59,7 +59,7 @@ def check(v):
         if logo_resp!=200:
             review_list.append(f'Logo unresponsive ({v['logo']})')
 
-        if (show_logo_resp!=200) | (show_logo_resp!=None):
+        if (show_logo_resp!=200) and (show_logo_resp!=None):
             review_list.append(f'Show logo unresponsive ({v['showLogo']})')
 
     needs_review = len(review_list)>0
