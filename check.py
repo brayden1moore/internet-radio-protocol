@@ -13,6 +13,7 @@ def check(v):
     hidden = v['hidden'] 
     status = v['status']
     last_updated = v['lastUpdated']
+    show_logo = v['showLogo']
     now = datetime.now(timezone.utc)
     seconds_since_last_update = (now - datetime.fromisoformat(last_updated)).seconds
 
@@ -27,6 +28,15 @@ def check(v):
             stream_resp = r.status_code
     except requests.exceptions.RequestException:
         stream_resp = 0
+
+    if show_logo:
+        try:
+            with session.get(show_logo, timeout=5) as r:
+                show_logo_resp = r.status_code
+        except requests.exceptions.RequestException:
+            show_logo_resp = 0
+    else:
+        show_logo_resp = None
 
     try:
         info_link = v['infoLink'] if 'calendar.google.com' not in v['infoLink'] else f"https://www.googleapis.com/calendar/v3/calendars/{v['infoLink']}/events"
@@ -49,6 +59,9 @@ def check(v):
         if logo_resp!=200:
             review_list.append(f'Logo unresponsive ({v['logo']})')
 
+        if (show_logo_resp!=200) | (show_logo_resp!=None):
+            review_list.append(f'Show logo unresponsive ({v['showLogo']})')
+
     needs_review = len(review_list)>0
     review_str = ', '.join(review_list)
     
@@ -60,6 +73,8 @@ def check(v):
         'hidden':hidden,
         'status':status,
         'logo':logo_resp,
+        'mainLink':v['mainLink'],
+        'showLogo':show_logo_resp,
         'info':info_resp,
         'stream':stream_resp,
         'needsReview':needs_review,
