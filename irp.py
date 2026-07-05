@@ -692,8 +692,8 @@ class Stream:
                 self.status = "Offline"
 
         elif self.name == 'LYL Radio':
-            info = requests.post(self.info_link,data={"variables":{},"query":"{\n  onair {\n    title\n    hls\n    __typename\n  }\n}\n"}, timeout=TIMEOUT)
             try:
+                info = requests.post(self.info_link,data={"variables":{},"query":"{\n  onair {\n    title\n    hls\n    __typename\n  }\n}\n"}, timeout=TIMEOUT)
                 self.now_playing = info.json()['data']['onair']['title']
                 if "WE'LL BE BACK" not in self.now_playing:
                     self.status = 'Live'
