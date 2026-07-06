@@ -2685,11 +2685,15 @@
                 return;
             }
             const scrollY = window.scrollY;
-            const pxPerWord = 10; 
 
+            if (iOS) {
+                const pxPerWord = 0.1; 
+            }
+            else {
+                const pxPerWord = 10; 
+            }
             let wordsToRemove = Math.floor(scrollY / pxPerWord);
             wordsToRemove = Math.max(0, Math.min(wordsToRemove, totalWords)); 
-
             const wordsToShow = totalWords - wordsToRemove;
             everythingElse.textContent = introWords.slice(0, wordsToShow).join(' ');
         }
