@@ -61,7 +61,7 @@
         
         <div id="top-bar">
                 <div id="first-row">
-                    <div id="intro" class="row-item"><div id="intro-text-container"><span id="oneradio">ONE RADIO&nbsp;</span>BRINGS TOGETHER THE WORLD'S BEST INDEPENDENT, HUMAN-CURATED RADIO STATIONS FOR THE NON-ALGORITHMIC, PALATE-EXPANDING, MUSIC DISCOVERY PLEASURE OF THOSE UNAFRAID TO LISTEN THROUGH FRICTION.</div></div>
+                    <div id="intro" class="row-item"><div id="intro-text-container"><span id="oneradio">ONE RADIO&nbsp;</span><span id="everythingelse">BRINGS TOGETHER THE WORLD'S BEST INDEPENDENT, HUMAN-CURATED RADIO STATIONS FOR THE NON-ALGORITHMIC, PALATE-EXPANDING, MUSIC DISCOVERY PLEASURE OF THOSE UNAFRAID TO LISTEN THROUGH FRICTION.</span></div></div>
                     <div id="logo-container"  class="row-item" >
                         <img id="main-logo" src="assets/justear.png">
                     </div>
@@ -2673,5 +2673,27 @@
             marqueeWrapper = container.querySelector('.marquee-wrapper');
             marqueeWrapper.style.display = 'none';
         }
+
+        const everythingElse = document.getElementById('everythingelse');
+
+        // Cache original word list 
+        const introWords = everythingElse.textContent.trim().split(/\s+/);
+        const totalWords = introWords.length;
+        function updateIntroWords() {
+            if (window.innerWidth >= window.innerHeight) {
+                everythingElse.textContent = introWords.join(' ');
+                return;
+            }
+            const scrollY = window.scrollY;
+            const pxPerWord = 10; 
+
+            let wordsToRemove = Math.floor(scrollY / pxPerWord);
+            wordsToRemove = Math.max(0, Math.min(wordsToRemove, totalWords)); 
+
+            const wordsToShow = totalWords - wordsToRemove;
+            everythingElse.textContent = introWords.slice(0, wordsToShow).join(' ');
+        }
+
+        window.addEventListener('scroll', updateIntroWords, { passive: true });
 
         </script>
