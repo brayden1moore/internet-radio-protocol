@@ -2591,7 +2591,7 @@
             };
         }
 
-        window.addEventListener("resize", debounce(calculateTop, 50));
+        window.addEventListener("resize", debounce(calculateTop, 20));
 
         function marqueeInside(container, pauseSeconds = 1) {
             let marqueeWrapper = container.querySelector('.marquee-wrapper');
@@ -2675,7 +2675,9 @@
         }
 
         const everythingElse = document.getElementById('everythingelse');
-
+        const introContainer = document.getElementById('intro-text-container');
+        //introContainer.style.minHeight = introContainer.offsetHeight + 'px';
+        
         // Cache original word list 
         const introWords = everythingElse.textContent.trim().split(/\s+/);
         const totalWords = introWords.length;
