@@ -14,7 +14,7 @@
         
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8"><title>One Radio</title>
-<meta property="og:image" content="/assets/eartouch2.png" />
+<meta property="og:image" content="/assets/eartouch.png" />
 <link rel="preload" href="https://internetradioprotocol.org/info" as="fetch" crossorigin="anonymous">
 
                     
@@ -60,40 +60,36 @@
         </div>
         
         <div id="top-bar">
-                <div style="display:flex">
-                    <div id="one"><img src="assets/eartouch.png"></div>
-                        
-                        <div style="display:block; width: 100%;">
-                            
-                            <div style="display:flex; height:50%; align-items:center; border-bottom: 1px solid black;">
-                                <div id="last-up">
-                                    <div id="count-info">
-                                        <span id='live-count'></span><span class='last-updated'></span>
-                                    </div>
-
-                                    <div id="tag-line">
-                                        <span id='tag-line-one'>Radiation from computer screens is boiling your eyes.</span><span id="tag-line-two">Use your ears.</span>
-                                    </div>
-                                </div> 
-                            </div>
-
-                            <div style="display:flex; height: calc(50% - 1px);">
-                                
-                                <div id="play-random-button">
-                                    <svg viewBox="0 0 100 100" width="35px" height="80%">
-                                                    <polygon id="play-random-triangle" points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"></polygon>
-                                    </svg>
-                                    <div id="intro-div">Start listening</div>
-                                </div>    
-
-                                <div id="ios-app"><a id='get-app-button' href="https://apps.apple.com/us/app/one-radio-by-scud/id6747141008" target="_blank">
-                                 Get the app</a></div>
-
-                            </div>
-
-                        </div>
-                    </div>  
+            <div class="the-header" style="display:flex; align-items:center;">
+                <!--<img id="main-logo" src="assets/ears.png">-->
+                <img id="earlogo" src="assets/eartouch.png">
+                <div id="title">
+                    <div id="one">One  </div>
+                    <div class="dash">
+                    </div>
+                    <div id="radio">  Radio</div>
+                </div>
             </div>
+        </div>
+
+        <div id="ear-bar">
+            <!--<img class="main-logo" id="main-logo" src="assets/tagline1.png">-->
+        </div>
+
+        <div id="second-bar">
+            <div id="play-random-button">
+                <svg viewBox="0 0 100 100" width="35px" height="80%">
+                                <polygon id="play-random-triangle" points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"></polygon>
+                </svg>
+                <div id="intro-div">Start listening</div>
+            </div>         
+            <div id="last-up">        
+                <span id='live-count'></span><span class='last-updated'></span>
+            </div>
+            <a id='get-app-button' href="https://apps.apple.com/us/app/one-radio-by-scud/id6747141008" target="_blank"><div id="ios-app">
+                Get the app
+            </div></a>
+
         </div>
 
         <div id="player">
@@ -170,33 +166,16 @@
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
 
-    #count-info {
-        display: none;
-    }
-
-    #tag-line-one {
-        display: none;
-    }
-
-    #tag-line-two {
-        margin-left: 10px;
-    }
-
-    #tag-line {
-        display: flex;
-        height: 100%;
-        align-items: center;
-    }
-    
     #get-app-button {
         color:white; 
         border-bottom: none !important; 
         text-decoration: none;
         cursor: pointer;
-        border-right: 1px solid black;
+        border-left: 1px solid black;
+        margin-left: 15px;
         padding-left: 15px;
         padding-right: 15px;
-        height: 100%;
+        height: 38px;
         display: none;
         background-color: black;
         align-items: center;
@@ -209,8 +188,7 @@
     
     #earlogo {
         padding-top: 0px;
-        height: 78px;
-        width: auto;
+        height: 65px;
         padding-right: 7px;
         padding-bottom: 4px;
         margin-right: 7px;
@@ -225,14 +203,13 @@
     .category-header {
         cursor: pointer;
         border: 1px solid black;
-        font-family: 'Archivo SemiBold';
-        /*letter-spacing: -0.06em;*/
-        font-size: 12pt;
+        font-family: 'Archivo Semibold';
+        letter-spacing: -0.06em;
+        font-size: 18pt;
         margin-left: -0.5px;
         padding: 15px;
         padding-top: 10px;
         padding-bottom: 10px;
-        text-transform: uppercase;
     }
 
     #text-container {
@@ -514,7 +491,6 @@
 
         body {
             color: black;
-            text-transform: uppercase !important;
         }
 
         #pause-icon {
@@ -662,33 +638,51 @@
         }
 
         #top-bar {
-            top: 20.5px;
+            height: 65px;
+            top: 17.5px;
             left:17.5px;
+            border: 1px solid black;
             width: calc(100% - 37.5px);
             z-index: 100;
             background-color: rgb(255, 255, 255);
             position: fixed;
             margin-bottom: 25px;
-            display: block;
+            display: flex;
             align-items: center;
             color: black;
-            border: 1px solid black;
         }
+
+        #ear-bar {
+            height: 58px;
+            top: 0;
+            left:17.5px;
+            width: 100%;
+            z-index: 100;
+            position: fixed;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
 
         #last-up {
             display: flex;
-            padding-left: 10px;
+            padding-left: 15px;
         }
         #second-bar {
             align-items: center;
             display: flex;
+            top: 84.5px;
+            left: 17.5px;
+            position: fixed;
             z-index: 200;
-            background-color: white;
+            background-color: #ffffff;
             border-bottom: 1px solid black;
             border-left: 1px solid black;
             border-right: 1px solid black;
-            color: black;
-            width: 100%;
+            color: rgb(0, 0, 0);
+            width: calc(100% - 37.5px);
             height: 38px;
         }
 
@@ -698,19 +692,21 @@
             cursor: pointer;
             width: fit-content;
             display: flex;
-            background-color: white;
+            background-color: lab(100% 0.01 -0.01);
             border: none;
             border-radius: 0px;
             font-size: 18pt;
             opacity: 1;
             font-size: 12pt;
+            padding: 2px 0px;
             padding-left: 0px;
             padding-right: 0px;
             border-right: 1px solid black;
             color: black;
+            height: 34px;
         }
         #play-random-button:hover {
-            background-color: black;
+            background-color: rgb(20,20,20);
             color: white;
        }
 
@@ -718,17 +714,18 @@
             cursor: pointer;
         }
 
+        #title {
+            width: 100%;
+            display: flex;
+            margin-left: 0px;
+            align-items: center;
+            justify-content: left;
+        }
+
         #one {
             background-color: white;
             width: auto;
             margin-left: 0px;
-            padding: 0px 0px;
-            height: 70px;
-            border-right: 1px solid black;
-        }
-
-        #one img {
-            height: 70px;
         }
 
         #radio {
@@ -836,7 +833,7 @@
             font-family: 'Archivo Light';
             width: fit-content;
             padding: 2px 4px;
-            /*letter-spacing: -0.05em;*/
+            letter-spacing: -0.05em;
             background-color: rgb(17, 17, 17);
             color:#FFFFFF !important; 
             font-size: 12pt;}
@@ -1132,7 +1129,7 @@
         }
     
         body {
-            margin-top: 120px;
+            margin-top:150px;
             background-color: #FFFFFF; 
             font-size: 10pt; 
             padding-bottom: 15vh !important;
@@ -1141,15 +1138,14 @@
             width: 100%;
             color: rgb(0, 0, 0);
             font-family: "Archivo Semibold"; 
-            /*font-size: 36pt; */
+            font-size: 36pt; 
             line-height:0.75em; 
-            /*letter-spacing:-0.06em; */
+            letter-spacing:-0.06em; 
             margin-top:0px;
             margin-bottom:0px;
             padding-top:0px;
             padding-left: 0px;
-            padding-right: 0px;
-            border: 1px solid black;
+            padding-right: 8px;
         }
         .a-station {
             font-family: "Archivo Light"; 
@@ -1160,9 +1156,7 @@
             width: calc(100% - 112px);}
         
         @font-face {font-family: "Archivo Bold";src: url("assets/Archivo-Bold.ttf") format("truetype");}
-        @font-face {font-family: "Archivo SemiBold";src: url("assets/ABCFavoritMono-Regular.otf") format("truetype");}
-        @font-face {font-family: "Daumier";src: url("assets/Daumiercomique.otf") format("truetype");}
-        @font-face {font-family: "Archivo Light";src: url("assets/ABCFavoritMono-Regular.otf") format("truetype");}
+        @font-face {font-family: "Archivo SemiBold";src: url("assets/Archivo-SemiBold.ttf") format("truetype");}
 
         a {
             font-size: 10pt; 
@@ -1176,6 +1170,7 @@
             color:#FFFFFF
         }
        
+        @font-face {font-family: "Archivo Light";src: url("assets/Archivo-Light.ttf") format("truetype");}
         @keyframes rotate{
             0% {
                 transform: rotate(0deg)
@@ -1278,7 +1273,11 @@
 
 
         .category-header {
-            font-size: 12pt;
+            font-size: 24pt;
+        }
+
+        #live-count {
+            display: flex;
         }
 
         #intro-div {
@@ -1291,7 +1290,7 @@
         }
 
         .stream-name {
-            font-size: 12pt;
+            font-size: 14pt;
         }
 
         .one-liner {
@@ -1326,7 +1325,7 @@
         } 
         .the-header{
             margin-bottom: 0px;
-            /*font-size: 44pt;*/
+            font-size: 44pt;
         } .a-station {font-size:10pt;}
         .logo-and-overlay {
             width:100px; 
@@ -1345,13 +1344,6 @@
 
         @media (orientation: landscape) 
         {
-            #tag-line-one {
-                display: block;
-            }
-
-            #live-count {
-                display: flex;
-            }
             #modal {
                 width: calc(33% - 13px);
             }
@@ -1359,7 +1351,8 @@
             
         }
 
-        @media (min-width: 1500px) {
+        @media (min-width: 1500px) 
+        {
             .streams-container {
                 grid-template-columns: 1fr 1fr 1fr 1fr !important;
             } 
@@ -2541,34 +2534,7 @@
         // ios
         var iOS = /(iPhone)/g.test(navigator.userAgent);
         const getTheApp = document.getElementById('get-app-button');
-        //getTheApp.style.display = 'flex';
         if (iOS) {
             getTheApp.style.display = 'flex';
         }
-
-        function swapText() {
-            const liveCount = document.getElementById('count-info');
-            const tagLine = document.getElementById('tag-line');
-
-            const liveVisible = getComputedStyle(liveCount).display !== 'none';
-            const showEl = liveVisible ? tagLine : liveCount;
-            const hideEl = liveVisible ? liveCount : tagLine;
-
-            hideEl.style.transition = 'opacity 1s ease';
-            hideEl.style.opacity = '0';
-
-            setTimeout(() => {
-                hideEl.style.display = 'none';
-
-                showEl.style.display = 'flex';
-                showEl.style.opacity = '0';
-                showEl.style.transition = 'opacity 1s ease';
-
-                void showEl.offsetWidth;
-
-                showEl.style.opacity = '1';
-            }, 1000);
-        }
-
-        setInterval(swapText, 6000);
         </script>
