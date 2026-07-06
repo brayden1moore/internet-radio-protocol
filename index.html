@@ -60,36 +60,30 @@
         </div>
         
         <div id="top-bar">
-            <div class="the-header" style="display:flex; align-items:center;">
-                <!--<img id="main-logo" src="assets/ears.png">-->
-                <img id="earlogo" src="assets/eartouch2.png">
-                <div id="title">
-                    <div id="one">One  </div>
-                    <div class="dash">
+                <div id="first-row">
+                    <div id="intro" class="row-item"><div id="intro-text-container"><span id="oneradio">ONE RADIO&nbsp;</span>BRINGS TOGETHER THE WORLD'S BEST INDEPENDENT, HUMAN-CURATED RADIO STATIONS FOR THE NON-ALGORITHMIC, PALATE-EXPANDING, MUSIC DISCOVERY PLEASURE OF THOSE UNAFRAID TO LISTEN THROUGH FRICTION.</div></div>
+                    <div id="logo-container"  class="row-item" >
+                        <img id="main-logo" src="assets/justear.png">
                     </div>
-                    <div id="radio">  Radio</div>
+                    <!--<img id="earlogo" class="row-item" src="assets/oneradio.svg">-->
+
                 </div>
-            </div>
-        </div>
 
-        <div id="ear-bar">
-            <!--<img class="main-logo" id="main-logo" src="assets/tagline1.png">-->
-        </div>
+                <div id="second-row">
+                    <div id="play-random-button">
+                        <svg viewBox="0 0 100 100" width="35px" height="80%">
+                                        <polygon id="play-random-triangle" points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"></polygon>
+                        </svg>
+                        <div id="intro-div">Start listening</div>
+                    </div>         
+                    <div id="last-up">        
+                        <span id='live-count'></span><span class='last-updated'></span>
+                    </div>
+                    <a id='get-app-button' href="https://apps.apple.com/us/app/one-radio-by-scud/id6747141008" target="_blank"><div id="ios-app">
+                     Get the app
+                    </div></a>
 
-        <div id="second-bar">
-            <div id="play-random-button">
-                <svg viewBox="0 0 100 100" width="35px" height="80%">
-                                <polygon id="play-random-triangle" points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"></polygon>
-                </svg>
-                <div id="intro-div">Start listening</div>
-            </div>         
-            <div id="last-up">        
-                <span id='live-count'></span><span class='last-updated'></span>
-            </div>
-            <a id='get-app-button' href="https://apps.apple.com/us/app/one-radio-by-scud/id6747141008" target="_blank"><div id="ios-app">
-                Get the app
-            </div></a>
-
+                </div>
         </div>
 
         <div id="player">
@@ -166,6 +160,62 @@
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
 
+    #intro {
+        display: block;
+        align-items: center;
+        font-family: 'Archivo Bold';
+        padding: 10px;
+        letter-spacing: -0.05em;
+        font-size: 18pt;
+        -webkit-text-stroke: 0.5px rgb(0, 0, 0); 
+        color: rgb(243,243,243); 
+        overflow: hidden;
+    }
+
+    #top-bar {
+        transition: 0.2s ease;
+    }
+
+    #oneradio {
+        color: black;
+        -webkit-text-stroke: 1px black;
+    }
+
+    /*
+    .row-item:nth-child(1) {
+        border-right: 1px solid black;
+    }
+    */
+
+    .row-item:not(:first-child) {
+        border-left: 1px solid black;
+    }
+
+    #first-row {
+        display: flex;
+        height: auto;
+        border-bottom: 1px solid black;
+        justify-content: space-between;
+    }
+
+
+    #main-logo {
+        height: 45px; 
+        width: 45px;
+        margin-left: 0px;
+    }
+
+    #logo-container {
+        height: auto;
+        display: flex;
+        align-items: center;
+    }
+
+    #second-row {
+        display: flex;
+        align-items: center;
+    }
+
     #get-app-button {
         color:white; 
         border-bottom: none !important; 
@@ -186,16 +236,6 @@
         background-color: yellow;
     }
     
-    #earlogo {
-        padding-top: 0px;
-        height: 65px;
-        padding-right: 7px;
-        padding-bottom: 4px;
-        margin-right: 7px;
-        width: auto;
-        border-right: 1px solid black;
-        padding: 0px;
-    }
     .station-name-and-tag-div {
         display: block;
     }
@@ -203,11 +243,11 @@
     .category-header {
         cursor: pointer;
         border: 1px solid black;
-        font-family: 'Archivo Semibold';
-        letter-spacing: -0.06em;
-        font-size: 18pt;
+        font-family: 'Archivo Light';
+        letter-spacing: -0.05em;
+        font-size: 12pt;
         margin-left: -0.5px;
-        padding: 15px;
+        padding: 10px;
         padding-top: 10px;
         padding-bottom: 10px;
     }
@@ -491,6 +531,7 @@
 
         body {
             color: black;
+            letter-spacing: -0.05em;
         }
 
         #pause-icon {
@@ -638,7 +679,6 @@
         }
 
         #top-bar {
-            height: 65px;
             top: 17.5px;
             left:17.5px;
             border: 1px solid black;
@@ -647,22 +687,9 @@
             background-color: rgb(255, 255, 255);
             position: fixed;
             margin-bottom: 25px;
-            display: flex;
+            display: block;
             align-items: center;
             color: black;
-        }
-
-        #ear-bar {
-            height: 58px;
-            top: 0;
-            left:17.5px;
-            width: 100%;
-            z-index: 100;
-            position: fixed;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
 
@@ -673,16 +700,13 @@
         #second-bar {
             align-items: center;
             display: flex;
-            top: 84.5px;
-            left: 17.5px;
-            position: fixed;
             z-index: 200;
             background-color: #ffffff;
             border-bottom: 1px solid black;
             border-left: 1px solid black;
             border-right: 1px solid black;
             color: rgb(0, 0, 0);
-            width: calc(100% - 37.5px);
+            width: 100%;
             height: 38px;
         }
 
@@ -692,7 +716,7 @@
             cursor: pointer;
             width: fit-content;
             display: flex;
-            background-color: lab(100% 0.01 -0.01);
+            background-color: lab(0% 0 0);
             border: none;
             border-radius: 0px;
             font-size: 18pt;
@@ -702,12 +726,12 @@
             padding-left: 0px;
             padding-right: 0px;
             border-right: 1px solid black;
-            color: black;
+            color: rgb(255, 255, 255);
             height: 34px;
         }
         #play-random-button:hover {
-            background-color: rgb(20,20,20);
-            color: white;
+            background-color: rgb(255, 255, 255);
+            color: rgb(0, 0, 0);
        }
 
         #play-random-text {
@@ -867,16 +891,6 @@
 
         .favorite-star:hover {
             opacity: 1;
-        }
-
-
-        .main-logo {
-            height: 45px; 
-            margin-left: 0px;
-        }
-
-        .main-logo:nth-child {
-            left: calc(50% - 26px);
         }
 
         .station-tag {
@@ -1122,14 +1136,14 @@
         }
 
         #play-random-triangle {
-            fill: black;
+            fill: rgb(255, 255, 255);
         }
         #play-random-button:hover #play-random-triangle {
-            fill: white;
+            fill: rgb(0, 0, 0);
         }
     
         body {
-            margin-top:150px;
+            margin-top:152px;
             background-color: #FFFFFF; 
             font-size: 10pt; 
             padding-bottom: 15vh !important;
@@ -1140,12 +1154,12 @@
             font-family: "Archivo Semibold"; 
             font-size: 36pt; 
             line-height:0.75em; 
-            letter-spacing:-0.06em; 
+            letter-spacing:-0.05em; 
             margin-top:0px;
             margin-bottom:0px;
-            padding-top:0px;
-            padding-left: 0px;
             padding-right: 8px;
+            height: 100%;
+            padding: 20px !important;
         }
         .a-station {
             font-family: "Archivo Light"; 
@@ -1236,6 +1250,11 @@
             border-bottom: 0.5px solid black;
         }
     @media (min-aspect-ratio: 8/10)  {
+        
+        #intro {
+            font-size: 18pt;
+        }
+    
         .a-show-container {
             height: 200px; 
         }
@@ -1273,7 +1292,7 @@
 
 
         .category-header {
-            font-size: 24pt;
+            font-size: 12pt;
         }
 
         #live-count {
@@ -1338,12 +1357,14 @@
         } 
         
             a {font-size: 12pt}
-        .main-logo {height: 45px; margin-left:0px}
         #title {margin-left: 0px;}
         }
 
-        @media (orientation: landscape) 
-        {
+        @media (orientation: landscape) {
+            #main-logo {
+                height: 70px; 
+                width: 70px;
+            }
             #modal {
                 width: calc(33% - 13px);
             }
@@ -1591,7 +1612,6 @@
 
         function setupOneLinerMarquee(oneLinerElement, width, direction = 'left') {
             const text = oneLinerElement.textContent;
-            const textLength = text.length;
             
             const wrapper = document.createElement('div');
             wrapper.style.cssText = `
@@ -2537,4 +2557,118 @@
         if (iOS) {
             getTheApp.style.display = 'flex';
         }
+
+        const topBar = document.getElementById('top-bar');
+        function calculateTop() {
+            barHeight = topBar.offsetHeight;
+            const introContainer = document.getElementById('intro-text-container');
+            const marqueeing = introContainer.classList.contains('marqueeing');
+
+            if (window.innerHeight > window.innerWidth && marqueeing === false) {
+                marqueeInside(introContainer);
+            } else if (window.innerHeight <= window.innerWidth && marqueeing) {
+                unmarquee(introContainer);
+            } else if (marqueeing) {
+                if (introContainer._setMarqueeAnimation) introContainer._setMarqueeAnimation();
+            }
+
+            barHeight = topBar.offsetHeight;
+            document.body.style.marginTop = barHeight + 35 + 'px';
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+                calculateTop();
+        })
+
+        function debounce(fn, delay = 100) {
+            let timer;
+            return (...args) => {
+                clearTimeout(timer);
+                timer = setTimeout(() => fn(...args), delay);
+            };
+        }
+
+        window.addEventListener("resize", debounce(calculateTop, 50));
+
+        function marqueeInside(container, pauseSeconds = 1) {
+            let marqueeWrapper = container.querySelector('.marquee-wrapper');
+            let originalContent = container.querySelector('.original-content');
+            const marqueeing = container.classList.contains('marqueeing');
+
+            if (marqueeWrapper && marqueeing === false) {
+                // unhide
+                marqueeWrapper.style.display = 'inline-flex';
+                originalContent.style.display = 'none';
+                container.style.whiteSpace = 'nowrap';
+                container.classList.add('marqueeing');
+                if (container._setMarqueeAnimation) container._setMarqueeAnimation();
+                return;
+            }
+
+            if (!marqueeWrapper) {
+                // build
+                const content = container.innerHTML;
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'marquee-wrapper';
+                wrapper.innerHTML = `<span class="marquee-track">${content}</span><span class="marquee-track" aria-hidden="true">${content}</span>`;
+
+                container.innerHTML = '';
+                container.appendChild(wrapper);
+
+                originalContent = document.createElement('div');
+                originalContent.classList.add('original-content');
+                originalContent.style.display = 'none';
+                originalContent.innerHTML = content;
+                container.appendChild(originalContent);
+
+                container.style.overflow = 'hidden';
+                container.style.whiteSpace = 'nowrap';
+                wrapper.style.display = 'inline-flex';
+                wrapper.style.willChange = 'transform';
+
+                const tracks = wrapper.querySelectorAll('.marquee-track');
+                tracks.forEach(t => {
+                    t.style.display = 'inline-block';
+                    t.style.paddingRight = '2rem';
+                    t.style.flexShrink = '0';
+                });
+
+                const speed = 70;
+                const uid = 'm' + Math.random().toString(36).slice(2, 8);
+                const styleEl = document.createElement('style');
+                container.appendChild(styleEl);
+
+                // Store recompute fn 
+                container._setMarqueeAnimation = () => {
+                    const width = tracks[0].offsetWidth;
+                    const scrollDur = width / speed;
+                    const total = scrollDur + pauseSeconds;
+                    const pausePct = (pauseSeconds / total) * 100;
+
+                    styleEl.textContent = `
+                        @keyframes ${uid} {
+                            0%           { transform: translateX(0); }
+                            ${pausePct}% { transform: translateX(0); }
+                            100%         { transform: translateX(-50%); }
+                        }
+                    `;
+                    wrapper.style.animation = `${uid} ${total}s linear infinite`;
+                };
+
+                container._setMarqueeAnimation();
+            }
+
+            container.classList.add('marqueeing');
+        }
+
+        function unmarquee(container) {
+            container.classList.remove('marqueeing');
+            container.style.whiteSpace = 'wrap';
+            originalContent = container.querySelector('.original-content');
+            originalContent.style.display = 'block';
+            marqueeWrapper = container.querySelector('.marquee-wrapper');
+            marqueeWrapper.style.display = 'none';
+        }
+
         </script>
