@@ -2685,12 +2685,10 @@
                 return;
             }
             const scrollY = window.scrollY;
+            let pxPerWord = 10; 
 
             if (iOS) {
-                const pxPerWord = 0.1; 
-            }
-            else {
-                const pxPerWord = 10; 
+                pxPerWord = 0.1; 
             }
             let wordsToRemove = Math.floor(scrollY / pxPerWord);
             wordsToRemove = Math.max(0, Math.min(wordsToRemove, totalWords)); 
