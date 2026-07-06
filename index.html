@@ -80,7 +80,7 @@
                         <span id='live-count'></span><span class='last-updated'></span>
                     </div>
                     <a id='get-app-button' href="https://apps.apple.com/us/app/one-radio-by-scud/id6747141008" target="_blank"><div id="ios-app">
-                     Get the app
+                     Get the iPhone app
                     </div></a>
 
                 </div>
@@ -2564,6 +2564,7 @@
             const introContainer = document.getElementById('intro-text-container');
             const marqueeing = introContainer.classList.contains('marqueeing');
 
+            /*
             if (window.innerHeight > window.innerWidth && marqueeing === false) {
                 marqueeInside(introContainer);
             } else if (window.innerHeight <= window.innerWidth && marqueeing) {
@@ -2571,6 +2572,7 @@
             } else if (marqueeing) {
                 if (introContainer._setMarqueeAnimation) introContainer._setMarqueeAnimation();
             }
+            */
 
             barHeight = topBar.offsetHeight;
             document.body.style.marginTop = barHeight + 35 + 'px';
