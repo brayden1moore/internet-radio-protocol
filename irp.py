@@ -690,6 +690,7 @@ class Stream:
             except:
                 self.now_playing = None
                 self.status = "Offline"
+                self.show_logo = None
 
         elif self.name == 'LYL Radio':
             try:
