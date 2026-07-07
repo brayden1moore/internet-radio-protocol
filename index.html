@@ -2670,97 +2670,98 @@
             marqueeWrapper.style.display = 'none';
         }
 
-        function calculateTop() {
-            const topBar = document.getElementById('top-bar');
-            barHeight = topBar.offsetHeight;
-            //const introContainer = document.getElementById('intro-text-container');
-            //const marqueeing = introContainer.classList.contains('marqueeing');
+const everythingElse = document.getElementById('everythingelse');
+const justOneRadio   = document.getElementById('main-logo');
+const introContainer = document.getElementById('intro-text-container');
+const intro          = document.getElementById('intro');
 
-            /*
-            if (window.innerHeight > window.innerWidth && marqueeing === false) {
-                marqueeInside(introContainer);
-            } else if (window.innerHeight <= window.innerWidth && marqueeing) {
-                unmarquee(introContainer);
-            } else if (marqueeing) {
-                if (introContainer._setMarqueeAnimation) introContainer._setMarqueeAnimation();
-            }
-            */
-            document.body.style.marginTop = barHeight + 35 + 'px';
-        }
+const introWords = everythingElse.textContent.trim().split(/\s+/);
+const totalWords = introWords.length;
 
-        function debounce(fn, delay = 100) {
-            let timer;
-            return (...args) => {
-                clearTimeout(timer);
-                timer = setTimeout(() => fn(...args), delay);
-            };
-        }
+let originalHeight, justOneRadioHeight, pxPerWord;
+let lastWordsToShow = -1;
+let ready = false;
 
-        const everythingElse = document.getElementById('everythingelse');
-        const justOneRadio = document.getElementById('main-logo');
-        const introContainer = document.getElementById('intro-text-container');
-        const intro = document.getElementById('intro');
-        let originalHeight;
-        
-        // Cache original word list 
-        let pxPerWord;
-        function recalcPxPerWord() {
-            const fontSizePx = parseFloat(getComputedStyle(everythingElse).fontSize);
-            pxPerWord = 7 * (34 / fontSizePx) ;
-        }
+function recalcPxPerWord() {
+    const fontSizePx = parseFloat(getComputedStyle(everythingElse).fontSize);
+    pxPerWord = 7 * (34 / fontSizePx);
+}
 
-        const introWords = everythingElse.textContent.trim().split(/\s+/);
-        const totalWords = introWords.length;
-        const fontSizePx = parseFloat(getComputedStyle(everythingElse).fontSize);
+function calculateTop() {
+    const barHeight = document.getElementById('top-bar').offsetHeight;
+    document.body.style.marginTop = barHeight + 35 + 'px';
+}
 
-        function updateIntroWords() {
-            const scrollY = window.scrollY;
-            let wordsToRemove = Math.floor(scrollY / pxPerWord);
-            wordsToRemove = Math.max(0, Math.min(wordsToRemove, totalWords)); 
-            const wordsToShow = totalWords - wordsToRemove;
-            everythingElse.textContent = introWords.slice(0, wordsToShow).join(' ');
-            newHeight = originalHeight - scrollY;
-            if (newHeight < justOneRadioHeight) {
-                newHeight = justOneRadioHeight;
-            }
-            intro.style.height = newHeight + 'px';
+function updateIntroWords() {
+    if (!ready) return;
+    const scrollY = window.scrollY;
 
-        }
+    let wordsToRemove = Math.floor(scrollY / pxPerWord);
+    wordsToRemove = Math.max(0, Math.min(wordsToRemove, totalWords));
+    const wordsToShow = totalWords - wordsToRemove;
 
-        const fullText = everythingElse.textContent.trim();
+    if (wordsToShow !== lastWordsToShow) {
+        everythingElse.textContent = introWords.slice(0, wordsToShow).join(' ');
+        lastWordsToShow = wordsToShow;
+    }
 
-        window.addEventListener('scroll', updateIntroWords, { passive: true });
-        window.addEventListener('resize', recalcPxPerWord);
-        window.addEventListener('resize', updateIntroWords, { passive: true });
-        window.addEventListener("resize", debounce(() => {
-            if ((window.innerWidth / window.innerHeight) < 0.8) return;
-            calculateTop();
-        }, 20));
+    let newHeight = originalHeight - scrollY;
+    if (newHeight < justOneRadioHeight) newHeight = justOneRadioHeight;
+    intro.style.height = newHeight + 'px';
+}
 
-        document.addEventListener("DOMContentLoaded", () => {
-                window.scrollTo(0, 0);
-                recalcPxPerWord();
-                updateIntroWords();
-                calculateTop();
-        })
+// The key: restore full text, measure true height at the CURRENT width,
+// then re-apply scroll-based truncation.
+function remeasure() {
+    if (!ready) return;
 
-        let justOneRadioHeight;
-        window.addEventListener('load', () => {
-            if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-            window.scrollTo(0, 0);
+    everythingElse.textContent = introWords.join(' ');  // full text
+    intro.style.height = 'auto';                        // let it reflow naturally
 
-            intro.style.boxSizing = 'border-box';
-            justOneRadio.style.boxSizing = 'border-box';
-            originalHeight = intro.offsetHeight;
-            justOneRadioHeight = justOneRadio.offsetHeight;
+    originalHeight     = intro.offsetHeight;            // true height at new width
+    justOneRadioHeight = justOneRadio.offsetHeight;
 
-            recalcPxPerWord();
-            updateIntroWords();
-            calculateTop();
-        });
+    recalcPxPerWord();
+    lastWordsToShow = -1;                                // force DOM rewrite
+    updateIntroWords();                                 // re-truncate + set height
+    calculateTop();                                     // re-fix body margin
+}
 
-        if (document.fonts && document.fonts.ready) {
-            document.fonts.ready.then(() => calculateTop());
-        }
+function debounce(fn, delay = 100) {
+    let timer;
+    return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), delay); };
+}
+
+// scroll: cheap, rAF-throttled, no remeasure
+let ticking = false;
+window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => { updateIntroWords(); ticking = false; });
+}, { passive: true });
+
+// resize: expensive, debounced, full remeasure — this is the ONLY resize listener now
+window.addEventListener('resize', debounce(remeasure, 20));
+
+function init() {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+
+    intro.style.boxSizing = 'border-box';
+    justOneRadio.style.boxSizing = 'border-box';
+
+    originalHeight     = intro.offsetHeight;
+    justOneRadioHeight = justOneRadio.offsetHeight;
+
+    recalcPxPerWord();
+    ready = true;
+    updateIntroWords();
+    calculateTop();
+}
+
+window.addEventListener('load', init);
+if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => { if (ready) remeasure(); });
+}
 
         </script>
