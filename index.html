@@ -160,6 +160,9 @@
         </div>
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
+    #everythingelse {
+        transition: opacity 0.2s ease;
+    }
 
     #intro {
         display: block;
@@ -167,10 +170,11 @@
         font-family: 'Archivo Bold';
         padding: 10px;
         letter-spacing: -0.05em;
-        font-size: 12pt;
+        font-size: 18pt;
         -webkit-text-stroke: 0.2px rgb(0, 0, 0); 
         color: rgb(243,243,243); 
         overflow: hidden;
+        transition: height 0.2s ease;
     }
 
     #top-bar {
@@ -2572,38 +2576,6 @@
             getTheApp.style.display = 'flex';
         }
 
-        function calculateTop() {
-            const topBar = document.getElementById('top-bar');
-            barHeight = topBar.offsetHeight;
-            //const introContainer = document.getElementById('intro-text-container');
-            //const marqueeing = introContainer.classList.contains('marqueeing');
-
-            /*
-            if (window.innerHeight > window.innerWidth && marqueeing === false) {
-                marqueeInside(introContainer);
-            } else if (window.innerHeight <= window.innerWidth && marqueeing) {
-                unmarquee(introContainer);
-            } else if (marqueeing) {
-                if (introContainer._setMarqueeAnimation) introContainer._setMarqueeAnimation();
-            }
-            */
-            document.body.style.marginTop = barHeight + 35 + 'px';
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-                calculateTop();
-        })
-
-        function debounce(fn, delay = 100) {
-            let timer;
-            return (...args) => {
-                clearTimeout(timer);
-                timer = setTimeout(() => fn(...args), delay);
-            };
-        }
-
-        window.addEventListener("resize", debounce(calculateTop, 20));
-
         function marqueeInside(container, pauseSeconds = 1) {
             let marqueeWrapper = container.querySelector('.marquee-wrapper');
             let originalContent = container.querySelector('.original-content');
@@ -2685,9 +2657,47 @@
             marqueeWrapper.style.display = 'none';
         }
 
+        function calculateTop() {
+            const topBar = document.getElementById('top-bar');
+            barHeight = topBar.offsetHeight;
+            //const introContainer = document.getElementById('intro-text-container');
+            //const marqueeing = introContainer.classList.contains('marqueeing');
+
+            /*
+            if (window.innerHeight > window.innerWidth && marqueeing === false) {
+                marqueeInside(introContainer);
+            } else if (window.innerHeight <= window.innerWidth && marqueeing) {
+                unmarquee(introContainer);
+            } else if (marqueeing) {
+                if (introContainer._setMarqueeAnimation) introContainer._setMarqueeAnimation();
+            }
+            */
+            document.body.style.marginTop = barHeight + 35 + 'px';
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+                calculateTop();
+        })
+
+        function debounce(fn, delay = 100) {
+            let timer;
+            return (...args) => {
+                clearTimeout(timer);
+                timer = setTimeout(() => fn(...args), delay);
+            };
+        }
+
         const everythingElse = document.getElementById('everythingelse');
+        const justOneRadio = document.getElementById('main-logo');
         const introContainer = document.getElementById('intro-text-container');
-        //introContainer.style.minHeight = introContainer.offsetHeight + 'px';
+        const intro = document.getElementById('intro');
+        let originalHeight;
+        window.addEventListener('load', () => {
+            intro.style.boxSizing = 'border-box';
+            justOneRadio.style.boxSizing = 'border-box';
+            originalHeight = intro.offsetHeight;
+            justOneRadioHeight = justOneRadio.offsetHeight;
+        });
         
         // Cache original word list 
         let pxPerWord;
@@ -2702,15 +2712,29 @@
         const fontSizePx = parseFloat(getComputedStyle(everythingElse).fontSize);
 
         function updateIntroWords() {
-                const scrollY = window.scrollY;
+            const scrollY = window.scrollY;
+            if ((window.innerWidth / window.innerHeight) < 0.8) {
+                console.log(originalHeight);
+                if (scrollY >= 40) {
+                    everythingElse.style.opacity = 0;
+                    intro.style.height = justOneRadioHeight + 'px';
+                }
+                else {
+                    everythingElse.style.opacity = 1;
+                    intro.style.height = originalHeight + 'px';
+                }
+            }
+            else {
                 let wordsToRemove = Math.floor(scrollY / pxPerWord);
                 wordsToRemove = Math.max(0, Math.min(wordsToRemove, totalWords)); 
                 const wordsToShow = totalWords - wordsToRemove;
                 everythingElse.textContent = introWords.slice(0, wordsToShow).join(' ');
-                //calculateTop(scrollY);
+            }
+
         }
 
         window.addEventListener('scroll', updateIntroWords, { passive: true });
         window.addEventListener('resize', recalcPxPerWord);
         window.addEventListener('resize', updateIntroWords, { passive: true });
+        window.addEventListener("resize", debounce(calculateTop, 20));
         </script>
