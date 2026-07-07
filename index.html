@@ -81,7 +81,7 @@
                         <span id='live-count'></span><span class='last-updated'></span>
                     </div>
                     <a id='get-app-button' href="https://apps.apple.com/us/app/one-radio-by-scud/id6747141008" target="_blank"><div id="ios-app">
-                     Get the iPhone app
+                    <span id="apple-logo"></span>&nbsp;Get the iPhone app
                     </div></a>
 
                 </div>
@@ -228,26 +228,28 @@
     #second-row {
         display: flex;
         align-items: center;
+        justify-content: flex-start;
     }
 
     #get-app-button {
-        color:white; 
+        color:rgb(0, 0, 0); 
         border-bottom: none !important; 
         text-decoration: none;
         cursor: pointer;
         border-left: 1px solid black;
-        margin-left: 15px;
         padding-left: 15px;
         padding-right: 15px;
         height: 38px;
         display: none;
-        background-color: black;
+        background-color: rgb(255, 255, 255);
         align-items: center;
+        justify-self: end;
+        margin-left: auto;
     }
 
     #get-app-button:hover {
-        color: black;
-        background-color: yellow;
+        color: rgb(255, 255, 255);
+        background-color: rgb(0, 0, 0);
     }
     
     .station-name-and-tag-div {
@@ -2586,6 +2588,9 @@
         var iOS = /(iPhone)/g.test(navigator.userAgent);
         const getTheApp = document.getElementById('get-app-button');
         if (iOS) {
+            getTheApp.style.display = 'flex';
+        }
+        else {
             getTheApp.style.display = 'flex';
         }
 
