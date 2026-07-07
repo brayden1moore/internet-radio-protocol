@@ -2433,6 +2433,8 @@
 
         setTimeout(() => {
             setInterval(getUpdatedInfo, 10000);
+            recalcPxPerWord();
+            updateIntroWords();
             calculateTop();
         }, 1000);
 
@@ -2741,9 +2743,9 @@
         }, 20));
 
         document.addEventListener("DOMContentLoaded", () => {
-                calculateTop();
                 recalcPxPerWord();
                 updateIntroWords();
+                calculateTop();
         })
 
 
