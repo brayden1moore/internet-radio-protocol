@@ -2744,9 +2744,7 @@ window.addEventListener('scroll', () => {
 let lastWidth = window.innerWidth;
 
 window.addEventListener('resize', debounce(() => {
-    if (window.innerWidth === lastWidth) {
-        // height-only change (mobile toolbar showing/hiding) — text wrapping
-        // is unaffected, so don't rebuild the intro. Just re-fix the bar margin.
+    if (window.innerWidth != lastWidth) {
         calculateTop();
         return;
     }
