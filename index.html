@@ -2738,7 +2738,7 @@
         window.addEventListener('resize', recalcPxPerWord);
         window.addEventListener('resize', updateIntroWords, { passive: true });
         window.addEventListener("resize", debounce(() => {
-            if ((window.innerWidth / window.innerHeight) < 0.8) return; // mobile → skip
+            //if ((window.innerWidth / window.innerHeight) < 0.8) return;
             calculateTop();
         }, 20));
 
@@ -2747,6 +2747,5 @@
                 updateIntroWords();
                 calculateTop();
         })
-
 
         </script>
