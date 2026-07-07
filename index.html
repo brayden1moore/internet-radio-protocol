@@ -2700,13 +2700,6 @@
         const introContainer = document.getElementById('intro-text-container');
         const intro = document.getElementById('intro');
         let originalHeight;
-        window.addEventListener('load', () => {
-            intro.style.boxSizing = 'border-box';
-            justOneRadio.style.boxSizing = 'border-box';
-            originalHeight = intro.offsetHeight;
-            justOneRadioHeight = justOneRadio.offsetHeight;
-            intro.style.minHeight = justOneRadioHeight + 'px !important';
-        });
         
         // Cache original word list 
         let pxPerWord;
@@ -2749,6 +2742,20 @@
                 updateIntroWords();
                 calculateTop();
         })
+
+        window.addEventListener('load', () => {
+            if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+            window.scrollTo(0, 0);
+
+            intro.style.boxSizing = 'border-box';
+            justOneRadio.style.boxSizing = 'border-box';
+            originalHeight = intro.offsetHeight;
+            justOneRadioHeight = justOneRadio.offsetHeight;
+
+            recalcPxPerWord();
+            updateIntroWords();
+            calculateTop();
+        });
 
         if (document.fonts && document.fonts.ready) {
             document.fonts.ready.then(() => calculateTop());
