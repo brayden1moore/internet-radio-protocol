@@ -2749,4 +2749,8 @@
                 calculateTop();
         })
 
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(() => calculateTop());
+        }
+
         </script>
