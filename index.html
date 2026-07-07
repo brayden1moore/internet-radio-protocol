@@ -2741,7 +2741,18 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 // resize: expensive, debounced, full remeasure — this is the ONLY resize listener now
-window.addEventListener('resize', debounce(remeasure, 20));
+let lastWidth = window.innerWidth;
+
+window.addEventListener('resize', debounce(() => {
+    if (window.innerWidth === lastWidth) {
+        // height-only change (mobile toolbar showing/hiding) — text wrapping
+        // is unaffected, so don't rebuild the intro. Just re-fix the bar margin.
+        calculateTop();
+        return;
+    }
+    lastWidth = window.innerWidth;
+    remeasure();
+}, 20));
 
 function init() {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
