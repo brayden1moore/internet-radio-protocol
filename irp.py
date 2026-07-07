@@ -1942,7 +1942,7 @@ Stream(
         stream_link = "https://www.wnyu-ice-cast-relay.com/wnyu.mp3",
         main_link = "https://wnyu.org",
         about = "WNYU is NYU's radio station that is completely operated by NYU students. WNYU broadcasts on 89.1 FM weekdays from 4:00PM to 1:00AM, and on the Internet 24 hours a day, 7 days a week.",
-        support_link = "https://wnyu.org/contacts/send-us-music",
+        support_link = "https://www.givecampus.com/schools/NewYorkUniversity/wnyu-89-1fm-fundraiser?a=13612556",
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
