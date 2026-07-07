@@ -2683,10 +2683,6 @@
             document.body.style.marginTop = barHeight + 35 + 'px';
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-                calculateTop();
-        })
-
         function debounce(fn, delay = 100) {
             let timer;
             return (...args) => {
@@ -2714,7 +2710,6 @@
             const fontSizePx = parseFloat(getComputedStyle(everythingElse).fontSize);
             pxPerWord = 7 * (34 / fontSizePx) ;
         }
-        recalcPxPerWord();
 
         const introWords = everythingElse.textContent.trim().split(/\s+/);
         const totalWords = introWords.length;
@@ -2743,4 +2738,10 @@
             if ((window.innerWidth / window.innerHeight) < 0.8) return; // mobile → skip
             calculateTop();
         }, 20));
+
+        document.addEventListener("DOMContentLoaded", () => {
+                calculateTop();
+                recalcPxPerWord();
+                updateIntroWords();
+        })
         </script>
