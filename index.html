@@ -2433,6 +2433,7 @@
 
         setTimeout(() => {
             setInterval(getUpdatedInfo, 10000);
+            calculateTop();
         }, 1000);
 
         const titleText = document.getElementById('title');
@@ -2744,4 +2745,6 @@
                 recalcPxPerWord();
                 updateIntroWords();
         })
+
+
         </script>
