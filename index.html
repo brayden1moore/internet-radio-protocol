@@ -174,7 +174,11 @@
         -webkit-text-stroke: 0.2px rgb(0, 0, 0); 
         color: rgb(243,243,243); 
         overflow: hidden;
-        transition: height 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    #intro-text-container {
+        box-sizing: border-box;
     }
 
     #top-bar {
@@ -2697,6 +2701,7 @@
             justOneRadio.style.boxSizing = 'border-box';
             originalHeight = intro.offsetHeight;
             justOneRadioHeight = justOneRadio.offsetHeight;
+            intro.style.minHeight = justOneRadioHeight + 'px !important';
         });
         
         // Cache original word list 
@@ -2713,25 +2718,19 @@
 
         function updateIntroWords() {
             const scrollY = window.scrollY;
-            if ((window.innerWidth / window.innerHeight) < 0.1) {
-                console.log(originalHeight);
-                if (scrollY >= 40) {
-                    everythingElse.style.opacity = 0;
-                    intro.style.height = justOneRadioHeight + 'px';
-                }
-                else {
-                    everythingElse.style.opacity = 1;
-                    intro.style.height = originalHeight + 'px';
-                }
+            let wordsToRemove = Math.floor(scrollY / pxPerWord);
+            wordsToRemove = Math.max(0, Math.min(wordsToRemove, totalWords)); 
+            const wordsToShow = totalWords - wordsToRemove;
+            everythingElse.textContent = introWords.slice(0, wordsToShow).join(' ');
+            newHeight = originalHeight - scrollY;
+            if (newHeight < justOneRadioHeight) {
+                newHeight = justOneRadioHeight;
             }
-            else {
-                let wordsToRemove = Math.floor(scrollY / pxPerWord);
-                wordsToRemove = Math.max(0, Math.min(wordsToRemove, totalWords)); 
-                const wordsToShow = totalWords - wordsToRemove;
-                everythingElse.textContent = introWords.slice(0, wordsToShow).join(' ');
-            }
+            intro.style.height = newHeight + 'px';
 
         }
+
+        const fullText = everythingElse.textContent.trim();
 
         window.addEventListener('scroll', updateIntroWords, { passive: true });
         window.addEventListener('resize', recalcPxPerWord);
