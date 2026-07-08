@@ -1101,6 +1101,7 @@ class Stream:
 
         elif self.name == 'KALX':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.show_logo = None
             self.now_playing = extract_value(info, ['show','title'])
             self.now_playing_description = extract_value(info, ['show','users',0,'profile_text'])
             if self.now_playing_description:
@@ -1111,11 +1112,11 @@ class Stream:
                 self.status = 'Live'
 
             self.show_logo = extract_value(info, ['show','image','url'])
-    
-            try:
-                response = requests.get(self.show_logo, timeout=TIMEOUT)
-            except:
-                self.show_logo = None
+            if self.show_logo:
+                try:
+                    response = requests.get(self.show_logo, timeout=TIMEOUT)
+                except:
+                    self.show_logo = None
 
             try:
                 url = "https://kalx.berkeley.edu/wp-content/plugins/kalx-spinitron/now-playing.php"
