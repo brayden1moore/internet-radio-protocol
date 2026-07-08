@@ -1115,6 +1115,7 @@ class Stream:
             if self.show_logo:
                 try:
                     response = requests.get(self.show_logo, timeout=TIMEOUT)
+                    assert response.status_code == 200
                 except:
                     self.show_logo = None
 
