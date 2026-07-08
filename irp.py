@@ -1111,6 +1111,11 @@ class Stream:
                 self.status = 'Live'
 
             self.show_logo = extract_value(info, ['show','image','url'])
+    
+            try:
+                response = requests.get(self.show_logo, timeout=TIMEOUT)
+            except:
+                self.show_logo = None
 
             try:
                 url = "https://kalx.berkeley.edu/wp-content/plugins/kalx-spinitron/now-playing.php"
