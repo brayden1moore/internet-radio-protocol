@@ -76,7 +76,7 @@ def check(v):
         if (show_logo_resp!=200) and (show_logo_resp!=None):
             review_list.append(f'Show logo unresponsive ({v['showLogo']})')
 
-        if (donate_resp!=None) and (donate_resp!=403) and (donate_resp!=202) and (donate_resp!=429):
+        if (donate_resp!=None) and (donate_resp!=403) and (donate_resp!=202) and (donate_resp!=429) and (donate_resp!=200) :
             review_list.append(f'Donate link unresponsive ({v['supportLink']})')
 
     needs_review = len(review_list)>0
