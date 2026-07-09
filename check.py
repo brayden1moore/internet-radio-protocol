@@ -39,6 +39,11 @@ def check(v):
         show_logo_resp = None
 
     try:
+        donate_resp = session.get(v['supportLink'], timeout=5).status_code
+    except requests.exceptions.RequestException:
+        donate_resp = 0
+
+    try:
         info_link = v['infoLink'] if 'calendar.google.com' not in v['infoLink'] else f"https://www.googleapis.com/calendar/v3/calendars/{v['infoLink']}/events"
         info_resp = session.get(info_link, timeout=3).status_code
     except requests.exceptions.RequestException:
@@ -62,6 +67,9 @@ def check(v):
         if (show_logo_resp!=200) and (show_logo_resp!=None):
             review_list.append(f'Show logo unresponsive ({v['showLogo']})')
 
+        if donate_resp:
+            review_list.append(f'Donate link unresponsive ({v['supportLink']})')
+
     needs_review = len(review_list)>0
     review_str = ', '.join(review_list)
     
@@ -77,6 +85,7 @@ def check(v):
         'showLogo':show_logo_resp,
         'info':info_resp,
         'stream':stream_resp,
+        'supporLink':donate_resp,
         'needsReview':needs_review,
     }
 
