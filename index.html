@@ -2423,6 +2423,9 @@
             let value = params.station;
             if (value) {
                 chooseStation(value, false , true);
+                window.addEventListener('load', () => {
+                    requestAnimationFrame(remeasure);
+                });
             }
         });
 
