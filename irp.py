@@ -1457,7 +1457,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
-        hidden=True
+        hidden= False
 ),
 Stream(
         name = "KJazz",
