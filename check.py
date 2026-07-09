@@ -39,7 +39,13 @@ def check(v):
         show_logo_resp = None
 
     try:
-        donate_resp = session.get(v['supportLink'], timeout=5).status_code
+        headers = {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Priority":     "u=0, i",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.1 Safari/605.1.15"
+        }
+        donate_resp = session.get(v['supportLink'], headers=headers, timeout=15).status_code
     except requests.exceptions.RequestException:
         donate_resp = 0
 
