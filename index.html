@@ -2422,7 +2422,9 @@
             });
             let value = params.station;
             if (value) {
-                chooseStation(value, false , true);
+                const start = () => chooseStation(value, false, true);
+                if (document.readyState === 'complete') start();
+                else window.addEventListener('load', start)
             }
         });
 
