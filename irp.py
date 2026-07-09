@@ -1882,7 +1882,7 @@ Stream(
         stream_link = "https://subtle.out.airtime.pro/subtle_a",
         main_link = "https://www.subtleradio.com",
         about = "We Are Various is an online community radio station currently transmitting from inside Witzli Poetzli, Trix & Het Bos. Beats and pixels. Demos and expos. Rewinds and flashlights. Camera and musica obscura.",
-        support_link = "https://www.subtle.store/supporters",
+        support_link = "https://www.subtle.store",
         insta_link = "https://www.instagram.com/subtleradio/",
         bandcamp_link = None,
         soundcloud_link = None
