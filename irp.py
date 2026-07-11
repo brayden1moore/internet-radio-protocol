@@ -1285,7 +1285,7 @@ class Stream:
         elif self.name == 'Sphere Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.now_playing = extract_value(info, ['currentShow',0,'name'])
-            self.now_playing = 'Live'
+            self.status = 'Live'
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
