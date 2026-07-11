@@ -2414,7 +2414,7 @@ Stream(
 ),
 Stream(
         name = 'Zabrij Radio',
-        logo = "https://internetradioprotocol.org/logos/sphere.png",
+        logo = "https://internetradioprotocol.org/logos/zabrij.png",
         location = 'Zagreb',
         info_link = "https://api.radiocult.fm/api/station/zabrij-radio/schedule/live",
         stream_link = 'https://zabrij-radio.radiocult.fm/stream',
