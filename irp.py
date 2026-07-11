@@ -1296,7 +1296,9 @@ class Stream:
             if artist:
                 self.now_playing = self.now_playing + ' by ' + artist
             self.listeners = extract_value(info, ['listeners','total'])            
-
+            if self.status == 'Live':
+                self.now_playing = extract_value(info, ['live','streamer_name']) + ' ' + self.now_playing
+        
         elif self.name == 'Sphere Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.now_playing = extract_value(info, ['currentShow',0,'name'])
