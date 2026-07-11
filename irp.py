@@ -602,7 +602,7 @@ class Stream:
             self.now_playing = show['program_name'] # concatenation of host names show name
             self.additional_info = None
             self.genres = show['program_tags'].split(',')
-            self.show_logo = show['program_image_uri'] # show logo if provided
+            self.show_logo = None#show['program_image_uri'] # show logo if provided
             self.now_playing_subtitle = None
             if song['play_type'] == 'trackplay':
                 self.now_playing_subtitle = f"{song['song']} by {song['artist']}" # last played song and artist
@@ -738,7 +738,7 @@ class Stream:
             except:
                 self.now_playing_subtitle = info['title']
             try:
-                self.show_logo = None#info['program_image'].replace('\/','/')
+                self.show_logo = info['program_image'].replace('\/','/')
             except:
                 self.show_logo = None
 
@@ -1111,7 +1111,7 @@ class Stream:
             else:
                 self.status = 'Live'
 
-            self.show_logo = extract_value(info, ['show','image','url'])
+            # self.show_logo = extract_value(info, ['show','image','url'])
             if self.show_logo:
                 try:
                     response = requests.get(self.show_logo, timeout=TIMEOUT)
