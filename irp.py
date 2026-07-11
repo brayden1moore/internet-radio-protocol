@@ -1243,7 +1243,11 @@ class Stream:
             self.show_logo = extract_value(info, ['now_playing','song','art'])
             self.listeners = extract_value(info, ['listeners','total'])
         
-
+        elif self.name == 'Gatekeeper Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.status = 'Live' if info['live']['is_live'] == True else 'Re-Run'
+            self.now_playing = extract_value(info, ['now_playing','song','text'])
+            self.listeners = extract_value(info, ['listeners','total'])
         
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
@@ -2287,6 +2291,17 @@ Stream(
         support_link = 'https://lahmacun.hu/donate',
         insta_link = 'http://instagram.com/lahmacunradio',
         bandcamp_link = 'https://lahmacunradio.bandcamp.com/'
+),
+Stream(
+        name = 'Gatekeeper Radio',
+        logo = "https://internetradioprotocol.org/logos/gatekeeper.png",
+        location = 'Berlin',
+        info_link = "https://azuracast.gatekeeperradio.com/api/nowplaying/gatekeeper_radio",
+        stream_link = 'https://azuracast.gatekeeperradio.com/listen/gatekeeper_radio/radio.mp3',
+        main_link = 'https://gatekeeperradio.com/',
+        about = 'GATEKEEPER RADIO represents an innovative initiative, transforming urban spaces into vibrant temporary radio stations while also launching an online platform for creative collaboration. Its bringing together creatives from the realms of art, music, science, digital media, and society, fostering connections through artistic inquiries and the exploration of new potentials.',
+        support_link = 'mailto:mail@gatekeeperradio.com',
+        insta_link = 'https://www.instagram.com/gatekeeper_radio/'
 )     
 ]
 
