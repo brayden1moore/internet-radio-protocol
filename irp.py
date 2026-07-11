@@ -1171,6 +1171,72 @@ class Stream:
                         received = True
             finally:
                 ws.close()
+
+        elif self.name == 'ChuntFM':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            if len(info) > 0:
+                self.now_playing = extract_value(info, [0,'title'])
+                self.status = 'Live' if info[0]['restream'] == False else 'Re-Run'
+            else:
+                self.now_playing = None
+                self.status = 'Offline'
+
+        elif self.name == 'Palanga Street':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            name = extract_value(info, ['shows','current','name'])
+            if name:
+                self.now_playing = name
+                self.now_playing_description = extract_value(info, ['shows','current','description'])
+                self.show_logo = extract_value(info, ['shows','current','image_path'])
+                self.status = 'Live' if extract_value(info, ['sources','livedj']) == 'on' else 'Re-Run'
+            else:
+                self.now_playing = None
+                self.now_playing_description = None
+                self.show_logo = None
+                self.status = 'Offline'
+
+        elif self.name == 'Dublin Digital Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            if info['success'] == True:
+                self.now_playing = extract_value(info, ['result','content','name'])
+                self.status = 'Re-Run' if extract_value(info, ['result','status']) == 'defaultPlaylist' else 'Live'
+            else:
+                self.now_playing = None
+                self.status = 'Offline'
+
+        elif self.name == 'IDA':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            data = info['data']['tallinn']
+            if data:
+                self.now_playing = extract_value(data, ['title'])
+                self.status = 'Re-Run' if data['isRepeat'] == True else 'Live'
+                self.show_logo = data['featuredImage']
+            else:
+                self.now_playing = None
+                self.status = 'Offline'
+                self.show_logo = None
+
+        elif self.name == 'Tīrkultūra':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            if info['data']:
+                self.now_playing = extract_value(info, ['data','title'])
+                self.status = 'Live'
+            else:
+                self.status = 'Offline'
+
+        elif self.name == 'Seyðisfjörður Community Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            if info['success']:
+                self.now_playing = extract_value(info, ['result','content','title'])
+                artist = extract_value(info, ['result','content','artist'])
+                if artist:
+                    self.now_playing = self.now_playing + ' by ' + artist
+                self.status = 'Re-Run' if extract_value(info, ['result','content','media','type']) == 'playlist' else 'Live'
+            else:
+                self.now_playing = None
+                self.status = 'Offline'
+        
+
         
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
@@ -2133,7 +2199,76 @@ Stream(
         category = 'Student',
         status = 'Live',
         hidden = True
-)
+),
+Stream(
+        name = "ChuntFM",
+        logo = "https://internetradioprotocol.org/logos/chunt.png",
+        location = "London",
+        info_link = "https://api.chunt.org/fm/channels/1/now-playing",
+        stream_link = "https://fm.chunt.org/stream",
+        main_link = "https://chunt.org",
+        about = '"To chunt is divine"',
+        support_link = "https://ra.co/promoters/118280",
+        insta_link = "https://www.instagram.com/chuntongo"
+),
+Stream(
+        name = 'Palanga Street',
+        logo = "https://internetradioprotocol.org/logos/palanga.png",
+        location = 'Vilnius',
+        info_link = "https://api.palanga.live/live-info-v2?shows=1",
+        stream_link = 'https://stream.palanga.live/palanga128.mp3',
+        main_link = 'https://palanga.live/',
+        about = 'PSR is an independent community radio based in Vilnius, Lithuania. Established in 2017 in a flat on Palanga Street, we embraced a DIY philosophy that continues to inspire us to this day and fuels the engagement of our community. As a voluntary team we strive to foster a safe and inclusive environment for the creation of free cultural expression locally and online.',
+        support_link = 'https://palanga.live/donate',
+        insta_link = 'https://www.instagram.com/palanga_street_radio/'
+),
+Stream(
+        name = 'Dublin Digital Radio',
+        logo = "https://internetradioprotocol.org/logos/ddr.png",
+        location = 'Dublin',
+        info_link = "https://api.radiocult.fm/api/station/dublin-digital-radio/schedule/live",
+        stream_link = 'https://dublin-digital-radio.radiocult.fm/stream',
+        main_link = 'https://listen.dublindigitalradio.com/home',
+        about = 'Dublin Digital Radio (ddr.) is an award-winning, online community radio station representing a wealth of alternative music, art and politics across Ireland, since 2016. ddr. is wholly funded by its members (via Patreon subscriptions), composed of listeners and broadcasters alike, ensuring that it remains independent of corporate influence and is run democratically by its growing community.',
+        support_link = 'https://www.patreon.com/dublindigitalradio',
+        insta_link = 'https://www.instagram.com/dublindigitalradio/',
+        bandcamp_link = 'https://dublindigitalradio.bandcamp.com'
+),
+Stream(
+        name = 'IDA',
+        logo = "https://internetradioprotocol.org/logos/ida.png",
+        location = 'Tallinn',
+        info_link = "https://strapi.idaidaida.net/api/live",
+        stream_link = 'https://broadcast.idaidaida.net:8000/stream',
+        main_link = 'https://idaidaida.net',
+        about = 'IDA is an online radio located in Tallinn & Helsinki.',
+        support_link = 'https://idaidaida.net/about#about#support',
+        soundcloud_link = 'https://soundcloud.com/ida_radio',
+        insta_link = 'https://www.instagram.com/ida.radio/'
+),
+Stream(
+        name = 'Tīrkultūra',
+        logo = "https://internetradioprotocol.org/logos/tirk.png",
+        location = 'Riga',
+        info_link = "https://public.radio.co/api/v2/s216811754/track/current",
+        stream_link = 'https://s3.radio.co/s216811754/listen.m3u',
+        main_link = 'https://tirkultura.lv',
+        about = 'Tīrkultūra is an interdisciplinary contemporary culture platform working mainly through the medium of sound. Tīrkultura is a listener-powered, non-commercial, and non-profit online radio station, based in Riga, Latvia.',
+        support_link = 'mailto:reinis@tirkultura.net',
+        soundcloud_link = 'https://soundcloud.com/tirkultura',
+        insta_link = 'https://www.instagram.com/tirkultura/'
+),
+Stream(
+        name = 'Seyðisfjörður Community Radio',
+        logo = "https://internetradioprotocol.org/logos/scr.png",
+        location = 'Seyðisfjörður',
+        info_link = "https://www.seydisfjordurcommunityradio.net/api/schedule-live",
+        stream_link = 'https://seyisfjorur-community-radio.radiocult.fm/stream',
+        main_link = 'https://www.seydisfjordurcommunityradio.net/',
+        about = 'A platform founded in 2016. Experimental community radio constantly in the making. Broadcasting on 107.1FM in Seyðisfjörður and online. Seyðisfjörður is a small town on Iceland’s east coast. Our radio-room is in Herðubreið Community Center. Holding our antenna up high on the roof. Connecting local residents with remote residents with anyone who tunes in. Sharing sounds of thoughts with sounds of music. Confusing radio with magic with worldbuilding with belonging. Weaving the act of listening with the act of radio-making into the act of community. An open-ended network of people and places. Glowing from transience, togetherness and a sentiment of significance. The haptic experience of keeping in touch. Through radio. Forever.',
+        support_link = 'https://www.lungaschool.is/en/collaborators',
+        insta_link = 'https://www.instagram.com/seydisfjordur.community.radio/'
+)        
 ]
 
 def get_mixtapes():
