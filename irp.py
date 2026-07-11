@@ -1287,6 +1287,18 @@ class Stream:
             self.now_playing = extract_value(info, ['currentShow',0,'name'])
             self.status = 'Live'
 
+        elif self.name == 'Zabrij Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            if info['success'] == True:
+                self.now_playing = extract_value(info, ['result','metadata','title'])
+                artist = extract_value(info, ['result','metadata','artist'])
+                if artist:
+                    self.now_playing = self.now_playing + ' by ' + artist
+                self.status = 'Re-Run' if extract_value(info, ['result','status']) == 'defaultPlaylist' else 'Live'
+            else:
+                self.now_playing = None
+                self.status = 'Offline'            
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
@@ -2399,6 +2411,17 @@ Stream(
         about = "Sphere Radio is a community-driven Radio from Leipzig, curating space for diverse voices and ideas. We are open, experimental, and oriented towards emancipatory values.",
         support_link = 'https://liberapay.com/SphereRadio/',
         insta_link = 'https://www.instagram.com/sphere.radio/'
+),
+Stream(
+        name = 'Zabrij Radio',
+        logo = "https://internetradioprotocol.org/logos/sphere.png",
+        location = 'Zagreb',
+        info_link = "https://api.radiocult.fm/api/station/zabrij-radio/schedule/live",
+        stream_link = 'https://zabrij-radio.radiocult.fm/stream',
+        main_link = 'https://www.zabrijradio.org',
+        about = "Zabrij Radio was established in 2025 as an open and experimental space for sound without borders. In the beginning, we explored everything, from ambient and jazz to experimental electronics, film scores, and unexpected musical corners from around the world.",
+        support_link = 'https://www.zabrijradio.org/contact',
+        insta_link = 'https://www.instagram.com/zabrijradio/'
 )  
 ]
 
