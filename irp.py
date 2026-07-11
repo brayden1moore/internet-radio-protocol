@@ -1258,6 +1258,12 @@ class Stream:
                 self.now_playing = None
                 self.status = 'Offline'
 
+        elif self.name == 'Parea Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.status = 'Live'
+            self.now_playing = extract_value(info, ['title'])
+            
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
@@ -2323,7 +2329,19 @@ Stream(
         support_link = 'https://20ftradio.net/donate',
         insta_link = 'https://www.instagram.com/20ftradio/?hl=en',
         soundcloud_link = 'https://soundcloud.com/20ft_radio'
-)     
+),
+Stream(
+        name = 'Parea Radio',
+        logo = "https://internetradioprotocol.org/logos/parea.png",
+        location = 'Athens',
+        info_link = "https://parearadio.com/wp-json/parea/v1/live-info",
+        stream_link = 'https://parea-radio-b7474105.radiocult.fm/stream',
+        main_link = 'https://parearadio.com/',
+        about = "Parea Radio is an independent, community-oriented online radio platform based in Athens. Rooted in the idea of parea, a circle of friends gathered around sound, the station exists as a shared space for listening, exchange and documentation. It is built around presence rather than performance, continuity rather than volume.",
+        support_link = 'https://parearadio.com/support-us/',
+        insta_link = 'https://www.instagram.com/parea.radio/',
+        soundcloud_link = 'https://soundcloud.com/parea-radio'
+)    
 ]
 
 def get_mixtapes():
