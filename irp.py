@@ -1278,6 +1278,8 @@ class Stream:
             else:
                 self.now_playing = None
                 self.status = 'Offline'
+            if self.now_playing == None:
+                self.status = 'Offline'
 
         elif self.name == 'Parea Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
