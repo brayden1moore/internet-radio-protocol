@@ -932,7 +932,7 @@ class Stream:
 
                 if end_time > now_utc > start_time:
                     self.now_playing = event['summary']
-                    if 'Archivo' in event.get('description') or '':
+                    if 'Archivo' in event.get('summary') or '':
                         self.stream_link = 'https://radio.mensajito.mx/nopalVentana'
                     else:
                         self.stream_link = 'https://radio.mensajito.mx/nopalA'
