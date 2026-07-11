@@ -1262,7 +1262,16 @@ class Stream:
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.status = 'Live'
             self.now_playing = extract_value(info, ['title'])
-            
+
+        elif self.name == 'Radio Dopo':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.now_playing = extract_value(info, ['current_track','title'])
+            self.show_logo = extract_value(info, ['current_track','artwork_url_large'])
+            self.status = 'Re-Run' if extract_value(info, ['source','type']) == 'automated' else 'Live'
+            if info['status'] != 'online':
+                self.now_playing = None
+                self.status = 'Offline'
+                self.show_logo = None
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
@@ -2341,6 +2350,18 @@ Stream(
         support_link = 'https://parearadio.com/support-us/',
         insta_link = 'https://www.instagram.com/parea.radio/',
         soundcloud_link = 'https://soundcloud.com/parea-radio'
+),
+Stream(
+        name = 'Radio Dopo',
+        logo = "https://internetradioprotocol.org/logos/dopo.png",
+        location = 'Palermo',
+        info_link = "https://public.radio.co/stations/s807721f02/status",
+        stream_link = 'https://streaming.radio.co/s807721f02/listen',
+        main_link = 'https://radiodopo.it/',
+        about = "Established in 2025, Radio Dopo is a Palermo-based community radio station, working with artists, cultural workers and non-profit organizations, born from a partnership with like-minded community radio stations Kiosk Radio in Brussels and Refuge Worldwide in Berlin. This project has been funded by the European Union through the Erasmus+ program.",
+        support_link = 'mailto:info@radiodopo.it',
+        insta_link = 'https://www.instagram.com/radiodopo/',
+        soundcloud_link = 'https://soundcloud.com/radiodopo'
 )    
 ]
 
