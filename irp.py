@@ -1202,6 +1202,15 @@ class Stream:
                 if not self.now_playing:
                     self.now_playing = extract_value(info, ['result','content','title'])
                 self.status = 'Re-Run' if extract_value(info, ['result','status']) == 'defaultPlaylist' else 'Live'
+
+                resp = requests.get(self.main_link, timeout=TIMEOUT).text
+                soup = BeautifulSoup(resp)
+                imgs = soup.find_all(attrs={'class':'w-full'})
+                if imgs:
+                    self.show_logo = imgs[0].get('src')
+                else:
+                    self.show_logo = None
+
             else:
                 self.now_playing = None
                 self.status = 'Offline'
