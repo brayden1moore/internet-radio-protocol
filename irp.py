@@ -907,6 +907,7 @@ class Stream:
             self.status = "Live" if self.now_playing else "Offline"
 
         elif self.name == 'Radio Nopal':
+            self.now_playing = None
             calendar_id = self.info_link
             api_key = 'AIzaSyD7jIVZog7IC--y1RBCiLuUmxEDeBH9wDA'
             url = f'https://www.googleapis.com/calendar/v3/calendars/{calendar_id}/events'
@@ -935,7 +936,8 @@ class Stream:
                         self.stream_link = 'https://radio.mensajito.mx/nopalVentana'
                     else:
                         self.stream_link = 'https://radio.mensajito.mx/nopalA'
-                    self.status = "Live" if self.now_playing else "Offline"
+                
+            self.status = "Live" if self.now_playing else "Offline"
 
         elif self.name == 'Noods Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
