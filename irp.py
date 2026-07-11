@@ -1189,7 +1189,13 @@ class Stream:
             if name:
                 self.now_playing = name
                 self.now_playing_description = extract_value(info, ['shows','current','description'])
-                self.show_logo = extract_value(info, ['shows','current','image_path'])
+                id = extract_value(info, ['shows','current','id'])
+                self.show_logo = 'https://api.palanga.live/show-logo?id=' + id
+                try: 
+                    resp = requests.get(self.show_logo, timeout=3).status_code
+                    assert resp==200
+                except:
+                    self.show_logo = None
                 self.status = 'Live' if extract_value(info, ['sources','livedj']) == 'on' else 'Re-Run'
             else:
                 self.now_playing = None
