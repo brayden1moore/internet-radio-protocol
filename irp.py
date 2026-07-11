@@ -1318,7 +1318,7 @@ class Stream:
                 received = False
                 while received == False:
                     raw = ws.recv()
-                    if raw.strip() in ("", "{}"):   # skip keepalive pings
+                    if raw.strip() in ("", "{}"):     
                         continue
                     msg = json.loads(raw)
 
@@ -2473,7 +2473,8 @@ Stream(
         about = "Zone Est Radio est une association et une webradio strasbourgeoise née en 2018 d'une volonté de rassembler les acteur·ices de la scène électronique locale.",
         support_link = 'mailto:zoneestradio@gmail.com',
         insta_link = 'https://www.instagram.com/zest.radio',
-        soundcloud_link = 'https://soundcloud.com/zoneestradio'
+        soundcloud_link = 'https://soundcloud.com/zoneestradio',
+        hidden = True
 )  
 ]
 
