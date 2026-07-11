@@ -1249,6 +1249,15 @@ class Stream:
             self.now_playing = extract_value(info, ['now_playing','song','text'])
             self.listeners = extract_value(info, ['listeners','total'])
         
+        elif self.name == '20ft Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            if info['success'] == True:
+                self.now_playing = extract_value(info, ['result','metadata','title'])
+                self.status = 'Re-Run' if extract_value(info, ['result','status']) == 'defaultPlaylist' else 'Live'
+            else:
+                self.now_playing = None
+                self.status = 'Offline'
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
@@ -2302,6 +2311,18 @@ Stream(
         about = 'GATEKEEPER RADIO represents an innovative initiative, transforming urban spaces into vibrant temporary radio stations while also launching an online platform for creative collaboration. Its bringing together creatives from the realms of art, music, science, digital media, and society, fostering connections through artistic inquiries and the exploration of new potentials.',
         support_link = 'mailto:mail@gatekeeperradio.com',
         insta_link = 'https://www.instagram.com/gatekeeper_radio/'
+),
+Stream(
+        name = '20ft Radio',
+        logo = "https://internetradioprotocol.org/logos/20ft.jpg",
+        location = 'Kyiv',
+        info_link = "https://api.radiocult.fm/api/station/20ft%20Radio/schedule/live",
+        stream_link = 'https://20ft-radio.radiocult.fm/stream',
+        main_link = 'https://20ftradio.net/',
+        about = "Since 2017 we’ve been sharing music from DJs, selectors and artists from Ukraine and all over the world. Running by a small team of enthusiasts led by the idea of creating a platform for self-expression of those who are in love with music.",
+        support_link = 'https://20ftradio.net/donate',
+        insta_link = 'https://www.instagram.com/20ftradio/?hl=en',
+        soundcloud_link = 'https://soundcloud.com/20ft_radio'
 )     
 ]
 
