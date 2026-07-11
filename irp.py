@@ -1282,6 +1282,11 @@ class Stream:
                 self.now_playing = self.now_playing + ' by ' + artist
             self.listeners = extract_value(info, ['listeners','total'])            
 
+        elif self.name == 'Sphere Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.now_playing = extract_value(info, ['currentShow','name'])
+            self.now_playing = 'Live'
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
@@ -2383,6 +2388,17 @@ Stream(
         support_link = 'https://pay.sumup.com/b2c/QU2R9LMJ',
         insta_link = 'https://www.instagram.com/radio.sofa/',
         soundcloud_link = 'https://soundcloud.com/radio-sofa'
+),
+Stream(
+        name = 'Sphere Radio',
+        logo = "https://internetradioprotocol.org/logos/sphere.png",
+        location = 'Leipzig',
+        info_link = "https://libretime.sphere-radio.net/api/live-info/",
+        stream_link = 'https://stream.sphere-radio.net/listen',
+        main_link = 'https://www.sphere-radio.net/',
+        about = "Sphere Radio is a community-driven Radio from Leipzig, curating space for diverse voices and ideas. We are open, experimental, and oriented towards emancipatory values.",
+        support_link = 'https://liberapay.com/SphereRadio/',
+        insta_link = 'https://www.instagram.com/sphere.radio/'
 )  
 ]
 
