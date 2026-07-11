@@ -1178,7 +1178,7 @@ class Stream:
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             if len(info) > 0:
                 self.now_playing = extract_value(info, [0,'title'])
-                self.status = 'Live' if info[0]['restream'] == False else 'Re-Run'
+                self.status = 'Live' if info[0].get('restream') == False else 'Re-Run'
             else:
                 self.now_playing = None
                 self.status = 'Offline'
