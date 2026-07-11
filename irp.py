@@ -1254,7 +1254,7 @@ class Stream:
             self.show_logo = extract_value(info, ['now_playing','song','art'])
             self.listeners = extract_value(info, ['listeners','total'])
             if self.status == 'Live':
-                self.now_playing = extract_value(info, ['live','streamer_name']) + self.now_playing
+                self.now_playing = extract_value(info, ['live','streamer_name']) + ' ' + self.now_playing
         
         elif self.name == 'Gatekeeper Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
