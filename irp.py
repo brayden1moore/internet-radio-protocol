@@ -2421,7 +2421,8 @@ Stream(
         main_link = 'https://www.zabrijradio.org',
         about = "Zabrij Radio was established in 2025 as an open and experimental space for sound without borders. In the beginning, we explored everything, from ambient and jazz to experimental electronics, film scores, and unexpected musical corners from around the world.",
         support_link = 'https://www.zabrijradio.org/contact',
-        insta_link = 'https://www.instagram.com/zabrijradio/'
+        insta_link = 'https://www.instagram.com/zabrijradio/',
+        genres = ['Balkan']
 )  
 ]
 
