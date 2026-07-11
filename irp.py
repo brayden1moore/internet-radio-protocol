@@ -1236,6 +1236,13 @@ class Stream:
                 self.now_playing = None
                 self.status = 'Offline'
         
+        elif self.name == 'Lahmacun':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.status = 'Live' if info['live']['is_live'] == True else 'Re-Run'
+            self.now_playing = extract_value(info, ['now_playing','song','text'])
+            self.show_logo = extract_value(info, ['now_playing','song','art'])
+            self.listeners = extract_value(info, ['listeners','total'])
+        
 
         
     def set_last_updated(self):
@@ -2268,7 +2275,19 @@ Stream(
         about = 'A platform founded in 2016. Experimental community radio constantly in the making. Broadcasting on 107.1FM in Seyðisfjörður and online. Seyðisfjörður is a small town on Iceland’s east coast. Our radio-room is in Herðubreið Community Center. Holding our antenna up high on the roof. Connecting local residents with remote residents with anyone who tunes in. Sharing sounds of thoughts with sounds of music. Confusing radio with magic with worldbuilding with belonging. Weaving the act of listening with the act of radio-making into the act of community. An open-ended network of people and places. Glowing from transience, togetherness and a sentiment of significance. The haptic experience of keeping in touch. Through radio. Forever.',
         support_link = 'https://www.lungaschool.is/en/collaborators',
         insta_link = 'https://www.instagram.com/seydisfjordur.community.radio/'
-)        
+),
+Stream(
+        name = 'Lahmacun',
+        logo = "https://internetradioprotocol.org/logos/lahmacun.png",
+        location = 'Budapest',
+        info_link = "https://streaming.lahmacun.hu/api/nowplaying/1",
+        stream_link = 'https://streaming.lahmacun.hu/listen/lahmacun_radio/radio.mp3',
+        main_link = 'https://lahmacun.hu',
+        about = 'Lahmacun.hu is an online music & more radio from Budapest.',
+        support_link = 'https://lahmacun.hu/donate',
+        insta_link = 'http://instagram.com/lahmacunradio',
+        bandcamp_link = 'https://lahmacunradio.bandcamp.com/'
+)     
 ]
 
 def get_mixtapes():
