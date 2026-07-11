@@ -1300,6 +1300,7 @@ class Stream:
                 self.status = 'Offline'    
 
         elif self.name == 'Zone EST Radio':
+            self.status = 'Live'
             ws = create_connection(
                 self.info_link,
                 origin="https://radio.zest.radio",
@@ -1332,6 +1333,7 @@ class Stream:
                         continue
 
                     self.now_playing = pub["data"]["np"]["now_playing"]["song"]["title"] + ' by ' + pub["data"]["np"]["now_playing"]["song"]["artist"]
+                    self.status = 'Live' if pub['data']['np']['live']['is_live'] == True else 'Re-Run'
                     received = True
             finally:
                  ws.close()        
