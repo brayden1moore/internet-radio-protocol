@@ -2467,13 +2467,13 @@ Stream(
         name = 'Zone Est Radio',
         logo = "https://internetradioprotocol.org/logos/zest.png",
         location = 'Strasbourg',
-        info_link = "https://api.radiocult.fm/api/station/zabrij-radio/schedule/live",
-        stream_link = 'https://zabrij-radio.radiocult.fm/stream',
-        main_link = 'https://www.zabrijradio.org',
-        about = "Zabrij Radio was established in 2025 as an open and experimental space for sound without borders. In the beginning, we explored everything, from ambient and jazz to experimental electronics, film scores, and unexpected musical corners from around the world.",
-        support_link = 'https://www.zabrijradio.org/contact',
-        insta_link = 'https://www.instagram.com/zabrijradio/',
-        genres = ['Balkan']
+        info_link = "wss://radio.zest.radio/api/live/nowplaying/websocket",
+        stream_link = 'https://radio.zest.radio/radio/8000/radio.mp3',
+        main_link = 'https://zest.radio',
+        about = "Zone Est Radio est une association et une webradio strasbourgeoise née en 2018 d'une volonté de rassembler les acteur·ices de la scène électronique locale.",
+        support_link = 'mailto:zoneestradio@gmail.com',
+        insta_link = 'https://www.instagram.com/zest.radio',
+        soundcloud_link = 'https://soundcloud.com/zoneestradio'
 )  
 ]
 
