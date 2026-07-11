@@ -1273,6 +1273,15 @@ class Stream:
                 self.status = 'Offline'
                 self.show_logo = None
 
+        elif self.name == 'Radio Sofa':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.status = 'Live' if info['live']['is_live'] == True else 'Re-Run'
+            self.now_playing = extract_value(info, ['now_playing','song','title'])
+            artist = extract_value(info, ['now_playing','song','artist'])
+            if artist:
+                self.now_playing = self.now_playing + ' by ' + artist
+            self.listeners = extract_value(info, ['listeners','total'])            
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
@@ -2362,7 +2371,19 @@ Stream(
         support_link = 'mailto:info@radiodopo.it',
         insta_link = 'https://www.instagram.com/radiodopo/',
         soundcloud_link = 'https://soundcloud.com/radiodopo'
-)    
+),
+Stream(
+        name = 'Radio Sofa',
+        logo = "https://internetradioprotocol.org/logos/sofa.png",
+        location = 'Paris',
+        info_link = "https://radio.radio-sofa.com/api/nowplaying/radio_sofa",
+        stream_link = 'https://radio.radio-sofa.com/listen/radio_sofa/radio.mp3',
+        main_link = 'https://www.radio-sofa.com/',
+        about = "Radio Sofa is a collective set up in April 2020, originally in the form of a web radio, in order to participate in the continuity of the diffusion of current and electronic music in a context of closure of cultural places.",
+        support_link = 'https://pay.sumup.com/b2c/QU2R9LMJ',
+        insta_link = 'https://www.instagram.com/radio.sofa/',
+        soundcloud_link = 'https://soundcloud.com/radio-sofa'
+)  
 ]
 
 def get_mixtapes():
