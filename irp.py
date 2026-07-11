@@ -1297,7 +1297,44 @@ class Stream:
                 self.status = 'Re-Run' if extract_value(info, ['result','status']) == 'defaultPlaylist' else 'Live'
             else:
                 self.now_playing = None
-                self.status = 'Offline'            
+                self.status = 'Offline'    
+
+        elif self.name == 'Zone EST Radio':
+            ws = create_connection(
+                self.info_link,
+                origin="https://radio.zest.radio",
+                header=[
+                    "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.1 Safari/605.1.15",
+                    "Pragma: no-cache",
+                    "Cache-Control: no-cache",
+                ],
+                timeout=timeout,
+            )
+
+            try:
+                ws.send(json.dumps({"subs": {"station:zest_radio": {"recover": True}}}))
+                received = False
+                while received == False:
+                    raw = ws.recv()
+                    if raw.strip() in ("", "{}"):   # skip keepalive pings
+                        continue
+                    msg = json.loads(raw)
+
+                    pub = msg.get("pub")
+                    if pub is None:
+                        pubs = (msg.get("connect", {})
+                                .get("subs", {})
+                                .get("station:zest_radio", {})
+                                .get("publications", []))
+                        pub = pubs[0] if pubs else None
+                    if pub is None:
+                        continue
+
+                    self.now_playing = pub["data"]["np"]["now_playing"]["song"]["title"] + ' by ' + pub["data"]["np"]["now_playing"]["song"]["artist"]
+                    received = True
+            finally:
+                 ws.close()        
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
@@ -2416,6 +2453,18 @@ Stream(
         name = 'Zabrij Radio',
         logo = "https://internetradioprotocol.org/logos/zabrij.png",
         location = 'Zagreb',
+        info_link = "https://api.radiocult.fm/api/station/zabrij-radio/schedule/live",
+        stream_link = 'https://zabrij-radio.radiocult.fm/stream',
+        main_link = 'https://www.zabrijradio.org',
+        about = "Zabrij Radio was established in 2025 as an open and experimental space for sound without borders. In the beginning, we explored everything, from ambient and jazz to experimental electronics, film scores, and unexpected musical corners from around the world.",
+        support_link = 'https://www.zabrijradio.org/contact',
+        insta_link = 'https://www.instagram.com/zabrijradio/',
+        genres = ['Balkan']
+),
+Stream(
+        name = 'Zone Est Radio',
+        logo = "https://internetradioprotocol.org/logos/zest.png",
+        location = 'Strasbourg',
         info_link = "https://api.radiocult.fm/api/station/zabrij-radio/schedule/live",
         stream_link = 'https://zabrij-radio.radiocult.fm/stream',
         main_link = 'https://www.zabrijradio.org',
