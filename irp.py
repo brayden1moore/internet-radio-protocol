@@ -1227,8 +1227,8 @@ class Stream:
         elif self.name == 'Seyðisfjörður Community Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             if info['success']:
-                self.now_playing = extract_value(info, ['result','content','metadata','title'])
-                artist = extract_value(info, ['result','content','metadata','artist'])
+                self.now_playing = extract_value(info, ['result','metadata','title'])
+                artist = extract_value(info, ['result','metadata','artist'])
                 if artist:
                     self.now_playing = self.now_playing + ' by ' + artist
                 self.status = 'Re-Run' if extract_value(info, ['result','content','media','type']) == 'playlist' else 'Live'
