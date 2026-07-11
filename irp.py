@@ -1190,7 +1190,7 @@ class Stream:
                 self.now_playing = name
                 self.now_playing_description = extract_value(info, ['shows','current','description'])
                 id = extract_value(info, ['shows','current','id'])
-                self.show_logo = 'https://api.palanga.live/show-logo?id=' + id
+                self.show_logo = 'https://api.palanga.live/show-logo?id=' + str(id)
                 try: 
                     resp = requests.get(self.show_logo, timeout=3).status_code
                     assert resp==200
