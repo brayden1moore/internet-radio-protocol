@@ -1278,6 +1278,8 @@ class Stream:
             else:
                 self.now_playing = None
                 self.status = 'Offline'
+            if self.now_playing == None:
+                self.status = 'Offline'
 
         elif self.name == 'Parea Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
@@ -2662,12 +2664,14 @@ def main_loop():
                 'last_updated_pt': datetime.fromtimestamp(now, tz=pytz.timezone('America/Los_Angeles')),
                 'errors': [key for key,val in error_dict.items()],
                 'total': len(updated),
-                'hidden': len([key for key,val in updated.items() if val['hidden']==True]),
+                'hidden': len([key for key,val in updated.items() if (val['hidden']==True) or (val['tunerOnly']==True)]),
                 'live': len([key for key,val in updated.items() if val['hidden']!=True and val['status']=='Live']),
                 're-run': len([key for key,val in updated.items() if val['hidden']!=True and val['status']=='Re-Run']),
                 'offline': len([key for key,val in updated.items() if val['hidden']!=True and val['status']=='Offline']),
                 'stations': [key for key,val in updated.items()]
             }
+            status['app_tagline'] = f'{status['total'] - status['hidden']} of the best independent, human-curated radio stations for the non-algorithmic, palate-expanding, music discovery pleasure of those unafraid to listen through friction.'
+            
             with open('status.json', 'w') as f:
                 json.dump(status, f, indent=4, sort_keys=False, default=str)            
 
