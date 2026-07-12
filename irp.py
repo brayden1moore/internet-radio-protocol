@@ -1273,7 +1273,7 @@ class Stream:
         elif self.name == '20ft Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             if info['success'] == True:
-                self.now_playing = extract_value(info, ['result','metadata','title'])
+                self.now_playing = extract_value(info, ['result','title'])
                 self.status = 'Re-Run' if extract_value(info, ['result','status']) == 'defaultPlaylist' else 'Live'
             else:
                 self.now_playing = None
