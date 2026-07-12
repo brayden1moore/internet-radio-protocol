@@ -98,6 +98,7 @@
                     <div id="player-name-and-tags">
                         <div id="player-name"></div>
                         <div id="player-tags"></div>
+                        <div id="player-info-icon" class="info-icon" id="player-info-icon">ⓘ</div>
                     </div>
                     <div id="player-info"><span class="one-liner" style="font-size: 10pt !important;"></span></div>
                 </div>
@@ -160,6 +161,21 @@
         </div>
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
+
+    #player-info-icon {
+        margin-top:2px;
+        cursor: pointer;
+    }
+
+    #modal-subtitle-container {
+        max-height: 50px;
+        overflow-y: scroll;
+    }
+    
+    #modal-description-container {
+        max-height: 100px;
+        overflow-y: scroll;
+    }
 
     #apple-logo {
         position: relative;
@@ -305,7 +321,7 @@
         position: absolute;
     }
 
-    .logo-and-overlay:hover .play-overlay {
+    .a-station-container:hover .play-overlay {
         display: flex;
     }
 
@@ -922,6 +938,14 @@
             opacity: 1;
         }
 
+        .info-icon {
+            opacity: 0.3;
+        }
+
+        .info-icon:hover {
+            opacity: 1;
+        }
+
         .station-tag {
             color: black !important;
             font-size: 8pt;
@@ -1448,7 +1472,7 @@
         const modalInfoLink = document.getElementById('modal-info-link');
         const modalSupportLink = document.getElementById('modal-support-link');
 
-        function openModal(event, station) {
+        function openModal(station) {
             modalContainer.style.display = 'flex';
             modalName.textContent = station;
             modalLocation.textContent = info[station]['location'];
@@ -1548,8 +1572,10 @@
                 shareDiv.classList.add('player-paused');
             }
         }
+        
 
         const shareDiv = document.getElementById('share-icon');
+        const playerInfoIcon = document.getElementById('player-info-icon');
         let currentPositionInPrev = 0;
         let previousStations = [];
         let hasChosenOnce = false
@@ -1573,6 +1599,11 @@
             const oneLiner = station.dataset.oneLiner;
             const logo = station.querySelector('.a-logo').src;
             //document.querySelectorAll('meta[property=og\\:image]')[0].setAttribute('content', logo.replace('https://internetradioprotocol.org',''))
+
+            
+            playerInfoIcon.addEventListener('click', ()=>{
+                openModal(id);
+            })
 
             playerImg.src = logo;
             player.dataset.id = id;
@@ -2095,18 +2126,19 @@
                     stationDiv.dataset.oneLiner = oneLiner; 
                     stationDiv.dataset.genres = genres;
                     stationDiv.onclick = function(event) {
-                        if (event.target.closest('.logo-and-overlay') || (event.target.closest('.favorite-star'))) {
+                        if (event.target.closest('.info-icon') || (event.target.closest('.favorite-star'))) {
                             return;
                         }
-                        openModal(event, stationName);
+                        chooseStation(stationName);
                     };
                     stationDiv.setAttribute('draggable', true);
                     stationDiv.id = stationName;    
                               
                     stationDiv.innerHTML = `
                     <p class="favorite-star-favorited" id="${stationName}-favorite" style="position: absolute; top: 10px; right: 10px; margin: 0; cursor: pointer; z-index: 10;">★</p>
-                    <p class="favorite-star" onClick="toggleFavorite('${stationName}')"  id="${stationName}-favorite-outline" style="position: absolute; top: 10px; right: 10px; margin: 0; cursor: pointer; z-index: 11;">☆</p>
-                    <div class="logo-and-overlay" onclick="chooseStation('${stationName}')">
+                    <p class="favorite-star" onClick="toggleFavorite('${stationName}')"  id="${stationName}-favorite-outline" style="position: absolute; top: 3px; right: 8px; margin: 0; cursor: pointer; z-index: 11;">☆</p>
+                    <p class="info-icon" onClick="openModal('${stationName}')"  id="${stationName}-info-icon" style="position: absolute; top: 6px; right: 30px; margin: 0; cursor: pointer; z-index: 11;">ⓘ</p>
+                    <div class="logo-and-overlay">
                         <div class="play-overlay">
                             <svg viewBox="0 0 100 100" width="60%" height="60%">
                                 <polygon points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"/>
