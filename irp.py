@@ -1212,7 +1212,7 @@ class Stream:
                 self.status = 'Re-Run' if extract_value(info, ['result','status']) == 'defaultPlaylist' else 'Live'
 
                 resp = requests.get(self.main_link, timeout=TIMEOUT).text
-                soup = BeautifulSoup(resp)
+                soup = BeautifulSoup(resp, features='html.parser')
                 imgs = soup.find_all(attrs={'class':'w-full'})
                 if imgs:
                     self.show_logo = imgs[0].get('src')
