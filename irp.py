@@ -1216,6 +1216,8 @@ class Stream:
                 imgs = soup.find_all(attrs={'class':'w-full'})
                 if imgs:
                     self.show_logo = imgs[0].get('src')
+                    if self.show_logo:
+                        self.show_logo = self.show_logo.replace('http:','https:')
                 else:
                     self.show_logo = None
 
