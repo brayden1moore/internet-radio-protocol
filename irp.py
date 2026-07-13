@@ -1145,7 +1145,10 @@ class Stream:
             show_link = soup.find('td', class_='spin-time').find('a').get('href')
             resp = requests.get(show_link, timeout=TIMEOUT).text
             show_soup = BeautifulSoup(resp, features='html.parser')
-            show_name = show_soup.find('h3').find('a').get_text()
+            try:
+                show_name = show_soup.find('h3').find('a').get_text()
+            except:
+                show_name = show_soup.find('h3').get_text()
             self.now_playing = show_name
             self.now_playing_subtitle = f'{song} by {artist}'
 
