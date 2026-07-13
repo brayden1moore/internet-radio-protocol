@@ -278,9 +278,10 @@ class Stream:
             self.listeners = extract_value(info, ['listeners'], rule='listeners')
             self.show_logo = extract_value(info, ['image'])
 
-            img = Image.open(BytesIO(requests.get(self.show_logo, timeout=3).content)).convert("RGB")
-            if (img.getpixel((0,0)) == (255, 255, 255)) and (img.getpixel((100,100)) == (255, 255, 255)):
-                self.show_logo = None
+            if self.show_logo:
+                img = Image.open(BytesIO(requests.get(self.show_logo, timeout=3).content)).convert("RGB")
+                if (img.getpixel((0,0)) == (255, 255, 255)) and (img.getpixel((100,100)) == (255, 255, 255)):
+                    self.show_logo = None
             self.now_playing_description_long = extract_value(info, ['description'])
             self.now_playing_description = extract_value(info, ['description'], rule='shorten')
             self.status = "Live" if info['online'] == True else "Offline"
@@ -1142,10 +1143,9 @@ class Stream:
             song = soup.find('span', class_='song').get_text(strip=True)
 
             show_link = soup.find('td', class_='spin-time').find('a').get('href')
-            resp = requests.get(show_link).text
+            resp = requests.get(show_link, timeout=TIMEOUT).text
             show_soup = BeautifulSoup(resp, features='html.parser')
             show_name = show_soup.find('h3').find('a').get_text()
-
             self.now_playing = show_name
             self.now_playing_subtitle = f'{song} by {artist}'
 
