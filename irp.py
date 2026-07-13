@@ -2679,7 +2679,7 @@ def main_loop():
                 'Radiation from computer screens is boiling your eyes. Use your ears.'
             ]
 
-            status['app_tagline'] = taglines[datetime.datetime.fromtimestamp(time.time()).hour % len(taglines)]
+            status['app_tagline'] = taglines[datetime.fromtimestamp(time.time()).hour % len(taglines)]
 
             with open('status.json', 'w') as f:
                 json.dump(status, f, indent=4, sort_keys=False, default=str)            
