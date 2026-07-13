@@ -1421,16 +1421,18 @@ class Stream:
         logo_96 = logo.resize((96,  96)).convert('RGB')
         logo_60 = logo.resize((60,  60)).convert('RGB')
         logo_25 = logo.resize((25,  25)).convert('RGB')
-        logo_176 = logo.resize((176, 176)).convert('RGB')           
+        logo_176 = logo.resize((176, 176)).convert('RGB')      
+        logo_216 = logo.resize((216, 216)).convert('RGB')       
 
         # save images to dict
         tmp['logo_96'] = logo_96
         tmp['logo_60']  = logo_60
         tmp['logo_25'] = logo_25
         tmp['logo_176'] = logo_176
+        tmp['logo_216'] = logo_216
 
         # save images to lib
-        for i in ['96','60','25','176']:
+        for i in ['96','60','25','176','216']:
             entire_path = f'logos/{self.name.replace(' ','_')}_{i}.pkl'
             with open(entire_path, 'wb') as f:
                 pickle.dump(tmp[f'logo_{i}'], f)
