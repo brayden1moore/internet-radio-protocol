@@ -125,7 +125,7 @@ class Stream:
     from each station and convert it into a dict to be served at /info.
     '''
 
-    def __init__(self, from_dict=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, status=None, show_logo=None, now_playing=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False, genres=None, tuner_only=False, category=None):
+    def __init__(self, from_dict=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, status=None, show_logo=None, now_playing=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False, genres=None, tuner_only=False, category=None, song_basis=False):
         # station info 
         self.name = name
         self.logo = logo
@@ -142,6 +142,7 @@ class Stream:
         self.genres = genres
         self.tuner_only = tuner_only
         self.category = category
+        self.song_basis = song_basis
 
         # show info
         self.status = status
@@ -183,6 +184,7 @@ class Stream:
             self.genres = from_dict.get('genres')
             self.tuner_only = from_dict.get('tunerOnly')
             self.category = from_dict.get('category')
+            self.song_basis = from_dict.get('songBasis')
 
     def to_dict(self):
 
@@ -196,6 +198,7 @@ class Stream:
             "about": self.about,
             "location": self.location,
             "status": self.status,
+            "songBasis": self.song_basis,
 
             "infoLink": self.info_link,
             "streamLink": self.stream_link,
@@ -1713,7 +1716,8 @@ Stream(
         support_link = "https://ko-fi.com/kwsxradio",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        song_basis = True
 ),
 Stream(
         name = "Kiosk Radio",
@@ -2604,36 +2608,35 @@ def process_stream(stream):
         return (stream.name, error, stream.hidden)
 
 def main_loop():
-
-    '''
-    Loop that brings the above functions together. 
-    1. Reads the current info.json 
-    2. Writes the internetradioprotocol.org homepage from it
-    3. Processes each station with ThreadPoolExecutor
-    4. Writes the newly gathered information to info.json
-    5. Writes errors and status to /errors and /status
-    '''
+    last_processed = {}  # stream name -> epoch of last processing
 
     while True:
         try:
             start_time = time.time()
+            now = time.time()
 
-            # get prior vals
             with open('info.json', 'r') as f:
                 prior_values = json.load(f)
 
-            # threaded updates
-            with ThreadPoolExecutor(max_workers=10) as executor:
-                futures = [executor.submit(process_stream, stream) 
-                        for stream in streams]
-                results = [future.result(timeout=60) for future in futures]
+            # pick streams due for processing based on their interval
+            due_streams = []
+            for stream in streams:
+                interval = 20 if getattr(stream, 'song_basis', False) else 90
+                last = last_processed.get(stream.name, 0)
+                if now - last >= interval:
+                    due_streams.append(stream)
 
-            print('Finished updating streams!')
+            with ThreadPoolExecutor(max_workers=10) as executor:
+                futures = {executor.submit(process_stream, s): s for s in due_streams}
+                results = []
+                for future in futures:
+                    results.append(future.result(timeout=60))
+                    last_processed[futures[future].name] = time.time()
+
             processing_time = time.time() - start_time
             error_dict = {}
             updated = {}
 
-            # pull into info json and collect errors
             for result in results:
                 if len(result) == 3:
                     name, err, hidden_status = result
@@ -2652,49 +2655,52 @@ def main_loop():
                     else:
                         print(val, name)
 
+            # carry forward streams that weren't reprocessed this cycle
+            for name, val in prior_values.items():
+                if name not in updated:
+                    updated[name] = val
+
             with open('info.json', 'w') as f:
                 json.dump(updated, f, indent=4, sort_keys=True, default=str)
 
-            # save to /errors endpoint
             error_lines = [val for key, val in error_dict.items()]
             with open('errorlog.txt', 'w') as log:
                 log.write('\n'.join(error_lines))
 
-            # update /status endpoint
             now = time.time()
             status = {
                 'last_updated_epoch': now,
                 'last_updated_utc': datetime.fromtimestamp(now, tz=pytz.timezone('UTC')),
                 'last_updated_et': datetime.fromtimestamp(now, tz=pytz.timezone('America/New_York')),
                 'last_updated_pt': datetime.fromtimestamp(now, tz=pytz.timezone('America/Los_Angeles')),
-                'errors': [key for key,val in error_dict.items()],
+                'errors': [key for key, val in error_dict.items()],
                 'total': len(updated),
-                'hidden': len([key for key,val in updated.items() if (val['hidden']==True) or (val['tunerOnly']==True)]),
-                'live': len([key for key,val in updated.items() if val['hidden']!=True and val['status']=='Live']),
-                're-run': len([key for key,val in updated.items() if val['hidden']!=True and val['status']=='Re-Run']),
-                'offline': len([key for key,val in updated.items() if val['hidden']!=True and val['status']=='Offline']),
-                'stations': [key for key,val in updated.items()]
+                'hidden': len([key for key, val in updated.items() if (val['hidden'] == True) or (val['tunerOnly'] == True)]),
+                'live': len([key for key, val in updated.items() if val['hidden'] != True and val['status'] == 'Live']),
+                're-run': len([key for key, val in updated.items() if val['hidden'] != True and val['status'] == 'Re-Run']),
+                'offline': len([key for key, val in updated.items() if val['hidden'] != True and val['status'] == 'Offline']),
+                'stations': [key for key, val in updated.items()]
             }
-            
+
             taglines = [
-                f'{status['total'] - status['hidden']} of the best independent, human-curated radio stations for the non-algorithmic, palate-expanding, music discovery pleasure of those unafraid to listen through friction.',
+                f'{status["total"] - status["hidden"]} of the best independent, human-curated radio stations for the non-algorithmic, palate-expanding, music discovery pleasure of those unafraid to listen through friction.',
                 'As soon as the generals and the politicos can predict the motions of your mind, lose it.',
                 'Radiation from computer screens is boiling your eyes. Use your ears.'
             ]
-
             status['app_tagline'] = taglines[datetime.fromtimestamp(time.time()).hour % len(taglines)]
 
             with open('status.json', 'w') as f:
-                json.dump(status, f, indent=4, sort_keys=False, default=str)            
+                json.dump(status, f, indent=4, sort_keys=False, default=str)
 
             print(f'Done! Total time {processing_time}')
-            print('-'*50)
-            time.sleep(60)
+            print('-' * 50)
+            time.sleep(10) 
+
         except Exception as e:
             print(f"Error in main loop: {e}")
             traceback.print_exc()
-            print('-'*50)
-            time.sleep(60)    
+            print('-' * 50)
+            time.sleep(10)
 
 if __name__ == '__main__':
     main_loop()
