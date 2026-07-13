@@ -2672,8 +2672,15 @@ def main_loop():
                 'offline': len([key for key,val in updated.items() if val['hidden']!=True and val['status']=='Offline']),
                 'stations': [key for key,val in updated.items()]
             }
-            status['app_tagline'] = f'{status['total'] - status['hidden']} of the best independent, human-curated radio stations for the non-algorithmic, palate-expanding, music discovery pleasure of those unafraid to listen through friction.'
             
+            taglines = [
+                f'{status['total'] - status['hidden']} of the best independent, human-curated radio stations for the non-algorithmic, palate-expanding, music discovery pleasure of those unafraid to listen through friction.',
+                'As soon as the generals and the politicos can predict the motions of your mind, lose it.',
+                'Radiation from computer screens is boiling your eyes. Use your ears.'
+            ]
+
+            status['app_tagline'] = taglines[datetime.datetime.fromtimestamp(time.time()).hour % len(taglines)]
+
             with open('status.json', 'w') as f:
                 json.dump(status, f, indent=4, sort_keys=False, default=str)            
 
