@@ -1510,7 +1510,8 @@ Stream(
         support_link = "https://bff.fm/donate",
         insta_link = "https://www.instagram.com/bffdotfm",
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        song_basis = True
 ),
 Stream(
         name = "Bloop Radio",
@@ -2305,7 +2306,8 @@ Stream(
         tuner_only = False,
         genres = ['Student','Jazz'],
         category = 'Student',
-        status = 'Live'
+        status = 'Live',
+        song_basis = True
 ),
 Stream(
         name = "Datafruits FM",
@@ -2392,7 +2394,8 @@ Stream(
         about = 'Tīrkultūra is an interdisciplinary contemporary culture platform working mainly through the medium of sound. Tīrkultura is a listener-powered, non-commercial, and non-profit online radio station, based in Riga, Latvia.',
         support_link = 'mailto:reinis@tirkultura.net',
         soundcloud_link = 'https://soundcloud.com/tirkultura',
-        insta_link = 'https://www.instagram.com/tirkultura/'
+        insta_link = 'https://www.instagram.com/tirkultura/',
+        song_basis = True
 ),
 Stream(
         name = 'Seyðisfjörður Community Radio',
@@ -2403,7 +2406,8 @@ Stream(
         main_link = 'https://www.seydisfjordurcommunityradio.net/',
         about = 'A platform founded in 2016. Experimental community radio constantly in the making. Broadcasting on 107.1FM in Seyðisfjörður and online. Seyðisfjörður is a small town on Iceland’s east coast. Our radio-room is in Herðubreið Community Center. Holding our antenna up high on the roof. Connecting local residents with remote residents with anyone who tunes in. Sharing sounds of thoughts with sounds of music. Confusing radio with magic with worldbuilding with belonging. Weaving the act of listening with the act of radio-making into the act of community. An open-ended network of people and places. Glowing from transience, togetherness and a sentiment of significance. The haptic experience of keeping in touch. Through radio. Forever.',
         support_link = 'https://www.lungaschool.is/en/collaborators',
-        insta_link = 'https://www.instagram.com/seydisfjordur.community.radio/'
+        insta_link = 'https://www.instagram.com/seydisfjordur.community.radio/',
+        song_basis = True
 ),
 Stream(
         name = 'Lahmacun',
@@ -2426,7 +2430,8 @@ Stream(
         main_link = 'https://gatekeeperradio.com/',
         about = 'GATEKEEPER RADIO represents an innovative initiative, transforming urban spaces into vibrant temporary radio stations while also launching an online platform for creative collaboration. Its bringing together creatives from the realms of art, music, science, digital media, and society, fostering connections through artistic inquiries and the exploration of new potentials.',
         support_link = 'mailto:mail@gatekeeperradio.com',
-        insta_link = 'https://www.instagram.com/gatekeeper_radio/'
+        insta_link = 'https://www.instagram.com/gatekeeper_radio/',
+        song_basis = True
 ),
 Stream(
         name = '20ft Radio',
@@ -2497,7 +2502,8 @@ Stream(
         about = "Zabrij Radio was established in 2025 as an open and experimental space for sound without borders. In the beginning, we explored everything, from ambient and jazz to experimental electronics, film scores, and unexpected musical corners from around the world.",
         support_link = 'https://www.zabrijradio.org/contact',
         insta_link = 'https://www.instagram.com/zabrijradio/',
-        genres = ['Balkan']
+        genres = ['Balkan'],
+        song_basis = True
 ),
 Stream(
         name = 'Zone Est Radio',
