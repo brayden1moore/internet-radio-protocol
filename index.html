@@ -2459,10 +2459,19 @@
                 get: (searchParams, prop) => searchParams.get(prop),
             });
             let value = params.station;
+            let id = params.id;
             if (value) {
                 const start = () => chooseStation(value, false, true);
                 if (document.readyState === 'complete') start();
                 else window.addEventListener('load', start)
+            }
+            else if (id) {
+                data = Object.fromEntries(Object.entries(info).filter(([key, value]) => (value.criId === id)));
+                if (data) {
+                    const start = () => chooseStation(Object.keys(data)[0], false, true);
+                    if (document.readyState === 'complete') start();
+                    else window.addEventListener('load', start)
+                }
             }
         });
 
