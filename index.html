@@ -2467,6 +2467,7 @@
             }
             else if (id) {
                 data = Object.fromEntries(Object.entries(info).filter(([key, value]) => (value.criId === id)));
+                console.log(data);
                 if (data) {
                     const start = () => chooseStation(Object.keys(data)[0], false, true);
                     if (document.readyState === 'complete') start();
