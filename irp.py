@@ -26,6 +26,9 @@ logging.disable()
 
 TIMEOUT = 15
 
+with open('cri_ids.json','r') as f:
+    cri = json.load(f)
+
 def clean_text(text):
 
     '''
@@ -125,9 +128,10 @@ class Stream:
     from each station and convert it into a dict to be served at /info.
     '''
 
-    def __init__(self, from_dict=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, status=None, show_logo=None, now_playing=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False, genres=None, tuner_only=False, category=None, song_basis=False):
+    def __init__(self, from_dict=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, status=None, show_logo=None, now_playing=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False, genres=None, tuner_only=False, category=None, song_basis=False, cri_id=None):
         # station info 
         self.name = name
+        self.cri_id = cri_id or cri.get(name)
         self.logo = logo
         self.location = location
         self.info_link = info_link
@@ -185,6 +189,7 @@ class Stream:
             self.tuner_only = from_dict.get('tunerOnly')
             self.category = from_dict.get('category')
             self.song_basis = from_dict.get('songBasis')
+            self.cri_id = from_dict.get('criID')
 
     def to_dict(self):
 
@@ -226,7 +231,6 @@ class Stream:
             "tunerOnly":self.tuner_only,
             'category':self.category
         }
-
     
     def update(self):
 
