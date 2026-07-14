@@ -189,7 +189,7 @@ class Stream:
             self.tuner_only = from_dict.get('tunerOnly')
             self.category = from_dict.get('category')
             self.song_basis = from_dict.get('songBasis')
-            self.cri_id = from_dict.get('criID')
+            self.cri_id = from_dict.get('criId')
 
     def to_dict(self):
 
@@ -204,6 +204,7 @@ class Stream:
             "location": self.location,
             "status": self.status,
             "songBasis": self.song_basis,
+            "criId":self.cri_id,
 
             "infoLink": self.info_link,
             "streamLink": self.stream_link,
