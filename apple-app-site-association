@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["YK4ZD7P3RV.com.scud.radio"],
+        "components": [
+          {
+            "/": "/*",
+            "comment": "Matches any path on the domain"
+          }
+        ]
+      }
+    ]
+  }
+}
