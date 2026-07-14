@@ -2,7 +2,7 @@
   "applinks": {
     "details": [
       {
-        "appIDs": ["YK4ZD7P3RV.com.scud.radio"],
+        "appIDs": ["YK4ZD7P3RV.scud.radio"],
         "components": [
           {
             "/": "/*",
