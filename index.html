@@ -50,7 +50,10 @@
                     </div>
 
                     <div id="modal-from-the-show" class="modal-header">Now Playing</div>
-                    <div id="modal-subtitle-container" class="modal-description"></div>
+                    <div class="modal-description" id="modal-show-container">
+                        <div id="modal-show-logo-container"></div>
+                        <div id="modal-subtitle-container"></div>
+                    </div>
 
                     <div id="modal-from-the-station" class="modal-header">About the Station</div>
                     <div id="modal-description-container" class="modal-description"></div>
@@ -167,9 +170,30 @@
         cursor: pointer;
     }
 
-    #modal-subtitle-container {
-        max-height: 50px;
+    #modal-show-logo {
+        position: relative;
+        max-height: 100px;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    #modal-show-logo img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+    }
+
+    #modal-show-container {
+        max-height: 150px;
         overflow-y: scroll;
+    }
+
+    #modal-show-logo-container {
+        position: relative;
+        max-height: 100px;
+        overflow: hidden;
     }
     
     #modal-description-container {
@@ -1468,6 +1492,7 @@
         const modalLogoAndPlayOverlay = document.getElementById('modal-logo-and-overlay');
         const modalSubtitleHeader = document.getElementById('modal-from-the-show');
         const modalSubtitle = document.getElementById('modal-subtitle-container');
+        const modalShowLogo = document.getElementById('modal-show-logo-container');
         const modalDescription = document.getElementById('modal-description-container');
         const modalMainLink = document.getElementById('modal-main-link');
         const modalStreamLink = document.getElementById('modal-stream-link');
@@ -1476,6 +1501,7 @@
 
         function openModal(station) {
             modalContainer.style.display = 'flex';
+            modalShowLogo.innerHTML = '';
             modalName.textContent = station;
             modalLocation.textContent = info[station]['location'];
             modalLogo.src = info[station]['logo'];
@@ -1501,6 +1527,9 @@
             if (info[station]['nowPlayingDescriptionLong'] != null) { 
                 subtitleText = subtitleText + '<br>' +  info[station]['nowPlayingDescriptionLong'];
             }            
+            /*if (info[station]['showLogo'] != null) {
+                modalShowLogo.innerHTML = `<div id="modal-show-logo"><img style="width:100%;"src=${info[station]['showLogo']}></div>`;
+            }*/
             modalSubtitle.innerHTML = subtitleText;
 
             modalMainLink.href = info[station]['mainLink'];
@@ -1622,7 +1651,7 @@
                 togglePlayer();
             }
             else {
-                openModal(id);
+                //openModal(id);
             }
         }
                         
