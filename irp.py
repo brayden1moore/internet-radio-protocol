@@ -1239,10 +1239,13 @@ class Stream:
         elif self.name == 'IDA':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             data = info['data']['tallinn']
+            self.show_logo = None
             if data:
                 self.now_playing = extract_value(data, ['title'])
                 self.status = 'Re-Run' if data['isRepeat'] == True else 'Live'
                 self.show_logo = data['featuredImage']
+                if isinstance(self.show_logo, dict):
+                    self.show_logo = self.show_logo['formats']['large']['url']
             else:
                 self.now_playing = None
                 self.status = 'Offline'
