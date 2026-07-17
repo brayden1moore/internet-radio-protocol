@@ -1442,7 +1442,7 @@ class Stream:
             self.now_playing_description_long = extract_value(info, ['stream1',0,'body'])
             self.now_playing_description = extract_value(info, ['stream1',0,'body'], rule='shorten')
             self.show_logo = extract_value(info, ['stream1',0,'images',0,'cloudinaryURL'])
-            self.genres = extract_value(info, ['stream1',0,'genres'], rule='genre_list',sub_location='genre')
+            self.genres = extract_value(info, ['stream1',0,'genres'], rule='list_genres',sub_location='genre')
             if self.now_playing:
                 self.status = 'Live'
             else:
