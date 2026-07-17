@@ -1706,10 +1706,12 @@
                 updateMediaSession(oneLiner, id, logo);
 
                 if (!fromLink) {
-                    earRotate.style.display = 'none';
                     player.classList.add('pulsing');
                     shareDiv.classList.add('pulsing');
                     togglePlayer();
+                }
+                else {
+                    earRotate.style.display = 'none';
                 }
 
                 player.style.height = '60px'; 
