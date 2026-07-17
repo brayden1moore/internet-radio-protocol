@@ -724,9 +724,13 @@
             z-index: 1000;
             color: black;
             background-color: #ffffff;
-            border: 1px solid black;
             display: flex;
             transition: height 0.2s ease ;
+        }
+
+        .player-expanded {
+            border: 1px solid black;
+            height: 60px;
         }
         ::-webkit-scrollbar {
         display: none;
@@ -1715,15 +1719,15 @@
                     playerAudio.load();
                 }
 
-                player.style.height = '60px'; 
+                player.classList.add('player-expanded'); 
             };
 
             if (hasChosenOnce) {
-                player.style.height = '0px';    
+                player.classList.remove('player-expanded');
                 hasChosenOnce = true;
                 setTimeout(doChoose, 200);      
             } else {
-                player.style.height = '60px';
+                player.classList.add('player-expanded');
                 hasChosenOnce = true;
                 doChoose();
             }
