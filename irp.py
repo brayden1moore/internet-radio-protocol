@@ -2663,7 +2663,8 @@ Stream(
         support_link = 'https://kxlu.com/donate/',
         insta_link = 'https://www.instagram.com/kxlu/',
         hidden = False,
-        song_basis= False
+        song_basis= False,
+        genres=['Student']
 ),
 Stream(
         name = 'Operator Radio',
