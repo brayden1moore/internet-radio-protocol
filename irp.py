@@ -1379,7 +1379,42 @@ class Stream:
                     self.status = 'Live' if pub['data']['np']['live']['is_live'] == True else 'Re-Run'
                     received = True
             finally:
-                 ws.close()        
+                 ws.close()    
+
+        elif self.name == 'Depa Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.now_playing = extract_value(info,['currentTrack'])
+            if self.now_playing:
+                self.status = 'Live'
+            else:
+                self.status = 'Offline'
+
+        elif self.name == 'Muita Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.now_playing = extract_value(info,['tracks','current','name'])
+            if self.now_playing:
+                self.status = 'Live'
+            else:
+                self.now_playing = extract_value(info,['shows','current','name'])
+                if self.now_playing:
+                    self.status = 'Live'
+                else:
+                    self.status = 'Offline'
+
+        elif self.name == 'East Village Radio':
+            headers = {
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                    "Accept-Language": "en-US,en;q=0.9",
+                    "Priority": "u=0, i",
+                    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.1 Safari/605.1.15"
+            }
+            info = requests.get(self.info_link, timeout=TIMEOUT,headers=headers).text
+            soup = BeautifulSoup(info, features='html.parser')
+            self.now_playing = soup.find(attrs={'class':'hidden-xs'}).text.strip().replace('\t','').replace('\n',' ').replace('  ',' ').replace('(Current Track) ','')
+            if self.now_playing:
+                self.status = 'Live'
+            else:
+                self.status = 'Offline'
 
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
@@ -2527,6 +2562,46 @@ Stream(
         insta_link = 'https://www.instagram.com/zest.radio',
         soundcloud_link = 'https://soundcloud.com/zoneestradio',
         hidden = True
+),
+Stream(
+        name = 'Depa Radio',
+        logo = "https://internetradioprotocol.org/logos/depa.jps",
+        location = 'CDMX',
+        info_link = "https://d36nr0u3xmc4mm.cloudfront.net/index.php/api/streaming/status/7006/41f3cd9398218d2d50bac06f1a871026/SV28BR",
+        stream_link = 'https://servidor15-2.brlogic.com:7006/live?source=14465',
+        main_link = 'https://depa.radio',
+        about = "Transmitiendo 24/7 desde @departamento_studiobar. Música y comunidad.",
+        support_link = 'https://linktr.ee/deparecords',
+        insta_link = 'https://www.instagram.com/depa.radio/',
+        hidden = False,
+        song_basis=True
+),
+Stream(
+        name = 'Muito Radio',
+        logo = "https://internetradioprotocol.org/logos/muito.jpg",
+        location = 'Buenos Aires',
+        info_link = "https://muitoradio.airtime.pro/api/live-info-v2",
+        stream_link = 'https://muitoradio.out.airtime.pro/muitoradio_a',
+        main_link = 'https://www.muitoradio.com',
+        about = "(In)dependent community radio based in Buenos Aires. With the syncretic vocation of the Brazilian tropicalist movement of the 60s, we embrace mixing as a basis and crossover as a policy, with the desire to amplify a sound that escapes the forms of production, circulation and consumption that tend to homogenise our cultural practices.",
+        support_link = 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=05fce6105847446a9727e8cecbdbb891',
+        insta_link = 'https://www.instagram.com/muitoradio/',
+        soundcloud_link = 'https://soundcloud.com/muitoradio',
+        hidden = False,
+        song_basis=True
+),
+Stream(
+        name = 'East Village Radio',
+        logo = "https://internetradioprotocol.org/logos/evr.jpg",
+        location = 'New York',
+        info_link = "https://eastvillageradio.com/player-text-gw/",
+        stream_link = 'https://east-village-radio.radiocult.fm/stream',
+        main_link = 'https://eastvillageradio.com/',
+        about = "In these times of a narrowing set of corporatized avenues for artists to gain public attention, the monopolization of virtually every singular radio station being sucking into larger platforms with profits over promotion, EVR remains committed to its original cause: a grassroots source of independent minded DJs and programmers that serves its community. Free of dictated playlists, our hosts come from a wide and diverse background, schooled and deeply knowledgable about their passion.",
+        support_link = 'https://eastvillageradio.com/store/',
+        insta_link = 'https://www.instagram.com/eastvillageradio',
+        hidden = False,
+        song_basis=True
 )  
 ]
 
