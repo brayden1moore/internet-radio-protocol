@@ -1706,18 +1706,19 @@
                 updateMediaSession(oneLiner, id, logo);
 
                 if (!fromLink) {
+                    earRotate.style.display = 'none';
                     player.classList.add('pulsing');
                     shareDiv.classList.add('pulsing');
                     togglePlayer();
                 }
 
-                player.style.height = '60px';   // expand after content is in place
+                player.style.height = '60px'; 
             };
 
             if (hasChosenOnce) {
-                player.style.height = '0px';    // collapse first
+                player.style.height = '0px';    
                 hasChosenOnce = true;
-                setTimeout(doChoose, 200);      // swap + expand after collapse
+                setTimeout(doChoose, 200);      
             } else {
                 player.style.height = '60px';
                 hasChosenOnce = true;
