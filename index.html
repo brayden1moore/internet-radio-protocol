@@ -1498,7 +1498,8 @@
         const modalStreamLink = document.getElementById('modal-stream-link');
         const modalInfoLink = document.getElementById('modal-info-link');
         const modalSupportLink = document.getElementById('modal-support-link');
-        
+        const modalShow = document.getElementById('modal-show-container');
+
         function openModal(station) {
             modalContainer.style.display = 'flex';
             modalShowLogo.innerHTML = '';
@@ -1511,16 +1512,15 @@
             }
 
             
-            
             let subtitleText = '';
             modalSubtitleHeader.style.display = 'none';
             modalSubtitle.style.display = 'none';
-            modalDescription.style.display = 'none';
+            modalShow.style.display = 'none';
             if (info[station]['nowPlaying'] != null) { 
 
                 modalSubtitle.style.display = 'block';
                 modalSubtitleHeader.style.display = 'block';
-                modalDescription.style.display = 'block';
+                modalShow.style.display = 'block';
                 subtitleText = `<span style="font-family:'Archivo Semibold';">` + info[station]['nowPlaying'] + '</span>';
             }
             if (info[station]['nowPlayingSubtitle'] != null) { 
