@@ -1045,7 +1045,7 @@ class Stream:
             }
             info = requests.get(self.info_link, headers=headers, timeout=TIMEOUT + 10).text
             self.now_playing = info
-            if 'Account Suspended' in self.now_playing:
+            if 'Account Suspended' or 'Resource Limit Is Reached' in self.now_playing:
                 self.now_playing = 'Rukh Playlist'
                 self.status = 'Re-Run'
             else:
