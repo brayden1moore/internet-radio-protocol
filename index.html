@@ -2602,9 +2602,11 @@
           
           navigator.clipboard.writeText(urlToCopy).then(() => {
               shareIcon.className = "fa-solid fa-check";
+              shareIcon.style.paddingLeft = '5px';
               setTimeout(()=> {
                 shareIcon.className = "fa-solid fa-link";
-              },3000)
+                shareIcon.style.paddingLeft = '0px';
+              },1000)
           })
       });
         
