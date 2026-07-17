@@ -1436,6 +1436,18 @@ class Stream:
             if self.now_playing:
                 self.status = 'Live'
 
+        elif self.name == 'Operator Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.now_playing = extract_value(info, ['stream1',0,'setName'])
+            self.now_playing_description_long = extract_value(info, ['stream1',0,'body'])
+            self.now_playing_description = extract_value(info, ['stream1',0,'body'], rule='shorten')
+            self.show_logo = extract_value(info, ['stream1',0,'images',0,'cloudinaryURL'])
+            self.genres = extract_value(info, ['stream1',0,'genres'], rule='genre_list',sub_location='genre')
+            if self.now_playing:
+                self.status = 'Live'
+            else:
+                self.status = 'Offline'
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
@@ -2634,7 +2646,20 @@ Stream(
         support_link = 'https://kxlu.com/donate/',
         insta_link = 'https://www.instagram.com/kxlu/',
         hidden = False,
-        song_basis=True
+        song_basis= False
+),
+Stream(
+        name = 'Operator Radio',
+        logo = "https://internetradioprotocol.org/logos/operator.jpg",
+        location = 'Rotterdam',
+        info_link = "https://admin.operator-radio.com/api/sets/livenow",
+        stream_link = 'https://origin.streamnerd.nl/operator/operator/icecast.audio',
+        main_link = 'https://operator-radio.com/',
+        about = "Operator is an online radio station and cultural platform dedicated to enriching the music and cultural landscape of Rotterdam and beyond, with a special focus on alternative sounds and underrepresented stories. We curate both on- and offline events, placing emphasis on talent development, experimentation, and nightlife culture. By putting Rotterdam on the map locally, nationally, and internationally, we showcase our creators to the world.",
+        support_link = 'https://www.paypal.com/paypalme/operatorradio',
+        insta_link = 'https://www.instagram.com/operator.radio/',
+        hidden = False,
+        song_basis= False
 )   
 ]
 
