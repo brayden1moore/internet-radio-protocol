@@ -1033,8 +1033,10 @@ class Stream:
                     if i['server_name'] == 'Radio Vilnius':
                         self.now_playing = extract_value(i, ['title'])
                         self.now_playing_artist = extract_value(i, ['artist'])
-                        self.status = "Live"
+                        if self.now_playing:
+                            self.status = "Live"
                         self.listeners = extract_value(i, ['listener_peak'])
+
                         
         elif self.name == 'Rukh Radio':
             headers = {
