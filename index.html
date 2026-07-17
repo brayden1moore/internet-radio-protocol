@@ -165,7 +165,8 @@
             <a href="mailto:brayden@braydenmoore.com">Email</a>  
             <a target="_blank" href="https://github.com/brayden1moore/internet-radio-protocol">GitHub</a>  
             <a class='insta-link' target='_blank' href='https://www.instagram.com/scudradios/'>Instagram</a><br><br>
-            <a target="_blank" href="https://forms.gle/eWZTmtNRinxrtz587">Request a Station</a>
+            <a target="_blank" href="https://forms.gle/eWZTmtNRinxrtz587">Request a Station</a><br>
+            <span id="hits"></span>&nbsp;visits
         </div>
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
@@ -2339,6 +2340,8 @@
             
             const liveCount = document.querySelector('#live-count');
             liveCount.textContent = `${live + offline + rerun} stations, ${live} live, ${offline} offline. `;
+
+            const hitsContainer = document.getElementById('hits');
             
             fetch(`https://internetradioprotocol.org/status?cacheBust=${Math.random()}`)
                     .then(response => response.json())
@@ -2366,6 +2369,10 @@
                         }, 1100);
 
                         calculateMarquees(updatedOneLiners);
+
+                        const hits = json['hits'];
+                        hitsContainer.textContent = hits;
+
                     });
         }
 
