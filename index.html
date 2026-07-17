@@ -1498,7 +1498,7 @@
         const modalStreamLink = document.getElementById('modal-stream-link');
         const modalInfoLink = document.getElementById('modal-info-link');
         const modalSupportLink = document.getElementById('modal-support-link');
-
+        
         function openModal(station) {
             modalContainer.style.display = 'flex';
             modalShowLogo.innerHTML = '';
@@ -1509,13 +1509,18 @@
             if (info[station]['about']) {
                 modalDescription.textContent = info[station]['about'] + "";
             }
+
+            
             
             let subtitleText = '';
             modalSubtitleHeader.style.display = 'none';
             modalSubtitle.style.display = 'none';
+            modalDescription.style.display = 'none';
             if (info[station]['nowPlaying'] != null) { 
+
                 modalSubtitle.style.display = 'block';
                 modalSubtitleHeader.style.display = 'block';
+                modalDescription.style.display = 'block';
                 subtitleText = `<span style="font-family:'Archivo Semibold';">` + info[station]['nowPlaying'] + '</span>';
             }
             if (info[station]['nowPlayingSubtitle'] != null) { 
