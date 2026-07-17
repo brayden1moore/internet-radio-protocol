@@ -2565,7 +2565,7 @@ Stream(
 ),
 Stream(
         name = 'Depa Radio',
-        logo = "https://internetradioprotocol.org/logos/depa.jps",
+        logo = "https://internetradioprotocol.org/logos/depa.jpg",
         location = 'CDMX',
         info_link = "https://d36nr0u3xmc4mm.cloudfront.net/index.php/api/streaming/status/7006/41f3cd9398218d2d50bac06f1a871026/SV28BR",
         stream_link = 'https://servidor15-2.brlogic.com:7006/live?source=14465',
