@@ -1288,14 +1288,24 @@ class Stream:
         
         elif self.name == '20ft Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            
             if info['success'] == True:
                 self.now_playing = extract_value(info, ['result','content','title'])
                 self.status = 'Re-Run' if extract_value(info, ['result','status']) == 'defaultPlaylist' else 'Live'
             else:
                 self.now_playing = None
                 self.status = 'Offline'
-            if self.now_playing == None:
+
+            if not self.now_playing:
                 self.status = 'Offline'
+            else:
+                try:
+                    stream_resp = requests.get(self.stream_link, stream=True, timeout=5)
+                    assert stream_resp.status_code == 200
+                    self.status = 'Live'
+                except:
+                    self.status = 'Offline'
+                    self.now_playing = None
 
         elif self.name == 'Parea Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
