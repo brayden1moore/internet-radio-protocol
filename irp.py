@@ -1328,6 +1328,7 @@ class Stream:
             self.now_playing = extract_value(info, ['currentShow',0,'name'])
             try:
                 stream_resp = requests.get(self.stream_link, stream=True, timeout=5)
+                assert stream_resp.status_code == 200
                 self.status = 'Live'
             except:
                 self.status = 'Offline'
