@@ -1389,7 +1389,7 @@ class Stream:
             else:
                 self.status = 'Offline'
 
-        elif self.name == 'Muita Radio':
+        elif self.name == 'Muito Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.now_playing = extract_value(info,['tracks','current','name'])
             if self.now_playing:
