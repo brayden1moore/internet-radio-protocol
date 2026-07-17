@@ -1416,6 +1416,26 @@ class Stream:
             else:
                 self.status = 'Offline'
 
+        elif self.name == 'KXLU':
+            self.now_playing = None
+            self.status = 'Offline'
+            headers = {
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                    "Accept-Language": "en-US,en;q=0.9",
+                    "Priority": "u=0, i",
+                    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.1 Safari/605.1.15"
+            }
+            info = requests.get(self.info_link, timeout=TIMEOUT,headers=headers).text
+            soup = BeautifulSoup(info, features='html.parser')
+            self.now_playing = soup.find(attrs={'class':'show-title'}).text.replace('\n','').strip()
+            images = soup.find_all(attrs={'class':'image'})
+            if len(images) > 1:
+                self.show_logo = images[1].find('img').get('src')
+            else:
+                self.show_logo = None
+            if self.now_playing:
+                self.status = 'Live'
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
@@ -2602,7 +2622,20 @@ Stream(
         insta_link = 'https://www.instagram.com/eastvillageradio',
         hidden = False,
         song_basis=True
-)  
+),
+Stream(
+        name = 'KXLU',
+        logo = "https://internetradioprotocol.org/logos/kxlu.jpg",
+        location = 'Los Angeles',
+        info_link = "https://spinitron.com/KXLU/",
+        stream_link = 'https://kxlu.streamguys1.com/kxlu-hi',
+        main_link = 'https://kxlu.com',
+        about = "KXLU exists to engage in broadcasting under terms of a license granted by the Federal Communications Commission. KXLU is a non-commercial, educational station broadcasting from the Westchester campus of Loyola Marymount University at an assigned carrier of 88.9 megahertz and an assigned radiating power of 3000 watts. Licensed to the Board of Trustees of Loyola Marymount University, KXLU is operated in the public interest by its student, faculty, and volunteer staff.",
+        support_link = 'https://kxlu.com/donate/',
+        insta_link = 'https://www.instagram.com/kxlu/',
+        hidden = False,
+        song_basis=True
+)   
 ]
 
 def get_mixtapes():
