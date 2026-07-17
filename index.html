@@ -22,7 +22,6 @@
 <!-- STATION_DATA_START -->
 <!-- STATION_DATA_END --></head><body style="font-family:Archivo Light; padding:10px; padding-top: 0px;">
 
-
         <div id="modal-container">
             <div id="modal-bg" onClick="closeModal();"></div>
             <div id="modal">
@@ -96,7 +95,13 @@
                 <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" version="1.0" width="1262.000000pt" height="1280.000000pt" viewBox="0 0 1262.000000 1280.000000" preserveAspectRatio="xMidYMid meet"><g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)" fill="rgb(0,0,0,255)" stroke="#000000" stroke-width="0"><path d="M669 12214 c-59 -18 -130 -81 -160 -141 l-24 -48 0 -5650 0 -5650 23 -47 c13 -26 43 -65 67 -87 83 -77 -104 -71 2295 -71 2400 0 2212 -6 2295 71 24 23 54 62 67 87 l23 47 0 5650 0 5650 -23 47 c-13 25 -43 64 -67 87 -83 77 105 71 -2299 70 -1824 0 -2158 -3 -2197 -15z"></path><path d="M7542 12211 c-63 -22 -123 -76 -155 -141 l-22 -45 0 -5650 0 -5650 23 -47 c13 -25 43 -64 67 -87 83 -77 -105 -71 2295 -71 2399 0 2212 -6 2295 71 24 22 54 61 67 87 l23 47 0 5650 0 5650 -24 48 c-31 63 -101 123 -164 142 -44 13 -321 15 -2201 15 -2062 -1 -2153 -1 -2204 -19z"></path></g></svg>
             </div>
             <div id="player-things">
-                <img id="player-img" src="">
+                <div id="player-img-div">
+                    <img id="player-img" src="">
+                    <div id="ear-rotate">
+                        <div id="ear-rotate-bg"></div>
+                        <img src="assets/earcircledrawn.png">
+                    </div>
+                </div>
                 <div id="player-info-div">
                     <div id="player-name-and-tags">
                         <div id="player-name"></div>
@@ -165,6 +170,46 @@
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
 
+    #ear-rotate {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;         
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1001;
+    }
+
+    #ear-rotate-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: white;
+        opacity: 0.4;
+        z-index: 0;
+    }
+
+    #ear-rotate img {
+        position: relative;
+        z-index: 1;
+        height: 70%;
+        width: 70%;
+        object-fit: contain;
+    }
+
+    .fade-in-anim {
+        animation: fadeIn 0.6s ease;
+    }
+
+    .spinning {
+        animation: rotate 5s infinite linear;
+    }
+    
+    
     #player-info-icon {
         margin-top:2px;
         cursor: pointer;
@@ -625,10 +670,16 @@
         }
 
         #player-img {
-            border: 1px solid black;
+            height:100%;
+            z-index: 999;
+        }
+
+        #player-img-div {
             height: 45px;
+            width: 45px;
+            border: 1px solid black;
+            position: relative;  
             margin-right: 13px;
-            z-index: 1001;
         }
 
         #player-things {
@@ -645,9 +696,9 @@
             background-color: #ffffff;
             display: flex;
             align-items: center;
-            position: fixed;
-            right: 0px;
-            height: 70px;
+            position: relative;
+            right: 15px;
+            height: 100%;
             z-index: 20;
             cursor: pointer;
             margin-left: auto;
@@ -664,7 +715,8 @@
             align-items: center;
             padding: 0px;
             padding-left: 15px;
-            height: 70px;
+            height: 0px;
+            overflow-y: hidden;
             position: fixed;
             bottom: 0px;
             left: 0px;
@@ -673,7 +725,8 @@
             color: black;
             background-color: #ffffff;
             border: 1px solid black;
-            display: none;
+            display: flex;
+            transition: height 0.2s ease ;
         }
         ::-webkit-scrollbar {
         display: none;
@@ -1572,6 +1625,8 @@
         const playerIcons = document.getElementById('player-icons');
         const playIcon = document.getElementById('play-icon');
         const pauseIcon = document.getElementById('pause-icon');
+        const earRotate = document.getElementById('ear-rotate');
+        const earImg = earRotate.querySelector('img');
 
         playerIcons.addEventListener('click', togglePlayer);
 
@@ -1585,6 +1640,14 @@
             const theStation = document.getElementById(id);  
 
             if (playerAudio.paused) {
+                earRotate.classList.add('fade-in-anim');
+                earRotate.style.display = 'flex';
+
+                // force-restart the rotation
+                earImg.classList.remove('spinning');
+                void earImg.offsetWidth;
+                earImg.classList.add('spinning');
+
                 playerAudio.load();
                 theStation.classList.add('pulsing');           
                 playIcon.style.display = 'none';
@@ -1594,6 +1657,9 @@
                 player.classList.add('pulsing');                
                 shareDiv.classList.add('pulsing'); 
                 playerAudio.play().then(()=>{
+                    earRotate.style.display = 'none';
+                    earRotate.classList.remove('fade-in-anim');
+                    earImg.classList.remove('spinning');
                     player.classList.remove('pulsing');      
                     shareDiv.classList.remove('pulsing');  
                     theStation.classList.remove('pulsing');          
@@ -1616,47 +1682,46 @@
         let previousStations = [];
         let hasChosenOnce = false
         function chooseStation(id, random=false, fromLink=false, fromHistory=false) {
-            hasChosenOnce = true;
-            introDiv.textContent = 'Surprise me'
-            if (player.dataset.id && !fromHistory) {
-                previousStations.push(player.dataset.id);
-            }
-            document.title = `${id} on One Radio`;
+            const doChoose = () => {
+                introDiv.textContent = 'Surprise me';
+                if (player.dataset.id && !fromHistory) {
+                    previousStations.push(player.dataset.id);
+                }
+                document.title = `${id} on One Radio`;
 
-            player.style.display = 'flex';
+                const station = document.getElementById(id);
+                const oneLiner = station.dataset.oneLiner;
+                const logo = station.querySelector('.a-logo').src;
 
-            let d=document.getElementById(id)
-            let isPlaying=d.style.backgroundColor==='yellow';
+                playerInfoIcon.addEventListener('click', () => { openModal(id); });
 
-            const randomButton = document.getElementById('play-random-button');
-            //const playRandomText = document.getElementById('play-random-text');
+                playerImg.src = logo;
+                player.dataset.id = id;
+                playerName.textContent = id;
 
-            const station = document.getElementById(id)
-            const oneLiner = station.dataset.oneLiner;
-            const logo = station.querySelector('.a-logo').src;
-            //document.querySelectorAll('meta[property=og\\:image]')[0].setAttribute('content', logo.replace('https://internetradioprotocol.org',''))
+                const a = document.getElementById(`${id}-audio`);
+                playerAudio.src = a.dataset.src;
 
-            
-            playerInfoIcon.addEventListener('click', ()=>{
-                openModal(id);
-            })
+                updatePlayer(id, oneLiner, station.dataset.location);
+                updateMediaSession(oneLiner, id, logo);
 
-            playerImg.src = logo;
-            player.dataset.id = id;
-            playerName.textContent = id;
+                if (!fromLink) {
+                    player.classList.add('pulsing');
+                    shareDiv.classList.add('pulsing');
+                    togglePlayer();
+                }
 
-            const a=document.getElementById(`${id}-audio`);
-            playerAudio.src = a.dataset.src; 
+                player.style.height = '60px';   // expand after content is in place
+            };
 
-            updatePlayer(id, oneLiner, station.dataset.location);
-            updateMediaSession(oneLiner, id, logo);
-            if (!fromLink) {
-                player.classList.add('pulsing');
-                shareDiv.classList.add('pulsing');
-                togglePlayer();
-            }
-            else {
-                //openModal(id);
+            if (hasChosenOnce) {
+                player.style.height = '0px';    // collapse first
+                hasChosenOnce = true;
+                setTimeout(doChoose, 200);      // swap + expand after collapse
+            } else {
+                player.style.height = '60px';
+                hasChosenOnce = true;
+                doChoose();
             }
         }
                         
