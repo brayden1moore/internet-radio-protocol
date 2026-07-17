@@ -696,8 +696,8 @@
             background-color: #ffffff;
             display: flex;
             align-items: center;
-            position: relative;
-            right: 15px;
+            position: absolute;
+            right: 16px;
             height: 100%;
             z-index: 20;
             cursor: pointer;
@@ -1793,6 +1793,9 @@
 
         function setupOneLinerMarquee(oneLinerElement, width, direction = 'left') {
             const text = oneLinerElement.textContent;
+            const cs = window.getComputedStyle(oneLinerElement);
+            const fontSize = cs.fontSize;    
+            const lineHeight = cs.lineHeight;
             
             const wrapper = document.createElement('div');
             wrapper.style.cssText = `
@@ -1801,7 +1804,7 @@
                 display: inline-block;
                 width: 100%;
                 position: relative;
-                top: 1px;
+                vertical-align: top;
                 will-change: transform;
                 backface-visibility: hidden;
             `;
@@ -1820,6 +1823,8 @@
             originalSpan.style.cssText = `
                 display: inline-block;
                 margin-right: 40px;
+                font-size: ${fontSize};
+                line-height: ${lineHeight};
                 will-change: transform;
                 backface-visibility: hidden;
             `;
