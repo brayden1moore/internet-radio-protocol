@@ -1448,6 +1448,8 @@ class Stream:
             images = soup.find_all(attrs={'class':'image'})
             if len(images) > 1:
                 self.show_logo = images[1].find('img').get('src')
+                if 'https://' not in self.show_logo:
+                    self.show_logo = 'https://spinitron.com' + self.show_logo
             else:
                 self.show_logo = None
             if self.now_playing:
