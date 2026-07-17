@@ -4,6 +4,7 @@ from websocket import create_connection
 from urllib.parse import quote, urlsplit, urlunsplit
 from bs4 import BeautifulSoup
 from zoneinfo import ZoneInfo
+import urllib.request, json
 from io import BytesIO
 from PIL import Image
 import subprocess
@@ -2852,6 +2853,22 @@ def main_loop():
                 log.write('\n'.join(error_lines))
 
             now = time.time()
+            url = 'https://gateway-us.umami.is/api/websites/8362bf37-0d81-4f25-9ee8-027269410e08/stats?startAt=0&endAt=' + str(round(now) * 1000)
+
+            headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer 0P6H7A9QO/j67Iw0dkYmAgvf61YVd+1DwoGh3LVsAELR69R5giXNGaJ4UgKlf6qy3QSH5+sCy3/LnT2JXXeoIzGzQE0AqZa5iZZjXZuE2ET/CcLM8OrxQfMgk9rHYJuQ2VssWSlAVPezymVaWZtAB6XpuE+55umTux1+znIPZm9tHAMBv/vmZ9u8izKWWAXjnR9HHuAIZVcKwWdOj+301DjAyaQ3P0HVOVv00J0zhH/voraRMtOVZtOwcuWKxYFU9O6nbKnR8k/1auGT+gOodRQDPyLq6HEIWbW7ZVUoUZe4DVgMo69K+oWqXbbRiogoKvZXSlTkw583JVTXJbeunjhrTg4DndskkdGxzw==',
+                'Origin': 'https://cloud.umami.is',
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.1 Safari/605.1.15',
+                'x-umami-share-context': '1',
+                'x-umami-share-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZUlkIjoiMmZlMThjZTktMTNlNi00MzA5LTk0MTQtODJiNTcxOTJhZmEzIiwic2hhcmVUeXBlIjoxLCJwYXJhbWV0ZXJzIjp7InV0bSI6ZmFsc2UsImdvYWxzIjpmYWxzZSwiZXZlbnRzIjpmYWxzZSwiY29tcGFyZSI6ZmFsc2UsImZ1bm5lbHMiOmZhbHNlLCJyZXZlbnVlIjpmYWxzZSwiam91cm5leXMiOmZhbHNlLCJvdmVydmlldyI6dHJ1ZSwicmVhbHRpbWUiOmZhbHNlLCJzZXNzaW9ucyI6ZmFsc2UsImJyZWFrZG93biI6ZmFsc2UsInJldGVudGlvbiI6ZmFsc2UsImFsbG93RmlsdGVyIjp0cnVlLCJhdHRyaWJ1dGlvbiI6ZmFsc2UsInBlcmZvcm1hbmNlIjpmYWxzZX0sIndlYnNpdGVJZCI6IjgzNjJiZjM3LTBkODEtNGYyNS05ZWU4LTAyNzI2OTQxMGUwOCIsInR5cGUiOiJzaGFyZSIsImlhdCI6MTc4NDA5MjMxMH0.TKWhqRst0ZOpwUtF7DU77SAv2ffCPnBKfxs6I_oaZrw',
+            }
+
+            req = urllib.request.Request(url, headers=headers, method='GET')
+            with urllib.request.urlopen(req) as resp:
+                data = json.loads(resp.read().decode())
+
             status = {
                 'last_updated_epoch': now,
                 'last_updated_utc': datetime.fromtimestamp(now, tz=pytz.timezone('UTC')),
@@ -2863,7 +2880,8 @@ def main_loop():
                 'live': len([key for key, val in updated.items() if val['hidden'] != True and val['status'] == 'Live']),
                 're-run': len([key for key, val in updated.items() if val['hidden'] != True and val['status'] == 'Re-Run']),
                 'offline': len([key for key, val in updated.items() if val['hidden'] != True and val['status'] == 'Offline']),
-                'stations': [key for key, val in updated.items()]
+                'stations': [key for key, val in updated.items()],
+                'hits': data['pageviews']
             }
 
             taglines = [
