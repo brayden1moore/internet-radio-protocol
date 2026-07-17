@@ -693,7 +693,7 @@
         }
 
         #share-icon {
-            background-color: #ffffff;
+            background-color:var(--player-color);
             display: flex;
             align-items: center;
             position: absolute;
@@ -723,7 +723,7 @@
             width: 100%;
             z-index: 1000;
             color: black;
-            background-color: #ffffff;
+            background-color:var(--player-color);
             display: flex;
             transition: height 0.2s ease ;
         }
@@ -1334,6 +1334,7 @@
         :root {
             --pulse: pulse;
             --player-paused-color: rgb(243,243,243);
+            --player-color: yellow;
         }
 
          @keyframes pulse {
