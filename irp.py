@@ -1326,7 +1326,11 @@ class Stream:
         elif self.name == 'Sphere Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.now_playing = extract_value(info, ['currentShow',0,'name'])
-            self.status = 'Live'
+            try:
+                stream_resp = requests.get(self.stream_link, stream=True, timeout=5)
+                self.status = 'Live'
+            except:
+                self.status = 'Offline'
             if not self.now_playing:
                 self.status = 'Offline'
 
@@ -2655,6 +2659,19 @@ Stream(
         info_link = "https://admin.operator-radio.com/api/sets/livenow",
         stream_link = 'https://origin.streamnerd.nl/operator/operator/icecast.audio',
         main_link = 'https://operator-radio.com/',
+        about = "Operator is an online radio station and cultural platform dedicated to enriching the music and cultural landscape of Rotterdam and beyond, with a special focus on alternative sounds and underrepresented stories. We curate both on- and offline events, placing emphasis on talent development, experimentation, and nightlife culture. By putting Rotterdam on the map locally, nationally, and internationally, we showcase our creators to the world.",
+        support_link = 'https://www.paypal.com/paypalme/operatorradio',
+        insta_link = 'https://www.instagram.com/operator.radio/',
+        hidden = False,
+        song_basis= False
+),
+Stream(
+        name = 'fbi.radio',
+        logo = "https://internetradioprotocol.org/logos/fbi.jpg",
+        location = 'Sydney',
+        info_link = "https://admin.operator-radio.com/api/sets/livenow",
+        stream_link = 'https://streamer.fbiradio.com/stream',
+        main_link = 'https://fbi.radio/',
         about = "Operator is an online radio station and cultural platform dedicated to enriching the music and cultural landscape of Rotterdam and beyond, with a special focus on alternative sounds and underrepresented stories. We curate both on- and offline events, placing emphasis on talent development, experimentation, and nightlife culture. By putting Rotterdam on the map locally, nationally, and internationally, we showcase our creators to the world.",
         support_link = 'https://www.paypal.com/paypalme/operatorradio',
         insta_link = 'https://www.instagram.com/operator.radio/',
