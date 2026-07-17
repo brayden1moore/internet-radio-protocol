@@ -82,8 +82,8 @@
                     <div id="last-up">        
                         <span id='live-count'></span><span class='last-updated'></span>
                     </div>
-                    <a id='get-app-button' href="https://apps.apple.com/us/app/one-radio-by-scud/id6747141008" target="_blank"><div id="ios-app">
-                    <span id="apple-logo"></span>&nbsp;&nbsp;&nbsp;Get the iOS app
+                    <a id='get-app-button' href="https://apps.apple.com/us/app/one-radio-by-scud/id6747141008" target="_blank"><div id="ios-app" style="display:flex;">
+                    <div id="apple-logo"></div>Get the app
                     </div></a>
 
                 </div>
@@ -247,8 +247,11 @@
     }
 
     #apple-logo {
+        display: flex;
+        align-items: center;
         position: relative;
         top: 1px;
+        margin-right: 8px;
     }
 
     #everythingelse {
@@ -2343,9 +2346,9 @@
                         const lastUpdate = json['last_updated_epoch'];
                         const lastUpdateDate = new Date(lastUpdate * 1000);
                         const formatter = new Intl.DateTimeFormat('en-US', {
-                            weekday: 'short',
-                            month: 'short',
-                            day: 'numeric',
+                            //weekday: 'short',
+                           // month: 'short',
+                           // day: 'numeric',
                             hour: 'numeric',
                             minute: '2-digit',
                             hour12: true
