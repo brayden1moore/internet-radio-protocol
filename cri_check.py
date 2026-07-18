@@ -1,5 +1,4 @@
 import concurrent.futures
-from tqdm import tqdm
 import requests
 import json
 
@@ -25,7 +24,7 @@ def fetch_data(i):
         return item_id, None
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=max_threads) as executor:
-    results = list(tqdm(executor.map(fetch_data, list_resp), total=len(list_resp)))
+    results = list(executor.map(fetch_data, list_resp), total=len(list_resp))
 
 for item_id, response in results:
     if response is not None:
@@ -105,7 +104,7 @@ def check_live(station, timeout=7, min_bytes=8192):
         return False
     
 with concurrent.futures.ThreadPoolExecutor(max_workers=max_threads) as executor:
-    results = list(tqdm(executor.map(check_live, untracked_live_stations), total=len(untracked_live_stations)))
+    results = list(executor.map(check_live, untracked_live_stations), total=len(untracked_live_stations))
 
 truly_live_untracked_stations = []
 for s,r in zip(untracked_live_stations,results):
