@@ -2589,7 +2589,8 @@ Stream(
         main_link = 'https://www.sphere-radio.net/',
         about = "Sphere Radio is a community-driven Radio from Leipzig, curating space for diverse voices and ideas. We are open, experimental, and oriented towards emancipatory values.",
         support_link = 'https://liberapay.com/SphereRadio/',
-        insta_link = 'https://www.instagram.com/sphere.radio/'
+        insta_link = 'https://www.instagram.com/sphere.radio/',
+        hidden=True
 ),
 Stream(
         name = 'Zabrij Radio',
@@ -2694,7 +2695,7 @@ Stream(
         about = "Operator is an online radio station and cultural platform dedicated to enriching the music and cultural landscape of Rotterdam and beyond, with a special focus on alternative sounds and underrepresented stories. We curate both on- and offline events, placing emphasis on talent development, experimentation, and nightlife culture. By putting Rotterdam on the map locally, nationally, and internationally, we showcase our creators to the world.",
         support_link = 'https://www.paypal.com/paypalme/operatorradio',
         insta_link = 'https://www.instagram.com/operator.radio/',
-        hidden = False,
+        hidden = True,
         song_basis= False
 )   
 ]
