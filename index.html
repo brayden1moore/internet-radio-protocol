@@ -4,7 +4,8 @@
     <script defer src="https://cloud.umami.is/script.js" data-website-id="8362bf37-0d81-4f25-9ee8-027269410e08"></script>
     <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
+    <link rel="preload" href="assets/Archivo-Bold.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="assets/Archivo-Light.ttf" as="font" type="font/ttf" crossorigin>
         <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
         <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
         <link rel="shortcut icon" href="/favicon/favicon.ico" />
@@ -2493,7 +2494,6 @@
             if (info && from_endpoint == false) {
                 json = info;
 
-                
                 populateStations(json, needSort=firstLoad);
 
                 if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
@@ -2964,7 +2964,16 @@ function init() {
     //remeasure();
 }
 
-window.addEventListener('load', init);
+const topBarEl = document.getElementById('top-bar');
+new ResizeObserver(() => {
+    // Only re-sync while at the top; while scrolled, the header is
+    // intentionally shrunk and remeasure() handles resizes.
+    if (window.scrollY === 0) calculateTop();
+}).observe(topBarEl);
+
+// window.addEventListener('load', init);
+init();
+
 if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => { if (ready) remeasure(); });
 }
