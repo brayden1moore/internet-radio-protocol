@@ -792,7 +792,7 @@ class Stream:
         elif self.name == 'Mutant Radio':
             self.status = 'Live'
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
-            self.now_playing = info['title']
+            self.now_playing = extract_value(info,['title'])
             self.stream_check()
 
         elif self.name == 'n10.as':
