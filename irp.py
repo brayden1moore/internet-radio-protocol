@@ -793,6 +793,7 @@ class Stream:
             self.status = 'Live'
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.now_playing = info['title']
+            self.stream_check()
 
         elif self.name == 'n10.as':
             self.status = 'Live'
@@ -1508,6 +1509,18 @@ class Stream:
                             print('DATE2',date)                   
                             if date < datetime.now().date():
                                 self.status = 'Re-Run'
+
+    def stream_check(self):
+        if not self.now_playing:
+            self.status = 'Offline'
+        else:
+            try:
+                stream_resp = requests.get(self.stream_link, stream=True, timeout=5)
+                assert stream_resp.status_code == 200
+                self.status = 'Live'
+            except:
+                self.status = 'Offline'
+                self.now_playing = None
 
     def process_logos(self):
         logo_file = self.logo.replace('https://internetradioprotocol.org/','')
