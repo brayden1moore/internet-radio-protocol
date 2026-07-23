@@ -359,8 +359,7 @@ class Stream:
                 self.now_playing = extract_value(info,['playlist','title'])
 
             self.show_logo = extract_value(info,['playlist','image'])
-            if requests.get(self.show_logo, timeout=3).status_code != 200:
-                self.show_logo = None
+            self.show_logo_check()
              
             if info['metadata']['artist_name'] and self.additional_info:
                 self.additional_info += ' by ' + extract_value(info,['metadata','artist_name'])
@@ -1438,6 +1437,9 @@ class Stream:
                     self.show_logo = 'https://spinitron.com' + self.show_logo
             else:
                 self.show_logo = None
+
+            self.show_logo_check()
+
             if self.now_playing:
                 self.status = 'Live'
 
@@ -1503,6 +1505,10 @@ class Stream:
             except:
                 self.status = 'Offline'
                 self.now_playing = None
+
+    def show_logo_check(self):
+        if requests.get(self.show_logo, timeout=3).status_code not in  [200,403]:
+            self.show_logo = None
 
     def process_logos(self):
         logo_file = self.logo.replace('https://internetradioprotocol.org/','')
