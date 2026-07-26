@@ -2349,7 +2349,8 @@ Stream(
         support_link = "https://radiovilnius.live/support/",
         insta_link = "https://instagram.com/radiovilnius",
         bandcamp_link = "",
-        soundcloud_link = ""
+        soundcloud_link = "",
+        hidden=True
 ),
 Stream(
         name = "Rukh Radio",
