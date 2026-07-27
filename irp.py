@@ -1266,6 +1266,8 @@ class Stream:
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             if info['success']:
                 self.now_playing = extract_value(info, ['result','metadata','title'])
+                if self.now_playing == 'Live':
+                    self.now_playing = extract_value(info, ['result','content','title'])
                 artist = extract_value(info, ['result','metadata','artist'])
                 if artist:
                     self.now_playing = self.now_playing + ' by ' + artist
