@@ -2478,7 +2478,7 @@ Stream(
         insta_link = "https://instagram.com/radiovilnius",
         bandcamp_link = "",
         soundcloud_link = "",
-        hidden=True
+        hidden=False
 ),
 Stream(
         name = "Rukh Radio",
