@@ -28,7 +28,7 @@
         <div id="modal-container">
             <div id="modal-bg" onClick="closeModal();"></div>
             <div id="modal">
-                <div id="modal-x-container"><div id="modal-x" onClick="closeModal();">X</div></div>
+                <div id="modal-x-container"><div id="modal-x" onClick="closeModal();">x</div></div>
                 <div id="modal-content">
                     <div id="modal-logo-container">
                         <div id="modal-logo-and-overlay" class="logo-and-overlay">
@@ -207,11 +207,11 @@
     }
 
     #full-view-toggle {
-        border-left: 1px solid black;
-        border-bottom: 1px solid black;
+        border: 1px solid black;
         position: absolute;
         top: 0;
-        right: 0;
+        margin-top: 10px;
+        right: 10px;
         background-color: white;
         width: 48px;
         height: 48px;
@@ -234,7 +234,7 @@
     }
 
     .first-row-full-view {
-        height: 70px !important;
+        height: 45px !important;
     }
 
     .top-controls-full-view {
@@ -318,6 +318,7 @@
     .globe-list-station-info {
         width: calc(100% - 70px);
         display: block;
+        position: relative;
     }
 
     #globe-station-list-container {
@@ -786,13 +787,15 @@
     }
 
     #modal {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: saturate(180%) blur(20px);
+        -webkit-backdrop-filter: saturate(180%) blur(8px);
         font-size: 10pt;
         width: calc(100% - 37.5px);
         z-index: 11;
         height: fit-content;
-        background-color: white;
+        /* background-color: white; */
         border: 1px solid black;
-        box-shadow: 0 16px 17px rgba(0, 0, 0, 0.3);
     }
 
     #change-sort-button {
@@ -1658,6 +1661,9 @@
             border-bottom: 0.5px solid black;
         }
     @media (min-aspect-ratio: 8/10)  {
+        .first-row-full-view {
+            height: 55px !important;
+        }
 
         #full-view-toggle {
             width: 25px;
@@ -1783,6 +1789,9 @@
         }
 
         @media (orientation: landscape) {
+            .first-row-full-view {
+                height: 70px !important;
+            }
         
             #globe-station-list-container {
                 width: 450px !important;
@@ -3490,10 +3499,20 @@
             const stInfoCon = document.createElement('div');
             stInfoCon.classList.add('globe-list-station-info');
 
+            const nameAndInfo = document.createElement('div');
             const stName = document.createElement('div');
             stName.classList.add('stream-name');
             stName.textContent = station;
-            stInfoCon.appendChild(stName);
+            const infoIcon = document.createElement('p');
+            infoIcon.classList.add('info-icon');
+            infoIcon.addEventListener('click', ()=>{
+                openModal(station);
+            })
+            infoIcon.style = "position: absolute; top: 0px; right: 0px; margin: 0; cursor: pointer; z-index: 11;"
+            infoIcon.textContent = "ⓘ";
+            nameAndInfo.appendChild(stName);
+            nameAndInfo.appendChild(infoIcon);
+            stInfoCon.appendChild(nameAndInfo);
 
             const stOneLiner = document.createElement('span');
             stOneLiner.classList.add('one-liner');
@@ -3502,8 +3521,13 @@
 
             st.appendChild(stImg);
             st.appendChild(stInfoCon);
-            st.addEventListener('click', () => chooseStation(station));
-
+            st.onclick = function(event) {
+                if (event.target.closest('.info-icon')) {
+                    return;
+                }
+                chooseStation(stationName);
+            };
+            
             globeStationList.appendChild(st);
             pending.push({ stOneLiner, stInfoCon });
         });
