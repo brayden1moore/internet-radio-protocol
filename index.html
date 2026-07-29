@@ -136,6 +136,7 @@
         <div id="globe-and-list-container">
             <div id="globe-container-container">
                 <div id="globe-container"></div>
+                <div id="full-view-toggle" data-status="small"><img src="assets/fullview.png"></div>
                 <div id="globe-station-list-container">
                     <div id="globe-station-city-name"></div>
                     <div id="globe-station-list"></div>
@@ -193,6 +194,45 @@
         </div>
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
+
+    #globe-and-list-container {
+        border: 1px solid black;
+        margin-left: -0.5px;
+        width: calc(100% - 1.5px);
+        height: 70vh;
+    }
+
+    #full-view-toggle img {
+        height: 100%;
+        width: 100%;
+    }
+
+    #full-view-toggle {
+        border-left: 1px solid black;
+        border-bottom: 1px solid black;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: white;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+    }
+
+    #full-view-toggle:hover {
+        filter: invert();
+    }
+
+    .full-view {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100vw !important;
+        height: 100vh !important;
+        background-color: white;
+        z-index: 1000;
+        border-bottom: none;
+    }
 
     #new {
         position: absolute;
@@ -361,13 +401,10 @@
 
 
     #globe-container-container {
-        width: calc(100% - 1.5px);
         margin-bottom: 25px;
-        border: 1px solid black;
         overflow: hidden;
         padding: 0;
-        margin-left: -0.5px;
-        height: 70vh;
+        height: 100%;
         align-items: center;
         justify-content: center;
         display: none;
@@ -3465,7 +3502,6 @@
         });
     }
 
-
     function toggleGlobeList(moreArrow) {
         if (moreArrow.dataset.status == 'closed') {
             globeStationList.style.maxHeight = globeContainer.offsetHeight + "px";
@@ -3486,4 +3522,21 @@
             populatedGlobe = true;
         }
     }, 500)
+
+    const fullViewToggle = document.getElementById('full-view-toggle');
+    const globeAndListCont = document.getElementById('globe-and-list-container');
+    const fullViewToggleIcon = fullViewToggle.querySelector('img');
+    fullViewToggle.addEventListener('click', ()=> {
+        if (fullViewToggle.dataset.status === 'small') {
+            globeAndListCont.classList.add('full-view');
+            fullViewToggle.dataset.status = 'large';
+            fullViewToggleIcon.src = 'assets/smallview.png';
+        }
+        else {
+            globeAndListCont.classList.remove('full-view');
+            fullViewToggle.dataset.status = 'small';          
+            fullViewToggleIcon.src = 'assets/fullview.png';  
+        }
+        
+    })
 </script>
