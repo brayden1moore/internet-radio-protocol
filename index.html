@@ -2,10 +2,12 @@
 <head>
     
     <script defer src="https://cloud.umami.is/script.js" data-website-id="8362bf37-0d81-4f25-9ee8-027269410e08"></script>
+    <script src="https://cdn.jsdelivr.net/npm/globe.gl"></script>
+    <script src="https://unpkg.com/topojson-client@3"></script>
     <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="preload" href="assets/Archivo-Bold.ttf" as="font" type="font/ttf" crossorigin>
-    <link rel="preload" href="assets/Archivo-Light.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="https://one.radio/assets/Archivo-Bold.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="https://one.radio/assets/Archivo-Light.ttf" as="font" type="font/ttf" crossorigin>
         <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
         <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
         <link rel="shortcut icon" href="/favicon/favicon.ico" />
@@ -125,52 +127,255 @@
         <div  id="show-container-container">
         <div  id="shows-container"></div></div>
 
-        <div class="tag-container-container">
-            <div class="tags-container" id="status-tags-container">
-                <div class="tag status-tag" data-type="status" id="Live-tag">Live</div>
-                <div class="tag status-tag" data-type="status" id="Re-Run-tag">Re-Run</div>
-                <div class="tag status-tag" data-type="status" id="Offline-tag">Offline</div>
+        <div id="view-selector">
+            <img class="view-icon" id="list-button" src="assets/listicon.png">
+            <div id="view-select-divider"></div>
+            <img class="view-icon" id="globe-button" src="assets/globeicon.png">
+            <div id="new">New!</div>
+        </div>
+        <div id="globe-and-list-container">
+            <div id="globe-container-container">
+                <div id="globe-container"></div>
+                <div id="globe-station-list-container">
+                    <div id="globe-station-city-name"></div>
+                    <div id="globe-station-list"></div>
+                </div>
             </div>
-            <div class="tags-container" id="location-tags-container">
-            </div>
-            <div class="tags-container" id="genre-tags-container">
+
+            <div id="list-container">
+                <div class="tag-container-container">
+                    <div class="tags-container" id="status-tags-container">
+                        <div class="tag status-tag" data-type="status" id="Live-tag">Live</div>
+                        <div class="tag status-tag" data-type="status" id="Re-Run-tag">Re-Run</div>
+                        <div class="tag status-tag" data-type="status" id="Offline-tag">Offline</div>
+                    </div>
+                    <div class="tags-container" id="location-tags-container">
+                    </div>
+                    <div class="tags-container" id="genre-tags-container">
+                    </div>
+                </div>
+
+                <div id="change-sort-button">
+                    <img id="change-sort-icon"  onclick="sortStations(true)">
+                    <div id="search-bar">
+                        <div id="search-bar-and-icon">
+                            <img src="assets/searchicon.png">
+                            <input id="search-stations" placeholder=''></input>
+                        </div> 
+                    </div>
+                </div>
+
+                <div id="streaming-now" class="category-header" data-controls="streams-container">Stations</div>
+                <div class="streams-container" id="streams-container"></div>
+
+                <div id="category-container-container">
+                </div>
+
+                <div id="mixtapes-now" class="category-header" data-controls="mixtapes-container">Mixtapes</div>
+                <div class="streams-container" id="mixtapes-container"></div>
+
+                <div id="offline-now" class="category-header" data-controls="offline-container">Offline</div>
+                <div class="streams-container" id="offline-container"></div>
+
             </div>
         </div>
-
-        <div id="change-sort-button">
-            <img id="change-sort-icon"  onclick="sortStations(true)">
-            <div id="search-bar">
-                <div id="search-bar-and-icon">
-                    <img src="assets/searchicon.png">
-                    <input id="search-stations" placeholder=''></input>
-                </div> 
-            </div>
-        </div>
-
-        <div id="streaming-now" class="category-header" data-controls="streams-container">Stations</div>
-        <div class="streams-container" id="streams-container"></div>
-
-        <div id="category-container-container">
-        </div>
-
-        <div id="mixtapes-now" class="category-header" data-controls="mixtapes-container">Mixtapes</div>
-        <div class="streams-container" id="mixtapes-container"></div>
-
-        <div id="offline-now" class="category-header" data-controls="offline-container">Offline</div>
-        <div class="streams-container" id="offline-container"></div>
-
+    
+    
         <div id="text-container">
             Please support a station if you like it.<br>
             
             <a target="_blank" href="/info">API</a> 
             <a href="mailto:brayden@one.radio">Email</a>  
-            <a target="_blank" href="https://github.com/brayden1moore/internet-radio-protocol">GitHub</a>  
+            <!--<a target="_blank" href="https://github.com/brayden1moore/internet-radio-protocol">GitHub</a>  -->
             <a class='insta-link' target='_blank' href='https://www.instagram.com/scudradios/'>Instagram</a><br><br>
             <a target="_blank" href="https://forms.gle/eWZTmtNRinxrtz587">Request a Station</a><br><br>
             <span id="hits"></span>&nbsp;visits
         </div>
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
+
+    #new {
+        position: absolute;
+        right: -14px;
+        top:-7px;
+        transform: rotate(45deg);
+        background-color: yellow;
+    }
+
+    .more-arrow {
+        width: 100%;
+        position: absolute;
+        height: 20px;
+        bottom: -20px;
+        padding-top: 0px;
+        align-items: center;
+        font-size: 9pt;
+        border: 1px solid black;
+        border-left: none;
+        justify-content: center;
+        display: flex;
+        background-color: rgba(255, 255, 0, 1);
+        cursor: pointer;
+        transition: 0s;
+    }
+
+    .more-arrow:hover {
+        background-color: black;
+        color:white;
+    }
+
+    #globe-station-list {
+        padding-right: 10px;
+        overflow: hidden;
+        max-height: 282px;
+        transition: max-height 0.2s;
+        border-bottom: 1px solid black;
+    }
+
+    .globe-list-station {
+        height: 60px;
+        width: 100%;
+        cursor: pointer;
+        display: flex;
+        padding-right: 10px;
+        align-items: center;
+    }
+
+    .globe-list-station:hover {
+        background-color: yellow;
+    }
+
+    .globe-list-station:not(:last-child) {
+        border-bottom: black 1px solid;
+    }
+
+    .globe-list-station-logo {
+        height: 100%;
+        margin-right: 10px;
+        border-right: 0.5px solid black;
+    }
+
+    .globe-list-station-info {
+        width: calc(100% - 70px);
+        display: block;
+    }
+
+    #globe-station-list-container {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: saturate(180%) blur(20px);
+        -webkit-backdrop-filter: saturate(100%) blur(8px);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 99;
+        border-right: 1px solid black;
+        width: 100%;
+        display: none;
+    }
+
+    #globe-station-city-name {
+        padding: 5px;
+        min-width: 61px;
+        font-size: 12pt;
+        border-bottom: 1px solid black;
+    }
+
+    .globe-marker {
+        position: relative;
+        width: 20px;
+        height: 20px;
+        pointer-events: auto;
+    }
+    .globe-dot {
+        border-radius: 50%;
+        height: 20px;
+        width: 20px;
+        background-color: yellow;
+        border: 1px solid black;
+        opacity: 0.8;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .globe-dot-name {
+        position: absolute;
+        left: 26px;  
+        width: 0px;           
+        top: calc(50% + 1px);
+        transform: translateY(-50%);
+        opacity: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        transition: 0.3s;
+    }
+    .globe-marker:hover {z-index: 10;}
+    .globe-marker:hover .globe-dot-name {opacity: 1; margin-left: 1px; width: auto;}
+    .globe-dot {
+        transition: transform 0.2s;
+    }
+    #globe-container.marker-hover .globe-dot {
+        transform: scale(0.95);
+        background-color: rgb(0,0,0,0);
+        opacity: 1;
+    }
+    #globe-container .globe-marker:hover .globe-dot {
+        transform: scale(1.15);
+        background-color: rgb(255,255,0,1) !important;
+    }
+    
+    #view-select-divider {
+        height: 100%;
+        width: 0px;
+        border-right: 1px solid black;
+    }
+
+    #list-container {
+        padding-top: 18px;
+    }
+
+    #view-selector {
+        border: solid 1px black;
+        height: 35px;
+        margin-bottom: -1px;
+        margin-left: -0.5px;
+        width: fit-content;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        position: relative;
+    }
+    
+    .view-icon {
+        cursor: pointer;
+        height: 25px;
+        width: 25px;
+        padding: 5px;
+        background-color: white;
+    }
+
+    .view-icon:hover {
+        filter: invert();
+    }
+
+
+    #globe-container-container {
+        width: calc(100% - 1.5px);
+        margin-bottom: 25px;
+        border: 1px solid black;
+        overflow: hidden;
+        padding: 0;
+        margin-left: -0.5px;
+        height: 70vh;
+        align-items: center;
+        justify-content: center;
+        display: none;
+        position: relative;
+    }
+
+    #globe-container {
+        width: 100%;
+    }
 
     #ear-rotate {
         display: flex;
@@ -908,9 +1113,10 @@
         }
 
         .one-liner {
-            font-size: 8pt;
-        will-change: transform;
-        backface-visibility: hidden;
+            font-size: 10pt;
+            will-change: transform;
+            backface-visibility: hidden;
+            white-space: nowrap;
         }
 
         .one-liner > div {
@@ -1311,8 +1517,10 @@
             overflow-x: hidden;
             width: calc(100% - 112px);}
         
-        @font-face {font-family: "Archivo Bold";src: url("assets/Archivo-Bold.ttf") format("truetype");}
-        @font-face {font-family: "Archivo SemiBold";src: url("assets/Archivo-SemiBold.ttf") format("truetype");}
+        @font-face {font-family: "Archivo Bold";src: url("https://one.radio/assets/Archivo-Bold.ttf") format("truetype");}
+        @font-face {font-family: "Archivo SemiBold";src: url("https://one.radio/assets/Archivo-SemiBold.ttf") format("truetype");}
+        @font-face {font-family: "Archivo Light";src: url("https://one.radio/assets/Archivo-Light.ttf") format("truetype");}
+
 
         a {
             font-size: 10pt; 
@@ -1326,7 +1534,6 @@
             color:#FFFFFF
         }
        
-        @font-face {font-family: "Archivo Light";src: url("assets/Archivo-Light.ttf") format("truetype");}
         @keyframes rotate{
             0% {
                 transform: rotate(0deg)
@@ -1393,6 +1600,10 @@
             border-bottom: 0.5px solid black;
         }
     @media (min-aspect-ratio: 8/10)  {
+
+        #globe-station-list-container {
+            width: 300px !important;
+        }
         
         #intro {
             font-size: 24pt;
@@ -1509,6 +1720,10 @@
         }
 
         @media (orientation: landscape) {
+        
+            #globe-station-list-container {
+                width: 450px !important;
+            }
 
             #intro {
             font-size: 34pt;
@@ -1532,7 +1747,6 @@
             .streams-container {
                 grid-template-columns: 1fr 1fr 1fr 1fr !important;
             } 
-
 
             .a-show-container {
                 height: 200px;
@@ -2121,9 +2335,6 @@
             var live = 0;
             var offline = 0;
 
-            data = Object.fromEntries(
-                    Object.entries(data).filter(([key, value]) => (value.hidden != true) & (value.tunerOnly != true))
-            );
             const keys = Object.keys(data);
 
             if (needSort) {
@@ -2230,6 +2441,17 @@
                             });
                         }
                         stationTags.style.width = existingStation.offsetWidth - 120 - 20 + 'px';
+
+                        if (existingStation.dataset.status != status) {
+                            if (existingStation.dataset.status == 'Offline') {
+                                offlineContainer.removeChild(existingStation);
+                                container.appendChild(existingStation);
+                            }
+                            else if (status == 'Offline') {
+                                container.removeChild(existingStation);
+                                offlineContainer.appendChild(existingStation);
+                            }
+                        }
                     };
 
                     existingStation.dataset.location = location;
@@ -2490,6 +2712,7 @@
         function getUpdatedInfo(from_endpoint=true) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
             info = JSON.parse(localStorage.getItem('info'));
+            info = notHidden(info);
 
             if (info && from_endpoint == false) {
                 json = info;
@@ -2504,6 +2727,9 @@
                 fetch(`https://internetradioprotocol.org/info?cacheBust=${Math.random()}`)
                     .then(response => response.json())
                     .then(json => {
+                        json = notHidden(json);
+                        info = json;
+
                         if (firstLoad) {
                             populateStations(json, needSort=true);
                             distributeFavorites(favorites);
@@ -2521,6 +2747,12 @@
             }
 
             firstLoad = false;
+        }
+
+        function notHidden(data) {
+            return Object.fromEntries(
+                    Object.entries(data).filter(([key, value]) => (value.hidden != true) & (value.tunerOnly != true))
+            );
         }
 
         function distributeFavorites(favorites) {
@@ -2864,118 +3096,382 @@
             marqueeWrapper.style.display = 'none';
         }
 
-const everythingElse = document.getElementById('everythingelse');
-const justOneRadio   = document.getElementById('main-logo');
-const introContainer = document.getElementById('intro-text-container');
-const intro          = document.getElementById('intro');
+        const everythingElse = document.getElementById('everythingelse');
+        const justOneRadio   = document.getElementById('main-logo');
+        const introContainer = document.getElementById('intro-text-container');
+        const intro          = document.getElementById('intro');
 
-const introWords = everythingElse.textContent.trim().split(/\s+/);
-const totalWords = introWords.length;
+        const introWords = everythingElse.textContent.trim().split(/\s+/);
+        const totalWords = introWords.length;
 
-let originalHeight, justOneRadioHeight, pxPerWord;
-let lastWordsToShow = -1;
-let ready = false;
+        let originalHeight, justOneRadioHeight, pxPerWord;
+        let lastWordsToShow = -1;
+        let ready = false;
 
-function recalcPxPerWord() {
-    const fontSizePx = parseFloat(getComputedStyle(everythingElse).fontSize);
-    pxPerWord = 5 * (34 / fontSizePx);
-}
+        function recalcPxPerWord() {
+            const fontSizePx = parseFloat(getComputedStyle(everythingElse).fontSize);
+            pxPerWord = 5 * (34 / fontSizePx);
+        }
 
-function calculateTop() {
-    const barHeight = document.getElementById('top-bar').offsetHeight;
-    document.body.style.marginTop = barHeight + 35 + 9 + 'px';
-}
+        function calculateTop() {
+            const barHeight = document.getElementById('top-bar').offsetHeight;
+            document.body.style.marginTop = barHeight + 35 + 9 + 'px';
+        }
 
-function updateIntroWords() {
-    if (!ready) return;
-    const scrollY = window.scrollY;
+        function updateIntroWords() {
+            if (!ready) return;
+            const scrollY = window.scrollY;
 
-    let wordsToRemove = Math.floor(scrollY / pxPerWord);
-    wordsToRemove = Math.max(0, Math.min(wordsToRemove, totalWords));
-    const wordsToShow = totalWords - wordsToRemove;
+            let wordsToRemove = Math.floor(scrollY / pxPerWord);
+            wordsToRemove = Math.max(0, Math.min(wordsToRemove, totalWords));
+            const wordsToShow = totalWords - wordsToRemove;
 
-    if (wordsToShow !== lastWordsToShow) {
-        everythingElse.textContent = introWords.slice(0, wordsToShow).join(' ');
-        lastWordsToShow = wordsToShow;
+            if (wordsToShow !== lastWordsToShow) {
+                everythingElse.textContent = introWords.slice(0, wordsToShow).join(' ');
+                lastWordsToShow = wordsToShow;
+            }
+
+            let newHeight = originalHeight - scrollY;
+            if (newHeight < justOneRadioHeight) newHeight = justOneRadioHeight;
+            intro.style.height = newHeight + 'px';
+        }
+
+        function remeasure() {
+            if (!ready) return;
+
+            everythingElse.textContent = introWords.join(' '); 
+            intro.style.height = 'auto';                       
+
+            originalHeight     = intro.offsetHeight;          
+            justOneRadioHeight = justOneRadio.offsetHeight;
+
+            recalcPxPerWord();
+            lastWordsToShow = -1;                              
+            updateIntroWords();                              
+            calculateTop();                                   
+        }
+
+        function debounce(fn, delay = 100) {
+            let timer;
+            return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), delay); };
+        }
+
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => { updateIntroWords(); ticking = false; });
+        }, { passive: true });
+
+        let lastWidth = window.innerWidth;
+
+        window.addEventListener('resize', debounce(() => {
+            if (window.innerWidth != lastWidth) {
+                calculateTop();
+                remeasure();
+                return;
+            }
+            lastWidth = window.innerWidth;
+        }, 20));
+
+        function init() {
+            if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+            window.scrollTo(0, 0);
+
+            intro.style.boxSizing = 'border-box';
+            justOneRadio.style.boxSizing = 'border-box';
+
+            originalHeight     = intro.offsetHeight;
+            justOneRadioHeight = justOneRadio.offsetHeight;
+
+            recalcPxPerWord();
+            ready = true;
+            updateIntroWords();
+            calculateTop();
+
+            //remeasure();
+        }
+
+        const topBarEl = document.getElementById('top-bar');
+        new ResizeObserver(() => {
+            if (window.scrollY === 0) calculateTop();
+        }).observe(topBarEl);
+
+        init();
+
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(() => { if (ready) remeasure(); });
+        }
+
+
+        // toggle list/globe
+        const listButton = document.getElementById('list-button');
+        const globeButton = document.getElementById('globe-button');
+        const listContainer = document.getElementById('list-container');
+        const globeContainer = document.getElementById('globe-container');
+        const globeContainerContainer = document.getElementById('globe-container-container');
+        function toggleView(view) {
+            if (view=='list') {
+                globeContainerContainer.style.display = 'none';
+                listContainer.style.display = 'block';
+            }
+            else {
+                globeContainerContainer.style.display = 'flex';
+                listContainer.style.display = 'none';          
+            }
+        }
+
+        listButton.addEventListener('click', () => {
+            toggleView('list');
+        });
+        globeButton.addEventListener('click', () => {
+            toggleView('globe');
+        });
+
+        // globe
+        const width  = globeContainer.clientWidth;
+        const height = globeContainer.clientHeight;
+
+        const cities = {};
+        for (const [stationName, station] of Object.entries(info)) {
+            let city = station.location;
+            if (!city) continue;
+
+            if (['San Francisco','Oakland','Berkeley'].includes(city)) {
+                city = 'Bay Area';
+            }
+            else if (['New York','Brooklyn'].includes(city)) {
+                city = 'New York';
+            }
+            else if (['Soho','London'].includes(city)) {
+                city = 'London';
+            }    
+
+            if (!cities[city]) {
+            cities[city] = { lat: station.lat, lon: station.lon, stations: [] };
+            }
+            cities[city].stations.push(stationName);
+        }
+
+        const globeStationListContainer = document.getElementById('globe-station-list-container');
+        const globeStationCityName = document.getElementById('globe-station-city-name');
+        const globeStationList = document.getElementById('globe-station-list');
+
+        let hasClickedGlobe = false;
+        const myGlobe = Globe()(globeContainer)
+                .width(width)
+                .height(height)
+                .backgroundColor('rgba(0,0,0,0)')
+                .showGlobe(false)       
+                .showAtmosphere(false)
+                .showGraticules(false);   
+        myGlobe.controls().autoRotate = true;
+        myGlobe.controls().autoRotateSpeed = 0.4;
+        myGlobe.controls().enableZoom = false;
+        myGlobe
+                .htmlElementsData(Object.entries(cities)
+                    .filter(([, s]) => s.lat != null)
+                    .map(([name, s]) => ({ name, lat: s.lat, lng: s.lon, stations: s.stations })))
+                .htmlLat(d => d.lat)
+                .htmlLng(d => d.lng)
+                .htmlElement(d => {
+                    const el = document.createElement('div');
+                    el.className = 'globe-marker';
+                    len = d.stations.length > 1 ? d.stations.length : "";
+                    el.innerHTML = `<div class="globe-dot">${len}</div><div class="globe-dot-name">${d.name}</div>`;
+                    el.style.pointerEvents = 'auto';
+                    el.style.cursor = 'pointer';
+                    el.dataset.stations = d.stations;
+                    el.onclick = () => {
+                        myGlobe.pointOfView({ lat: d.lat, lng: d.lng, altitude: 0.3 }, 1000);
+                        myGlobe.controls().autoRotate = false;
+                        const rect = el.getBoundingClientRect();
+                        console.log(el.dataset.stations);
+                        hasClickedGlobe = true;
+                        globeStationCityName.textContent = d.name;
+                        openCity(d.stations);
+                    }
+                    let hoverCount = 0;
+                    el.addEventListener('mouseenter', () => {
+                    hoverCount++;
+                    globeContainer.classList.add('marker-hover');
+                    });
+                    el.addEventListener('mouseleave', () => {
+                    if (--hoverCount <= 0) {
+                        hoverCount = 0;
+                        globeContainer.classList.remove('marker-hover');
+                    }
+                    });
+                    return el;
+                })
+        window.addEventListener('resize', () => {
+            const w = globeContainer.clientWidth;
+            const h = globeContainer.clientHeight;
+            myGlobe.width(w).height(h);
+        });
+        fetch('https://unpkg.com/world-atlas@2/countries-110m.json')
+            .then(r => r.json())
+            .then(topo => {
+
+                const occup = topo.objects.countries.geometries.find(
+                    g => g.properties.name === "Palestine"
+                );
+                if (occup) {
+                    occup.properties.name = "West Bank";
+                }
+                const country = topo.objects.countries.geometries.find(
+                    g => g.properties.name === "Israel"
+                );
+                if (country) {
+                    country.properties.name = "Palestine";
+                }
+
+                console.log(occup.arcs);
+                console.log(country.arcs[0]);
+
+                const countries = topojson.feature(topo, topo.objects.countries);
+
+                myGlobe
+                    .polygonsData(countries.features)
+                    .polygonCapColor(() => 'rgba(243,243,243,0.8)')
+                    .polygonSideColor(() => 'rgba(0,0,0,0)')
+                    .polygonStrokeColor(d => ['West Bank'].includes(d.properties.name) ? 'rgba(243,243,243,1)' : '#000');
+                });
+            globeContainer.addEventListener('mouseover', () => {
+                myGlobe.controls().autoRotate = false;
+            });
+            /*globeContainer.addEventListener('mouseleave', () => {
+                if (!hasClickedGlobe) {
+                    setTimeout( () => {
+                        myGlobe.controls().autoRotate = true;
+                    }, 2000)
+                }
+            });*/
+
+    // zoom controls
+    const controls = myGlobe.controls();
+    controls.enableZoom = true;
+
+    let gestureActive = false;
+    let lastScale = 1;
+
+    function zoomBy(factor) {
+    const pov = myGlobe.pointOfView();
+    const alt = Math.max(0.05, Math.min(5, pov.altitude / factor));
+    myGlobe.pointOfView({ altitude: alt }, 0);   
     }
 
-    let newHeight = originalHeight - scrollY;
-    if (newHeight < justOneRadioHeight) newHeight = justOneRadioHeight;
-    intro.style.height = newHeight + 'px';
-}
-
-// The key: restore full text, measure true height at the CURRENT width,
-// then re-apply scroll-based truncation.
-function remeasure() {
-    if (!ready) return;
-
-    everythingElse.textContent = introWords.join(' ');  // full text
-    intro.style.height = 'auto';                        // let it reflow naturally
-
-    originalHeight     = intro.offsetHeight;            // true height at new width
-    justOneRadioHeight = justOneRadio.offsetHeight;
-
-    recalcPxPerWord();
-    lastWordsToShow = -1;                                // force DOM rewrite
-    updateIntroWords();                                 // re-truncate + set height
-    calculateTop();                                     // re-fix body margin
-}
-
-function debounce(fn, delay = 100) {
-    let timer;
-    return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), delay); };
-}
-
-// scroll: cheap, rAF-throttled, no remeasure
-let ticking = false;
-window.addEventListener('scroll', () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => { updateIntroWords(); ticking = false; });
-}, { passive: true });
-
-// resize: expensive, debounced, full remeasure — this is the ONLY resize listener now
-let lastWidth = window.innerWidth;
-
-window.addEventListener('resize', debounce(() => {
-    if (window.innerWidth != lastWidth) {
-        calculateTop();
-        remeasure();
-        return;
+    // scroll = page; ctrl+scroll = zoom 
+    globeContainer.addEventListener('wheel', e => {
+    if (e.ctrlKey) {
+        e.preventDefault();                        
+        if (gestureActive) e.stopPropagation();    
+    } else {
+        e.stopPropagation();                       
     }
-    lastWidth = window.innerWidth;
-}, 20));
+    }, { capture: true, passive: false });
 
-function init() {
-    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    window.scrollTo(0, 0);
+    // safari pinch
+    globeContainer.addEventListener('gesturestart', e => {
+    e.preventDefault();
+    gestureActive = true;
+    lastScale = e.scale;
+    }, { passive: false });
 
-    intro.style.boxSizing = 'border-box';
-    justOneRadio.style.boxSizing = 'border-box';
+    globeContainer.addEventListener('gesturechange', e => {
+    e.preventDefault();
+    zoomBy(e.scale / lastScale);
+    lastScale = e.scale;
+    }, { passive: false });
 
-    originalHeight     = intro.offsetHeight;
-    justOneRadioHeight = justOneRadio.offsetHeight;
+    globeContainer.addEventListener('gestureend', e => {
+    e.preventDefault();
+    gestureActive = false;
+    }, { passive: false });
 
-    recalcPxPerWord();
-    ready = true;
-    updateIntroWords();
-    calculateTop();
+    // open city in globe container
 
-    //remeasure();
-}
+    function openCity(list) {
+        globeStationListContainer.style.display = 'block';
+        globeStationList.innerHTML = "";
+        const pending = [];
 
-const topBarEl = document.getElementById('top-bar');
-new ResizeObserver(() => {
-    // Only re-sync while at the top; while scrolled, the header is
-    // intentionally shrunk and remeasure() handles resizes.
-    if (window.scrollY === 0) calculateTop();
-}).observe(topBarEl);
+        // online first, offline last
+        const ordered = [...list].sort((a, b) => {
+            const aOff = info[a].status === "Offline" ? 1 : 0;
+            const bOff = info[b].status === "Offline" ? 1 : 0;
+            return aOff - bOff;
+        });
 
-// window.addEventListener('load', init);
-init();
+        const needsMoreArrow = ordered.length > 4;
 
-if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(() => { if (ready) remeasure(); });
-}
+        ordered.forEach(station => {
+            globeStationList.style.maxHeight = "282px";
 
-        </script>
+            const st = document.createElement('div');
+            st.classList.add('globe-list-station');
+
+            const stInfo = info[station];
+            if (stInfo.status === "Offline") {
+                st.classList.add('offline');  
+            }
+
+            const stImg = document.createElement('img');
+            stImg.classList.add('globe-list-station-logo');
+            stImg.src = stInfo.logo;
+
+            const stInfoCon = document.createElement('div');
+            stInfoCon.classList.add('globe-list-station-info');
+
+            const stName = document.createElement('div');
+            stName.classList.add('stream-name');
+            stName.textContent = station;
+            stInfoCon.appendChild(stName);
+
+            const stOneLiner = document.createElement('span');
+            stOneLiner.classList.add('one-liner');
+            stOneLiner.textContent = stInfo.oneLiner;
+            stInfoCon.appendChild(stOneLiner);
+
+            st.appendChild(stImg);
+            st.appendChild(stInfoCon);
+            st.addEventListener('click', () => chooseStation(station));
+
+            globeStationList.appendChild(st);
+            pending.push({ stOneLiner, stInfoCon });
+        });
+
+        if (needsMoreArrow) {
+            moreArrow = document.createElement('div');
+            moreArrow.classList.add('more-arrow');
+            moreArrow.textContent = '▼';
+            moreArrow.dataset.status = 'closed';
+            globeStationList.appendChild(moreArrow);
+            moreArrow.addEventListener('click', ()=> {
+                toggleGlobeList(moreArrow);
+            });
+        }
+
+        requestAnimationFrame(() => {
+            pending.forEach(({ stOneLiner, stInfoCon }) => {
+                if (stOneLiner.offsetWidth > stInfoCon.offsetWidth) {
+                    setupOneLinerMarquee(stOneLiner, stInfoCon.offsetWidth + 'px', 'left');
+                }
+            });
+        });
+    }
+
+
+    function toggleGlobeList(moreArrow) {
+        if (moreArrow.dataset.status == 'closed') {
+            globeStationList.style.maxHeight = globeContainer.offsetHeight + "px";
+            moreArrow.textContent = '▲';
+            moreArrow.dataset.status = 'open';
+        }
+        else {
+            globeStationList.style.maxHeight = "282px";
+            moreArrow.textContent = '▼';
+            moreArrow.dataset.status = 'closed';
+        }
+    }
+</script>
