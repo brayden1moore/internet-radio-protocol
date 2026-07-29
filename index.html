@@ -3350,20 +3350,20 @@
                     }, 2000)
                 }
             });*/
+
+            // zoom controls
+            const controls = myGlobe.controls();
+            controls.enableZoom = true;
+
+            let gestureActive = false;
+            let lastScale = 1;
+
+            function zoomBy(factor) {
+            const pov = myGlobe.pointOfView();
+            const alt = Math.max(0.05, Math.min(5, pov.altitude / factor));
+            myGlobe.pointOfView({ altitude: alt }, 0);   
+            }
         }
-
-    // zoom controls
-    const controls = myGlobe.controls();
-    controls.enableZoom = true;
-
-    let gestureActive = false;
-    let lastScale = 1;
-
-    function zoomBy(factor) {
-    const pov = myGlobe.pointOfView();
-    const alt = Math.max(0.05, Math.min(5, pov.altitude / factor));
-    myGlobe.pointOfView({ altitude: alt }, 0);   
-    }
 
     // scroll = page; ctrl+scroll = zoom 
     globeContainer.addEventListener('wheel', e => {
