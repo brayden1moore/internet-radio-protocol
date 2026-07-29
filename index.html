@@ -2713,7 +2713,9 @@
         function getUpdatedInfo(from_endpoint=true) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
             info = JSON.parse(localStorage.getItem('info'));
-            info = notHidden(info);
+            if (info) {
+                info = notHidden(info);
+            }
 
             if (info && from_endpoint == false) {
                 json = info;
