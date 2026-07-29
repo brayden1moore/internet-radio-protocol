@@ -3232,6 +3232,10 @@
         });
 
         // globe
+        const globeStationListContainer = document.getElementById('globe-station-list-container');
+        const globeStationCityName = document.getElementById('globe-station-city-name');
+        const globeStationList = document.getElementById('globe-station-list');
+        function populateGlobe() {
         const width  = globeContainer.clientWidth;
         const height = globeContainer.clientHeight;
 
@@ -3255,10 +3259,6 @@
             }
             cities[city].stations.push(stationName);
         }
-
-        const globeStationListContainer = document.getElementById('globe-station-list-container');
-        const globeStationCityName = document.getElementById('globe-station-city-name');
-        const globeStationList = document.getElementById('globe-station-list');
 
         let hasClickedGlobe = false;
         const myGlobe = Globe()(globeContainer)
@@ -3350,6 +3350,7 @@
                     }, 2000)
                 }
             });*/
+        }
 
     // zoom controls
     const controls = myGlobe.controls();
@@ -3477,4 +3478,12 @@
             moreArrow.dataset.status = 'closed';
         }
     }
+
+    let populatedGlobe = false;
+    setTimeout(() => {
+        if ((populatedGlobe === false) && (info)) {
+            populateGlobe();
+            populatedGlobe = true;
+        }
+    }, 500)
 </script>
