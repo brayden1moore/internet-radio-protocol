@@ -3363,35 +3363,35 @@
             const alt = Math.max(0.05, Math.min(5, pov.altitude / factor));
             myGlobe.pointOfView({ altitude: alt }, 0);   
             }
+
+            // scroll = page; ctrl+scroll = zoom 
+            globeContainer.addEventListener('wheel', e => {
+            if (e.ctrlKey) {
+                e.preventDefault();                        
+                if (gestureActive) e.stopPropagation();    
+            } else {
+                e.stopPropagation();                       
+            }
+            }, { capture: true, passive: false });
+
+            // safari pinch
+            globeContainer.addEventListener('gesturestart', e => {
+            e.preventDefault();
+            gestureActive = true;
+            lastScale = e.scale;
+            }, { passive: false });
+
+            globeContainer.addEventListener('gesturechange', e => {
+            e.preventDefault();
+            zoomBy(e.scale / lastScale);
+            lastScale = e.scale;
+            }, { passive: false });
+
+            globeContainer.addEventListener('gestureend', e => {
+            e.preventDefault();
+            gestureActive = false;
+            }, { passive: false });
         }
-
-    // scroll = page; ctrl+scroll = zoom 
-    globeContainer.addEventListener('wheel', e => {
-    if (e.ctrlKey) {
-        e.preventDefault();                        
-        if (gestureActive) e.stopPropagation();    
-    } else {
-        e.stopPropagation();                       
-    }
-    }, { capture: true, passive: false });
-
-    // safari pinch
-    globeContainer.addEventListener('gesturestart', e => {
-    e.preventDefault();
-    gestureActive = true;
-    lastScale = e.scale;
-    }, { passive: false });
-
-    globeContainer.addEventListener('gesturechange', e => {
-    e.preventDefault();
-    zoomBy(e.scale / lastScale);
-    lastScale = e.scale;
-    }, { passive: false });
-
-    globeContainer.addEventListener('gestureend', e => {
-    e.preventDefault();
-    gestureActive = false;
-    }, { passive: false });
 
     // open city in globe container
 
