@@ -213,8 +213,8 @@
         margin-top: 10px;
         right: 10px;
         background-color: white;
-        width: 48px;
-        height: 48px;
+        width: 40px;
+        height: 40px;
         cursor: pointer;
     }
 
@@ -238,8 +238,8 @@
     }
 
     .top-controls-full-view {
-        top: 90px !important;
-        z-index: 101 !important;
+        top: 65px !important;
+        z-index: 20001 !important;
     }
 
 
@@ -331,7 +331,7 @@
         left: 0;
         z-index: 99;
         border-right: 1px solid black;
-        width: calc(100% - 49px);
+        width: calc(100% - 71px);
         display: none;
     }
 
@@ -434,6 +434,7 @@
     }
 
     #globe-container {
+        transition: 0.2s;
         width: 100%;
     }
 
@@ -536,6 +537,8 @@
         color: rgb(243,243,243); 
         overflow: hidden;
         box-sizing: border-box;
+        z-index: 1;
+        max-height: 100%;
     }
 
     #everythingelse {
@@ -1662,6 +1665,11 @@
             border-bottom: 0.5px solid black;
         }
     @media (min-aspect-ratio: 8/10)  {
+
+        .top-controls-full-view {
+                top: 70px !important;
+            }
+
         .first-row-full-view {
             height: 55px !important;
         }
@@ -1792,6 +1800,10 @@
         @media (orientation: landscape) {
             .first-row-full-view {
                 height: 70px !important;
+            }
+
+            .top-controls-full-view {
+                top: 90px !important;
             }
         
             #globe-station-list-container {
@@ -3192,7 +3204,8 @@
             const barHeight = document.getElementById('top-bar').offsetHeight;
             document.body.style.marginTop = barHeight + 35 + 9 + 'px';
         }
-
+        
+        let isFull = false;
         function updateIntroWords() {
             if (!ready) return;
             const scrollY = window.scrollY;
@@ -3293,7 +3306,7 @@
             else {
                 globeContainerContainer.style.display = 'flex';
                 listContainer.style.display = 'none';     
-                toggleFullView('grow');     
+                //toggleFullView('grow');     
             }
         }
 
@@ -3344,6 +3357,8 @@
         myGlobe.controls().autoRotate = true;
         myGlobe.controls().autoRotateSpeed = 0.4;
         myGlobe.controls().enableZoom = false;
+        myGlobe.controls().maxDistance = 3000; 
+        myGlobe.controls().update();
         myGlobe
                 .htmlElementsData(Object.entries(cities)
                     .filter(([, s]) => s.lat != null)
@@ -3385,6 +3400,18 @@
             const h = globeContainer.clientHeight;
             myGlobe.width(w).height(h);
         });
+
+        setInterval(() => {
+            const w = globeContainer.clientWidth;
+            const h = globeContainer.clientHeight;
+            myGlobe.width(w).height(h);
+        }, 3000);
+        window.addEventListener('click', () => {
+            const w = globeContainer.clientWidth;
+            const h = globeContainer.clientHeight;
+            myGlobe.width(w).height(h);
+        });
+
         fetch('https://unpkg.com/world-atlas@2/countries-110m.json')
             .then(r => r.json())
             .then(topo => {
@@ -3594,6 +3621,7 @@
             fullViewToggle.classList.add('top-controls-full-view');
             fullViewToggle.dataset.status = 'large';
             fullViewToggleIcon.src = 'assets/smallview.png';
+            let isFull = true;
         }
         else {
             globeContainerContainer.classList.remove('full-view');
@@ -3604,6 +3632,7 @@
             fullViewToggle.classList.remove('top-controls-full-view');
             fullViewToggle.dataset.status = 'small';          
             fullViewToggleIcon.src = 'assets/fullview.png';  
+            isFull = false;
         }
     }
     fullViewToggle.addEventListener('click', toggleFullView);
