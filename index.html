@@ -217,6 +217,7 @@
         background-color: rgba(255, 255, 0, 1);
         cursor: pointer;
         transition: 0s;
+        font-family: 'Archivo Bold';
     }
 
     .more-arrow:hover {
@@ -3465,11 +3466,11 @@
     function toggleGlobeList(moreArrow) {
         if (moreArrow.dataset.status == 'closed') {
             globeStationList.style.maxHeight = globeContainer.offsetHeight + "px";
-            moreArrow.textContent = '▲';
+            moreArrow.textContent = 'x';
             moreArrow.dataset.status = 'open';
         }
         else {
-            globeStationList.style.maxHeight = "282px";
+            globeStationList.style.maxHeight = "0px";
             moreArrow.textContent = '▼';
             moreArrow.dataset.status = 'closed';
         }
