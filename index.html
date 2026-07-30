@@ -3372,6 +3372,7 @@
         // toggle list/globe
         const listButton = document.getElementById('list-button');
         const globeButton = document.getElementById('globe-button');
+        const newIcon = document.getElementById('new');
         const listContainer = document.getElementById('list-container');
         const globeContainer = document.getElementById('globe-container');
         const globeContainerContainer = document.getElementById('globe-container-container');
@@ -3381,11 +3382,13 @@
                 globeContainerContainer.style.display = 'none';
                 listContainer.style.display = 'block';
                 criSearch.style.display = 'block';
+                newIcon.style.display = 'block';
             }
             else {
                 globeContainerContainer.style.display = 'flex';
                 listContainer.style.display = 'none';   
                 criSearch.style.display = 'none';  
+                newIcon.style.display = 'none';
                 //toggleFullView('grow');     
             }
         }
