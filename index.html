@@ -199,6 +199,17 @@
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
 
+    .custom-remove {
+        position: absolute;
+        top: 9px;
+        right: 50px;
+        margin: 0px;
+        cursor: pointer;
+        z-index: 12;
+        font-size: 12pt;
+        opacity: 0.2;
+    }
+
     #globe-button {
         border-right: none;
     }
@@ -1913,7 +1924,6 @@
                 modalDescription.textContent = info[station]['about'] + "";
             }
 
-            
             let subtitleText = '';
             modalSubtitleHeader.style.display = 'none';
             modalSubtitle.style.display = 'none';
@@ -2859,19 +2869,26 @@
 
             if (info && from_endpoint == false) {
                 json = info;
+
+                // merge customs into info
+                getCustomStations().forEach(u => {
+                    info[u.name] = untrackedToStation(u);
+                });
+
                 populateStations(json, needSort=firstLoad);
+                getCustomStations().forEach(u => decorateCustomCard(u.name, u.id));   // <-- decorate
+
                 if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
-                    populateTags(json);
+                    populateTags(info);
                 }
-                restoreCustomStations();   
             } else {
                 fetch(`https://internetradioprotocol.org/info?cacheBust=${Math.random()}`)
                     .then(response => response.json())
                     .then(json => {
                         json = notHidden(json);
                         info = json;
-                        restoreCustomStations();
 
+                        // merge customs into info
                         getCustomStations().forEach(u => {
                             info[u.name] = untrackedToStation(u);
                         });
@@ -2879,11 +2896,11 @@
                         if (firstLoad) {
                             populateStations(json, needSort=true);
                             distributeFavorites(favorites);
-                            restoreCustomStations();  
                         }
                         else {
                             populateStations(json);
                         }
+                        getCustomStations().forEach(u => decorateCustomCard(u.name, u.id));   // <-- decorate
 
                         if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
                             populateTags(info);
@@ -3756,50 +3773,44 @@
     }
 
     // Add a custom station into the live info object + render it at the top
+    function decorateCustomCard(name, id) {
+        const el = document.getElementById(name);
+        if (!el) return;
+
+        // remove info icon
+        //const infoIcon = el.querySelector('.info-icon');
+        //if (infoIcon) infoIcon.remove();
+
+        // add ✕ if missing
+        if (!el.querySelector('.custom-remove')) {
+            const x = document.createElement('p');
+            x.className = 'custom-remove';
+            x.textContent = '✕';
+            x.onmouseenter = () => x.style.opacity = '1';
+            x.onmouseleave = () => x.style.opacity = '0.2';
+            x.onclick = (e) => {
+                e.stopPropagation();
+                removeCustomStation(name, id);
+            };
+            el.appendChild(x);
+        }
+    }
+
     function addCustomStation(u, persist = true) {
         if (!info) info = {};
-        // avoid dupes by name
         if (info[u.name]) return;
 
         const station = untrackedToStation(u);
         info[u.name] = station;
 
-        // render it
         populateStations({ [u.name]: station });
 
-        // move it to the top of the Stations list
+        decorateCustomCard(u.name, u.id);
+
         const el = document.getElementById(u.name);
-        if (el && !el.querySelector('.custom-remove')) {
-            const x = document.createElement('p');
-            x.className = 'custom-remove';
-            x.textContent = '✕';
-            x.style.cssText = `
-                position: absolute;
-                top: 8px;
-                right: 30px;
-                margin: 0px;
-                cursor: pointer;
-                z-index: 12;
-                font-size: 14pt;
-                opacity: 0.2;
-            `;
-            x.onmouseenter = () => x.style.opacity = '1';
-            x.onmouseleave = () => x.style.opacity = '0.2';
-            x.onclick = (e) => {
-                e.stopPropagation();
-                removeCustomStation(u.name, u.id);
-            };
-            el.appendChild(x);
-        }
-        if (el) {
-            const infoIcon = el.querySelector('.info-icon');
-            if (infoIcon) infoIcon.remove();
-        }
         const container = document.getElementById('streams-container');
-        if (el && container) {
-            container.insertBefore(el, container.firstChild);
-        }
-        
+        if (el && container) container.insertBefore(el, container.firstChild);
+
         ensureCustomTag();
 
         if (persist) {
