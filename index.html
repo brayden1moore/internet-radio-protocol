@@ -3331,14 +3331,17 @@
         const listContainer = document.getElementById('list-container');
         const globeContainer = document.getElementById('globe-container');
         const globeContainerContainer = document.getElementById('globe-container-container');
+        const criSearch = document.getElementById('add-station-search');
         function toggleView(view) {
             if (view=='list') {
                 globeContainerContainer.style.display = 'none';
                 listContainer.style.display = 'block';
+                criSearch.style.display = 'block';
             }
             else {
                 globeContainerContainer.style.display = 'flex';
-                listContainer.style.display = 'none';     
+                listContainer.style.display = 'none';   
+                criSearch.style.display = 'none';  
                 //toggleFullView('grow');     
             }
         }
