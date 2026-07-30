@@ -199,9 +199,14 @@
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
 
+    #globe-button {
+        border-right: none;
+    }
+
     #add-station-search:focus{
       outline: none;
       border: none;
+      border-left: 1px solid black;
       border-bottom: 1px solid yellow;
       height: 28px;
       padding-bottom: 2.5px;
@@ -212,6 +217,7 @@
         appearance: none;
         background-color: rgb(243, 243, 243);
         border: none;
+        border-left: 1px solid black;
         height: 29px;
         padding: 3px 10px;
         transition: 0.2s ease;
@@ -977,6 +983,7 @@
 
         #player-img {
             height:100%;
+            width: 100%;
             z-index: 999;
         }
 
@@ -2446,6 +2453,21 @@
             }
         }
 
+        // Re-add saved custom stations on load
+        let customStationsRestored = false;
+        function restoreCustomStations() {
+            if (customStationsRestored) return;
+            if (!info) return;             
+            customStationsRestored = true;
+            getCustomStations().forEach(u => addCustomStation(u, false));
+        
+            const t = document.getElementById('Custom-tag');
+            console.log('exists:', !!t);
+            console.log('parent:', t && t.parentElement && t.parentElement.id);
+            console.log('rect:', t && t.getBoundingClientRect());
+            console.log('container display:', getComputedStyle(document.getElementById('genre-tags-container')).display);            
+        }
+
         function populateStations(data, needSort=false) {
             var rerun = 0;
             var live = 0;
@@ -2835,19 +2857,22 @@
 
             if (info && from_endpoint == false) {
                 json = info;
-
                 populateStations(json, needSort=firstLoad);
-
                 if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
                     populateTags(json);
                 }
-                
+                restoreCustomStations();   
             } else {
                 fetch(`https://internetradioprotocol.org/info?cacheBust=${Math.random()}`)
                     .then(response => response.json())
                     .then(json => {
                         json = notHidden(json);
                         info = json;
+                        restoreCustomStations();
+
+                        getCustomStations().forEach(u => {
+                            info[u.name] = untrackedToStation(u);
+                        });
 
                         if (firstLoad) {
                             populateStations(json, needSort=true);
@@ -2859,7 +2884,7 @@
                         }
 
                         if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
-                            populateTags(json);
+                            populateTags(info);
                         }
                         localStorage.setItem('info', JSON.stringify(json));
                     })
@@ -3714,6 +3739,20 @@
         };
     }
 
+    function ensureCustomTag() {
+        console.log('ensureCustomTag called', document.getElementById('Custom-tag'));
+
+        if (document.getElementById('Custom-tag')) return;
+        const genreTagsContainer = document.getElementById('genre-tags-container');
+        const t = document.createElement('div');
+        t.id = 'Custom-tag';
+        t.classList.add('genre-tag', 'tag');
+        t.textContent = 'Custom';
+        t.dataset.type = 'genre';
+        t.addEventListener('click', () => toggleTag(t));
+        genreTagsContainer.appendChild(t);
+    }
+
     // Add a custom station into the live info object + render it at the top
     function addCustomStation(u, persist = true) {
         if (!info) info = {};
@@ -3728,18 +3767,38 @@
 
         // move it to the top of the Stations list
         const el = document.getElementById(u.name);
+        if (el && !el.querySelector('.custom-remove')) {
+            const x = document.createElement('p');
+            x.className = 'custom-remove';
+            x.textContent = '✕';
+            x.style.cssText = `
+                position: absolute;
+                top: 8px;
+                right: 30px;
+                margin: 0px;
+                cursor: pointer;
+                z-index: 12;
+                font-size: 14pt;
+                opacity: 0.2;
+            `;
+            x.onmouseenter = () => x.style.opacity = '1';
+            x.onmouseleave = () => x.style.opacity = '0.2';
+            x.onclick = (e) => {
+                e.stopPropagation();
+                removeCustomStation(u.name, u.id);
+            };
+            el.appendChild(x);
+        }
+        if (el) {
+            const infoIcon = el.querySelector('.info-icon');
+            if (infoIcon) infoIcon.remove();
+        }
         const container = document.getElementById('streams-container');
         if (el && container) {
             container.insertBefore(el, container.firstChild);
         }
-
-        if (dark && el) {
-            el.classList.add('dark-station');
-            el.querySelector('.stream-name')?.classList.add('dark-stream-name');
-            el.querySelector('.favorite-star')?.classList.add('dark-favorite-star');
-            el.querySelector('.logo-and-overlay')?.classList.add('dark-logo-overlay');
-            el.querySelectorAll('.tag').forEach(t => t.classList.add('dark-tag'));
-        }
+        
+        ensureCustomTag();
 
         if (persist) {
             const saved = getCustomStations();
@@ -3750,9 +3809,31 @@
         }
     }
 
-    // Re-add saved custom stations on load
-    function restoreCustomStations() {
-        getCustomStations().forEach(u => addCustomStation(u, false));
+    function removeCustomStation(name, id) {
+        // remove from storage
+        const saved = getCustomStations().filter(s => s.id !== id);
+        saveCustomStations(saved);
+
+        // remove from in-memory info
+        if (info && info[name]) delete info[name];
+
+        // if it's currently playing, stop
+        if (player.dataset.id === name) {
+            playerAudio.pause();
+            player.classList.remove('player-expanded');
+            player.dataset.id = '';
+        }
+
+        // remove from any favorites list too, to avoid a dangling ref
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        if (favorites.includes(name)) {
+            favorites = favorites.filter(f => f !== name);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+
+        // remove the DOM element (check all containers + favorites)
+        const el = document.getElementById(name);
+        if (el && el.parentNode) el.parentNode.removeChild(el);
     }
 
     // ---- Search UI ----
@@ -3768,7 +3849,7 @@
             position: absolute;
             top: 35px;
             right: -1px;
-            width: 261px;
+            width: 275px;
             max-height: 300px;
             overflow-y: auto;
             background: white;
@@ -3809,6 +3890,7 @@
                 addCustomStation(u);
                 box.style.display = 'none';
                 addStationSearch.value = '';
+                
             };
             box.appendChild(row);
         });
