@@ -132,6 +132,10 @@
             <div id="view-select-divider"></div>
             <img class="view-icon" id="globe-button" src="assets/globeicon.png">
             <div id="new">New!</div>
+            <div id="add-station">
+                <img class="view-icon" id="plus-button" src="assets/plusicon.png">
+                <input id="add-station-search" placeholder='Search the Community Radio Index'></input>
+            </div>
         </div>
         <div id="globe-and-list-container">
             <div id="globe-container-container">
@@ -195,10 +199,35 @@
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
 
+    #add-station-search:focus{
+      outline: none;
+      border: none;
+      border-bottom: 1px solid yellow;
+      height: 28px;
+      padding-bottom: 2.5px;
+    }
+
+    #add-station-search {
+        -webkit-appearance: none;
+        appearance: none;
+        background-color: rgb(243, 243, 243);
+        border: none;
+        height: 29px;
+        padding: 3px;
+        transition: 0.2s ease;
+        width: 255px;
+        font-size: 16px;
+    }
+
+    #add-station {
+        display: flex;
+        align-items: end;
+    }
+
     #globe-and-list-container {
         margin-left: -0.5px;
         width: calc(100% - 1.5px);
-        height: 70vh;
+        /*height: 70vh;*/
     }
 
     #full-view-toggle img {
@@ -256,10 +285,11 @@
 
     #new {
         position: absolute;
-        right: -14px;
+        left: 50px;
         top:-7px;
         transform: rotate(45deg);
         background-color: yellow;
+        z-index: 1000;
     }
 
     .more-arrow {
@@ -385,12 +415,7 @@
         transform: scale(1.15);
         background-color: rgb(255,255,0,1) !important;
     }
-    
-    #view-select-divider {
-        height: 100%;
-        width: 0px;
-        border-right: 1px solid black;
-    }
+
 
     #list-container {
         padding-top: 18px;
@@ -414,6 +439,10 @@
         width: 25px;
         padding: 5px;
         background-color: white;
+    }
+
+    .view-icon:not(:last-child) {
+        border-right: 1px solid black;
     }
 
     .view-icon:hover {
@@ -829,7 +858,7 @@
     #search-stations:focus{
       outline: none;
       border: none;
-      border-bottom: 1px solid #00acff;
+      border-bottom: 1px solid yellow;
     }
 
     #search-bar {
@@ -1113,7 +1142,6 @@
         }
 
         #play-random-button {
-
             align-items: center;
             cursor: pointer;
             width: fit-content;
@@ -1131,6 +1159,7 @@
             color: rgb(255, 255, 255);
             height: 34px;
         }
+
         #play-random-button:hover {
             background-color: rgb(255, 255, 255);
             color: rgb(0, 0, 0);
@@ -2794,6 +2823,7 @@
 
         let firstLoad = true;
         let info;
+        let untracked;
         function getUpdatedInfo(from_endpoint=true) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
             info = JSON.parse(localStorage.getItem('info'));
@@ -2820,6 +2850,7 @@
                         if (firstLoad) {
                             populateStations(json, needSort=true);
                             distributeFavorites(favorites);
+                            restoreCustomStations();  
                         }
                         else {
                             populateStations(json);
@@ -3641,5 +3672,168 @@
       if (event.keyCode === 27) { 
         toggleFullView('shrink');
       }
+    });
+
+    // ---- Untracked / Custom stations ----
+
+    let untrackedCache = null;
+
+    function getCustomStations() {
+        return JSON.parse(localStorage.getItem('customStations')) || [];
+    }
+
+    function saveCustomStations(list) {
+        localStorage.setItem('customStations', JSON.stringify(list));
+    }
+
+    // Convert an untracked.json entry into the info[] shape populateStations expects
+    function untrackedToStation(u) {
+        return {
+            oneLiner: u.name,
+            location: u.city || u.country || 'Unknown',
+            genres: ['Custom'],
+            status: 'Live',
+            streamLink: u.stream_url,
+            mainLink: u.website_url || u.stream_url,
+            infoLink: u.website_url || '',
+            supportLink: u.website_url || '',
+            logo: u.logo_url ? (u.logo_url.startsWith('http') ? u.logo_url : 'https://api.community-radio-index.com' + u.logo_url) : 'assets/justear.png',
+            about: u.description || '',
+            lat: u.latitude,
+            lon: u.longitude,
+            category: 'Station',
+            hidden: false,
+            tunerOnly: false,
+            criId: u.id,
+            custom: true
+        };
+    }
+
+    // Add a custom station into the live info object + render it at the top
+    function addCustomStation(u, persist = true) {
+        if (!info) info = {};
+        // avoid dupes by name
+        if (info[u.name]) return;
+
+        const station = untrackedToStation(u);
+        info[u.name] = station;
+
+        // render it
+        populateStations({ [u.name]: station });
+
+        // move it to the top of the Stations list
+        const el = document.getElementById(u.name);
+        const container = document.getElementById('streams-container');
+        if (el && container) {
+            container.insertBefore(el, container.firstChild);
+        }
+
+        if (dark && el) {
+            el.classList.add('dark-station');
+            el.querySelector('.stream-name')?.classList.add('dark-stream-name');
+            el.querySelector('.favorite-star')?.classList.add('dark-favorite-star');
+            el.querySelector('.logo-and-overlay')?.classList.add('dark-logo-overlay');
+            el.querySelectorAll('.tag').forEach(t => t.classList.add('dark-tag'));
+        }
+
+        if (persist) {
+            const saved = getCustomStations();
+            if (!saved.some(s => s.id === u.id)) {
+                saved.push(u);
+                saveCustomStations(saved);
+            }
+        }
+    }
+
+    // Re-add saved custom stations on load
+    function restoreCustomStations() {
+        getCustomStations().forEach(u => addCustomStation(u, false));
+    }
+
+    // ---- Search UI ----
+
+    const addStationSearch = document.getElementById('add-station-search');
+    let addStationResults;
+
+    function ensureResultsBox() {
+        if (addStationResults) return addStationResults;
+        addStationResults = document.createElement('div');
+        addStationResults.id = 'add-station-results';
+        addStationResults.style.cssText = `
+            position: absolute;
+            top: 35px;
+            right: -1px;
+            width: 261px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid black;
+            z-index: 10001;
+            display: none;
+        `;
+        document.getElementById('add-station').appendChild(addStationResults);
+        document.getElementById('add-station').style.position = 'relative';
+        return addStationResults;
+    }
+
+    async function loadUntracked() {
+        if (untrackedCache) return untrackedCache;
+        const res = await fetch(`https://one.radio/untracked.json?cacheBust=${Math.random()}`);
+        untrackedCache = await res.json();
+        return untrackedCache;
+    }
+
+    function renderResults(matches) {
+        const box = ensureResultsBox();
+        box.innerHTML = '';
+        if (matches.length === 0) {
+            box.style.display = 'none';
+            return;
+        }
+        matches.slice(0, 30).forEach(u => {
+            const row = document.createElement('div');
+            row.style.cssText = `
+                display: flex; align-items: center; gap: 8px;
+                padding: 6px; cursor: pointer; border-bottom: 0.5px solid black;
+            `;
+            row.onmouseenter = () => row.style.background = 'yellow';
+            row.onmouseleave = () => row.style.background = 'white';
+            const label = [u.name, u.city, u.country].filter(Boolean).join(' · ');
+            row.innerHTML = `<div style="font-size:10pt;">${label}</div>`;
+            row.onclick = () => {
+                addCustomStation(u);
+                box.style.display = 'none';
+                addStationSearch.value = '';
+            };
+            box.appendChild(row);
+        });
+        box.style.display = 'block';
+    }
+
+    let searchDebounce;
+    addStationSearch.addEventListener('input', () => {
+        clearTimeout(searchDebounce);
+        const q = addStationSearch.value.trim().toLowerCase();
+        if (q.length < 2) {
+            if (addStationResults) addStationResults.style.display = 'none';
+            return;
+        }
+        searchDebounce = setTimeout(async () => {
+            const data = await loadUntracked();
+            const matches = data.filter(u =>
+                (u.name && u.name.toLowerCase().includes(q)) ||
+                (u.city && u.city.toLowerCase().includes(q)) ||
+                (u.country && u.country.toLowerCase().includes(q)) ||
+                (u.genre_focus && u.genre_focus.toLowerCase().includes(q))
+            );
+            renderResults(matches);
+        }, 200);
+    });
+
+    // close results when clicking elsewhere
+    document.addEventListener('click', (e) => {
+        if (addStationResults && !document.getElementById('add-station').contains(e.target)) {
+            addStationResults.style.display = 'none';
+        }
     });
 </script>
