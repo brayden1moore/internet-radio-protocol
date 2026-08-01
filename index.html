@@ -732,20 +732,20 @@
     }
 
     .modal-header {
-        border:1px solid black;
-        border-bottom: none;
+        border: none;
+        border-bottom: 1px solid black;
         margin-bottom: 0px;
-        padding: 8px;
+        padding: 8px 0px;
         margin-top: 15px;
-        background-color: #000000;
-        color:white;
+        color:black;
+        font-family: "Archivo SemiBold";
     }
 
     .modal-description {
         margin-top: 0px;
         line-height: 1.2em;
-        border: 1px solid black;
-        padding: 8px;
+        border: none;
+        padding: 8px 0px;
     }
 
     .a-link {
@@ -1615,7 +1615,7 @@
         .the-header {
             width: 100%;
             color: rgb(0, 0, 0);
-            font-family: "Archivo Semibold"; 
+            font-family: "ArchivoBold"; 
             font-size: 36pt; 
             line-height:0.75em; 
             letter-spacing:-0.05em; 
@@ -1933,7 +1933,7 @@
                 modalSubtitle.style.display = 'block';
                 modalSubtitleHeader.style.display = 'block';
                 modalShow.style.display = 'block';
-                subtitleText = `<span style="font-family:'Archivo Semibold';">` + info[station]['nowPlaying'] + '</span>';
+                subtitleText = info[station]['nowPlaying'];
             }
             if (info[station]['nowPlayingSubtitle'] != null) { 
                 subtitleText = subtitleText + '<br>' +  info[station]['nowPlayingSubtitle'];
