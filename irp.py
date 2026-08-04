@@ -3040,7 +3040,7 @@ def main_loop():
 
             # make summary
             summary_list = []
-            for _,v in updated:
+            for _,v in updated.items():
                 summary_item = {
                     "name":v['name'],
                     "oneLiner":v['oneLiner'],
