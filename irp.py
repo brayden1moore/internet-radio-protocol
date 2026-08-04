@@ -1547,12 +1547,14 @@ class Stream:
         # convert to xbm
         size = 32
         img = Image.open(logo_file).convert("L")
-        img = ImageOps.autocontrast(img, cutoff=2)          
+        img = ImageOps.autocontrast(img, cutoff=2)
         img = img.resize((size, size), Image.LANCZOS)
-        img = img.point(lambda p: 255 if p > 128 else 0, mode="1") 
-       
-        img.save(f'logos/{self.name.replace(' ','_')}.xbm')
+        img = img.point(lambda p: 255 if p > 128 else 0, mode="1")
+        raw = img.tobytes()   # 128 bytes
 
+        filename = f"logos/{self.name.replace(' ', '_')}.xbm"
+        with open(filename, "wb") as f:  
+            f.write(raw)
 
 ## define streams
 streams = [
