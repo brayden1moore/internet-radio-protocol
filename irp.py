@@ -11,6 +11,7 @@ import subprocess
 import traceback
 import requests
 import tempfile
+import hashlib
 import asyncio
 import logging
 import shutil
@@ -30,6 +31,11 @@ TIMEOUT = 15
 
 with open('cri_ids.json','r') as f:
     cri = json.load(f)
+
+def logo_hash(safe):
+    # hash the canonical PNG so the device can tell if art changed
+    with open(f'logos/{safe}_96.png', 'rb') as f:
+        return hashlib.md5(f.read()).hexdigest()[:12]
 
 def clean_text(text):
 
@@ -1520,53 +1526,35 @@ class Stream:
             self.show_logo = None
 
     def process_logos(self):
-        logo_file = self.logo.replace('https://internetradioprotocol.org/','')
+        logo_file = self.logo.replace('https://internetradioprotocol.org/', '')
 
         tmp = {}
         logo = Image.open(logo_file).convert('RGB')
 
-        logo_96 = logo.resize((96,  96)).convert('RGB')
-        logo_60 = logo.resize((60,  60)).convert('RGB')
-        logo_25 = logo.resize((25,  25)).convert('RGB')
-        logo_176 = logo.resize((176, 176)).convert('RGB')      
-        logo_216 = logo.resize((216, 216)).convert('RGB')       
+        for i in [96, 60, 25, 176, 216]:
+            tmp[f'logo_{i}'] = logo.resize((i, i)).convert('RGB')
 
-        # save images to dict
-        tmp['logo_96'] = logo_96
-        tmp['logo_60']  = logo_60
-        tmp['logo_25'] = logo_25
-        tmp['logo_176'] = logo_176
-        tmp['logo_216'] = logo_216
+        safe = self.name.replace(' ', '_')
 
-        # save images to lib
-        for i in ['96','60','25','176','216']:
-            entire_path = f'logos/{self.name.replace(' ','_')}_{i}.pkl'
-            with open(entire_path, 'wb') as f:
-                pickle.dump(tmp[f'logo_{i}'], f)
+        # write PNG for the Pi 
+        for i in ['96', '60', '25', '176', '216']:
+            tmp[f'logo_{i}'].save(f'logos/{safe}_{i}.png', format='PNG', optimize=True)
 
-        # convert to xbm
+        # ---- XBM for ESP32 ----
         size = 32
-        inner = 30   # logo shrunk to 30x30, leaving room for 1px border on all sides
-
+        inner = 30
         img = Image.open(logo_file).convert("L")
         img = ImageOps.autocontrast(img, cutoff=2)
-        img = img.resize((inner, inner), Image.LANCZOS)          # shrink to 30x30
+        img = img.resize((inner, inner), Image.LANCZOS)
         img = img.point(lambda p: 255 if p > 128 else 0, mode="1")
-
-        # build the final 32x32: black canvas, paste the 30x30 logo at (1,1)
-        canvas = Image.new("1", (size, size), 0)                 # 0 = black background
-        canvas.paste(img, (1, 1))                                # inset by 1px all sides
-
-        # draw a 1px white border around the outer edge
+        canvas = Image.new("1", (size, size), 0)
+        canvas.paste(img, (1, 1))
         draw = ImageDraw.Draw(canvas)
-        draw.rectangle([0, 0, size - 1, size - 1], outline=1)    # outline=1 = white frame
-
-        raw = canvas.tobytes()    
-        filename = f"logos/{self.name.replace(' ', '_')}.xbm"          
+        draw.rectangle([0, 0, size - 1, size - 1], outline=1)
+        raw = canvas.tobytes()
         LSB_LOOKUP = bytes(int('{:08b}'.format(b)[::-1], 2) for b in range(256))
-                     # clean 128 bytes, 32x32
-        raw = raw.translate(LSB_LOOKUP)                          # keep the bit-reversal
-        with open(filename, "wb") as f:
+        raw = raw.translate(LSB_LOOKUP)
+        with open(f"logos/{safe}.xbm", "wb") as f:
             f.write(raw)
 
 ## define streams
@@ -3056,19 +3044,22 @@ def main_loop():
 
             # make summary
             summary_list = []
-            for _,v in updated.items():
+            for _, v in updated.items():
                 rendered = html.unescape(v['oneLiner']).replace('&amp;', '&').strip()
                 if v['status'] == 'Offline':
                     rendered = 'Offline'
+                safe = v['name'].replace(' ', '_')
                 summary_item = {
-                    "name":v['name'],
-                    "oneLiner":rendered,
-                    "status":v['status'],
-                    "location":v['location'],
-                    "genres":v['genres'],
-                    "streamLink":v['streamLink'],
-                    "logo":f'https://one.radio/logos/{v['name'].replace(' ','_')}.xbm',
-                    "hidden":v['hidden']
+                    "name": v['name'],
+                    "oneLiner": rendered,
+                    "status": v['status'],
+                    "location": v['location'],
+                    "genres": v['genres'],
+                    "streamLink": v['streamLink'],
+                    "logo": f'https://one.radio/logos/{safe}.xbm',  
+                    "logo_png_base": f'https://one.radio/logos/{safe}',  
+                    "logo_hash": logo_hash(safe),                    
+                    "hidden": v['hidden'],
                 }
                 summary_list.append(summary_item)
             summary = {
