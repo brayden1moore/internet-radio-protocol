@@ -17,6 +17,7 @@ import shutil
 import random
 import pickle
 import time
+import html
 import json
 import pytz
 import re
@@ -3041,9 +3042,12 @@ def main_loop():
             # make summary
             summary_list = []
             for _,v in updated.items():
+                rendered = html.unescape(v['oneLiner']).replace('&amp;', '&').strip()
+                if v['status'] == 'Offline':
+                    rendered = 'Offline'
                 summary_item = {
                     "name":v['name'],
-                    "oneLiner":v['oneLiner'],
+                    "oneLiner":rendered,
                     "status":v['status'],
                     "location":v['location'],
                     "genres":v['genres'],
