@@ -3038,6 +3038,26 @@ def main_loop():
             with open('info.json', 'w') as f:
                 json.dump(updated, f, indent=4, sort_keys=True, default=str)
 
+            # make summary
+            summary_list = []
+            for _,v in updated:
+                summary_item = {
+                    "name":v['name'],
+                    "oneLiner":v['oneLiner'],
+                    "status":v['status'],
+                    "location":v['location'],
+                    "genres":v['genres'],
+                    "streamLink":v['streamLink'],
+                    "logo":f'https://one.radio/logos/{v['name'].replace(' ','_')}.xbm',
+                    "hidden":v['hidden']
+                }
+                summary_list.append(summary_item)
+            summary = {
+                "stations":summary_list
+            }
+            with open('summary.json', 'w') as f:
+                json.dump(summary, f, indent=4, sort_keys=True, default=str)
+
             error_lines = [val for key, val in error_dict.items()]
             with open('errorlog.txt', 'w') as log:
                 log.write('\n'.join(error_lines))
