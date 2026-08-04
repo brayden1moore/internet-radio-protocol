@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from zoneinfo import ZoneInfo
 import urllib.request, json
 from io import BytesIO
-from PIL import Image
+from PIL import Image, ImageOps
 import subprocess
 import traceback
 import requests
@@ -1542,6 +1542,15 @@ class Stream:
             entire_path = f'logos/{self.name.replace(' ','_')}_{i}.pkl'
             with open(entire_path, 'wb') as f:
                 pickle.dump(tmp[f'logo_{i}'], f)
+
+        # convert to xbm
+        size = 32
+        img = Image.open(logo_file).convert("L")
+        img = ImageOps.autocontrast(img, cutoff=2)          
+        img = img.resize((size, size), Image.LANCZOS)
+        img = img.point(lambda p: 255 if p > 128 else 0, mode="1") 
+       
+        img.save(f'logos/{self.name.replace(' ','_')}_{i}.xbm')
 
 
 ## define streams
