@@ -1550,7 +1550,7 @@ class Stream:
         img = img.resize((size, size), Image.LANCZOS)
         img = img.point(lambda p: 255 if p > 128 else 0, mode="1") 
        
-        img.save(f'logos/{self.name.replace(' ','_')}_{i}.xbm')
+        img.save(f'logos/{self.name.replace(' ','_')}.xbm')
 
 
 ## define streams
