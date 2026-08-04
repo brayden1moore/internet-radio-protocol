@@ -1534,11 +1534,16 @@ class Stream:
         for i in [96, 60, 25, 176, 216]:
             tmp[f'logo_{i}'] = logo.resize((i, i)).convert('RGB')
 
-        safe = self.name.replace(' ', '_')
-
         # write PNG for the Pi 
+        safe = self.name.replace(' ', '_')
         for i in ['96', '60', '25', '176', '216']:
-            tmp[f'logo_{i}'].save(f'logos/{safe}_{i}.png', format='PNG', optimize=True)
+            buf = io.BytesIO()
+            tmp[f'logo_{i}'].save(buf, format='PNG', optimize=True)
+            data = buf.getvalue()
+            with open(f'logos/{safe}_{i}.png', 'wb') as f:
+                f.write(data)
+            if i == '96':
+                self.logo_hash = hashlib.md5(data).hexdigest()[:12]
 
         # ---- XBM for ESP32 ----
         size = 32
@@ -3058,7 +3063,7 @@ def main_loop():
                     "streamLink": v['streamLink'],
                     "logo": f'https://one.radio/logos/{safe}.xbm',  
                     "logo_png_base": f'https://one.radio/logos/{safe}',  
-                    "logo_hash": logo_hash(safe),                    
+                    "logo_hash": getattr(v, 'logo_hash', None),
                     "hidden": v['hidden'],
                 }
                 summary_list.append(summary_item)
