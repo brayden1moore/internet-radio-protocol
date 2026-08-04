@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from zoneinfo import ZoneInfo
 import urllib.request, json
 from io import BytesIO
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageDraw
 import subprocess
 import traceback
 import requests
@@ -1546,15 +1546,26 @@ class Stream:
 
         # convert to xbm
         size = 32
+        inner = 30   # logo shrunk to 30x30, leaving room for 1px border on all sides
+
         img = Image.open(logo_file).convert("L")
         img = ImageOps.autocontrast(img, cutoff=2)
-        img = img.resize((size, size), Image.LANCZOS)
+        img = img.resize((inner, inner), Image.LANCZOS)          # shrink to 30x30
         img = img.point(lambda p: 255 if p > 128 else 0, mode="1")
 
-        filename = f"logos/{self.name.replace(' ', '_')}.xbm"
-        raw = img.tobytes()
+        # build the final 32x32: black canvas, paste the 30x30 logo at (1,1)
+        canvas = Image.new("1", (size, size), 0)                 # 0 = black background
+        canvas.paste(img, (1, 1))                                # inset by 1px all sides
+
+        # draw a 1px white border around the outer edge
+        draw = ImageDraw.Draw(canvas)
+        draw.rectangle([0, 0, size - 1, size - 1], outline=1)    # outline=1 = white frame
+
+        raw = canvas.tobytes()    
+        filename = f"logos/{self.name.replace(' ', '_')}.xbm"          
         LSB_LOOKUP = bytes(int('{:08b}'.format(b)[::-1], 2) for b in range(256))
-        raw = raw.translate(LSB_LOOKUP)
+                     # clean 128 bytes, 32x32
+        raw = raw.translate(LSB_LOOKUP)                          # keep the bit-reversal
         with open(filename, "wb") as f:
             f.write(raw)
 
