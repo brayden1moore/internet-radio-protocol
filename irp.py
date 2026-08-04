@@ -1550,10 +1550,12 @@ class Stream:
         img = ImageOps.autocontrast(img, cutoff=2)
         img = img.resize((size, size), Image.LANCZOS)
         img = img.point(lambda p: 255 if p > 128 else 0, mode="1")
-        raw = img.tobytes()   # 128 bytes
 
         filename = f"logos/{self.name.replace(' ', '_')}.xbm"
-        with open(filename, "wb") as f:  
+        raw = img.tobytes()
+        LSB_LOOKUP = bytes(int('{:08b}'.format(b)[::-1], 2) for b in range(256))
+        raw = raw.translate(LSB_LOOKUP)
+        with open(filename, "wb") as f:
             f.write(raw)
 
 ## define streams
