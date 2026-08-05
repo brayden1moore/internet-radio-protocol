@@ -573,8 +573,9 @@
         margin-right: 8px;
     }
 
-    #everythingelse {
-        transition: opacity 0.2s ease;
+    #header-scroll-spacer {
+        height: 0px;
+        width: 100%;
     }
 
     #intro {
@@ -598,10 +599,6 @@
 
     #intro-text-container {
         box-sizing: border-box;
-    }
-
-    #top-bar {
-        transition: 0.2s ease;
     }
 
     #oneradio {
@@ -636,6 +633,7 @@
 
     #logo-container {
         height: auto;
+        background-color: white;
         display: flex;
         align-items: center;
     }
@@ -1131,21 +1129,28 @@
         }
 
         #top-bar {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            top: 17.5px;
-            left:17.5px;
-            border: 1px solid black;
-            width: calc(100% - 37.5px);
-            z-index: 100;
-            position: fixed;
-            margin-bottom: 25px;
-            display: block;
-            align-items: center;
-            color: black;
+        position: fixed;
+        top: 17.5px;
+        left: 17.5px;
+        width: calc(100% - 37.5px);
+        z-index: 100;
+        /* remove margin-top / margin-bottom */
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: saturate(180%) blur(20px);
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+        border: 1px solid black;
+        display: block;
+        align-items: center;
+        color: black;
         }
 
+        .top-bar-scrolled {
+            position: fixed;
+            width: calc(100% - 37.5px) !important;
+            top: 17.5px;
+            margin-top: 0px !important;
+            left:17.5px;
+        }
 
         #last-up {
             display: flex;
@@ -1463,12 +1468,19 @@
         }
 
         .show-card {
-            transition: 0.1s ease;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            width: 200px;
             position: relative;
-            width: 200px !important;
             height: 100%;
             overflow: hidden;
             cursor: pointer;
+        }
+
+        .show-card.show-card-expanded {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .show-card:hover {
@@ -1611,8 +1623,8 @@
             background-color: #FFFFFF; 
             font-size: 10pt; 
             padding-bottom: 15vh !important;
-            transition: 0.2s ease;
         }
+
         .the-header {
             width: 100%;
             color: rgb(0, 0, 0);
@@ -1752,7 +1764,7 @@
             font-size: 14pt;
         }
 
-        .show-card {
+        .show-card-expanded {
             width: 300px !important;
         }
 
@@ -2027,6 +2039,7 @@
                 });
             }
             else {
+                earRotate.style.display = 'none';
                 playIcon.style.display = 'block';
                 pauseIcon.style.display = 'none';
                 playerAudio.pause();
@@ -2558,6 +2571,9 @@
                             </div>`
 
                         showContainer.appendChild(showDiv);
+                        const showCard = showDiv.querySelector('.show-card');
+                        showCard.classList.add('show-card-expanded');
+
                     }
 
                     showsAdded++
@@ -2667,8 +2683,10 @@
                             offliners.push(stationDiv);
                         }
                         else if (category === 'Mixtape') {
-                            stationDiv.dataset.container = 'mixtapes-container'
-                            mixtapeContainer.appendChild(stationDiv);
+                            if (!document.getElementById(stationName)) {
+                                stationDiv.dataset.container = 'mixtapes-container';
+                                mixtapeContainer.appendChild(stationDiv);
+                            }
                         }
                         else {
                             stationDiv.dataset.container = 'streams-container';
@@ -3262,113 +3280,53 @@
         }
 
         const everythingElse = document.getElementById('everythingelse');
-        const justOneRadio   = document.getElementById('main-logo');
-        const introContainer = document.getElementById('intro-text-container');
-        const intro          = document.getElementById('intro');
+        const topBar = document.getElementById('top-bar');
+        const intro  = document.getElementById('intro');
+        const logo   = document.getElementById('main-logo');
 
-        const introWords = everythingElse.textContent.trim().split(/\s+/);
-        const totalWords = introWords.length;
+        let introFullHeight, logoHeight, collapseDistance, barFullHeight, topOffset;
 
-        let originalHeight, justOneRadioHeight, pxPerWord;
-        let lastWordsToShow = -1;
-        let ready = false;
+        function measure() {
+            intro.style.height = 'auto';
+            everythingElse.style.opacity = '1';
 
-        function recalcPxPerWord() {
-            const fontSizePx = parseFloat(getComputedStyle(everythingElse).fontSize);
-            pxPerWord = 5 * (34 / fontSizePx);
-        }
+            topOffset = parseFloat(getComputedStyle(topBar).marginTop) || 0;
 
-        function calculateTop() {
-            const barHeight = document.getElementById('top-bar').offsetHeight;
-            document.body.style.marginTop = barHeight + 35 + 9 + 'px';
-        }
-        
-        let isFull = false;
-        function updateIntroWords() {
-            if (!ready) return;
-            const scrollY = window.scrollY;
+            introFullHeight = intro.offsetHeight;
+            logoHeight = logo.offsetHeight;
+            collapseDistance = introFullHeight - logoHeight;
+            barFullHeight = topBar.offsetHeight;
 
-            let wordsToRemove = Math.floor(scrollY / pxPerWord);
-            wordsToRemove = Math.max(0, Math.min(wordsToRemove, totalWords));
-            const wordsToShow = totalWords - wordsToRemove;
-
-            if (wordsToShow !== lastWordsToShow) {
-                everythingElse.textContent = introWords.slice(0, wordsToShow).join(' ');
-                lastWordsToShow = wordsToShow;
-            }
-
-            let newHeight = originalHeight - scrollY;
-            if (newHeight < justOneRadioHeight) newHeight = justOneRadioHeight;
-            intro.style.height = newHeight + 'px';
-        }
-
-        function remeasure() {
-            if (!ready) return;
-
-            everythingElse.textContent = introWords.join(' '); 
-            intro.style.height = 'auto';                       
-
-            originalHeight     = intro.offsetHeight;          
-            justOneRadioHeight = justOneRadio.offsetHeight;
-
-            recalcPxPerWord();
-            lastWordsToShow = -1;                              
-            updateIntroWords();                              
-            calculateTop();                                   
-        }
-
-        function debounce(fn, delay = 100) {
-            let timer;
-            return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), delay); };
+            updateHeader();
         }
 
         let ticking = false;
-        window.addEventListener('scroll', () => {
-            if (ticking) return;
-            ticking = true;
-            requestAnimationFrame(() => { updateIntroWords(); ticking = false; });
-        }, { passive: true });
-
-        let lastWidth = window.innerWidth;
-
-        window.addEventListener('resize', debounce(() => {
-            if (window.innerWidth != lastWidth) {
-                calculateTop();
-                remeasure();
-                return;
-            }
-            lastWidth = window.innerWidth;
-        }, 20));
-
-        function init() {
-            if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-            window.scrollTo(0, 0);
-
-            intro.style.boxSizing = 'border-box';
-            justOneRadio.style.boxSizing = 'border-box';
-
-            originalHeight     = intro.offsetHeight;
-            justOneRadioHeight = justOneRadio.offsetHeight;
-
-            recalcPxPerWord();
-            ready = true;
-            updateIntroWords();
-            calculateTop();
-
-            //remeasure();
+        function onScroll() {
+            if (!ticking) { requestAnimationFrame(updateHeader); ticking = true; }
         }
 
-        const topBarEl = document.getElementById('top-bar');
-        new ResizeObserver(() => {
-            if (window.scrollY === 0) calculateTop();
-        }).observe(topBarEl);
+        function updateHeader() {
+        ticking = false;
+        const y = window.scrollY;
+        const p = collapseDistance > 0 ? Math.min(y / collapseDistance, 1) : 1;
 
-        init();
+        intro.style.height = (introFullHeight - collapseDistance * p) + 'px';
+        everythingElse.style.opacity = String(1 - p);
+        everythingElse.style.pointerEvents = p > 0.9 ? 'none' : '';
 
-        if (document.fonts && document.fonts.ready) {
-            document.fonts.ready.then(() => { if (ready) remeasure(); });
+        document.body.style.paddingTop =
+            (barFullHeight + topOffset + 30 - Math.min(y, collapseDistance)) + 'px';
         }
 
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        let resizeRAF;
+        window.addEventListener('resize', () => {
+            cancelAnimationFrame(resizeRAF);
+            resizeRAF = requestAnimationFrame(measure);
+        });
+
+        measure();
 
         // toggle list/globe
         const listButton = document.getElementById('list-button');
@@ -3378,6 +3336,8 @@
         const globeContainer = document.getElementById('globe-container');
         const globeContainerContainer = document.getElementById('globe-container-container');
         const criSearch = document.getElementById('add-station-search');
+        let viewMode;
+        let populatedGlobe = false;
         function toggleView(view) {
             if (view=='list') {
                 globeContainerContainer.style.display = 'none';
@@ -3390,8 +3350,17 @@
                 listContainer.style.display = 'none';   
                 criSearch.style.display = 'none';  
                 newIcon.style.display = 'none';
+                setTimeout(() => {
+                    if ((populatedGlobe === false) && (info) && (viewMode === 'globe')) {
+                        populateGlobe();
+                        console.log('populated');
+                        populatedGlobe = true;
+                    }
+                }, 500)
                 //toggleFullView('grow');     
             }
+            viewMode = view;
+            console.log(viewMode);
         }
 
         listButton.addEventListener('click', () => {
@@ -3676,14 +3645,6 @@
             moreArrow.dataset.status = 'closed';
         }
     }
-
-    let populatedGlobe = false;
-    setTimeout(() => {
-        if ((populatedGlobe === false) && (info)) {
-            populateGlobe();
-            populatedGlobe = true;
-        }
-    }, 500)
 
     const fullViewToggle = document.getElementById('full-view-toggle');
     const firstRow = document.getElementById('first-row');
