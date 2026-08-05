@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Redirecting…</title>
+</head>
+<body>
+  <p>Opening…</p>
+  <script>
+    var APP_STORE_URL = "https://apps.apple.com/us/app/one-radio-by-scud/id6747141008";
+
+    var ua = navigator.userAgent || "";
+    var isInstagram = ua.indexOf("Instagram") > -1;
+    var isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+    var target = APP_STORE_URL;
+
+    if (isInstagram) {
+      if (isIOS) {
+        window.location.href = "instagram://extbrowser?url=" + encodeURIComponent(target);
+      } else {
+        window.location.href = target;
+      }
+    } else {
+      window.location.href = target;
+    }
+
+    setTimeout(function () {
+      window.location.href = target;
+    }, 1500);
+  </script>
+</body>
+</html>
