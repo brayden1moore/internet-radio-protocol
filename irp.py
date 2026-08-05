@@ -1470,6 +1470,16 @@ class Stream:
             else:
                 self.status = 'Offline'
 
+        elif self.name == 'Mouthfull Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.status = 'Re-Run' if extract_value(info, ['result','status']) =='defaultPlaylist' else 'Live'
+            self.now_playing = extract_value(info, ['result','content','name'])
+            self.now_playing_subtitle = extract_value(info, ['result','metadata','title']) 
+            if self.now_playing_subtitle:
+                self.now_playing_subtitle += ' by ' + extract_value(info, ['result','metadata','artist']) 
+
+        ### MARK: STATION LOGIC END
+
     def set_last_updated(self):
         self.last_updated = datetime.now(timezone.utc)
 
@@ -1508,6 +1518,7 @@ class Stream:
                             print('DATE2',date)                   
                             if date < datetime.now().date():
                                 self.status = 'Re-Run'
+                    
 
     def stream_check(self):
         if not self.now_playing:
@@ -2895,7 +2906,22 @@ Stream(
         insta_link = 'https://www.instagram.com/operator.radio/',
         hidden = True,
         song_basis= False
-)   
+),
+Stream(
+        name = 'Mouthfull Radio',
+        logo = "https://internetradioprotocol.org/logos/mouthfull.jpeg",
+        location = 'Wellington',
+        lat = -41.2887953,
+        lon = 174.7772114,
+        info_link = "https://api.radiocult.fm/api/station/Mouthfull%20Radio/schedule/live",
+        stream_link = 'https://mouthfull-radio.radiocult.fm/stream',
+        main_link = 'https://mouthfull.live',
+        about = "Kia ora, we are Mouthfull Radio (est. 2017) an independent non-profit online radio station, broadcasting from Aotearoa and beyond 💫📡",
+        support_link = 'mailto:mouthfull.space@gmail.com',
+        insta_link = 'https://www.instagram.com/__mouthfull__',
+        hidden = False,
+        song_basis= True
+)    
 ]
 
 def get_mixtapes():
