@@ -133,9 +133,9 @@
             <img class="view-icon" id="globe-button" src="assets/globeicon.png">
             <div id="new">New!</div>
             <div id="add-station">
-                <!--<img class="view-icon" id="plus-button" src="assets/plusicon.png">-->
                 <input id="add-station-search" placeholder='Search the Community Radio Index'></input>
             </div>
+            <img class="view-icon" data-status="closed" title="Add a station from the Community Radio Index" id="plus-button" src="assets/plusicon.png">
         </div>
         <div id="globe-and-list-container">
             <div id="globe-container-container">
@@ -210,8 +210,8 @@
         opacity: 0.2;
     }
 
-    #globe-button {
-        border-right: none;
+    #x-button {
+        display: none;
     }
 
     #add-station-search:focus{
@@ -240,7 +240,11 @@
 
     #add-station {
         display: flex;
+        width: 0px;
+        overflow-x: hidden;
+        overflow-y: visible;
         align-items: end;
+        transition: width 0.3s ease;
     }
 
     #globe-and-list-container {
@@ -452,6 +456,14 @@
         align-items: center;
         display: flex;
         position: relative;
+    }
+
+    #globe-button {
+        border-right: none;
+    }
+
+    #plus-button {
+        border-left: 1px solid black;
     }
     
     .view-icon {
@@ -3344,12 +3356,14 @@
                 listContainer.style.display = 'block';
                 criSearch.style.display = 'block';
                 newIcon.style.display = 'block';
+                plusButton.style.display = 'block';
             }
             else {
                 globeContainerContainer.style.display = 'flex';
                 listContainer.style.display = 'none';   
                 criSearch.style.display = 'none';  
                 newIcon.style.display = 'none';
+                plusButton.style.display = 'none';
                 setTimeout(() => {
                     if ((populatedGlobe === false) && (info) && (viewMode === 'globe')) {
                         populateGlobe();
@@ -3701,6 +3715,24 @@
     }
 
     // Convert an untracked.json entry into the info[] shape populateStations expects
+    const plusButton = document.getElementById('plus-button');
+    const addStation = document.getElementById('add-station');
+    const addStationSearch = document.getElementById('add-station-search');
+    plusButton.addEventListener('click', ()=> {
+        if (plusButton.dataset.status == 'closed') {
+            addStation.style.width = 258 + 'px';
+            addStation.style.overflowX = 'visible';
+            plusButton.src = 'assets/xicon.png';
+            plusButton.dataset.status = 'open';
+        }
+        else {
+            addStation.style.width = 0 + 'px';
+            addStation.style.overflowX = 'hidden';
+            plusButton.src = 'assets/plusicon.png';        
+            plusButton.dataset.status = 'closed';    
+        }
+    })
+
     function untrackedToStation(u) {
         return {
             oneLiner: u.name,
@@ -3815,8 +3847,6 @@
     }
 
     // ---- Search UI ----
-
-    const addStationSearch = document.getElementById('add-station-search');
     let addStationResults;
 
     function ensureResultsBox() {
@@ -3827,7 +3857,7 @@
             position: absolute;
             top: 35px;
             right: -1px;
-            width: 275px;
+            width: 257px;
             max-height: 300px;
             overflow-y: auto;
             background: white;
