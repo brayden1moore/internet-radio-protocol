@@ -3044,6 +3044,8 @@ def main_loop():
                 if name not in updated:
                     updated[name] = val
 
+            current_names = {s.name for s in streams}
+            updated = {k: v for k, v in updated.items() if k in current_names}
             with open('info.json', 'w') as f:
                 json.dump(updated, f, indent=4, sort_keys=True, default=str)
 
