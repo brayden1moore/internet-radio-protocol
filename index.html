@@ -3294,7 +3294,7 @@
 
             introFullHeight = intro.offsetHeight;
             logoHeight = logo.offsetHeight;
-            collapseDistance = introFullHeight - logoHeight;
+            collapseDistance = (introFullHeight - logoHeight);
             barFullHeight = topBar.offsetHeight;
 
             updateHeader();
@@ -3659,7 +3659,7 @@
 
         if (fullViewToggle.dataset.status === 'small') {
             globeContainerContainer.classList.add('full-view');
-            topBarEl.classList.add('top-bar-full-view');
+            topBar.classList.add('top-bar-full-view');
             firstRow.classList.add('first-row-full-view');
             everythingElse.classList.add('everything-else-full-view');
             globeStationListContainer.classList.add('top-controls-full-view');
@@ -3670,7 +3670,7 @@
         }
         else {
             globeContainerContainer.classList.remove('full-view');
-            topBarEl.classList.remove('top-bar-full-view');
+            topBar.classList.remove('top-bar-full-view');
             firstRow.classList.remove('first-row-full-view');
             everythingElse.classList.remove('everything-else-full-view');
             globeStationListContainer.classList.remove('top-controls-full-view');
