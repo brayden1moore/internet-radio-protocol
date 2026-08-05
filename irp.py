@@ -372,7 +372,7 @@ class Stream:
                 self.now_playing = extract_value(info,['playlist','title'])
 
             self.show_logo = None #extract_value(info,['playlist','image'])
-            self.show_logo_check()
+            #self.show_logo_check()
              
             if info['metadata']['artist_name'] and self.additional_info:
                 self.additional_info += ' by ' + extract_value(info,['metadata','artist_name'])
