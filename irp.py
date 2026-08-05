@@ -2923,7 +2923,7 @@ def get_mixtapes():
     streams = []
     for i in mixtapes:
         # get logo
-        if not os.path.exists(f"logos/NTS_{i['title'].replace(' ','_')}_Corner.jpg"):
+        if not os.path.exists(f"logos/NTS_{i['title'].replace(' ','_')}_Corner.png"):
             img = Image.open(BytesIO(requests.get(i['media']['picture_medium_large']).content)).convert("RGBA")
             w, h = img.size
             s = min(w, h)
@@ -2936,7 +2936,7 @@ def get_mixtapes():
             oy = img.height - overlay.height - margin
             img.paste(overlay, (ox, oy), overlay)
 
-            img.convert("RGB").save(f"logos/NTS_{i['title'].replace(' ','_')}_Corner.jpg")
+            img.convert("RGB").save(f"logos/NTS_{i['title'].replace(' ','_')}_Corner.png")
         
         if i['title'] in genre_map.keys():
             genres = genre_map[i['title']]
@@ -2945,7 +2945,7 @@ def get_mixtapes():
 
         streams.append(Stream(
             name = 'NTS ' + i['title'],
-            logo = f"https://internetradioprotocol.org/logos/NTS_{i['title'].replace(' ','_')}_Corner.jpg",
+            logo = f"https://internetradioprotocol.org/logos/NTS_{i['title'].replace(' ','_')}_Corner.png",
             location = "World",
             info_link = "https://www.nts.live/api/v2/mixtapes",
             stream_link = i['audio_stream_endpoint'],
