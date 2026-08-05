@@ -2883,7 +2883,7 @@ Stream(
 ),
 Stream(
         name = 'fbi.radio',
-        logo = "https://internetradioprotocol.org/logos/fbi.jpg",
+        logo = "https://internetradioprotocol.org/logos/fbi.png",
         location = 'Sydney',
         lat = -33.8698439,
         lon = 151.2082848,
