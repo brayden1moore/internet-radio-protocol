@@ -3101,7 +3101,7 @@ def main_loop():
                 'last_updated_pt': datetime.fromtimestamp(now, tz=pytz.timezone('America/Los_Angeles')),
                 'errors': [key for key, val in error_dict.items()],
                 'total': len(updated),
-                'hidden': len([key for key, val in updated.items() if (val['hidden'] == True) or (val['tunerOnly'] == True)]),
+                'hidden': len([key for key, val in updated.items() if (val.get('hidden') == True) or (val.get('tunerOnly') == True)]),
                 'live': len([key for key, val in updated.items() if val['hidden'] != True and val['status'] == 'Live']),
                 're-run': len([key for key, val in updated.items() if val['hidden'] != True and val['status'] == 'Re-Run']),
                 'offline': len([key for key, val in updated.items() if val['hidden'] != True and val['status'] == 'Offline']),
