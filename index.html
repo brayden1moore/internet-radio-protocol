@@ -3203,6 +3203,10 @@
         // ios
         var iOS = /(iPhone)/g.test(navigator.userAgent);
         const getTheApp = document.getElementById('get-app-button');
+        getTheApp.addEventListener('click',()=> {
+            appUrl = getTheApp.href;
+            window.location = appUrl;
+        })
         if (iOS) {
             getTheApp.style.display = 'flex';
         }
