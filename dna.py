@@ -22,6 +22,7 @@ PAGE = """
   letter-spacing: -0.05em;
   font:14px/1.4 "Archivo Light",system-ui,sans-serif;margin:2rem;color:#111}
   h1{
+    border: 1px solid black;
     letter-spacing: -0.05em;
     font-family: "Archivo Bold";
     font-size:34pt;
@@ -57,10 +58,13 @@ PAGE = """
   table.plays td{white-space:nowrap}
   table.plays td.wrap{white-space:normal}
 
+  table {
+    border: 1px solid black;
+   }
   .dna {
-    paint-order: fill stroke;
-    -webkit-text-stroke: 0.2px rgb(0, 0, 0);
-    color: rgb(243,243,243);
+    background-color: yellow;
+    font-family: "Archivo Light";
+    color: black;
   }
 </style>
 
