@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 PAGE = """
 <!doctype html><meta charset="utf-8">
-<title>one.radio / dna</title>
+<title>One Radio DNA</title>
 <style>
   body{font:14px/1.4 system-ui,sans-serif;margin:2rem;color:#111}
   h1{font-size:1.2rem}
