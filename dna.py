@@ -50,7 +50,7 @@ PAGE = """
 
 <h1>One Radio DNA</h1>
 
-<h2>Per-station summary <small>({{summaries|length}} stations)</small></h2>
+<h2>Summary <small>({{summaries|length}} stations)</small></h2>
 <table class="summary sortable">
   <thead>
   <tr>
@@ -78,7 +78,7 @@ PAGE = """
   </tbody>
 </table>
 
-<h2>Recent plays <small>({{rows|length}} shown)</small></h2>
+<h2>Polls <small>({{rows|length}})</small></h2>
 <table class="plays sortable">
   <thead>
   <tr>
