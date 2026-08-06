@@ -1,3 +1,14 @@
+# dna.py
+import sqlite3
+import re
+import statistics
+from collections import Counter
+from pathlib import Path
+from flask import Flask, render_template_string
+
+DB_PATH = Path("/var/www/internet-radio-protocol/plays.db")
+app = Flask(__name__)
+
 PAGE = """
 <!doctype html><meta charset="utf-8">
 <title>One Radio DNA</title>
@@ -83,3 +94,86 @@ PAGE = """
   {% endfor %}
 </table>
 """
+
+
+def parse_year(r):
+    if r["acr_release"] and len(r["acr_release"]) >= 4 and r["acr_release"][:4].isdigit():
+        return int(r["acr_release"][:4])
+    if r["mb_year"]:
+        try:
+            return int(str(r["mb_year"])[:4])
+        except (ValueError, TypeError):
+            return None
+    return None
+
+
+def parse_genres(raw):
+    """Split messy genre/tag strings into normalized tokens."""
+    if not raw:
+        return []
+    # split on commas, semicolons, slashes, pipes
+    parts = re.split(r"[,;/|]+", str(raw))
+    out = []
+    for p in parts:
+        g = p.strip().strip("\"'[]{}").lower()
+        g = re.sub(r"\s+", " ", g)
+        if g and g not in ("n/a", "none", "unknown", "null"):
+            out.append(g)
+    return out
+
+
+def summarize(rows):
+    by_station = {}
+    for r in rows:
+        by_station.setdefault(r["station"], []).append(r)
+
+    summaries = []
+    for station, srows in sorted(by_station.items()):
+        total = len(srows)
+        matched = [r for r in srows if r["matched"]]
+        identified = len(matched)
+
+        artists = Counter(r["artist"] for r in srows if r["artist"])
+        top_artist = artists.most_common(1)
+
+        genres = Counter()
+        for r in srows:
+            raw = r["acr_genres"] or r["mb_genre"] or r["lf_tags"]
+            genres.update(parse_genres(raw))
+        top_genre = genres.most_common(1)
+
+        years = [y for y in (parse_year(r) for r in srows) if y]
+        plays = [(r["lf_playcount"], r) for r in srows if r["lf_playcount"]]
+
+        def track_label(r):
+            a, t = r["artist"] or "?", r["title"] or "?"
+            return f"{a} — {t}"
+
+        summaries.append({
+            "station": station,
+            "total": total,
+            "identified": identified,
+            "id_rate": (identified / total * 100) if total else 0,
+            "top_artist": top_artist[0][0] if top_artist else "—",
+            "top_artist_n": top_artist[0][1] if top_artist else None,
+            "avg_year": round(statistics.mean(years)) if years else None,
+            "year_stdev": round(statistics.stdev(years), 1) if len(years) > 1 else None,
+            "top_genre": top_genre[0][0] if top_genre else "—",
+            "top_genre_n": top_genre[0][1] if top_genre else None,
+            "avg_plays": round(statistics.mean([p for p, _ in plays])) if plays else None,
+            "most_popular": track_label(max(plays, key=lambda x: x[0])[1]) if plays else "—",
+            "least_popular": track_label(min(plays, key=lambda x: x[0])[1]) if plays else "—",
+        })
+    return summaries
+
+
+@app.route("/dna")
+def dna():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute(
+        "SELECT * FROM plays ORDER BY ts DESC LIMIT 500"
+    ).fetchall()
+    conn.close()
+    summaries = summarize(rows)
+    return render_template_string(PAGE, rows=rows, summaries=summaries)
