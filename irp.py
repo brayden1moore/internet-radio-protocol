@@ -1478,7 +1478,7 @@ class Stream:
             if self.now_playing_subtitle != None:
                 self.now_playing_subtitle += ' by ' + extract_value(info, ['result','metadata','artist']) 
 
-        elif self.name == 'Mouthfull Radio':
+        elif self.name == 'Duuu':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.status = 'Re-Run' if extract_value(info,['isOnAir']) == False else 'Live'
             self.now_playing = extract_value(info,['title'])
