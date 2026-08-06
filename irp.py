@@ -2955,7 +2955,7 @@ Stream(
         support_link = 'https://duuueditions.bandcamp.com',
         insta_link = 'https://www.instagram.com/duuuradio',
         bandcamp_link = 'https://duuueditions.bandcamp.com',
-        hidden = True,
+        hidden = False,
         song_basis= True
 )
 
