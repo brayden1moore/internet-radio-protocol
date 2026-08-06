@@ -28,7 +28,7 @@
         <div id="modal-container">
             <div id="modal-bg" onClick="closeModal();"></div>
             <div id="modal">
-                <div id="modal-x-container"><div id="modal-x" onClick="closeModal();">x</div></div>
+                <div id="modal-x-container"><div id="modal-x" onClick="closeModal();"><img style="height:25px" src="assets/xicon.png"></div></div>
                 <div id="modal-content">
                     <div id="modal-logo-container">
                         <div id="modal-logo-and-overlay" class="logo-and-overlay">
@@ -85,9 +85,16 @@
                     <div id="last-up">        
                         <span id='live-count'></span><span class='last-updated'></span>
                     </div>
+
                     <a id='get-app-button' href="https://apps.apple.com/us/app/one-radio-by-scud/id6747141008" target="_blank"><div id="ios-app" style="display:flex;">
-                    <div id="apple-logo"></div>Get the app
-                    </div></a>
+                        <div id="apple-logo"></div>iOS App
+                        </div>
+                    </a>
+
+                    <a id='support-button' href="https://ko-fi.com/oneradio" target="_blank"><div id="support-div" style="display:flex;">
+                       Support
+                        </div>
+                    </a>
 
                 </div>
         </div>
@@ -187,8 +194,7 @@
     
     
         <div id="text-container">
-            Please support a station if you like it.<br>
-            
+            Please support a station if you like it.<br>            
             <a target="_blank" href="/info">API</a> 
             <a href="mailto:brayden@one.radio">Email</a>  
             <!--<a target="_blank" href="https://github.com/brayden1moore/internet-radio-protocol">GitHub</a>  -->
@@ -198,6 +204,27 @@
         </div>
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
+
+    #support-button {
+        height: 38px;
+        display: flex;
+        text-decoration: none;
+        border: none;
+        outline: none;
+        align-items: center;
+        color: black;
+        padding: 0px 7.5px;
+        width: 55px;
+        justify-content: center;
+        text-align: center;
+        background-color: yellow;
+        /*background: linear-gradient(139deg, yellow, rgb(255, 255, 0) 50.84%, rgb(6, 172, 255) 76.89%, color(display-p3 0.9175 0.2 0.1372));*/
+        border-left: 1px solid black;
+    }
+
+    #support-button:hover {
+        background: white !important;
+    }
 
     .custom-remove {
         position: absolute;
@@ -810,7 +837,7 @@
 
     #modal-content {
         padding: 20px;
-        margin-top: -45px;
+        margin-top: -56px;
     }
 
     #modal-logo {
