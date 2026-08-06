@@ -17,7 +17,9 @@ PAGE = """
 </head>
 <style>
 @font-face{font-family:"Archivo Light";src:url("https://one.radio/assets/Archivo-Light.ttf") format("truetype");}
-  body{font:14px/1.4 "Archivo Light",system-ui,sans-serif;margin:2rem;color:#111}
+  body{
+  letter-spacing: -0.05em;
+  font:14px/1.4 "Archivo Light",system-ui,sans-serif;margin:2rem;color:#111}
   h1{font-size:1.2rem}
   h2{font-size:1rem;margin:1.5rem 0 .5rem}
   table{border-collapse:collapse;width:100%;table-layout:fixed}
