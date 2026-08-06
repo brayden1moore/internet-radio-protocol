@@ -22,6 +22,7 @@ PAGE = """
   letter-spacing: -0.05em;
   font:14px/1.4 "Archivo Light",system-ui,sans-serif;margin:2rem;color:#111}
   h1{
+    letter-spacing: -0.05em;
     font-family: "Archivo Bold";
     font-size:34pt;
     color: black;
@@ -55,9 +56,14 @@ PAGE = """
   table.plays .c-plays{width:9%}
   table.plays td{white-space:nowrap}
   table.plays td.wrap{white-space:normal}
+
+  .dna {
+    -webkit-text-stroke: 0.2px rgb(0, 0, 0);
+    color: rgb(243,243,243);
+  }
 </style>
 
-<h1>ONE RADIO DNA</h1>
+<h1>ONE RADIO <span class="dna">DNA</span></h1>
 
 <h2>Summary <small>({{summaries|length}} stations)</small></h2>
 <table class="summary sortable">
