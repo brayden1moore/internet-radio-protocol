@@ -218,7 +218,7 @@ def dna():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     rows = conn.execute(
-        "SELECT * FROM plays ORDER BY ts DESC LIMIT 500"
+        "SELECT * FROM plays ORDER BY ts DESC"
     ).fetchall()
     conn.close()
     summaries = summarize(rows)
