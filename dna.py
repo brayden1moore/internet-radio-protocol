@@ -66,7 +66,7 @@ PAGE = """
     <td class=num>{{ '{:,}'.format(s.total) }}</td>
     <td class=num>{{ '{:,}'.format(s.identified) }}</td>
     <td class=num>{{ '%.0f'|format(s.id_rate) }}%</td>
-    <td>{{ s.top_artist }}{% if s.top_artist_n %} ({{ s.top_artist_n }}){% endif %}</td>
+    <td class=txt>{{ s.top_artist }}{% if s.top_artist_n %} ({{ s.top_artist_n }}){% endif %}</td>
     <td class=num>{{ s.avg_year or '—' }}</td>
     <td class=num>{{ s.year_stdev or '—' }}</td>
     <td>{{ s.top_genre }}{% if s.top_genre_n %} ({{ s.top_genre_n }}){% endif %}</td>
