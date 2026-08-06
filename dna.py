@@ -11,12 +11,13 @@ app = Flask(__name__)
 
 PAGE = """
 <!doctype html><meta charset="utf-8">
-<title>One Radio DNA</title>
+<title>O.R DNA</title>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=0.66">
 </head>
 <style>
-  body{font:14px/1.4 system-ui,sans-serif;margin:2rem;color:#111}
+@font-face{font-family:"Archivo Light";src:url("https://one.radio/assets/Archivo-Light.ttf") format("truetype");}
+  body{font:14px/1.4 "Archivo Light",system-ui,sans-serif;margin:2rem;color:#111}
   h1{font-size:1.2rem}
   h2{font-size:1rem;margin:1.5rem 0 .5rem}
   table{border-collapse:collapse;width:100%;table-layout:fixed}
@@ -211,7 +212,6 @@ def summarize(rows):
             "least_popular": track_label(min(plays, key=lambda x: x[0])[1]) if plays else "—",
         })
     return summaries
-
 
 @app.route("/dna")
 def dna():
