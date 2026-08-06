@@ -64,6 +64,7 @@ PAGE = """
   .dna {
     background-color: yellow;
     font-family: "Archivo Light";
+    -webkit-text-stroke: 0px !important;
     color: black;
   }
 </style>
