@@ -22,16 +22,18 @@ PAGE = """
   table{border-collapse:collapse;width:100%;table-layout:fixed}
   th,td{text-align:left;padding:4px 10px;border-bottom:1px solid #eee;
         overflow:hidden;text-overflow:ellipsis}
-  th{position:sticky;top:0;background:#fff;border-bottom:2px solid #ccc}
+  th{position:sticky;top:0;background:#fff;border-bottom:2px solid #ccc;
+     cursor:pointer;user-select:none}
+  th:hover{background:#f3f3f3}
+  th.sorted-asc::after{content:" \\2191";color:#888}
+  th.sorted-desc::after{content:" \\2193";color:#888}
   td.num{text-align:right;font-variant-numeric:tabular-nums}
   tr:hover{background:#fafafa}
   .miss{color:#999}
 
-  /* summary table column hints */
   table.summary td, table.summary th{white-space:nowrap}
   table.summary td.txt{white-space:normal}
 
-  /* plays table: fixed widths so nothing overflows */
   table.plays{table-layout:fixed}
   table.plays .c-time{width:11%}
   table.plays .c-station{width:9%}
@@ -42,19 +44,22 @@ PAGE = """
   table.plays .c-genre{width:14%}
   table.plays .c-year{width:5%}
   table.plays .c-plays{width:9%}
-  table.plays td{white-space:nowrap}      /* ellipsis-truncate long cells */
-  table.plays td.wrap{white-space:normal} /* let these wrap instead */
+  table.plays td{white-space:nowrap}
+  table.plays td.wrap{white-space:normal}
 </style>
 
 <h1>One Radio DNA</h1>
 
-<h2>Summary <small>({{summaries|length}} stations)</small></h2>
-<table class="summary">
+<h2>Per-station summary <small>({{summaries|length}} stations)</small></h2>
+<table class="summary sortable">
+  <thead>
   <tr>
-    <th>station</th><th class=num>polled</th><th class=num>id'd</th><th class=num>id rate</th>
-    <th>top artist</th><th class=num>avg yr</th><th class=num>yr stdev</th>
-    <th>top genre</th><th class=num>avg plays</th><th class=txt>most popular</th><th class=txt>least popular</th>
+    <th>station</th><th class=num data-type=num>polled</th><th class=num data-type=num>id'd</th><th class=num data-type=num>id rate</th>
+    <th>top artist</th><th class=num data-type=num>avg yr</th><th class=num data-type=num>yr stdev</th>
+    <th>top genre</th><th class=num data-type=num>avg plays</th><th class=txt>most popular</th><th class=txt>least popular</th>
   </tr>
+  </thead>
+  <tbody>
   {% for s in summaries %}
   <tr>
     <td>{{ s.station }}</td>
@@ -70,15 +75,19 @@ PAGE = """
     <td class=txt>{{ s.least_popular }}</td>
   </tr>
   {% endfor %}
+  </tbody>
 </table>
 
-<h2>Polled <small>({{rows|length}} shown)</small></h2>
-<table class="plays">
+<h2>Recent plays <small>({{rows|length}} shown)</small></h2>
+<table class="plays sortable">
+  <thead>
   <tr>
     <th class=c-time>time (UTC)</th><th class=c-station>station</th><th class=c-source>source</th>
     <th class=c-artist>artist</th><th class=c-title>title</th><th class=c-label>label</th>
-    <th class=c-genre>genre</th><th class=c-year>year</th><th class="c-plays num">last.fm plays</th>
+    <th class=c-genre>genre</th><th class="c-year num" data-type=num>year</th><th class="c-plays num" data-type=num>last.fm plays</th>
   </tr>
+  </thead>
+  <tbody>
   {% for r in rows %}
   <tr class="{{ 'miss' if not r['matched'] else '' }}">
     <td class=wrap>{{ r['ts'][:19].replace('T',' ') }}</td>
@@ -92,7 +101,44 @@ PAGE = """
     <td class=num>{{ '{:,}'.format(r['lf_playcount']) if r['lf_playcount'] else '' }}</td>
   </tr>
   {% endfor %}
+  </tbody>
 </table>
+
+<script>
+document.querySelectorAll("table.sortable").forEach(function(table){
+  var ths = table.tHead.rows[0].cells;
+  Array.prototype.forEach.call(ths, function(th, col){
+    th.addEventListener("click", function(){
+      var tbody = table.tBodies[0];
+      var rows = Array.prototype.slice.call(tbody.rows);
+      var numeric = th.dataset.type === "num";
+      var asc = !th.classList.contains("sorted-asc");
+
+      Array.prototype.forEach.call(ths, function(h){
+        h.classList.remove("sorted-asc","sorted-desc");
+      });
+      th.classList.add(asc ? "sorted-asc" : "sorted-desc");
+
+      function val(row){
+        var t = row.cells[col].textContent.trim();
+        if(numeric){
+          var n = parseFloat(t.replace(/[^0-9.\\-]/g,""));
+          return isNaN(n) ? -Infinity : n;
+        }
+        return t.toLowerCase();
+      }
+
+      rows.sort(function(a,b){
+        var x = val(a), y = val(b);
+        if(x < y) return asc ? -1 : 1;
+        if(x > y) return asc ? 1 : -1;
+        return 0;
+      });
+      rows.forEach(function(r){ tbody.appendChild(r); });
+    });
+  });
+});
+</script>
 """
 
 

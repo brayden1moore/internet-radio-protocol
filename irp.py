@@ -3206,7 +3206,8 @@ def main_loop():
                 'As soon as the generals and the politicos can predict the motions of your mind, lose it.',
                 'Radiation from computer screens is boiling your eyes. Use your ears.',
                 'You might hear something.',
-                'Be like the fox who makes more tracks than necessary, some in the wrong direction.'
+                'Be like the fox who makes more tracks than necessary, some in the wrong direction.',
+                'Somewhere out there, a song is playing for you.'
             ]
             status['app_tagline'] = taglines[datetime.fromtimestamp(time.time()).hour % len(taglines)]
 
