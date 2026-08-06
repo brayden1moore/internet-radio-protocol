@@ -1483,6 +1483,11 @@ class Stream:
             self.status = 'Re-Run' if extract_value(info,['isOnAir']) == False else 'Live'
             self.now_playing = extract_value(info,['title'])
 
+        elif self.name == 'Ola Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.status = 'Live' if extract_value(info, ['result','content','media','type']) == 'Live' else 'Re-Run'
+            self.now_playing = extract_value(info, ['result','content','title'])
+
         ### MARK: STATION LOGIC END
 
     def set_last_updated(self):
@@ -2931,7 +2936,7 @@ Stream(
         support_link = 'mailto:mouthfull.space@gmail.com',
         insta_link = 'https://www.instagram.com/__mouthfull__',
         hidden = False,
-        song_basis= True
+        song_basis = True
 ),
 Stream(
         name = 'UHDW',
@@ -2946,7 +2951,7 @@ Stream(
         support_link = 'https://uhdw.bigcartel.com',
         insta_link = 'https://www.instagram.com/__mouthfull__',
         hidden = True,
-        song_basis= True
+        song_basis = True
 ),
 Stream(
         name = 'Duuu',
@@ -2962,7 +2967,23 @@ Stream(
         insta_link = 'https://www.instagram.com/duuuradio',
         bandcamp_link = 'https://duuueditions.bandcamp.com',
         hidden = False,
-        song_basis= True
+        song_basis = True
+),
+Stream(
+        name = 'Ola Radio',
+        logo = "https://internetradioprotocol.org/logos/ola.jpg",
+        location = 'Marseille',
+        lat = 43.3026,
+        lon = 5.3691,
+        info_link = "https://api.radiocult.fm/api/station/ola-radio/schedule/live",
+        stream_link = 'https://ola-radio.radiocult.fm/stream',
+        main_link = 'https://www.olaradio.fr/',
+        about = "Ola Radio is the Marseille-based cultural online radio specializing in electronic music and avant-garde aesthetics. It brings together over 80 residents from Marseille, France, and around the world. Established in 2019, Ola aims to unite actors from various musical scenes and provide a creative platform for emerging artists.",
+        support_link = 'https://www.gofundme.com/f/soutenir-votre-radio-marseillaise',
+        insta_link = 'https://www.instagram.com/ola_radio/',
+        soundcloud_link = 'https://soundcloud.com/ola_radio',
+        hidden = False,
+        song_basis = True
 )
 
 ### MARK: STREAM END
