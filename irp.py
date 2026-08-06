@@ -595,7 +595,8 @@ class Stream:
             self.status = 'Live' if info['is_online'] == True else 'Offline'
             self.additional_info = None 
             self.listeners = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
-            self.now_playing = info['now_playing']['song']['text'] # simple show title
+            self.now_playing = info['now_playing']['song']['title']
+            self.now_playing = info['now_playing']['song']['artist']
 
         elif self.name == 'KJazz':
             webpage = requests.get(self.main_link, timeout=TIMEOUT).text
@@ -752,13 +753,12 @@ class Stream:
         
         elif self.name == 'BFF.fm':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
-            self.now_playing = info['program']
-            self.now_playing_artist = info['presenter']
+            self.now_playing_subtitle = info['program'] + ' - ' +  info['presenter']
             self.status = 'Live'
-            try:
-                self.now_playing_subtitle = info['title'] + ' by ' + info['artist']
-            except:
-                self.now_playing_subtitle = info['title']
+
+            self.now_playing = info['title'] 
+            self.now_playing_artist = info['artist']
+
             try:
                 self.show_logo = None#info['program_image'].replace('\/','/')
             except:
@@ -1173,8 +1173,9 @@ class Stream:
                 show_name = show_soup.find('h3').find('a').get_text()
             except:
                 show_name = show_soup.find('h3').get_text()
-            self.now_playing = show_name
-            self.now_playing_subtitle = f'{song} by {artist}'
+            self.now_playing_subtitle = show_name
+            self.now_playing = song
+            self.now_playing_artist = artist
 
         elif self.name == 'Datafruits FM':
             timeout = 3
@@ -1281,9 +1282,7 @@ class Stream:
                 self.now_playing = extract_value(info, ['result','metadata','title'])
                 if self.now_playing == 'Live':
                     self.now_playing = extract_value(info, ['result','content','title'])
-                artist = extract_value(info, ['result','metadata','artist'])
-                if artist:
-                    self.now_playing = self.now_playing + ' by ' + artist
+                self.now_playing_artist = extract_value(info, ['result','metadata','artist'])
                 self.status = 'Re-Run' if extract_value(info, ['result','content','media','type']) == 'playlist' else 'Live'
             else:
                 self.now_playing = None
@@ -1301,7 +1300,8 @@ class Stream:
         elif self.name == 'Gatekeeper Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.status = 'Live' if info['live']['is_live'] == True else 'Re-Run'
-            self.now_playing = extract_value(info, ['now_playing','song','text'])
+            self.now_playing = extract_value(info, ['now_playing','song','title'])
+            self.now_playing_artist = extract_value(info, ['now_playing','song','artist'])
             self.listeners = extract_value(info, ['listeners','total'])
         
         elif self.name == '20ft Radio':
@@ -1353,7 +1353,8 @@ class Stream:
                 self.now_playing = extract_value(info, ['result','metadata','title'])
                 artist = extract_value(info, ['result','metadata','artist'])
                 if artist:
-                    self.now_playing = self.now_playing + ' by ' + artist
+                    self.now_playing = self.now_playing
+                    self.now_playing_artist = artist
                 self.status = 'Re-Run' if extract_value(info, ['result','status']) == 'defaultPlaylist' else 'Live'
             else:
                 self.now_playing = None
@@ -1473,10 +1474,9 @@ class Stream:
         elif self.name == 'Mouthfull Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.status = 'Re-Run' if extract_value(info, ['result','status']) =='defaultPlaylist' else 'Live'
-            self.now_playing = extract_value(info, ['result','content','name'])
-            self.now_playing_subtitle = extract_value(info, ['result','metadata','title']) 
-            if self.now_playing_subtitle != None:
-                self.now_playing_subtitle += ' by ' + extract_value(info, ['result','metadata','artist']) 
+            self.now_playing = extract_value(info, ['result','metadata','title']) 
+            self.now_playing_artist = extract_value(info, ['result','metadata','artist']) 
+            self.now_playing_subtitle = extract_value(info, ['result','content','name'])
 
         elif self.name == 'Duuu':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
@@ -1494,7 +1494,13 @@ class Stream:
             self.now_playing_artist,
             self.now_playing_subtitle,
         ]
-        return_string = " - ".join(p for p in parts if p).replace(' - - ',' - ').replace('\n',' ')
+        if self.song_basis == True:
+            if isinstance(self.now_playing, str) and isinstance(self.now_playing_artist, str):
+                return_string = self.now_playing + ' by ' + self.now_playing_artist
+            if isinstance(self.now_playing_subtitle):
+                return_string = return_string + ' - ' + self.now_playing_subtitle
+        else:
+            return_string = " - ".join(p for p in parts if p).replace(' - - ',' - ').replace('\n',' ')
 
         self.one_liner = return_string
 
