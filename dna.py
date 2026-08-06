@@ -22,7 +22,6 @@ PAGE = """
   letter-spacing: -0.05em;
   font:14px/1.4 "Archivo Light",system-ui,sans-serif;margin:2rem;color:#111}
   h1{
-    border: 1px solid black;
     letter-spacing: -0.05em;
     font-family: "Archivo Bold";
     font-size:34pt;
