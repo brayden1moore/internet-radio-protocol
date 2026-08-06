@@ -9,6 +9,9 @@ app = Flask(__name__)
 PAGE = """
 <!doctype html><meta charset="utf-8">
 <title>One Radio DNA</title>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=0.66">
+</head>
 <style>
   body{font:14px/1.4 system-ui,sans-serif;margin:2rem;color:#111}
   h1{font-size:1.2rem}
