@@ -48,7 +48,7 @@ PAGE = """
 
 <h1>One Radio DNA</h1>
 
-<h2>Per-station summary <small>({{summaries|length}} stations)</small></h2>
+<h2>Summary <small>({{summaries|length}} stations)</small></h2>
 <table class="summary">
   <tr>
     <th>station</th><th class=num>polled</th><th class=num>id'd</th><th class=num>id rate</th>
@@ -72,7 +72,7 @@ PAGE = """
   {% endfor %}
 </table>
 
-<h2>Recent plays <small>({{rows|length}} shown)</small></h2>
+<h2>Polled <small>({{rows|length}} shown)</small></h2>
 <table class="plays">
   <tr>
     <th class=c-time>time (UTC)</th><th class=c-station>station</th><th class=c-source>source</th>
