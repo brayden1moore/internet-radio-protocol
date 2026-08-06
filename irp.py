@@ -2921,7 +2921,24 @@ Stream(
         insta_link = 'https://www.instagram.com/__mouthfull__',
         hidden = False,
         song_basis= True
-)    
+),
+Stream(
+        name = 'UHDW',
+        logo = "https://internetradioprotocol.org/logos/uhdw.png",
+        location = 'Denver',
+        lat = -41.2887953,
+        lon = 174.7772114,
+        info_link = "https://api.radiocult.fm/api/station/Mouthfull%20Radio/schedule/live",
+        stream_link = 'https://mouthfull-radio.radiocult.fm/stream',
+        main_link = 'https://mouthfull.live',
+        about = "Kia ora, we are Mouthfull Radio (est. 2017) an independent non-profit online radio station, broadcasting from Aotearoa and beyond 💫📡",
+        support_link = 'https://uhdw.bigcartel.com',
+        insta_link = 'https://www.instagram.com/__mouthfull__',
+        hidden = True,
+        song_basis= True
+)
+
+### MARK: STREAM END
 ]
 
 def get_mixtapes():
@@ -3140,7 +3157,9 @@ def main_loop():
             taglines = [
                 f'{status["total"] - status["hidden"]} of the best independent, human-curated radio stations for the non-algorithmic, palate-expanding, music discovery pleasure of those unafraid to listen through friction.',
                 'As soon as the generals and the politicos can predict the motions of your mind, lose it.',
-                'Radiation from computer screens is boiling your eyes. Use your ears.'
+                'Radiation from computer screens is boiling your eyes. Use your ears.',
+                'You might hear something.',
+                'Be like the fox who makes more tracks than necessary, some in the wrong direction.'
             ]
             status['app_tagline'] = taglines[datetime.fromtimestamp(time.time()).hour % len(taglines)]
 
