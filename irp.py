@@ -1475,7 +1475,7 @@ class Stream:
             self.status = 'Re-Run' if extract_value(info, ['result','status']) =='defaultPlaylist' else 'Live'
             self.now_playing = extract_value(info, ['result','content','name'])
             self.now_playing_subtitle = extract_value(info, ['result','metadata','title']) 
-            if self.now_playing_subtitle:
+            if self.now_playing_subtitle != None:
                 self.now_playing_subtitle += ' by ' + extract_value(info, ['result','metadata','artist']) 
 
         elif self.name == 'Mouthfull Radio':
