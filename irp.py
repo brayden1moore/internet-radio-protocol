@@ -1502,7 +1502,7 @@ class Stream:
         if self.song_basis == True:
             if isinstance(self.now_playing, str) and isinstance(self.now_playing_artist, str):
                 return_string = self.now_playing + ' by ' + self.now_playing_artist
-            if isinstance(self.now_playing_subtitle):
+            if isinstance(self.now_playing_subtitle, str):
                 return_string = return_string + ' - ' + self.now_playing_subtitle
         else:
             return_string = " - ".join(p for p in parts if p).replace(' - - ',' - ').replace('\n',' ')
