@@ -596,7 +596,7 @@ class Stream:
             self.additional_info = None 
             self.listeners = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
             self.now_playing = info['now_playing']['song']['title']
-            self.now_playing = info['now_playing']['song']['artist']
+            self.now_playing_artist = info['now_playing']['song']['artist']
 
         elif self.name == 'KJazz':
             webpage = requests.get(self.main_link, timeout=TIMEOUT).text
