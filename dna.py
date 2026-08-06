@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 PAGE = """
 <!doctype html><meta charset="utf-8">
-<title>O.R DNA</title>
+<title>ONE RADIO DNA</title>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=0.66">
 </head>
@@ -51,7 +51,7 @@ PAGE = """
   table.plays td.wrap{white-space:normal}
 </style>
 
-<h1>One Radio DNA</h1>
+<h1>ONE RADIO DNA</h1>
 
 <h2>Summary <small>({{summaries|length}} stations)</small></h2>
 <table class="summary sortable">
