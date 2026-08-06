@@ -58,6 +58,7 @@ PAGE = """
   table.plays td.wrap{white-space:normal}
 
   .dna {
+    paint-order: stroke;
     -webkit-text-stroke: 0.2px rgb(0, 0, 0);
     color: rgb(243,243,243);
   }
