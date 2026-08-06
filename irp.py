@@ -1485,7 +1485,7 @@ class Stream:
 
         elif self.name == 'Ola Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
-            self.status = 'Live' if extract_value(info, ['result','content','media','type']) == 'Live' else 'Re-Run'
+            self.status = 'Live' if extract_value(info, ['result','content','media','type']) == 'live' else 'Re-Run'
             self.now_playing = extract_value(info, ['result','content','title'])
 
         ### MARK: STATION LOGIC END
