@@ -1478,6 +1478,11 @@ class Stream:
             if self.now_playing_subtitle:
                 self.now_playing_subtitle += ' by ' + extract_value(info, ['result','metadata','artist']) 
 
+        elif self.name == 'Mouthfull Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.status = 'Re-Run' if extract_value(info,['isOnAir']) == False else 'Live'
+            self.now_playing = extract_value(info,['title'])
+
         ### MARK: STATION LOGIC END
 
     def set_last_updated(self):
@@ -2934,6 +2939,22 @@ Stream(
         about = "Kia ora, we are Mouthfull Radio (est. 2017) an independent non-profit online radio station, broadcasting from Aotearoa and beyond 💫📡",
         support_link = 'https://uhdw.bigcartel.com',
         insta_link = 'https://www.instagram.com/__mouthfull__',
+        hidden = True,
+        song_basis= True
+),
+Stream(
+        name = 'Duuu',
+        logo = "https://internetradioprotocol.org/logos/duuu.png",
+        location = 'Paris',
+        lat = 48.8588897,
+        lon = 2.320041,
+        info_link = "https://duuuradio.fr/get-live-info",
+        stream_link = 'https://duuu.out.airtime.pro/duuu_a',
+        main_link = 'https://duuuradio.fr/',
+        about = "*Duuu is a radio art space dedicated to contemporary creation, circulating the voices of today's artists and thinkers. The structure functions as a platform for the production and distribution of artistic, sound and radio projects. *Duuu is a score, it is the translation of the word RADIO into Parsons code.",
+        support_link = 'https://duuueditions.bandcamp.com',
+        insta_link = 'https://www.instagram.com/duuuradio',
+        bandcamp_link = 'https://duuueditions.bandcamp.com',
         hidden = True,
         song_basis= True
 )
