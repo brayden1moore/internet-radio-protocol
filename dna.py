@@ -35,7 +35,7 @@ PAGE = """
     <td>{{ r['source'] }}</td>
     <td>{{ r['artist'] or '' }}</td>
     <td>{{ r['title'] or '' }}</td>
-    <td>{{ r['label'] or '' }}</td>
+    <td>{{ r['acr_label'] or '' }}</td>
     <td>{{ r['acr_genres'] or r['mb_genre'] or r['lf_tags'] or '' }}</td>
     <td>{{ r['acr_release'][:4] if r['acr_release'] else (r['mb_year'] or '') }}</td>
     <td class=num>{{ '{:,}'.format(r['lf_playcount']) if r['lf_playcount'] else '' }}</td>
