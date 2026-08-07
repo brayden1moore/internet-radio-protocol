@@ -100,10 +100,13 @@ PAGE = """
 </div>
 
 <div id="chart-div">
-    <h2>Most Similar</h2>
-    <div id="radar-similar" style="margin:.5rem 0 1rem;display:flex;gap:.5rem;flex-wrap:wrap"></div>
-    <div style="max-width:560px;">
-    <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
+
+    <div>
+        <h2>Most Similar</h2>
+        <div id="radar-similar" style="margin:.5rem 0 1rem;display:flex;gap:.5rem;flex-wrap:wrap"></div>
+        <div style="max-width:560px;">
+        <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
+        </div>
     </div>
 
     <div id="spectra-div">
