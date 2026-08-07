@@ -80,6 +80,15 @@ PAGE = """
 
 <h1>ONE RADIO <span class="dna">DNA</span></h1>
 
+<h2>Station DNA</h2>
+<div style="margin:.5rem 0 1rem">
+  <select id="radar-station" style="font:inherit;padding:4px 8px"></select>
+  <span id="radar-n" style="margin-left:.75rem;color:#888"></span>
+</div>
+<div style="max-width:560px;">
+  <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
+</div>
+
 <h2>Summary <small>({{summaries|length}} stations)</small></h2>
 <div class="scroll">
 <table class="summary sortable">
@@ -157,15 +166,6 @@ PAGE = """
   {% endfor %}
   </tbody>
 </table>
-</div>
-
-<h2>Station DNA</h2>
-<div style="margin:.5rem 0 1rem">
-  <select id="radar-station" style="font:inherit;padding:4px 8px"></select>
-  <span id="radar-n" style="margin-left:.75rem;color:#888"></span>
-</div>
-<div style="max-width:560px;">
-  <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
