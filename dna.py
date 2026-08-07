@@ -59,9 +59,8 @@ PAGE = """
   table.plays td{white-space:nowrap}
   table.plays td.wrap{white-space:normal}
 
-  table {
-    border: 1px solid black;
-   }
+  .scroll{max-height:500px;overflow-y:auto;border:1px solid black}
+
   .dna {
     background-color: yellow;
     font-family: "Archivo Light";
@@ -73,6 +72,7 @@ PAGE = """
 <h1>ONE RADIO <span class="dna">DNA</span></h1>
 
 <h2>Summary <small>({{summaries|length}} stations)</small></h2>
+<div class="scroll">
 <table class="summary sortable">
   <thead>
   <tr>
@@ -99,8 +99,10 @@ PAGE = """
   {% endfor %}
   </tbody>
 </table>
+</div>
 
 <h2>Polls <small>({{rows|length}})</small></h2>
+<div class="scroll">
 <table class="plays sortable">
   <thead>
   <tr>
@@ -129,7 +131,9 @@ PAGE = """
   {% endfor %}
   </tbody>
 </table>
+</div>
 
+<div class="scroll">
 <h2>Uncategorized tags <small>({{misses|length}} distinct, from unresolved rows only)</small></h2>
 <table class="summary sortable">
   <thead>
@@ -144,6 +148,7 @@ PAGE = """
   {% endfor %}
   </tbody>
 </table>
+</div>
 
 <script>
 document.querySelectorAll("table.sortable").forEach(function(table){
