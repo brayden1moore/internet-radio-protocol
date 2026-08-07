@@ -197,7 +197,7 @@ var RADAR_AXIS = {{ radar_axis|tojson }};
         datasets: [{
           label: stations[0] || "",
           data: RADAR_DATA[stations[0]] || [],
-          backgroundColor: "rgba(255,255,0,0.55)",
+          backgroundColor: "rgba(255,255,0,1)",
           borderColor: "#FFFF00",
           borderWidth: 3,
           pointBackgroundColor: "#FFFF00",
