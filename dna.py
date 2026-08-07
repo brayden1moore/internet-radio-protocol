@@ -229,12 +229,16 @@ PAGE = """
         order: 2   // draw the main (filled yellow) polygon behind overlays
       };
     }
+    function rgba(hex, a){
+        var n = parseInt(hex.slice(1), 16);
+        return "rgba(" + (n >> 16 & 255) + "," + (n >> 8 & 255) + "," + (n & 255) + "," + a + ")";
+        }
 
     function overlayDataset(station, color){
       return {
         label: station,
         data: RADAR_DATA[station] || [],
-        backgroundColor: color,
+        backgroundColor: rgba(color, 0.3),
         borderColor: color,
         borderWidth: 1,
         pointBackgroundColor: color,
