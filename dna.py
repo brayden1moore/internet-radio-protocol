@@ -89,6 +89,7 @@ PAGE = """
   <select id="radar-station" style="font:inherit;padding:4px 8px"></select>
   <span id="radar-n" style="margin-left:.75rem;color:#888"></span>
 </div>
+<div id="radar-similar" style="margin:.5rem 0 1rem;display:flex;gap:.5rem;flex-wrap:wrap"></div>
 <div style="max-width:560px;">
   <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
 </div>
@@ -174,61 +175,138 @@ PAGE = """
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-var RADAR_AXIS = {{ radar_axis|tojson }};
+  var RADAR_AXIS = {{ radar_axis|tojson }};
   var RADAR_DATA = {{ radar_data|tojson }};
   var RADAR_TOTALS = {{ radar_totals|tojson }};
+
+  var OVERLAY_COLORS = ["#00acff", "#ff0000", "#00ffa4"];
 
   (function(){
     var sel = document.getElementById("radar-station");
     var nLabel = document.getElementById("radar-n");
-    var stations = Object.keys(RADAR_DATA)
+    var simBox = document.getElementById("radar-similar");
+
+    var eligible = Object.keys(RADAR_DATA)
       .filter(function(s){ return (RADAR_TOTALS[s] || 0) >= 5; });
-    stations.forEach(function(s){
+
+    eligible.forEach(function(s){
       var o = document.createElement("option");
-      o.value = s; o.textContent = `${s} (${RADAR_TOTALS[s]})`;
+      o.value = s; o.textContent = s + " (" + RADAR_TOTALS[s] + ")";
       sel.appendChild(o);
     });
 
+    function dist(a, b){
+      var s = 0;
+      for (var i = 0; i < a.length; i++){ var d = a[i] - b[i]; s += d * d; }
+      return Math.sqrt(s);
+    }
+
+    // The 3 eligible stations whose proportion vectors are nearest `station`.
+    function nearest(station){
+      var base = RADAR_DATA[station] || [];
+      return eligible
+        .filter(function(s){ return s !== station; })
+        .map(function(s){ return { s: s, d: dist(base, RADAR_DATA[s]) }; })
+        .sort(function(a, b){ return a.d - b.d; })
+        .slice(0, 3)
+        .map(function(x){ return x.s; });
+    }
+
     function setN(s){
-      var n = RADAR_TOTALS[s] || 0;
-      nLabel.textContent = "n = " + n.toLocaleString();
+      nLabel.textContent = "n = " + (RADAR_TOTALS[s] || 0).toLocaleString();
+    }
+
+    function baseDataset(station){
+      return {
+        label: station,
+        data: RADAR_DATA[station] || [],
+        backgroundColor: "rgba(255,255,0,1)",
+        borderColor: "#000000",
+        borderWidth: 1,
+        pointBackgroundColor: "#000000",
+        pointRadius: 4,
+        order: 2   // draw the main (filled yellow) polygon behind overlays
+      };
+    }
+
+    function overlayDataset(station, color){
+      return {
+        label: station,
+        data: RADAR_DATA[station] || [],
+        backgroundColor: "transparent",
+        borderColor: color,
+        borderWidth: 2,
+        pointBackgroundColor: color,
+        pointRadius: 2,
+        order: 1
+      };
     }
 
     var chart = new Chart(document.getElementById("radar-chart"), {
       type: "radar",
-      data: {
-        labels: RADAR_AXIS,
-        datasets: [{
-          label: stations[0] || "",
-          data: RADAR_DATA[stations[0]] || [],
-          backgroundColor: "rgba(255,255,0,1)",
-          borderColor: "#000000",
-          borderWidth: 1,
-          pointBackgroundColor: "#000000",
-          pointRadius: 4
-        }]
-      },
-        options: {
-                responsive: true,
-                scales: { r: {
-                beginAtZero: true,
-                ticks: { display: false },
-                grid: { display: false },
-                pointLabels: { font: { size: 11 } }
-                }},
-                plugins: { legend: { display: false } }
-            }
+      data: { labels: RADAR_AXIS, datasets: [baseDataset(eligible[0] || "")] },
+      options: {
+        responsive: true,
+        scales: { r: {
+          beginAtZero: true,
+          ticks: { display: false },
+          grid: { display: false },
+          pointLabels: { font: { size: 11 } }
+        }},
+        plugins: { legend: { display: false } }
+      }
     });
 
-    setN(stations[0] || "");
+    // Rebuild the similar-station buttons for the current selection.
+    function renderSimilar(station){
+      simBox.innerHTML = "";
+      nearest(station).forEach(function(other, i){
+        var color = OVERLAY_COLORS[i];
+        var btn = document.createElement("button");
+        btn.textContent = other + " (" + RADAR_TOTALS[other] + ")";
+        btn.dataset.station = other;
+        btn.dataset.color = color;
+        btn.dataset.on = "0";
+        btn.style.cssText =
+          "font:inherit;padding:4px 10px;cursor:pointer;border:1px solid #000;" +
+          "background:#fff;border-left:6px solid " + color + ";";
+        btn.addEventListener("click", function(){
+          var on = btn.dataset.on === "1";
+          if (on){
+            // remove this station's overlay
+            chart.data.datasets = chart.data.datasets.filter(function(d){
+              return !(d.order === 1 && d.label === other);
+            });
+            btn.dataset.on = "0";
+            btn.style.background = "#fff";
+            btn.style.color = "#000";
+          } else {
+            chart.data.datasets.push(overlayDataset(other, color));
+            btn.dataset.on = "1";
+            btn.style.background = color;
+            btn.style.color = "#fff";
+          }
+          chart.update();
+        });
+        simBox.appendChild(btn);
+      });
+    }
 
-    sel.addEventListener("change", function(){
-      var s = sel.value;
-      chart.data.datasets[0].label = s;
-      chart.data.datasets[0].data = RADAR_DATA[s] || [];
+    function selectStation(station){
+      // reset to just the base polygon, then rebuild buttons
+      chart.data.datasets = [baseDataset(station)];
       chart.update();
-      setN(s);
-    });
+      setN(station);
+      renderSimilar(station);
+    }
+
+    sel.addEventListener("change", function(){ selectStation(sel.value); });
+
+    if (eligible.length){
+      selectStation(eligible[0]);
+    } else {
+      nLabel.textContent = "no stations with enough data yet";
+    }
   })();
 </script>
 
