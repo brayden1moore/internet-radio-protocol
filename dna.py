@@ -204,15 +204,16 @@ var RADAR_AXIS = {{ radar_axis|tojson }};
           pointRadius: 1
         }]
       },
-      options: {
-        responsive: true,
-        scales: { r: {
-          beginAtZero: true,
-          ticks: { showLabelBackdrop: false, font: { size: 10 } },
-          pointLabels: { font: { size: 11 } }
-        }},
-        plugins: { legend: { display: false } }
-      }
+        options: {
+                responsive: true,
+                scales: { r: {
+                beginAtZero: true,
+                ticks: { display: false },
+                grid: { display: false },
+                pointLabels: { font: { size: 11 } }
+                }},
+                plugins: { legend: { display: false } }
+            }
     });
 
     setN(stations[0] || "");
