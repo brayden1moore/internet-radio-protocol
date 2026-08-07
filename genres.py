@@ -8,6 +8,7 @@ GENRE_MAP = {
     "Dance - Drum & Bass": "Drum & Bass",
     "Drum & Bass - Jungle" : "Drum & Bass",
     "Ram Drum & Bass": "Drum & Bass",
+    "dance - drum & bass / jungle": "Drum & Bass",
 
     # Techno
     "Dance - Techno": "Techno",
@@ -50,6 +51,8 @@ GENRE_MAP = {
     "electronic": "Electronic",
     "idm": "Electronic",
     "breaks":"Electronic",
+    "electronic: others...": "Electronic",
+    "deconstructed club":"Electronic",
  
     # Ambient
     "Ambient": "Ambient",
@@ -85,6 +88,7 @@ GENRE_MAP = {
     "progressive rock": "Rock", 
  
     # Alternative
+    "post-punk": "Alternative",
     "Alternative|Indie Pop|Indie Rock|Pop": "Alternative",
     "Indie": "Alternative",
     "Indie Pop": "Alternative",
@@ -155,6 +159,7 @@ GENRE_MAP = {
     "Reggae: Reggae": "Reggae / Caribbean",
  
     # Latin
+    "mpb": "Latin",
     "Alternativo & Rock Latino": "Latin",
     "Latin": "Latin",
     "Latin / Tropical": "Latin",
@@ -176,6 +181,7 @@ GENRE_MAP = {
     "Jazz: Free Jazz": "Jazz",
     "Jazz: Electro Jazz": "Jazz",
     "Jazz - World": "Jazz",
+    "jazz: contemporary jazz":"Jazz",
 
     # Classical
     "Church Organ": "Classical",
@@ -206,6 +212,7 @@ GENRE_MAP = {
     "Country": "Country",
  
     # World
+    "african - afrobeat": "World",
     "Africa": "World",
     "African": "World",
     "Afro-Beat": "World",
@@ -226,6 +233,7 @@ GENRE_MAP = {
     "Anime": "Other",
     "Comedy": "Other",
     "Holiday": "Other",
+    "j-pop": "Other"
 }
 
 GENRE_ORDER = [
