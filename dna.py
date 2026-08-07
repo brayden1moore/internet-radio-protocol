@@ -1,9 +1,9 @@
-# dna.py
-import sqlite3
 import re
+import json
+import sqlite3
 import statistics
-from collections import Counter
 from pathlib import Path
+from collections import Counter
 from flask import Flask, render_template_string
 
 import genres
@@ -150,6 +150,62 @@ PAGE = """
 </table>
 </div>
 
+<h2>Station DNA radar</h2>
+<div style="margin:.5rem 0 1rem">
+  <select id="radar-station" style="font:inherit;padding:4px 8px"></select>
+</div>
+<div style="max-width:560px;margin:0 auto">
+  <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  var RADAR_AXIS = {{ radar_axis|tojson }};
+  var RADAR_DATA = {{ radar_data|tojson }};
+
+  (function(){
+    var sel = document.getElementById("radar-station");
+    var stations = Object.keys(RADAR_DATA).sort();
+    stations.forEach(function(s){
+      var o = document.createElement("option");
+      o.value = s; o.textContent = s;
+      sel.appendChild(o);
+    });
+
+    var chart = new Chart(document.getElementById("radar-chart"), {
+      type: "radar",
+      data: {
+        labels: RADAR_AXIS,
+        datasets: [{
+          label: stations[0] || "",
+          data: RADAR_DATA[stations[0]] || [],
+          backgroundColor: "rgba(214,90,48,0.15)",
+          borderColor: "#d85a30",
+          borderWidth: 2,
+          pointBackgroundColor: "#d85a30",
+          pointRadius: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: { r: {
+          beginAtZero: true,
+          ticks: { showLabelBackdrop: false, font: { size: 10 } },
+          pointLabels: { font: { size: 11 } }
+        }},
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    sel.addEventListener("change", function(){
+      var s = sel.value;
+      chart.data.datasets[0].label = s;
+      chart.data.datasets[0].data = RADAR_DATA[s] || [];
+      chart.update();
+    });
+  })();
+</script>
+
 <script>
 document.querySelectorAll("table.sortable").forEach(function(table){
   var ths = table.tHead.rows[0].cells;
@@ -267,6 +323,25 @@ def summarize(rows):
         })
     return summaries
 
+def station_categories(rows):
+    axis = genres.all_categories()
+    idx = {c: i for i, c in enumerate(axis)}
+    counts = {}
+    for r in rows:
+        if not r["matched"] or not r["categories"]:
+            continue
+        cnt = counts.setdefault(r["station"], Counter())
+        for c in r["categories"].split(";"):
+            if c in idx:
+                cnt[c] += 1
+    data = {}
+    for station, cnt in counts.items():
+        total = sum(cnt.values())
+        if not total:
+            continue
+        data[station] = [round(100 * cnt.get(c, 0) / total, 1) for c in axis]
+    return axis, data
+
 @app.route("/dna")
 def dna():
     conn = sqlite3.connect(DB_PATH)
@@ -275,4 +350,8 @@ def dna():
     conn.close()
     summaries = summarize(rows)
     misses = uncategorized(rows)
-    return render_template_string(PAGE, rows=rows, summaries=summaries, misses=misses)
+    radar_axis, radar_data = station_categories(rows)
+    return render_template_string(
+        PAGE, rows=rows, summaries=summaries, misses=misses,
+        radar_axis=radar_axis, radar_data=radar_data,
+    )
