@@ -117,7 +117,7 @@ GENRE_MAP = {
     # Disco / Funk
     "Soul & Funk": "Disco / Funk",
     "Funk": "Disco / Funk",
-    "Disco": "Disco",
+    "Disco": "Disco / Funk",
  
     # Soul / R&B
     "Contemporary R&B": "Soul / R&B",
