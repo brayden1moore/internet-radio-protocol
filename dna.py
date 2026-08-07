@@ -162,6 +162,7 @@ PAGE = """
 <h2>Station DNA</h2>
 <div style="margin:.5rem 0 1rem">
   <select id="radar-station" style="font:inherit;padding:4px 8px"></select>
+  <span id="radar-n" style="margin-left:.75rem;color:#888"></span>
 </div>
 <div style="max-width:560px;">
   <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
@@ -169,17 +170,24 @@ PAGE = """
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-  var RADAR_AXIS = {{ radar_axis|tojson }};
+var RADAR_AXIS = {{ radar_axis|tojson }};
   var RADAR_DATA = {{ radar_data|tojson }};
+  var RADAR_TOTALS = {{ radar_totals|tojson }};
 
   (function(){
     var sel = document.getElementById("radar-station");
+    var nLabel = document.getElementById("radar-n");
     var stations = Object.keys(RADAR_DATA).sort();
     stations.forEach(function(s){
       var o = document.createElement("option");
       o.value = s; o.textContent = s;
       sel.appendChild(o);
     });
+
+    function setN(s){
+      var n = RADAR_TOTALS[s] || 0;
+      nLabel.textContent = "n = " + n.toLocaleString();
+    }
 
     var chart = new Chart(document.getElementById("radar-chart"), {
       type: "radar",
@@ -200,17 +208,20 @@ PAGE = """
         scales: { r: {
           beginAtZero: true,
           ticks: { showLabelBackdrop: false, font: { size: 10 } },
-          //pointLabels: { font: { size: 11 } }
+          pointLabels: { font: { size: 11 } }
         }},
         plugins: { legend: { display: false } }
       }
     });
+
+    setN(stations[0] || "");
 
     sel.addEventListener("change", function(){
       var s = sel.value;
       chart.data.datasets[0].label = s;
       chart.data.datasets[0].data = RADAR_DATA[s] || [];
       chart.update();
+      setN(s);
     });
   })();
 </script>
@@ -336,20 +347,22 @@ def station_categories(rows):
     axis = genres.all_categories()
     idx = {c: i for i, c in enumerate(axis)}
     counts = {}
+    totals = {}
     for r in rows:
         if not r["matched"] or not r["categories"]:
             continue
         cnt = counts.setdefault(r["station"], Counter())
+        totals[r["station"]] = totals.get(r["station"], 0) + 1   # one per song
         for c in r["categories"].split(";"):
             if c in idx:
                 cnt[c] += 1
     data = {}
     for station, cnt in counts.items():
-        total = sum(cnt.values())
-        if not total:
+        hits = sum(cnt.values())
+        if not hits:
             continue
-        data[station] = [round(100 * cnt.get(c, 0) / total, 1) for c in axis]
-    return axis, data
+        data[station] = [round(100 * cnt.get(c, 0) / hits, 1) for c in axis]
+    return axis, data, totals
 
 @app.route("/dna")
 def dna():
@@ -359,8 +372,8 @@ def dna():
     conn.close()
     summaries = summarize(rows)
     misses = uncategorized(rows)
-    radar_axis, radar_data = station_categories(rows)
+    radar_axis, radar_data, radar_totals = station_categories(rows)
     return render_template_string(
         PAGE, rows=rows, summaries=summaries, misses=misses,
-        radar_axis=radar_axis, radar_data=radar_data,
+        radar_axis=radar_axis, radar_data=radar_data, radar_totals=radar_totals,
     )
