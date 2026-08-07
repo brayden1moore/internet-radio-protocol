@@ -115,7 +115,7 @@ PAGE = """
 <div id="chart-div">
 
     <div id="left-div">
-        <h2>Most Similar Genre Makeup</h2>
+        <h2 style="margin-top: 0px;">Most Similar Genre Makeup</h2>
         <div id="radar-similar" style="white-space:nowrap; margin:.5rem 0 1rem;display:flex;gap:.5rem;overflow:scroll;"></div>
         <div style="max-width:560px;">
         <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
