@@ -9,6 +9,7 @@ GENRE_ORDER = [
     'Soul / R&B',
     'Pop',
     'Rock',
+    'Punk',
     'Alternative',
     'Folk / Singer-Songwriter',
     'Country',
