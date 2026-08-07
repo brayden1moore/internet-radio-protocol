@@ -292,7 +292,7 @@ var yearChart = makeSpectrum("year-chart", {
       : [];
     var plays = (s.obsc_mean != null)
       ? [{ lo: s.obsc_lo, hi: s.obsc_hi, mean: s.obsc_mean,
-           label: s.obsc_mean + " / 100", color: "#000", fill: "#FFFF00" }]
+           label: s.obsc_mean, color: "#000", fill: "#FFFF00" }]
       : [];
     return { year: year, plays: plays };
   }
