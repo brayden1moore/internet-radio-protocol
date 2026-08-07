@@ -24,11 +24,13 @@ PAGE = """
   letter-spacing: -0.05em;
   font:14px/1.4 "Archivo Light",system-ui,sans-serif;margin:2rem;color:#111}
   h1{
-    margin: 0px;
-    letter-spacing: -0.05em;
-    font-family: "Archivo Bold";
-    font-size:34pt;
-    color: black;
+        border-bottom: 1px solid black;
+        margin-left: 0px;
+        letter-spacing: -0.05em;
+        padding-bottom: 15px;
+        font-family: "Archivo Bold";
+        font-size: 34pt;
+        color: black;
   }
   h2{font-size:1rem;margin:1.5rem 0 .5rem}
   table{border-collapse:collapse;width:100%;table-layout:fixed}
