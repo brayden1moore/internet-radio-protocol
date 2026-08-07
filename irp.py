@@ -1280,7 +1280,12 @@ class Stream:
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             if info['data']:
                 self.now_playing = extract_value(info, ['data','title'])
+                self.now_playing_subtitle = None
                 self.status = 'Live'
+                if info['data']['track_title']:
+                    self.now_playing_subtitle = self.now_playing
+                    self.now_playing = extract_value(info, ['data','track_title'])
+                    self.now_playing_artist = extract_value(info, ['data','track_artist'])
             else:
                 self.status = 'Offline'
 
