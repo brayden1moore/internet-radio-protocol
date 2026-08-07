@@ -150,7 +150,7 @@ PAGE = """
 </table>
 </div>
 
-<h2>Station DNA radar</h2>
+<h2>Station DNA</h2>
 <div style="margin:.5rem 0 1rem">
   <select id="radar-station" style="font:inherit;padding:4px 8px"></select>
 </div>
@@ -179,10 +179,10 @@ PAGE = """
         datasets: [{
           label: stations[0] || "",
           data: RADAR_DATA[stations[0]] || [],
-          backgroundColor: "rgba(214,90,48,0.15)",
-          borderColor: "#d85a30",
+          backgroundColor: "rgba(255,255,0,0.15)",
+          borderColor: "#FFFF00",
           borderWidth: 2,
-          pointBackgroundColor: "#d85a30",
+          pointBackgroundColor: "#FFFF00",
           pointRadius: 2
         }]
       },
