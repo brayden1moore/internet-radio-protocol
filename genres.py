@@ -95,7 +95,6 @@ GENRE_MAP = {
     "Easy Listening": "Ambient",
  
     # Rock
-    "Alternative/Punk": "Rock",
     "Hard Rock": "Rock",
     "Metal": "Rock",
     "Metal - Hard Rock": "Rock",
@@ -103,12 +102,15 @@ GENRE_MAP = {
     "Metal/HardRock": "Rock",
     "Metalli": "Rock",
     "Psychedelic": "Rock",
-    "Punk": "Rock",
     "Rock": "Rock",
     "Rock - Psychedelic": "Rock",
     "Industrial/Noise": "Rock",
     "Rock - Progressive": "Rock",
     "progressive rock": "Rock", 
+
+    # Punk
+    "Punk": "Punk",
+    "Alternative/Punk": "Punk",
  
     # Alternative
     "post-punk": "Alternative",
