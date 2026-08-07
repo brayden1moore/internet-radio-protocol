@@ -203,14 +203,18 @@ PAGE = """
     }
 
     // The 3 eligible stations whose proportion vectors are nearest `station`.
+    var MAX_DIST = 100 * Math.SQRT2;   // ~141.4, two disjoint proportion vectors
+
     function nearest(station){
       var base = RADAR_DATA[station] || [];
       return eligible
         .filter(function(s){ return s !== station; })
-        .map(function(s){ return { s: s, d: dist(base, RADAR_DATA[s]) }; })
+        .map(function(s){
+          var d = dist(base, RADAR_DATA[s]);
+          return { s: s, d: d, sim: Math.round(100 * (1 - d / MAX_DIST)) };
+        })
         .sort(function(a, b){ return a.d - b.d; })
-        .slice(0, 3)
-        .map(function(x){ return x.s; });
+        .slice(0, 3);
     }
 
     function setN(s){
@@ -265,20 +269,20 @@ PAGE = """
     // Rebuild the similar-station buttons for the current selection.
     function renderSimilar(station){
       simBox.innerHTML = "";
-      nearest(station).forEach(function(other, i){
+      nearest(station).forEach(function(item, i){
+        var other = item.s;
         var color = OVERLAY_COLORS[i];
         var btn = document.createElement("button");
-        btn.textContent = other + " (" + RADAR_TOTALS[other] + ")";
+        btn.textContent = other + " (" + item.sim + "%, n=" + RADAR_TOTALS[other] + ")";
         btn.dataset.station = other;
         btn.dataset.color = color;
         btn.dataset.on = "0";
         btn.style.cssText =
-          "font:inherit;padding:4px 10px;cursor:pointer;border:1px solid " + color + ";" +
-          "background:#fff;border-top:6px solid " + color + ";";
+          "font:inherit;padding:4px 10px;cursor:pointer;border:1px solid #000;" +
+          "background:#fff;border-left:6px solid " + color + ";";
         btn.addEventListener("click", function(){
           var on = btn.dataset.on === "1";
           if (on){
-            // remove this station's overlay
             chart.data.datasets = chart.data.datasets.filter(function(d){
               return !(d.order === 1 && d.label === other);
             });
