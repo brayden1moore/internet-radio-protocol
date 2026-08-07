@@ -200,7 +200,7 @@ PAGE = """
         scales: { r: {
           beginAtZero: true,
           ticks: { showLabelBackdrop: false, font: { size: 10 } },
-          pointLabels: { font: { size: 11 } }
+          //pointLabels: { font: { size: 11 } }
         }},
         plugins: { legend: { display: false } }
       }
