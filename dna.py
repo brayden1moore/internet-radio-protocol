@@ -80,6 +80,11 @@ PAGE = """
     width: 560px;
     border: 1px solid black;
   }
+
+  #plays-chart, #year-chart {
+      border: 1px solid black;
+      background-color: rgb(243,243,243);
+  }
 </style>
 
 <h1>ONE RADIO <span class="dna">DNA</span></h1>
@@ -206,7 +211,7 @@ PAGE = """
       var xm  = xs.getPixelForValue(w.mean);
       var ctx = chart.ctx;
       ctx.save();
-      ctx.strokeStyle = "#000"; ctx.lineWidth = 2;
+      ctx.strokeStyle = "#000"; ctx.lineWidth = 1;
       // horizontal line
       ctx.beginPath(); ctx.moveTo(xlo, yc); ctx.lineTo(xhi, yc); ctx.stroke();
       // end caps
@@ -518,7 +523,7 @@ def station_spectra(rows):
         tmp[station] = {
             "year_mean": year_mean, "year_sd": year_sd,
             "year_lo": (year_mean - year_sd) if (year_mean and year_sd) else year_mean,
-            "year_hi": (year_mean + year_sd) if (year_mean and year_sd) else year_mean,
+            "year_hi": this_year,
             "n_year": len(years),
             "gmean": gmean, "g_lo": g_lo, "g_hi": g_hi,
             "n_plays": len(plays),
