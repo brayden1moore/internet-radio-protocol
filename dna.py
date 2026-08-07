@@ -32,7 +32,7 @@ PAGE = """
         font-size: 34pt;
         color: black;
   }
-  h2{font-size:1rem;margin:1.5rem 0 .5rem; margin-top: 0px;}
+  h2{font-size:1rem;margin:1.5rem 0 .5rem;}
   table{border-collapse:collapse;width:100%;table-layout:fixed}
   th,td{text-align:left;padding:4px 10px;border-bottom:1px solid #eee;
         overflow:hidden;text-overflow:ellipsis}
@@ -106,7 +106,7 @@ PAGE = """
 
 <h1>ONE RADIO <span class="dna">DNA</span></h1>
 
-<h2>Station</h2>
+<h2 style="margin-top: 0px;">Station</h2>
 <div style="margin:.5rem 0 1rem">
   <select id="radar-station" style="font:inherit;padding:4px 8px"></select>
   <span id="radar-n" style="margin-left:.75rem;color:#888"></span>
