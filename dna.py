@@ -6,6 +6,8 @@ from collections import Counter
 from pathlib import Path
 from flask import Flask, render_template_string
 
+import genres
+
 DB_PATH = Path("/var/www/internet-radio-protocol/plays.db")
 app = Flask(__name__)
 
@@ -128,6 +130,21 @@ PAGE = """
   </tbody>
 </table>
 
+<h2>Uncategorized tags <small>({{misses|length}} distinct, from unresolved rows only)</small></h2>
+<table class="summary sortable">
+  <thead>
+  <tr><th>tag</th><th class=num data-type=num>count</th></tr>
+  </thead>
+  <tbody>
+  {% for tag, n in misses %}
+  <tr>
+    <td>{{ tag }}</td>
+    <td class=num>{{ n }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
 <script>
 document.querySelectorAll("table.sortable").forEach(function(table){
   var ths = table.tHead.rows[0].cells;
@@ -191,6 +208,15 @@ def parse_genres(raw):
             out.append(g)
     return out
 
+def uncategorized(rows):
+    """Count tags from rows that resolved to NO category"""
+    misses = Counter()
+    for r in rows:
+        if not r["matched"] or r["category"]:
+            continue  
+        for tag in genres.unresolved_tags_for_row(r["acr_genres"], r["lf_tags"]):
+            misses[tag] += 1
+    return misses.most_common()
 
 def summarize(rows):
     by_station = {}
@@ -240,9 +266,8 @@ def summarize(rows):
 def dna():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
-    rows = conn.execute(
-        "SELECT * FROM plays ORDER BY ts DESC"
-    ).fetchall()
+    rows = conn.execute("SELECT * FROM plays ORDER BY ts DESC").fetchall()
     conn.close()
     summaries = summarize(rows)
-    return render_template_string(PAGE, rows=rows, summaries=summaries)
+    misses = uncategorized(rows)
+    return render_template_string(PAGE, rows=rows, summaries=summaries, misses=misses)
