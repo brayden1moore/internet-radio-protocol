@@ -108,7 +108,7 @@ PAGE = """
 
 <h2 style="margin-top: 0px;">Station</h2>
 <div style="margin:.5rem 0 1rem">
-  <select id="radar-station" style="font:inherit;padding:4px 8px"></select>
+  <select id="radar-station" style="font:inherit;padding:4px 8px;background-color: yellow;height: 33px !important;outline: none !important;border-radius: 0px !important;"></select>
   <span id="radar-n" style="margin-left:.75rem;color:#888"></span>
 </div>
 
