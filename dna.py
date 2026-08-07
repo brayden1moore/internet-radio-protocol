@@ -240,7 +240,8 @@ PAGE = """
     });
   }
 
-var yearChart = makeSpectrum("year-chart", { x: { type: "linear", max: s.year_hi  } });
+const currentYear = new Date().getFullYear();
+var yearChart = makeSpectrum("year-chart", { x: { type: "linear", max: currentYear } });
   var playsChart = makeSpectrum("plays-chart", {
     x: { type: "linear", min: 0, max: 100 }
   });
