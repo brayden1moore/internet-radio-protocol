@@ -32,7 +32,7 @@ PAGE = """
         font-size: 34pt;
         color: black;
   }
-  h2{font-size:1rem;margin:1.5rem 0 .5rem}
+  h2{font-size:1rem;margin:1.5rem 0 .5rem; margin-top: 0px;}
   table{border-collapse:collapse;width:100%;table-layout:fixed}
   th,td{text-align:left;padding:4px 10px;border-bottom:1px solid #eee;
         overflow:hidden;text-overflow:ellipsis}
