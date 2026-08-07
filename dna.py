@@ -233,11 +233,11 @@ PAGE = """
       return {
         label: station,
         data: RADAR_DATA[station] || [],
-        backgroundColor: "transparent",
+        backgroundColor: color,
         borderColor: color,
-        borderWidth: 2,
+        borderWidth: 1,
         pointBackgroundColor: color,
-        pointRadius: 2,
+        pointRadius: 1,
         order: 1
       };
     }
@@ -268,8 +268,8 @@ PAGE = """
         btn.dataset.color = color;
         btn.dataset.on = "0";
         btn.style.cssText =
-          "font:inherit;padding:4px 10px;cursor:pointer;border:1px solid #000;" +
-          "background:#fff;border-left:6px solid " + color + ";";
+          "font:inherit;padding:4px 10px;cursor:pointer;border:1px solid " + color + ";" +
+          "background:#fff;border-top:6px solid " + color + ";";
         btn.addEventListener("click", function(){
           var on = btn.dataset.on === "1";
           if (on){
