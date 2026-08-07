@@ -228,6 +228,28 @@ GENRE_MAP = {
     "Holiday": "Other",
 }
 
+GENRE_ORDER = [
+    'Ambient',
+    'Electronic',
+    'Drum & Bass',
+    'Techno',
+    'House',
+    'Disco / Funk',
+    'Hip-Hop',
+    'Soul / R&B',
+    'Pop',
+    'Rock',
+    'Country',
+    'Folk / Singer-Songwriter',
+    'Alternative',
+    'World',
+    'Reggae / Caribbean',
+    'Latin',
+    'Jazz',
+    'Soundtrack / Score',
+    'Classical',
+    'Other',
+]
 
 # Case-insensitive index of every GENRE_MAP key
 _CI = {k.lower(): v for k, v in GENRE_MAP.items()}
@@ -334,8 +356,11 @@ def resolve_row(acr_genres, lf_tags=None):
 
  
 def all_categories():
-    return sorted(set(GENRE_MAP.values()) | set(_ALIAS.values()))
- 
+    produced = set(GENRE_MAP.values()) | set(_ALIAS.values())
+    missing = produced - set(GENRE_ORDER)
+    if missing:
+        raise ValueError(f"GENRE_ORDER missing categories: {sorted(missing)}")
+    return list(GENRE_ORDER)
 
 def add_categories(df, acr_col="acr_genres", lf_col="lf_tags"):
     """
