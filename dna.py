@@ -224,7 +224,7 @@ PAGE = """
         borderColor: "#000000",
         borderWidth: 1,
         pointBackgroundColor: "#000000",
-        pointRadius: 4,
+        pointRadius: 1,
         order: 2   // draw the main (filled yellow) polygon behind overlays
       };
     }
