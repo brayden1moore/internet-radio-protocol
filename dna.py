@@ -67,6 +67,15 @@ PAGE = """
     -webkit-text-stroke: 0px !important;
     color: black;
   }
+
+  #radar-chart {
+    background-color: rgb(243,243,243);
+    display: block;
+    box-sizing: border-box;
+    height: 560px;
+    width: 560px;
+    border: 1px solid black;
+  }
 </style>
 
 <h1>ONE RADIO <span class="dna">DNA</span></h1>
@@ -154,7 +163,7 @@ PAGE = """
 <div style="margin:.5rem 0 1rem">
   <select id="radar-station" style="font:inherit;padding:4px 8px"></select>
 </div>
-<div style="max-width:560px;margin:0 auto">
+<div style="max-width:560px;">
   <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
 </div>
 
@@ -181,9 +190,9 @@ PAGE = """
           data: RADAR_DATA[stations[0]] || [],
           backgroundColor: "rgba(255,255,0,0.15)",
           borderColor: "#FFFF00",
-          borderWidth: 2,
+          borderWidth: 3,
           pointBackgroundColor: "#FFFF00",
-          pointRadius: 2
+          pointRadius: 1
         }]
       },
       options: {
