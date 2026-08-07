@@ -316,7 +316,7 @@ var yearChart = makeSpectrum("year-chart", {
     }
     if (s.obsc_mean != null){
        playsChart.$whiskers.push({ station: station, lo: s.obsc_lo, hi: s.obsc_hi,
-        mean: s.obsc_mean, label: s.obsc_mean + " / 100", color: color, fill: color });
+        mean: s.obsc_mean, label: s.obsc_mean , color: color, fill: color });
       playsChart.update();
     }
   }
