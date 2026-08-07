@@ -178,12 +178,10 @@ var RADAR_AXIS = {{ radar_axis|tojson }};
   (function(){
     var sel = document.getElementById("radar-station");
     var nLabel = document.getElementById("radar-n");
-    var stations = Object.keys(RADAR_DATA).sort(function(a, b){
-      return (RADAR_TOTALS[b] || 0) - (RADAR_TOTALS[a] || 0);
-    });
+    var stations = Object.keys(RADAR_DATA).sort();
     stations.forEach(function(s){
       var o = document.createElement("option");
-      o.value = s; o.textContent = s;
+      o.value = s; o.textContent = `${s} (${nLabel})`;
       sel.appendChild(o);
     });
 
