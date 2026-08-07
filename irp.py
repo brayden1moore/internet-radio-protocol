@@ -1131,6 +1131,8 @@ class Stream:
         elif self.name == 'KALX':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.show_logo = None
+            self.now_playing_artist = None
+            self.now_playing_subtitle = None
             self.now_playing = extract_value(info, ['show','title'])
             self.now_playing_description = extract_value(info, ['show','users',0,'profile_text'])
             if self.now_playing_description:
@@ -1156,7 +1158,9 @@ class Stream:
                 artist = artist.getText().strip()
                 song = soup.find(attrs={'class':"song"})
                 song = song.getText().strip()
-                self.now_playing_subtitle = song + ' by ' + artist
+                self.now_playing_subtitle = self.now_playing
+                self.now_playing = song
+                self.now_playing_artist = artist
             except Exception as e:
                 print(e)
                 self.now_playing_subtitle = None
@@ -2573,7 +2577,8 @@ Stream(
         insta_link = "https://www.instagram.com/kalxradio/",
         tuner_only = False,
         genres = ['Student'],
-        category='Student'
+        category='Student',
+        song_basis=True
 ),
 Stream(
         name = "WKCR",
