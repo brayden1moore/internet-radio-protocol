@@ -24,6 +24,7 @@ PAGE = """
   letter-spacing: -0.05em;
   font:14px/1.4 "Archivo Light",system-ui,sans-serif;margin:2rem;color:#111}
   h1{
+    margin: 0px;
     letter-spacing: -0.05em;
     font-family: "Archivo Bold";
     font-size:34pt;
@@ -80,7 +81,7 @@ PAGE = """
 
 <h1>ONE RADIO <span class="dna">DNA</span></h1>
 
-<h2>Station DNA</h2>
+<h2>Station</h2>
 <div style="margin:.5rem 0 1rem">
   <select id="radar-station" style="font:inherit;padding:4px 8px"></select>
   <span id="radar-n" style="margin-left:.75rem;color:#888"></span>
