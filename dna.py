@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 PAGE = """
 <!doctype html><meta charset="utf-8">
-<title>ONE RADIO DNA</title>
+<title>One Radio [DNA]</title>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=0.66">
 </head>
