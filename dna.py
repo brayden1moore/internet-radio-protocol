@@ -95,6 +95,16 @@ PAGE = """
   <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
 </div>
 
+<h2>Era <small>(release year, mean ±1 SD)</small></h2>
+<div style="max-width:560px;">
+  <canvas id="year-chart" role="img" aria-label="Average release year with spread for the selected station"></canvas>
+</div>
+
+<h2>Obscurity <small>(last.fm plays, geometric mean ±1 SD, log scale)</small></h2>
+<div style="max-width:560px;">
+  <canvas id="plays-chart" role="img" aria-label="Average last.fm playcount with spread for the selected station"></canvas>
+</div>
+
 <h2>Summary <small>({{summaries|length}} stations)</small></h2>
 <div class="scroll">
 <table class="summary sortable">
@@ -175,6 +185,84 @@ PAGE = """
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  var SPECTRA = {{ spectra|tojson }};
+
+  // Minimal horizontal error-bar plugin: draws a whisker from lo->hi with a
+  // center mean dot, for a single-point dataset carrying {lo, hi, mean}.
+  var whiskerPlugin = {
+    id: "whisker",
+    afterDatasetsDraw: function(chart){
+      var meta = chart.getDatasetMeta(0);
+      var pt = meta.data && meta.data[0];
+      if (!pt || !chart.$whisker) return;
+      var w = chart.$whisker;
+      var yc = pt.y;
+      var xs = chart.scales.x;
+      var xlo = xs.getPixelForValue(w.lo);
+      var xhi = xs.getPixelForValue(w.hi);
+      var xm  = xs.getPixelForValue(w.mean);
+      var ctx = chart.ctx;
+      ctx.save();
+      ctx.strokeStyle = "#000"; ctx.lineWidth = 2;
+      // horizontal line
+      ctx.beginPath(); ctx.moveTo(xlo, yc); ctx.lineTo(xhi, yc); ctx.stroke();
+      // end caps
+      ctx.beginPath(); ctx.moveTo(xlo, yc-8); ctx.lineTo(xlo, yc+8); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(xhi, yc-8); ctx.lineTo(xhi, yc+8); ctx.stroke();
+      // mean marker
+      ctx.fillStyle = "#FFFF00"; ctx.strokeStyle = "#000";
+      ctx.beginPath(); ctx.arc(xm, yc, 6, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
+      ctx.restore();
+    }
+  };
+
+  function makeSpectrum(canvasId, opts){
+    return new Chart(document.getElementById(canvasId), {
+      type: "scatter",
+      data: { datasets: [{ data: [{x: 0, y: 0}], pointRadius: 0 }] },
+      options: {
+        responsive: true,
+        scales: {
+          x: Object.assign({ position: "bottom" }, opts.x),
+          y: { display: false, min: -1, max: 1 }
+        },
+        plugins: { legend: { display: false }, tooltip: { enabled: false } }
+      },
+      plugins: [whiskerPlugin]
+    });
+  }
+
+  var yearChart = makeSpectrum("year-chart", { x: { type: "linear" } });
+  var playsChart = makeSpectrum("plays-chart", {
+    x: { type: "logarithmic" }
+  });
+
+  function updateSpectra(station){
+    var s = SPECTRA[station] || {};
+
+    // Year
+    if (s.year_mean != null){
+      yearChart.$whisker = { lo: s.year_lo, hi: s.year_hi, mean: s.year_mean };
+      yearChart.data.datasets[0].data = [{ x: s.year_mean, y: 0 }];
+    } else {
+      yearChart.$whisker = null;
+      yearChart.data.datasets[0].data = [];
+    }
+    yearChart.update();
+
+    // Plays
+    if (s.plays_mean != null){
+      playsChart.$whisker = { lo: Math.max(1, s.plays_lo), hi: s.plays_hi, mean: s.plays_mean };
+      playsChart.data.datasets[0].data = [{ x: s.plays_mean, y: 0 }];
+    } else {
+      playsChart.$whisker = null;
+      playsChart.data.datasets[0].data = [];
+    }
+    playsChart.update();
+  }
+</script>
+
 <script>
   var RADAR_AXIS = {{ radar_axis|tojson }};
   var RADAR_DATA = {{ radar_data|tojson }};
@@ -302,11 +390,11 @@ PAGE = """
     }
 
     function selectStation(station){
-      // reset to just the base polygon, then rebuild buttons
       chart.data.datasets = [baseDataset(station)];
       chart.update();
       setN(station);
       renderSimilar(station);
+      updateSpectra(station);    
     }
 
     sel.addEventListener("change", function(){ selectStation(sel.value); });
@@ -392,6 +480,46 @@ def uncategorized(rows):
             misses[tag] += 1
     return [(tag, n) for tag, n in misses.most_common() if n > 2]
 
+def station_spectra(rows):
+    """
+    Per-station stats for the year and plays spectrums.
+    """
+    import math
+    by_station = {}
+    for r in rows:
+        by_station.setdefault(r["station"], []).append(r)
+
+    out = {}
+    for station, srows in by_station.items():
+        years = [y for y in (parse_year(r) for r in srows) if y]
+        plays = [r["lf_playcount"] for r in srows if r["lf_playcount"] and r["lf_playcount"] > 0]
+
+        year_mean = round(statistics.mean(years)) if years else None
+        year_sd = round(statistics.stdev(years), 1) if len(years) > 1 else None
+
+        if plays:
+            logs = [math.log10(p) for p in plays]
+            lm = statistics.mean(logs)
+            lsd = statistics.stdev(logs) if len(logs) > 1 else 0
+            plays_gmean = round(10 ** lm)
+            plays_lo = round(10 ** (lm - lsd))
+            plays_hi = round(10 ** (lm + lsd))
+        else:
+            plays_gmean = plays_lo = plays_hi = None
+
+        out[station] = {
+            "year_mean": year_mean,
+            "year_sd": year_sd,
+            "year_lo": (year_mean - year_sd) if (year_mean and year_sd) else year_mean,
+            "year_hi": (year_mean + year_sd) if (year_mean and year_sd) else year_mean,
+            "n_year": len(years),
+            "plays_mean": plays_gmean,
+            "plays_lo": plays_lo,
+            "plays_hi": plays_hi,
+            "n_plays": len(plays),
+        }
+    return out
+
 def summarize(rows):
     by_station = {}
     for r in rows:
@@ -466,7 +594,9 @@ def dna():
     summaries = summarize(rows)
     misses = uncategorized(rows)
     radar_axis, radar_data, radar_totals = station_categories(rows)
+    spectra = station_spectra(rows)
     return render_template_string(
         PAGE, rows=rows, summaries=summaries, misses=misses,
         radar_axis=radar_axis, radar_data=radar_data, radar_totals=radar_totals,
+        spectra=spectra,
     )
