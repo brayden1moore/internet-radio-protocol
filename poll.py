@@ -291,7 +291,7 @@ def main():
             "INSERT INTO plays (ts, station, source, matched, artist, title,"
             " acr_genres, acr_release, acr_label,"
             " lf_playcount, lf_listeners, lf_tags, mb_genre, mb_year, category, categories)"
-            " VALUES (?,?,?,1,?,?,?,?,?,?,?,?,?,?)",
+            " VALUES (?,?,?,1,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 utcnow(), name, track["source"], track["artist"], track["title"],
                 track.get("acr_genres"), track.get("acr_release"), track.get("acr_label"),
