@@ -205,7 +205,7 @@ var RADAR_AXIS = {{ radar_axis|tojson }};
           borderColor: "#000000",
           borderWidth: 1,
           pointBackgroundColor: "#FFFF00",
-          pointRadius: 1
+          pointRadius: 4
         }]
       },
         options: {
