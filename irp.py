@@ -755,11 +755,13 @@ class Stream:
         
         elif self.name == 'BFF.fm':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
-            self.now_playing_subtitle = info['program'] + ' - ' +  info['presenter']
+            self.now_playing = info['program'] + ' - ' +  info['presenter']
             self.status = 'Live'
 
-            self.now_playing = info['title'] 
-            self.now_playing_artist = info['artist']
+            if info['title']:
+                self.now_playing_subtitle = self.now_playing
+                self.now_playing = info['title'] 
+                self.now_playing_artist = info['artist']
 
             try:
                 self.show_logo = None#info['program_image'].replace('\/','/')
