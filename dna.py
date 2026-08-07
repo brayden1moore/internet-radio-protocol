@@ -185,7 +185,9 @@ PAGE = """
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+
 <script>
+
   var SPECTRA = {{ spectra|tojson }};
 
   // Minimal horizontal error-bar plugin: draws a whisker from lo->hi with a
@@ -261,9 +263,7 @@ PAGE = """
     }
     playsChart.update();
   }
-</script>
 
-<script>
   var RADAR_AXIS = {{ radar_axis|tojson }};
   var RADAR_DATA = {{ radar_data|tojson }};
   var RADAR_TOTALS = {{ radar_totals|tojson }};
