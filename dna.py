@@ -133,8 +133,8 @@ PAGE = """
 </table>
 </div>
 
-<div class="scroll">
 <h2>Uncategorized tags <small>({{misses|length}} distinct, from unresolved rows only)</small></h2>
+<div class="scroll">
 <table class="summary sortable">
   <thead>
   <tr><th>tag</th><th class=num data-type=num>count</th></tr>
