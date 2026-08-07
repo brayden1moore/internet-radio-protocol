@@ -105,6 +105,8 @@ PAGE = """
     <th class=c-time>time (UTC)</th><th class=c-station>station</th><th class=c-source>source</th>
     <th class=c-artist>artist</th><th class=c-title>title</th><th class=c-label>label</th>
     <th class=c-genre>genre</th><th class="c-year num" data-type=num>year</th><th class="c-plays num" data-type=num>last.fm plays</th>
+    <th class=c-genre>category</th>
+    <th class=c-genre>categories</th>
   </tr>
   </thead>
   <tbody>
