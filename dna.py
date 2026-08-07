@@ -93,11 +93,13 @@ PAGE = """
   @media (orientation: landscape)  {
     #chart-div {
         display:flex;
-        width: 560px;
     }
     #spectra-div {
         margin-left: 30px;
         margin-top: 50px;
+    }
+    #left-div {
+        width: 560px;
     }
   }
 </style>
@@ -112,7 +114,7 @@ PAGE = """
 
 <div id="chart-div">
 
-    <div>
+    <div id="left-div">
         <h2>Most Similar Genre Makeup</h2>
         <div id="radar-similar" style="margin:.5rem 0 1rem;display:flex;gap:.5rem;overflow:scroll;"></div>
         <div style="max-width:560px;">
