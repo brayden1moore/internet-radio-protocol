@@ -85,6 +85,10 @@ PAGE = """
       border: 1px solid black;
       background-color: rgb(243,243,243);
   }
+
+  #chart-div {
+    display:flex;
+  }
 </style>
 
 <h1>ONE RADIO <span class="dna">DNA</span></h1>
@@ -94,20 +98,25 @@ PAGE = """
   <select id="radar-station" style="font:inherit;padding:4px 8px"></select>
   <span id="radar-n" style="margin-left:.75rem;color:#888"></span>
 </div>
-<h2>Most Similar</h2>
-<div id="radar-similar" style="margin:.5rem 0 1rem;display:flex;gap:.5rem;flex-wrap:wrap"></div>
-<div style="max-width:560px;">
-  <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
-</div>
 
-<h2>Era <small>(release year, mean ±1 SD)</small></h2>
-<div style="max-width:560px;">
-  <canvas id="year-chart" role="img" aria-label="Average release year with spread for the selected station"></canvas>
-</div>
+<div id="chart-div">
+    <h2>Most Similar</h2>
+    <div id="radar-similar" style="margin:.5rem 0 1rem;display:flex;gap:.5rem;flex-wrap:wrap"></div>
+    <div style="max-width:560px;">
+    <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
+    </div>
 
-<h2>Obscurity <small>(0 = most played, 100 = most obscure, vs all stations)</small></h2>
-<div style="max-width:560px;">
-  <canvas id="plays-chart" role="img" aria-label="Average last.fm playcount with spread for the selected station"></canvas>
+    <div id="spectra-div">
+        <h2>Era <small>(release year, mean ±1 SD)</small></h2>
+        <div style="max-width:560px;">
+        <canvas id="year-chart" role="img" aria-label="Average release year with spread for the selected station"></canvas>
+        </div>
+
+        <h2>Obscurity <small>(0 = most played, 100 = most obscure, vs all stations)</small></h2>
+        <div style="max-width:560px;">
+        <canvas id="plays-chart" role="img" aria-label="Average last.fm playcount with spread for the selected station"></canvas>
+        </div>
+    </div>
 </div>
 
 <h2>Summary <small>({{summaries|length}} stations)</small></h2>
