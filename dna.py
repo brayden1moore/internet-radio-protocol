@@ -240,7 +240,7 @@ PAGE = """
     });
   }
 
-var yearChart = makeSpectrum("year-chart", { x: { type: "linear" } });
+var yearChart = makeSpectrum("year-chart", { x: { type: "linear", max: s.year_hi  } });
   var playsChart = makeSpectrum("plays-chart", {
     x: { type: "linear", min: 0, max: 100 }
   });
