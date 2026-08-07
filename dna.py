@@ -62,9 +62,11 @@ PAGE = """
   .scroll{max-height:500px;overflow-y:auto;border:1px solid black}
 
   .dna {
+    padding: 0px 7px;
+    border: 0.5px solid black;
     background-color: yellow;
     font-family: "Archivo Light";
-    -webkit-text-stroke: 0px !important;
+    /* -webkit-text-stroke: 0px !important; */
     color: black;
   }
 
