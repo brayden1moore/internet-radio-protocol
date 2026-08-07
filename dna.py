@@ -179,10 +179,7 @@ var RADAR_AXIS = {{ radar_axis|tojson }};
     var sel = document.getElementById("radar-station");
     var nLabel = document.getElementById("radar-n");
     var stations = Object.keys(RADAR_DATA)
-      .filter(function(s){ return (RADAR_TOTALS[s] || 0) >= 5; })
-      .sort(function(a, b){
-        return (RADAR_TOTALS[b] || 0) - (RADAR_TOTALS[a] || 0);
-      });
+      .filter(function(s){ return (RADAR_TOTALS[s] || 0) >= 5; });
     stations.forEach(function(s){
       var o = document.createElement("option");
       o.value = s; o.textContent = `${s} (${RADAR_TOTALS[s]})`;
