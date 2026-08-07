@@ -100,7 +100,7 @@ PAGE = """
   <canvas id="year-chart" role="img" aria-label="Average release year with spread for the selected station"></canvas>
 </div>
 
-<h2>Obscurity <small>(last.fm plays, geometric mean ±1 SD, log scale)</small></h2>
+<h2>Obscurity <small>(0 = most played, 100 = most obscure, vs all stations)</small></h2>
 <div style="max-width:560px;">
   <canvas id="plays-chart" role="img" aria-label="Average last.fm playcount with spread for the selected station"></canvas>
 </div>
@@ -235,15 +235,14 @@ PAGE = """
     });
   }
 
-  var yearChart = makeSpectrum("year-chart", { x: { type: "linear" } });
+var yearChart = makeSpectrum("year-chart", { x: { type: "linear" } });
   var playsChart = makeSpectrum("plays-chart", {
-    x: { type: "logarithmic" }
+    x: { type: "linear", min: 0, max: 100 }
   });
 
   function updateSpectra(station){
     var s = SPECTRA[station] || {};
 
-    // Year
     if (s.year_mean != null){
       yearChart.$whisker = { lo: s.year_lo, hi: s.year_hi, mean: s.year_mean };
       yearChart.data.datasets[0].data = [{ x: s.year_mean, y: 0 }];
@@ -253,10 +252,9 @@ PAGE = """
     }
     yearChart.update();
 
-    // Plays
-    if (s.plays_mean != null){
-      playsChart.$whisker = { lo: Math.max(1, s.plays_lo), hi: s.plays_hi, mean: s.plays_mean };
-      playsChart.data.datasets[0].data = [{ x: s.plays_mean, y: 0 }];
+    if (s.obsc_mean != null){
+      playsChart.$whisker = { lo: s.obsc_lo, hi: s.obsc_hi, mean: s.obsc_mean };
+      playsChart.data.datasets[0].data = [{ x: s.obsc_mean, y: 0 }];
     } else {
       playsChart.$whisker = null;
       playsChart.data.datasets[0].data = [];
@@ -482,17 +480,27 @@ def uncategorized(rows):
 
 def station_spectra(rows):
     """
-    Per-station stats for the year and plays spectrums.
+    Per-station stats for the era and obscurity spectrums.
+    - Era: linear mean/SD of release year, excluding future years (bad ACR/MB data).
+    - Obscurity: percentile rank of the station's geometric-mean last.fm plays
+      among all stations. 0 = highest avg plays (most popular), 100 = lowest
+      (most obscure). Whisker maps the station's play mean ±1 SD onto the same
+      rank axis, so the spread shows where its range sits relative to all stations.
     """
     import math
+    from datetime import datetime, timezone
+    this_year = datetime.now(timezone.utc).year
+
     by_station = {}
     for r in rows:
         by_station.setdefault(r["station"], []).append(r)
 
-    out = {}
+    # Pass 1: per-station geometric-mean plays (linear-space year stats too).
+    tmp = {}
     for station, srows in by_station.items():
-        years = [y for y in (parse_year(r) for r in srows) if y]
-        plays = [r["lf_playcount"] for r in srows if r["lf_playcount"] and r["lf_playcount"] > 0]
+        years = [y for y in (parse_year(r) for r in srows) if y and y <= this_year]
+        plays = [r["lf_playcount"] for r in srows
+                 if r["lf_playcount"] and r["lf_playcount"] > 0]
 
         year_mean = round(statistics.mean(years)) if years else None
         year_sd = round(statistics.stdev(years), 1) if len(years) > 1 else None
@@ -501,22 +509,56 @@ def station_spectra(rows):
             logs = [math.log10(p) for p in plays]
             lm = statistics.mean(logs)
             lsd = statistics.stdev(logs) if len(logs) > 1 else 0
-            plays_gmean = round(10 ** lm)
-            plays_lo = round(10 ** (lm - lsd))
-            plays_hi = round(10 ** (lm + lsd))
+            gmean = 10 ** lm
+            g_lo = 10 ** (lm - lsd)
+            g_hi = 10 ** (lm + lsd)
         else:
-            plays_gmean = plays_lo = plays_hi = None
+            gmean = g_lo = g_hi = None
 
-        out[station] = {
-            "year_mean": year_mean,
-            "year_sd": year_sd,
+        tmp[station] = {
+            "year_mean": year_mean, "year_sd": year_sd,
             "year_lo": (year_mean - year_sd) if (year_mean and year_sd) else year_mean,
             "year_hi": (year_mean + year_sd) if (year_mean and year_sd) else year_mean,
             "n_year": len(years),
-            "plays_mean": plays_gmean,
-            "plays_lo": plays_lo,
-            "plays_hi": plays_hi,
+            "gmean": gmean, "g_lo": g_lo, "g_hi": g_hi,
             "n_plays": len(plays),
+        }
+
+    # Pass 2: rank-map geometric means to 0-100 obscurity.
+    ranked = sorted(g["gmean"] for g in tmp.values() if g["gmean"] is not None)
+    n = len(ranked)
+
+    def obscurity(val):
+        """0 = most plays, 100 = fewest, by interpolated percentile rank."""
+        if val is None or n == 0:
+            return None
+        if n == 1:
+            return 50
+        import bisect
+        i = bisect.bisect_left(ranked, val)
+        if i <= 0:
+            frac = 0.0
+        elif i >= n:
+            frac = float(n - 1)
+        else:
+            lo, hi = ranked[i - 1], ranked[i]
+            frac = (i - 1) + ((val - lo) / (hi - lo) if hi > lo else 0)
+        pct = frac / (n - 1)          # 0 = fewest plays, 1 = most
+        return round(100 * (1 - pct))  # invert -> obscurity
+
+    out = {}
+    for station, g in tmp.items():
+        out[station] = {
+            "year_mean": g["year_mean"], "year_sd": g["year_sd"],
+            "year_lo": g["year_lo"], "year_hi": g["year_hi"],
+            "n_year": g["n_year"],
+            # obscurity axis (0-100). whisker endpoints swap: hi plays -> low obscurity.
+            "obsc_mean": obscurity(g["gmean"]),
+            "obsc_lo": obscurity(g["g_hi"]),   # more plays -> lower obscurity number
+            "obsc_hi": obscurity(g["g_lo"]),   # fewer plays -> higher obscurity number
+            "n_plays": g["n_plays"],
+            # keep raw geomean for the label if you want to show actual plays
+            "plays_gmean": round(g["gmean"]) if g["gmean"] else None,
         }
     return out
 
