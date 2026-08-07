@@ -76,7 +76,7 @@ PAGE = """
   <tr>
     <th>station</th><th class=num data-type=num>polled</th><th class=num data-type=num>id'd</th><th class=num data-type=num>id rate</th>
     <th>top artist</th><th class=num data-type=num>avg yr</th><th class=num data-type=num>yr stdev</th>
-    <th>top genre</th><th class=num data-type=num>avg plays</th><th class=txt>most popular</th><th class=txt>least popular</th>
+    <th>top category</th><th class=num data-type=num>avg plays</th><th class=txt>most popular</th><th class=txt>least popular</th>
   </tr>
   </thead>
   <tbody>
@@ -89,7 +89,7 @@ PAGE = """
     <td class=txt>{{ s.top_artist }}{% if s.top_artist_n %} ({{ s.top_artist_n }}){% endif %}</td>
     <td class=num>{{ s.avg_year or '—' }}</td>
     <td class=num>{{ s.year_stdev or '—' }}</td>
-    <td>{{ s.top_genre }}{% if s.top_genre_n %} ({{ s.top_genre_n }}){% endif %}</td>
+    <td>{{ s.top_category }}{% if s.top_category_n %} ({{ s.top_category_n }}){% endif %}</td>
     <td class=num>{{ '{:,}'.format(s.avg_plays) if s.avg_plays else '—' }}</td>
     <td class=txt>{{ s.most_popular }}</td>
     <td class=txt>{{ s.least_popular }}</td>
@@ -206,11 +206,11 @@ def summarize(rows):
         artists = Counter(r["artist"] for r in srows if r["artist"])
         top_artist = artists.most_common(1)
 
-        genres = Counter()
+        categories = Counter()
         for r in srows:
-            raw = r["acr_genres"] or r["mb_genre"] or r["lf_tags"]
-            genres.update(parse_genres(raw))
-        top_genre = genres.most_common(1)
+            raw = r["category"] 
+            categories.update(parse_genres(raw))
+        top_category = categories.most_common(1)
 
         years = [y for y in (parse_year(r) for r in srows) if y]
         plays = [(r["lf_playcount"], r) for r in srows if r["lf_playcount"]]
@@ -228,8 +228,8 @@ def summarize(rows):
             "top_artist_n": top_artist[0][1] if top_artist else None,
             "avg_year": round(statistics.mean(years)) if years else None,
             "year_stdev": round(statistics.stdev(years), 1) if len(years) > 1 else None,
-            "top_genre": top_genre[0][0] if top_genre else "—",
-            "top_genre_n": top_genre[0][1] if top_genre else None,
+            "top_category": top_category[0][0] if top_category else "—",
+            "top_category_n": top_category[0][1] if top_category else None,
             "avg_plays": round(statistics.mean([p for p, _ in plays])) if plays else None,
             "most_popular": track_label(max(plays, key=lambda x: x[0])[1]) if plays else "—",
             "least_popular": track_label(min(plays, key=lambda x: x[0])[1]) if plays else "—",
