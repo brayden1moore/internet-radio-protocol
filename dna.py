@@ -87,7 +87,13 @@ PAGE = """
   }
 
   #chart-div {
-    display:flex;
+    display:block;
+  }
+
+  @media (orientation: landscape)  {
+    #chart-div {
+        display:flex;
+    }
   }
 </style>
 
@@ -102,7 +108,7 @@ PAGE = """
 <div id="chart-div">
 
     <div>
-        <h2>Most Similar</h2>
+        <h2>Most Similar Genre Makeup</h2>
         <div id="radar-similar" style="margin:.5rem 0 1rem;display:flex;gap:.5rem;flex-wrap:wrap"></div>
         <div style="max-width:560px;">
         <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
