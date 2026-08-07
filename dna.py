@@ -216,7 +216,7 @@ def uncategorized(rows):
             continue  
         for tag in genres.unresolved_tags_for_row(r["acr_genres"], r["lf_tags"]):
             misses[tag] += 1
-    return misses.most_common()
+    return [(tag, n) for tag, n in misses.most_common() if n > 2]
 
 def summarize(rows):
     by_station = {}
