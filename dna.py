@@ -241,6 +241,15 @@ PAGE = """
       // mean marker
       ctx.fillStyle = "#FFFF00"; ctx.strokeStyle = "#000";
       ctx.beginPath(); ctx.arc(xm, yc, 6, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
+
+      // value label under the marker
+      if (w.label != null){
+        ctx.fillStyle = "#000";
+        ctx.font = "12px 'Archivo Light', sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.fillText(w.label, xm, yc + 12);
+      }
       ctx.restore();
     }
   };
@@ -261,9 +270,14 @@ PAGE = """
     });
   }
 
-const currentYear = new Date().getFullYear();
-var yearChart = makeSpectrum("year-chart", { x: { type: "linear", max: currentYear } });
-  var playsChart = makeSpectrum("plays-chart", {
+var YEAR_MIN = {{ year_min|tojson }};
+var YEAR_MAX = new Date().getFullYear();
+var yearChart = makeSpectrum("year-chart", {
+    x: {
+      type: "linear", min: YEAR_MIN, max: YEAR_MAX,
+      ticks: { callback: function(v){ return String(v); } }
+    }
+  });  var playsChart = makeSpectrum("plays-chart", {
     x: { type: "linear", min: 0, max: 100 }
   });
 
@@ -670,8 +684,12 @@ def dna():
     misses = uncategorized(rows)
     radar_axis, radar_data, radar_totals = station_categories(rows)
     spectra = station_spectra(rows)
+    year_min = min(
+        (s["year_lo"] for s in spectra.values() if s["year_lo"] is not None),
+        default=1950,
+    )
     return render_template_string(
         PAGE, rows=rows, summaries=summaries, misses=misses,
         radar_axis=radar_axis, radar_data=radar_data, radar_totals=radar_totals,
-        spectra=spectra,
+        spectra=spectra, year_min=year_min,
     )
