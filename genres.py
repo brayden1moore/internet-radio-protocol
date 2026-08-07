@@ -82,6 +82,7 @@ GENRE_MAP = {
     "Rock - Psychedelic": "Rock",
     "Industrial/Noise": "Rock",
     "Rock - Progressive": "Rock",
+    "progressive rock": "Rock", 
  
     # Alternative
     "Alternative|Indie Pop|Indie Rock|Pop": "Alternative",
@@ -111,6 +112,7 @@ GENRE_MAP = {
     "POP": "Pop",
     "Pop - Rock": "Pop",
     "Pop - Italo": "Pop",
+    "synthpop": "Pop",
  
     # Disco / Funk
     "Soul & Funk": "Disco / Funk",
@@ -188,6 +190,9 @@ GENRE_MAP = {
     "Score/Romance": "Soundtrack / Score",
     "Soundtracks": "Soundtrack / Score",
     "SOUNDTRACKS/CAST ALBUMS": "Soundtrack / Score",
+    "soundtrack": "Soundtrack / Score",
+    "video game music": "Soundtrack / Score",
+    "game": "Soundtrack / Score",
  
     # Folk / Singer-Songwriter
     "Folk": "Folk / Singer-Songwriter",
@@ -215,6 +220,7 @@ GENRE_MAP = {
     "Afrikkalainen musiikki": "World",
     "African Music": "World",
     "Musique africaine": "World",
+    "japanese": "World",
  
     # Other
     "Anime": "Other",
