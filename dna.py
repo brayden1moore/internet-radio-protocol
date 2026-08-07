@@ -223,34 +223,32 @@ PAGE = """
     afterDatasetsDraw: function(chart){
       var meta = chart.getDatasetMeta(0);
       var pt = meta.data && meta.data[0];
-      if (!pt || !chart.$whisker) return;
-      var w = chart.$whisker;
-      var yc = pt.y;
+      if (!pt) return;
+      var list = chart.$whiskers || [];
       var xs = chart.scales.x;
-      var xlo = xs.getPixelForValue(w.lo);
-      var xhi = xs.getPixelForValue(w.hi);
-      var xm  = xs.getPixelForValue(w.mean);
       var ctx = chart.ctx;
-      ctx.save();
-      ctx.strokeStyle = "#000"; ctx.lineWidth = 1;
-      // horizontal line
-      ctx.beginPath(); ctx.moveTo(xlo, yc); ctx.lineTo(xhi, yc); ctx.stroke();
-      // end caps
-      ctx.beginPath(); ctx.moveTo(xlo, yc-8); ctx.lineTo(xlo, yc+8); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(xhi, yc-8); ctx.lineTo(xhi, yc+8); ctx.stroke();
-      // mean marker
-      ctx.fillStyle = "#FFFF00"; ctx.strokeStyle = "#000";
-      ctx.beginPath(); ctx.arc(xm, yc, 6, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
-
-      // value label under the marker
-      if (w.label != null){
-        ctx.fillStyle = "#000";
-        ctx.font = "12px 'Archivo Light', sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "top";
-        ctx.fillText(w.label, xm, yc + 12);
-      }
-      ctx.restore();
+      list.forEach(function(w, i){
+        if (w.lo == null) return;
+        // stack overlays on slightly different y offsets so they don't overprint
+        var yc = pt.y + i * 16;
+        var xlo = xs.getPixelForValue(w.lo);
+        var xhi = xs.getPixelForValue(w.hi);
+        var xm  = xs.getPixelForValue(w.mean);
+        ctx.save();
+        ctx.strokeStyle = w.color || "#000"; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(xlo, yc); ctx.lineTo(xhi, yc); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(xlo, yc-8); ctx.lineTo(xlo, yc+8); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(xhi, yc-8); ctx.lineTo(xhi, yc+8); ctx.stroke();
+        ctx.fillStyle = w.fill || "#FFFF00"; ctx.strokeStyle = w.color || "#000";
+        ctx.beginPath(); ctx.arc(xm, yc, 6, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
+        if (w.label != null){
+          ctx.fillStyle = w.color || "#000";
+          ctx.font = "12px 'Archivo Light', sans-serif";
+          ctx.textAlign = "center"; ctx.textBaseline = "top";
+          ctx.fillText(w.label, xm, yc + 12);
+        }
+        ctx.restore();
+      });
     }
   };
 
@@ -281,32 +279,50 @@ var yearChart = makeSpectrum("year-chart", {
     x: { type: "linear", min: 0, max: 100 }
   });
 
- function updateSpectra(station){
+ function spectrumWhiskers(station){
+    // returns {year:[...], plays:[...]} base whisker arrays for a station
     var s = SPECTRA[station] || {};
+    var year = (s.year_mean != null)
+      ? [{ lo: s.year_lo, hi: s.year_hi, mean: s.year_mean,
+           label: String(s.year_mean), color: "#000", fill: "#FFFF00" }]
+      : [];
+    var plays = (s.obsc_mean != null)
+      ? [{ lo: s.obsc_lo, hi: s.obsc_hi, mean: s.obsc_mean,
+           label: s.obsc_mean + " / 100", color: "#000", fill: "#FFFF00" }]
+      : [];
+    return { year: year, plays: plays };
+  }
 
-    if (s.year_mean != null){
-      yearChart.$whisker = {
-        lo: s.year_lo, hi: s.year_hi, mean: s.year_mean,
-        label: String(s.year_mean)
-      };
-      yearChart.data.datasets[0].data = [{ x: s.year_mean, y: 0 }];
-    } else {
-      yearChart.$whisker = null;
-      yearChart.data.datasets[0].data = [];
-    }
+  function updateSpectra(station){
+    var w = spectrumWhiskers(station);
+    yearChart.$whiskers = w.year;
+    yearChart.data.datasets[0].data = w.year.length ? [{x: w.year[0].mean, y: 0}] : [];
     yearChart.update();
-
-    if (s.obsc_mean != null){
-      playsChart.$whisker = {
-        lo: s.obsc_lo, hi: s.obsc_hi, mean: s.obsc_mean,
-        label: s.obsc_mean + " / 100"
-      };
-      playsChart.data.datasets[0].data = [{ x: s.obsc_mean, y: 0 }];
-    } else {
-      playsChart.$whisker = null;
-      playsChart.data.datasets[0].data = [];
-    }
+    playsChart.$whiskers = w.plays;
+    playsChart.data.datasets[0].data = w.plays.length ? [{x: w.plays[0].mean, y: 0}] : [];
     playsChart.update();
+  }
+
+  function addSpectrumOverlay(station, color){
+    var s = SPECTRA[station] || {};
+    if (s.year_mean != null){
+      yearChart.$whiskers.push({ station: station, lo: s.year_lo, hi: s.year_hi,
+        mean: s.year_mean, label: String(s.year_mean), color: color, fill: color });
+      yearChart.update();
+    }
+    if (s.obsc_mean != null){
+       playsChart.$whiskers.push({ station: station, lo: s.obsc_lo, hi: s.obsc_hi,
+        mean: s.obsc_mean, label: s.obsc_mean + " / 100", color: color, fill: color });
+      playsChart.update();
+    }
+  }
+
+  function removeSpectrumOverlay(station){
+    function drop(chart){
+      chart.$whiskers = chart.$whiskers.filter(function(w){ return w.station !== station; });
+      chart.update();
+    }
+    drop(yearChart); drop(playsChart);
   }
 
   var RADAR_AXIS = {{ radar_axis|tojson }};
@@ -419,11 +435,13 @@ var yearChart = makeSpectrum("year-chart", {
             chart.data.datasets = chart.data.datasets.filter(function(d){
               return !(d.order === 1 && d.label === other);
             });
+            removeSpectrumOverlay(other);        
             btn.dataset.on = "0";
             btn.style.background = "#fff";
             btn.style.color = "#000";
           } else {
             chart.data.datasets.push(overlayDataset(other, color));
+            addSpectrumOverlay(other, color);      
             btn.dataset.on = "1";
             btn.style.background = color;
             btn.style.color = "#fff";
