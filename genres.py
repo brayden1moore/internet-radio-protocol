@@ -1,3 +1,26 @@
+GENRE_ORDER = [
+    'Ambient',
+    'Electronic',
+    'Drum & Bass',
+    'Techno',
+    'House',
+    'Disco / Funk',
+    'Hip-Hop',
+    'Soul / R&B',
+    'Pop',
+    'Rock',
+    'Alternative',
+    'Folk / Singer-Songwriter',
+    'Country',
+    'World',
+    'Reggae / Caribbean',
+    'Latin',
+    'Jazz',
+    'Soundtrack / Score',
+    'Classical',
+    'Other',
+]
+
 GENRE_MAP = {
     # Drum and Bass
     "Drum & Bass": "Drum & Bass",
@@ -236,28 +259,6 @@ GENRE_MAP = {
     "j-pop": "Other"
 }
 
-GENRE_ORDER = [
-    'Ambient',
-    'Electronic',
-    'Drum & Bass',
-    'Techno',
-    'House',
-    'Disco / Funk',
-    'Hip-Hop',
-    'Soul / R&B',
-    'Pop',
-    'Rock',
-    'Country',
-    'Folk / Singer-Songwriter',
-    'Alternative',
-    'World',
-    'Reggae / Caribbean',
-    'Latin',
-    'Jazz',
-    'Soundtrack / Score',
-    'Classical',
-    'Other',
-]
 
 # Case-insensitive index of every GENRE_MAP key
 _CI = {k.lower(): v for k, v in GENRE_MAP.items()}
