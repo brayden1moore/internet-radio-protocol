@@ -278,8 +278,8 @@ PAGE = """
         btn.dataset.color = color;
         btn.dataset.on = "0";
         btn.style.cssText =
-          "font:inherit;padding:4px 10px;cursor:pointer;border:1px solid #000;" +
-          "background:#fff;border-left:6px solid " + color + ";";
+          "font:inherit;padding:4px 10px;cursor:pointer;border:1px solid" + color + ";" +
+          "background:#fff;border-top:6px solid " + color + ";";
         btn.addEventListener("click", function(){
           var on = btn.dataset.on === "1";
           if (on){
