@@ -63,7 +63,7 @@ PAGE = """
 
   .dna {
     padding: 0px 7px;
-    border: 0.5px solid black;
+    border: 1px solid black;
     background-color: yellow;
     font-family: "Archivo Light";
     /* -webkit-text-stroke: 0px !important; */
