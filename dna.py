@@ -235,7 +235,7 @@ PAGE = """
         var xhi = xs.getPixelForValue(w.hi);
         var xm  = xs.getPixelForValue(w.mean);
         ctx.save();
-        ctx.strokeStyle = w.color || "#000"; ctx.lineWidth = 0.5;
+        ctx.strokeStyle = w.color || "#000"; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(xlo, yc); ctx.lineTo(xhi, yc); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(xlo, yc-8); ctx.lineTo(xlo, yc+8); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(xhi, yc-8); ctx.lineTo(xhi, yc+8); ctx.stroke();
