@@ -93,9 +93,11 @@ PAGE = """
   @media (orientation: landscape)  {
     #chart-div {
         display:flex;
+        width: 560px;
     }
     #spectra-div {
         margin-left: 30px;
+        margin-top: 50px;
     }
   }
 </style>
@@ -112,7 +114,7 @@ PAGE = """
 
     <div>
         <h2>Most Similar Genre Makeup</h2>
-        <div id="radar-similar" style="margin:.5rem 0 1rem;display:flex;gap:.5rem;flex-wrap:wrap"></div>
+        <div id="radar-similar" style="margin:.5rem 0 1rem;display:flex;gap:.5rem;overflow:scroll;"></div>
         <div style="max-width:560px;">
         <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
         </div>
