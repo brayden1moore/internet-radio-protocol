@@ -94,6 +94,9 @@ PAGE = """
     #chart-div {
         display:flex;
     }
+    #spectra-div {
+        margin-left: 30px;
+    }
   }
 </style>
 
