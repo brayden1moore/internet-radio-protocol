@@ -178,7 +178,11 @@ var RADAR_AXIS = {{ radar_axis|tojson }};
   (function(){
     var sel = document.getElementById("radar-station");
     var nLabel = document.getElementById("radar-n");
-    var stations = Object.keys(RADAR_DATA).sort();
+    var stations = Object.keys(RADAR_DATA)
+      .filter(function(s){ return (RADAR_TOTALS[s] || 0) >= 5; })
+      .sort(function(a, b){
+        return (RADAR_TOTALS[b] || 0) - (RADAR_TOTALS[a] || 0);
+      });
     stations.forEach(function(s){
       var o = document.createElement("option");
       o.value = s; o.textContent = `${s} (${RADAR_TOTALS[s]})`;
@@ -354,7 +358,7 @@ def station_categories(rows):
         if not r["matched"] or not r["categories"]:
             continue
         cnt = counts.setdefault(r["station"], Counter())
-        totals[r["station"]] = totals.get(r["station"], 0) + 1   # one per song
+        totals[r["station"]] = totals.get(r["station"], 0) + 1   
         for c in r["categories"].split(";"):
             if c in idx:
                 cnt[c] += 1
