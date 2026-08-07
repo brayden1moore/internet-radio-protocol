@@ -628,7 +628,9 @@ class Stream:
             self.show_logo = None#show['program_image_uri'] # show logo if provided
             self.now_playing_subtitle = None
             if song['play_type'] == 'trackplay':
-                self.now_playing_subtitle = f"{song['song']} by {song['artist']}" # last played song and artist
+                self.now_playing_subtitle = self.now_playing
+                self.now_playing = song['song'] 
+                self.now_playing_artist = song['artist']
         
         elif self.name == 'Clyde Built Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
@@ -1845,7 +1847,8 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
-        hidden= False
+        hidden= False,
+        song_basis= True
 ),
 Stream(
         name = "KJazz",
