@@ -332,6 +332,10 @@ def resolve_row(acr_genres, lf_tags=None):
         return None, None
     return cats[0], CATEGORY_SEP.join(cats)
 
+ 
+def all_categories():
+    return sorted(set(GENRE_MAP.values()) | set(_ALIAS.values()))
+ 
 
 def add_categories(df, acr_col="acr_genres", lf_col="lf_tags"):
     """
