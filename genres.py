@@ -347,6 +347,21 @@ def add_categories(df, acr_col="acr_genres", lf_col="lf_tags"):
     ]
     return out
 
+ 
+def unresolved_tags_for_row(acr_genres, lf_tags=None):
+    """
+    For a row that resolved to NO category, return the list of its raw tags that
+    failed to match (lowercased, junk excluded). Use this to build a "true miss"
+    review list: only call it on rows where resolve_row(...) returned no primary.
+    """
+    out = []
+    for raw in _split(acr_genres) + _split(lf_tags):
+        t = raw.strip().strip('"').lower()
+        if not t or _is_junk(t):
+            continue
+        if _match_tag(raw) is None and t not in out:
+            out.append(t)
+    return out
 
 def unmapped_tags(df, acr_col="acr_genres", lf_col="lf_tags", top=None):
     from collections import Counter
