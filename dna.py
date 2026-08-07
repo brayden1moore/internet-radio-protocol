@@ -181,7 +181,7 @@ var RADAR_AXIS = {{ radar_axis|tojson }};
     var stations = Object.keys(RADAR_DATA).sort();
     stations.forEach(function(s){
       var o = document.createElement("option");
-      o.value = s; o.textContent = `${s} (${nLabel})`;
+      o.value = s; o.textContent = `${s} (${RADAR_TOTALS[s]})`;
       sel.appendChild(o);
     });
 
