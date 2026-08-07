@@ -11,6 +11,10 @@ import subprocess
 from pathlib import Path
 from datetime import datetime, timezone
 
+import genres
+import backfill_categories
+from artist_tags import ensure_cache, artist_top_tags
+
 try:
     with open('environ.json','r') as f:
         env = json.load(f)
@@ -46,6 +50,10 @@ CREATE TABLE IF NOT EXISTS plays (
     lf_playcount  INTEGER,
     lf_listeners  INTEGER,
     lf_tags       TEXT,                     -- comma-joined community tags
+    lf_tags       TEXT,                     -- comma-joined community tags
+    -- Consolidated categories
+    category      TEXT,                     -- primary consolidated category
+    categories    TEXT, 
     -- MusicBrainz metadata (optional)
     mb_genre      TEXT,
     mb_year       INTEGER
@@ -229,6 +237,12 @@ def main():
 
     conn = sqlite3.connect(DB_PATH)
     conn.executescript(SCHEMA)
+    ensure_cache(conn)
+
+    # pull in any category changes
+    stats = backfill_categories.recompute(conn)
+    if stats["changed"]:
+        print(f"  recategorized {stats['changed']} rows to current mapping")
 
     matched = nomatch = skipped = 0
     for key, st in stations.items():
@@ -256,6 +270,19 @@ def main():
         lf = track.get("lf")
         if lf is None:
             lf = lastfm(track["artist"], track["title"])
+
+        # Genre fallback 
+        have_acr   = bool(track.get("acr_genres"))
+        have_lftag = bool(lf and lf.get("tags"))
+        lf_tags_out = ", ".join(lf["tags"][:5]) if have_lftag else None
+        if not have_acr and not have_lftag:
+            at = artist_top_tags(track["artist"], conn, LASTFM_KEY)
+            if at:
+                lf_tags_out = at
+
+        # Consolidated categories (same resolver as the backfill).
+        category, categories = genres.resolve_row(track.get("acr_genres"), lf_tags_out)
+
         mb = musicbrainz(track["artist"], track["title"]) if use_mb else None
         if use_mb:
             time.sleep(1.1)  # MusicBrainz ~1 req/s
@@ -270,9 +297,11 @@ def main():
                 track.get("acr_genres"), track.get("acr_release"), track.get("acr_label"),
                 lf["playcount"] if lf else None,
                 lf["listeners"] if lf else None,
-                ", ".join(lf["tags"][:5]) if lf else None,
+                lf_tags_out,
                 mb["genre"] if mb else None,
                 mb["year"] if mb else None,
+                category, 
+                categories,
             ),
         )
         conn.commit()
