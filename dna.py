@@ -267,11 +267,14 @@ var yearChart = makeSpectrum("year-chart", { x: { type: "linear", max: currentYe
     x: { type: "linear", min: 0, max: 100 }
   });
 
-  function updateSpectra(station){
+ function updateSpectra(station){
     var s = SPECTRA[station] || {};
 
     if (s.year_mean != null){
-      yearChart.$whisker = { lo: s.year_lo, hi: s.year_hi, mean: s.year_mean };
+      yearChart.$whisker = {
+        lo: s.year_lo, hi: s.year_hi, mean: s.year_mean,
+        label: String(s.year_mean)
+      };
       yearChart.data.datasets[0].data = [{ x: s.year_mean, y: 0 }];
     } else {
       yearChart.$whisker = null;
@@ -280,7 +283,10 @@ var yearChart = makeSpectrum("year-chart", { x: { type: "linear", max: currentYe
     yearChart.update();
 
     if (s.obsc_mean != null){
-      playsChart.$whisker = { lo: s.obsc_lo, hi: s.obsc_hi, mean: s.obsc_mean };
+      playsChart.$whisker = {
+        lo: s.obsc_lo, hi: s.obsc_hi, mean: s.obsc_mean,
+        label: s.obsc_mean + " / 100"
+      };
       playsChart.data.datasets[0].data = [{ x: s.obsc_mean, y: 0 }];
     } else {
       playsChart.$whisker = null;
