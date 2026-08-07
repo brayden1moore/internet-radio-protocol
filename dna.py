@@ -29,7 +29,6 @@ PAGE = """
     font-family: "Archivo Bold";
     font-size:34pt;
     color: black;
-    -webkit-text-stroke: 1px black;
   }
   h2{font-size:1rem;margin:1.5rem 0 .5rem}
   table{border-collapse:collapse;width:100%;table-layout:fixed}
