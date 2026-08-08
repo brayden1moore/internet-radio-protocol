@@ -340,6 +340,8 @@ var yearChart = makeSpectrum("year-chart", {
   console.log(RADAR_DATA);
 console.log('RADAR TOTALS');
   console.log(RADAR_TOTALS);
+  console.log('RADAR AXIS');
+  console.log(RADAR_AXIS);
 
   var OVERLAY_COLORS = ["#00acff", "#ff0000", "#00ffa4"];
 
