@@ -138,13 +138,13 @@
         <div id="finder-sentence">
             I'm looking for a station where I can hear
             <select class="finder-select" id="finder-era">
-            <option value="">new or old</option>
+            <option value="">new and old</option>
             <option value="new">new</option>
             <option value="old">old</option>
             </select>
         
             <select class="finder-select" id="finder-obsc">
-            <option value="">deep cuts or classics</option>
+            <option value="">deep cuts and classics</option>
             <option value="deep">deep cuts</option>
             <option value="classic">classics</option>
             </select>
@@ -293,21 +293,20 @@
     }
     .finder-pill:hover { background: #FFFF00; }
     .finder-pill img {
-        height: 28px;
-        width: 28px;
+        height: 35px;
+        width: 35px;
         object-fit: cover;
         border: 0.5px solid black;
         flex-shrink: 0;
     }
     .finder-pill-text { overflow: hidden; }
     .finder-pill-name {
-        font-size: 10pt;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
     .finder-pill-oneliner {
-        font-size: 8pt;
+        font-size:  10pt;
         opacity: 0.6;
         white-space: nowrap;
         overflow: hidden;
@@ -326,6 +325,13 @@
 
     #finder-genre-wrap { position: relative; display: inline-block; }
 
+    .finder-genre-option.chosen {
+        color: #aaa;
+        background-color: rgb(243,243,243);
+    }
+    .finder-genre-option.chosen:hover {
+        background-color: #e8e8e8;
+    }
 
     #support-button {
         height: 38px;
@@ -4128,6 +4134,51 @@
         buildGenrePicker(Object.keys(present).sort());
     }
 
+    // Normalize a value to 0..1 across all stations' values for that field.
+    function normRanges(){
+        var spectra = DNA.spectra || {};
+        var ys = [], os = [];
+        Object.values(spectra).forEach(function(s){
+        if (s.year_mean != null) ys.push(s.year_mean);
+        if (s.obsc_mean != null) os.push(s.obsc_mean);
+        });
+        return {
+        yMin: Math.min.apply(null, ys), yMax: Math.max.apply(null, ys),
+        oMin: Math.min.apply(null, os), oMax: Math.max.apply(null, os)
+        };
+    }
+    var RANGES = null;   // set once after DNA loads
+
+    function score(station){
+        var s = (DNA.spectra || {})[station] || {};
+        var era = eraSel.value, obsc = obscSel.value;
+        var genres = selectedGenres();
+        var total = 0;
+
+        function scale(v, min, max){ return (max > min) ? (v - min) / (max - min) : 0.5; }
+
+        if (era && s.year_mean != null){
+        var y = scale(s.year_mean, RANGES.yMin, RANGES.yMax);
+        total += (era === 'new') ? y : (1 - y);
+        }
+        if (obsc && s.obsc_mean != null){
+        var o = scale(s.obsc_mean, RANGES.oMin, RANGES.oMax);
+        total += (obsc === 'deep') ? o : (1 - o);
+        }
+        if (genres.length){
+        // how strongly this station leans into the chosen genre(s): max % among them
+        var axis = DNA.categories || [];
+        var vec = DNA.radar[station] || [];
+        var best = 0;
+        genres.forEach(function(g){
+            var i = axis.indexOf(g);
+            if (i >= 0 && vec[i] > best) best = vec[i];
+        });
+        total += best / 100;   // radar values are percentages
+        }
+        return total;
+    }
+
     // Does one station pass the currently-selected clauses?
     function matches(station){
         var s = (DNA.spectra || {})[station];
@@ -4152,6 +4203,15 @@
         if (!hit) return false;
         }
         return true;
+    }
+
+    function matchPct(station){
+        var active = 0;
+        if (eraSel.value) active++;
+        if (obscSel.value) active++;
+        if (selectedGenres().length) active++;
+        if (!active) return null;
+        return Math.round(100 * score(station) / active);
     }
 
     function fitSelect(sel){
@@ -4207,6 +4267,7 @@
     });
 
     function applyFilter(){
+        
         if (!DNA) return;
         var resultsEl = document.getElementById('finder-results');
         var anySelected = eraSel.value || obscSel.value || selectedGenres().length;
@@ -4217,19 +4278,25 @@
         resultsEl.innerHTML = '';
 
         if (!anySelected){
-        statusEl.textContent = 'All stations match.';
+        statusEl.textContent = '';
         return;
         }
 
         // Which stations exist as cards right now (so pills are always playable)
-        var cards = document.querySelectorAll('#streams-container .a-station-container');
+        var cards = document.querySelectorAll(
+        '#streams-container .a-station-container, ' +
+        '#mixtapes-container .a-station-container'
+        );
         var byId = {};
         cards.forEach(function(c){ byId[c.id] = c; });
 
         var shown = 0;
-        Object.keys(byId).forEach(function(name){
-        if (!matches(name)) return;
+        var matched = Object.keys(byId).filter(matches);
+        matched.sort(function(a, b){ return score(b) - score(a); });  // high score first
+
+        matched.forEach(function(name){
         shown++;
+        var card = byId[name];
 
         var card = byId[name];
         var logo = card.querySelector('.a-logo');
@@ -4241,12 +4308,14 @@
             '<img src="' + (logo ? logo.src : 'assets/justear.png') + '">' +
             '<div class="finder-pill-text">' +
             '<div class="finder-pill-name"></div>' +
+            '<div class="finder-pill-oneliner"></div>' +
             '</div>';
         // set text via textContent to avoid HTML injection from names/one-liners
         pill.querySelector('.finder-pill-name').textContent = name;
-
         pill.addEventListener('click', function(){ chooseStation(name); });
+        pill.querySelector('.finder-pill-oneliner').textContent = matchPct(name) + '% match';
         resultsEl.appendChild(pill);
+    
         });
 
         statusEl.textContent = shown + ' station' + (shown === 1 ? '' : 's') + ' match'  + (shown === 1 ? 'es.' : '.');
@@ -4261,6 +4330,7 @@
         .then(function(data){
         DNA = data;
         computeDerived();
+        RANGES = normRanges();
         applyFilter();
         })
         .catch(function(e){
