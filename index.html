@@ -154,20 +154,28 @@
             <div id="finder-genre-menu"></div>
             </span>
             .
+            <span id="finder-undo">
+                <img id="finder-undo-icon" src="assets/undoicon.png">
+            </span>
         </div>
         <div id="finder-status"></div>
         <div id="finder-results"></div>
         </div>
 
         <div id="view-selector">
+            <img  class="view-icon" id="change-sort-icon"  onclick="sortStations(true)">
+            <!--<img  class="view-icon" id="filter-button"  onclick="toggleFilters" src="assets/filtericon.png">-->
             <img class="view-icon" id="list-button" src="assets/listicon.png">
             <div id="view-select-divider"></div>
-            <img class="view-icon" id="globe-button" src="assets/globeicon.png">
-            <div id="new">New!</div>
+            <img class="view-icon" id="globe-button" data-status="list" src="assets/globeicon.png">
+            <!--<div id="new">New!</div>-->
             <div id="add-station">
-                <input id="add-station-search" placeholder='Search the Community Radio Index'></input>
+                <input id="add-station-search" placeholder='Search Community Radio Index'></input>
             </div>
             <img class="view-icon" data-status="closed" title="Add a station from the Community Radio Index" id="plus-button" src="assets/plusicon.png">
+            <div id="search-bar">
+                <input id="search-stations" placeholder='Find a station'></input>
+            </div>
         </div>
         <div id="globe-and-list-container">
             <div id="globe-container-container">
@@ -180,7 +188,7 @@
             </div>
 
             <div id="list-container">
-                <div class="tag-container-container">
+                <div id="tag-container-container">
                     <div class="tags-container" id="status-tags-container">
                         <div class="tag status-tag" data-type="status" id="Live-tag">Live</div>
                         <div class="tag status-tag" data-type="status" id="Re-Run-tag">Re-Run</div>
@@ -189,16 +197,6 @@
                     <div class="tags-container" id="location-tags-container">
                     </div>
                     <div class="tags-container" id="genre-tags-container">
-                    </div>
-                </div>
-
-                <div id="change-sort-button">
-                    <img id="change-sort-icon"  onclick="sortStations(true)">
-                    <div id="search-bar">
-                        <div id="search-bar-and-icon">
-                            <img src="assets/searchicon.png">
-                            <input id="search-stations" placeholder=''></input>
-                        </div> 
                     </div>
                 </div>
 
@@ -230,15 +228,38 @@
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
 
+    #list-button {
+        display: none;
+    }
+
+    #finder-undo {
+        margin-left: 8px;
+        height: 22px;
+        opacity: 0.3;
+        cursor: pointer;
+        display: none;
+    }
+
+    #finder-undo:hover {
+        opacity: 1;
+    }
+
+    #finder-undo-icon {
+        height: 100%;
+    }
+
     #finder {
         border: 1px solid black;
-        margin: 20px 0 25px 0;
-        padding: 10px;
+        margin: 20px 0 25px -0.5px;
+        padding: 5px 10px;
         font-size: 12pt;
         letter-spacing: -0.05em;
-        background: rgb(243,243,243);
+        background: rgb(255, 255, 255);
     }
-    #finder-sentence { line-height: 2.2; }
+    #finder-sentence {
+        line-height: 1.7;
+        display: block;
+    }
     .finder-select {
         font-family: 'Archivo Light';
         font-size: 12pt;
@@ -250,14 +271,20 @@
         -webkit-appearance: none;
         appearance: none;
         border-radius: 0px;
+        margin-left: 8px;
+    }
+    #finder-obsc {
+        margin-right: 8px;
     }
     #finder-genre-menu {
-        margin-top: -8px;
+        margin-top: -6px;
         display: none;
         position: absolute;
         top: 100%;
         left: 0;
-        z-index: 100;
+        z-index: 99;
+        overflow: scroll;
+        height: 228px;
         background: white;
         border: 1px solid black;
         min-width: 140px;
@@ -323,7 +350,11 @@
         background-color: rgb(243,243,243);
     }
 
-    #finder-genre-wrap { position: relative; display: inline-block; }
+    #finder-genre-wrap { 
+        position: relative; 
+        display: inline-block; 
+        margin-left: 8px;
+    }
 
     .finder-genre-option.chosen {
         color: #aaa;
@@ -596,7 +627,6 @@
 
 
     #list-container {
-        padding-top: 18px;
         margin-left: 0.5px;
         width: calc(100% + 1.5px);
     }
@@ -1034,21 +1064,26 @@
     #search-stations {
     background-color: rgb(243, 243, 243);
       border: none;
-      border-bottom: 1px solid black;
-      height: 15px;
+      height: 100%;
       padding: 3px;
       transition: 0.2s ease;
-      width: 150px;
-      font-size: 16px;
+        width: 95px;
+        font-size: 16px;
+        padding: 3px 10px;
+        font-family: "Archivo Light";
+      
     }
 
     #search-stations:focus{
       outline: none;
       border: none;
       border-bottom: 1px solid yellow;
+      padding-bottom: 2px !important;
     }
 
     #search-bar {
+        margin-bottom: -7px;
+        height: 28px;
         display: flex;
         align-items: end;
         justify-content: space-between;
@@ -1065,9 +1100,6 @@
         cursor: pointer;
         height: 25px;
         opacity: 1;
-    }
-    #change-sort-icon:hover{
-        opacity: 0.7;
     }
 
     #scud-logo {
@@ -1227,10 +1259,16 @@
         ::-webkit-scrollbar {
         display: none;
         }
-        .tag-container-container {
+        #tag-container-container {
             margin-top: 0px;
-            margin-bottom: 15px;
-            width: 100%;
+            /* width: 100%; */
+            margin-left: -0.5px;
+            height: 105px;
+            border: 1px solid black;
+            border-bottom: none;
+            padding: 10px;
+            overflow: hidden;
+            transition: 0.3s ease;
         }
         .tags-container {
             scrollbar-width: thin;
@@ -1897,6 +1935,11 @@
         }
     @media (min-aspect-ratio: 8/10)  {
 
+        #finder-sentence { 
+            display: flex;
+            align-items: center;
+        }
+
         .top-controls-full-view {
                 top: 70px !important;
             }
@@ -2554,6 +2597,11 @@
             };
 
             //playerInfo.style.width = width + 'px';
+        }
+
+        function toggleFilters() {
+            const filters = document.getElementById('tag-container-container');
+            filters.style.height = "100px !important";
         }
 
         function orderStations(by, keys=null) {
@@ -3507,22 +3555,35 @@
         const globeContainer = document.getElementById('globe-container');
         const globeContainerContainer = document.getElementById('globe-container-container');
         const criSearch = document.getElementById('add-station-search');
+        const orSearch = document.getElementById('search-bar');
+        const sortIcon = document.getElementById('change-sort-icon');
         let viewMode;
         let populatedGlobe = false;
-        function toggleView(view) {
-            if (view=='list') {
+
+        function toggleView() {
+            status = globeButton.dataset.status;
+            if (status === 'globe') {
+                globeButton.src = 'assets/globeicon.png';
                 globeContainerContainer.style.display = 'none';
                 listContainer.style.display = 'block';
                 criSearch.style.display = 'block';
-                newIcon.style.display = 'block';
+                orSearch.style.display = 'flex';
                 plusButton.style.display = 'block';
+                sortIcon.style.display = "block";
+                globeButton.dataset.status = 'list';
             }
             else {
+                globeButton.dataset.status = 'globe';
+                globeButton.src = 'assets/listicon.png';
                 globeContainerContainer.style.display = 'flex';
-                listContainer.style.display = 'none';   
+                listContainer.style.display = 'none';  
+                orSearch.style.display = 'none';
                 criSearch.style.display = 'none';  
-                newIcon.style.display = 'none';
+                sortIcon.style.display = "none";
                 plusButton.style.display = 'none';
+                if (plusButton.dataset.status === 'open') {
+                    plusButton.click();
+                }
                 setTimeout(() => {
                     if ((populatedGlobe === false) && (info) && (viewMode === 'globe')) {
                         populateGlobe();
@@ -3532,15 +3593,12 @@
                 }, 500)
                 //toggleFullView('grow');     
             }
-            viewMode = view;
+            viewMode = globeButton.dataset.status;
             console.log(viewMode);
         }
 
-        listButton.addEventListener('click', () => {
-            toggleView('list');
-        });
         globeButton.addEventListener('click', () => {
-            toggleView('globe');
+            toggleView();
         });
 
         // globe
@@ -3879,7 +3937,7 @@
     const addStationSearch = document.getElementById('add-station-search');
     plusButton.addEventListener('click', ()=> {
         if (plusButton.dataset.status == 'closed') {
-            addStation.style.width = 258 + 'px';
+            addStation.style.width = 234 + 'px';
             addStation.style.overflowX = 'visible';
             plusButton.src = 'assets/xicon.png';
             plusButton.dataset.status = 'open';
@@ -4100,6 +4158,7 @@
     var eraSel = document.getElementById('finder-era');
     var obscSel = document.getElementById('finder-obsc');
     var statusEl = document.getElementById('finder-status');
+    var undoEl = document.getElementById('finder-undo');
 
     function medianOf(vals){
         var a = vals.filter(function(v){ return v != null; }).sort(function(x,y){ return x-y; });
@@ -4222,7 +4281,7 @@
         ';letter-spacing:' + cs.letterSpacing;
         tmp.textContent = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '';
         document.body.appendChild(tmp);
-        sel.style.width = (tmp.offsetWidth + 28) + 'px';  // +padding/arrow room
+        sel.style.width = (tmp.offsetWidth + 15) + 'px';  // +padding/arrow room
         tmp.remove();
     }
 
@@ -4251,7 +4310,8 @@
             var g = Array.from(chosenGenres);
             slot.textContent = !g.length ? 'any genre'
                 : g.length === 1 ? g[0]
-                : g[0] + ' +' + (g.length - 1);
+                : g.length === 2 ? g[0] + ' or ' + g[1]
+                : g.slice(0, -1).join(', ') + ', or ' + (g.at(-1));
             }
         renderGenreSlot();
 
@@ -4269,8 +4329,9 @@
     function applyFilter(){
         
         if (!DNA) return;
+
         var resultsEl = document.getElementById('finder-results');
-        var anySelected = eraSel.value || obscSel.value || selectedGenres().length;
+        var anySelected = (eraSel.value || obscSel.value || selectedGenres().length);
 
         fitSelect(eraSel);
         fitSelect(obscSel);
@@ -4278,14 +4339,17 @@
         resultsEl.innerHTML = '';
 
         if (!anySelected){
-        statusEl.textContent = '';
-        return;
+            statusEl.textContent = '';
+            undoEl.style.display = 'none';
+            return;
+        } else {
+            undoEl.style.display = 'block';
         }
 
         // Which stations exist as cards right now (so pills are always playable)
         var cards = document.querySelectorAll(
-        '#streams-container .a-station-container, ' +
-        '#mixtapes-container .a-station-container'
+            '#streams-container .a-station-container, ' +
+            '#mixtapes-container .a-station-container'
         );
         var byId = {};
         cards.forEach(function(c){ byId[c.id] = c; });
@@ -4295,26 +4359,24 @@
         matched.sort(function(a, b){ return score(b) - score(a); });  // high score first
 
         matched.forEach(function(name){
-        shown++;
-        var card = byId[name];
+            shown++;
+            var card = byId[name];
+            var logo = card.querySelector('.a-logo');
+            var oneLiner = card.dataset.oneLiner || '';
 
-        var card = byId[name];
-        var logo = card.querySelector('.a-logo');
-        var oneLiner = card.dataset.oneLiner || '';
-
-        var pill = document.createElement('div');
-        pill.className = 'finder-pill';
-        pill.innerHTML =
-            '<img src="' + (logo ? logo.src : 'assets/justear.png') + '">' +
-            '<div class="finder-pill-text">' +
-            '<div class="finder-pill-name"></div>' +
-            '<div class="finder-pill-oneliner"></div>' +
-            '</div>';
-        // set text via textContent to avoid HTML injection from names/one-liners
-        pill.querySelector('.finder-pill-name').textContent = name;
-        pill.addEventListener('click', function(){ chooseStation(name); });
-        pill.querySelector('.finder-pill-oneliner').textContent = matchPct(name) + '% match';
-        resultsEl.appendChild(pill);
+            var pill = document.createElement('div');
+            pill.className = 'finder-pill';
+            pill.innerHTML =
+                '<img src="' + (logo ? logo.src : 'assets/justear.png') + '">' +
+                '<div class="finder-pill-text">' +
+                '<div class="finder-pill-name"></div>' +
+                '<div class="finder-pill-oneliner"></div>' +
+                '</div>';
+            // set text via textContent to avoid HTML injection from names/one-liners
+            pill.querySelector('.finder-pill-name').textContent = name;
+            pill.addEventListener('click', function(){ chooseStation(name); });
+            pill.querySelector('.finder-pill-oneliner').textContent = matchPct(name) + '% match';
+            resultsEl.appendChild(pill);
     
         });
 
@@ -4324,6 +4386,24 @@
     [eraSel, obscSel].forEach(function(el){
         el.addEventListener('change', applyFilter);
     });
+
+    function resetFilters(){
+        eraSel.value = '';
+        obscSel.value = '';
+
+        chosenGenres.clear();
+        document.querySelectorAll('#finder-genre-menu .finder-genre-option.chosen')
+            .forEach(function(opt){ opt.classList.remove('chosen'); });
+
+        var slot = document.getElementById('finder-genre-slot');
+        var menu = document.getElementById('finder-genre-menu');
+        if (slot) slot.textContent = 'any genre';
+        if (menu) menu.style.display = 'none';
+
+        applyFilter();  
+    }
+
+    undoEl.addEventListener('click', resetFilters);
 
     fetch('https://www.one.radio/dna/data?cacheBust=' + Math.random())
         .then(function(r){ return r.json(); })
