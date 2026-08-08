@@ -220,6 +220,8 @@ PAGE = """
 <script>
 
   var SPECTRA = {{ spectra|tojson }};
+  console.log("SPECTRA");
+  console.log(SPECTRA);
 
   // Minimal horizontal error-bar plugin: draws a whisker from lo->hi with a
   // center mean dot, for a single-point dataset carrying {lo, hi, mean}.
@@ -333,6 +335,11 @@ var yearChart = makeSpectrum("year-chart", {
   var RADAR_AXIS = {{ radar_axis|tojson }};
   var RADAR_DATA = {{ radar_data|tojson }};
   var RADAR_TOTALS = {{ radar_totals|tojson }};
+
+  console.log('RADAR DATA');
+  console.log(RADAR_DATA);
+console.log('RADAR TOTALS');
+  console.log(RADAR_TOTALS);
 
   var OVERLAY_COLORS = ["#00acff", "#ff0000", "#00ffa4"];
 
