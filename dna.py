@@ -747,6 +747,4 @@ def dna_data():
     conn.row_factory = sqlite3.Row
     rows = conn.execute("SELECT * FROM plays ORDER BY ts DESC").fetchall()
     conn.close()
-    
-    resp = jsonify(compute_dna(rows))
-    return resp
+    return jsonify(compute_dna(rows))
