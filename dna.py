@@ -4,7 +4,7 @@ import sqlite3
 import statistics
 from pathlib import Path
 from collections import Counter
-from flask import Flask, render_template_string
+from flask import Flask, render_template_string, jsonify
 
 import genres
 
@@ -706,22 +706,44 @@ def station_categories(rows):
         data[station] = [round(100 * cnt.get(c, 0) / hits, 1) for c in axis]
     return axis, data, totals
 
+def compute_dna(rows):
+    radar_axis, radar_data, radar_totals = station_categories(rows)
+    return {
+        "categories": radar_axis,
+        "radar": radar_data,
+        "spectra": station_spectra(rows),
+        "totals": radar_totals,
+    }
+
 @app.route("/dna")
 def dna():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     rows = conn.execute("SELECT * FROM plays ORDER BY ts DESC").fetchall()
     conn.close()
+
     summaries = summarize(rows)
     misses = uncategorized(rows)
-    radar_axis, radar_data, radar_totals = station_categories(rows)
-    spectra = station_spectra(rows)
+
+    the_dna = jsonify(compute_dna(rows))
+    radar_axis, radar_data, radar_totals, spectra = the_dna['categories'], the_dna['radar'], the_dna['totals'], the_dna['spectra']
+
     year_min = min(
         (s["year_lo"] for s in spectra.values() if s["year_lo"] is not None),
         default=1950,
     )
+    
     return render_template_string(
         PAGE, rows=rows, summaries=summaries, misses=misses,
         radar_axis=radar_axis, radar_data=radar_data, radar_totals=radar_totals,
         spectra=spectra, year_min=year_min,
     )
+
+@app.route("/dna/data")
+def dna_data():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute("SELECT * FROM plays ORDER BY ts DESC").fetchall()
+    conn.close()
+    
+    return jsonify(compute_dna(rows))
