@@ -6,10 +6,12 @@ from pathlib import Path
 from collections import Counter
 from flask import Flask, render_template_string, jsonify
 
+
 import genres
 
 DB_PATH = Path("/var/www/internet-radio-protocol/plays.db")
 app = Flask(__name__)
+CORS(app, resources={r"/dna/*": {"origins": ["https://one.radio", "https://www.one.radio"]}})
 
 PAGE = """
 <!doctype html><meta charset="utf-8">
@@ -747,5 +749,5 @@ def dna_data():
     conn.close()
     
     resp = jsonify(compute_dna(rows))
-    resp.headers["Access-Control-Allow-Origin"] = "https://www.one.radio"
+    resp.headers["Access-Control-Allow-Origin"] = "*"
     return resp
