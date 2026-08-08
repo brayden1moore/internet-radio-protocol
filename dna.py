@@ -746,4 +746,6 @@ def dna_data():
     rows = conn.execute("SELECT * FROM plays ORDER BY ts DESC").fetchall()
     conn.close()
     
-    return jsonify(compute_dna(rows))
+    resp = jsonify(compute_dna(rows))
+    resp.headers["Access-Control-Allow-Origin"] = "https://www.one.radio"
+    return resp
