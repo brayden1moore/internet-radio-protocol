@@ -130,6 +130,29 @@
         
         <div class="streams-container" id="favorites-container"></div>
 
+        <div id="finder">
+            <div id="finder-sentence">
+                I'm looking for a station where I can hear
+                <select class="finder-select" id="finder-era">
+                <option value="">new or old</option>
+                <option value="new">new</option>
+                <option value="old">old</option>
+                </select>
+                ,
+                <select class="finder-select" id="finder-obsc">
+                <option value="">deep cuts or classics</option>
+                <option value="deep">deep cuts</option>
+                <option value="classic">classics</option>
+                </select>
+                in
+                <select class="finder-select" id="finder-genre">
+                <option value="">any genre</option>
+                </select>
+                .
+            </div>
+            <div id="finder-status"></div>
+        </div>
+
         <div id="shows-now" class="category-header" data-controls="shows-container">Shows On Now</div>
         <div  id="show-container-container">
         <div  id="shows-container"></div></div>
@@ -204,6 +227,29 @@
         </div>
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
+
+    #finder {
+        border: 1px solid black;
+        margin: 20px 0 25px 0;
+        padding: 15px;
+        font-size: 14pt;
+        letter-spacing: -0.05em;
+        background: rgb(243,243,243);
+    }
+    #finder-sentence { line-height: 2.2; }
+    .finder-select {
+        font-family: 'Archivo Light';
+        font-size: 13pt;
+        letter-spacing: -0.05em;
+        background-color: yellow;
+        border: 1px solid black;
+        padding: 3px 6px;
+        cursor: pointer;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+    .finder-select:hover { background-color: white; }
+    #finder-status { margin-top: 10px; font-size: 10pt; opacity: 0.6; }
 
     #support-button {
         height: 38px;
@@ -2774,7 +2820,7 @@
 
             const hitsContainer = document.getElementById('hits');
             
-            fetch(`https://internetradioprotocol.org/status?cacheBust=${Math.random()}`)
+            fetch(`https://one.radio/status?cacheBust=${Math.random()}`)
                     .then(response => response.json())
                     .then(json => {
                         const lastUpdate = json['last_updated_epoch'];
@@ -3962,4 +4008,113 @@
             addStationResults.style.display = 'none';
         }
     });
+
+    // MARK Natural Lang Search
+    (function(){
+    var DNA = null;
+    var median = { year: null, obsc: null };
+    var topCats = {};          // station -> Set of its top-3 categories
+
+    var eraSel = document.getElementById('finder-era');
+    var obscSel = document.getElementById('finder-obsc');
+    var genreSel = document.getElementById('finder-genre');
+    var statusEl = document.getElementById('finder-status');
+
+    function medianOf(vals){
+        var a = vals.filter(function(v){ return v != null; }).sort(function(x,y){ return x-y; });
+        if (!a.length) return null;
+        var m = Math.floor(a.length/2);
+        return a.length % 2 ? a[m] : (a[m-1]+a[m])/2;
+    }
+
+    function computeDerived(){
+        var spectra = DNA.spectra || {};
+        var radar = DNA.radar || {};
+        var axis = DNA.categories || [];
+
+        // medians across stations that have the data
+        median.year = medianOf(Object.values(spectra).map(function(s){ return s.year_mean; }));
+        median.obsc = medianOf(Object.values(spectra).map(function(s){ return s.obsc_mean; }));
+
+        // each station's top-3 categories by polled percentage
+        Object.keys(radar).forEach(function(st){
+        var vec = radar[st];
+        var pairs = axis.map(function(c, i){ return { c: c, v: vec[i] || 0 }; })
+                        .filter(function(p){ return p.v > 0; })
+                        .sort(function(a, b){ return b.v - a.v; })
+                        .slice(0, 3);
+        topCats[st] = new Set(pairs.map(function(p){ return p.c; }));
+        });
+
+        // populate genre dropdown with categories that are some station's top-3
+        var present = {};
+        Object.values(topCats).forEach(function(set){ set.forEach(function(c){ present[c] = true; }); });
+        Object.keys(present).sort().forEach(function(c){
+        var o = document.createElement('option');
+        o.value = c; o.textContent = c;
+        genreSel.appendChild(o);
+        });
+    }
+
+    // Does one station pass the currently-selected clauses?
+    function matches(station){
+        var s = (DNA.spectra || {})[station];
+        var era = eraSel.value, obsc = obscSel.value, genre = genreSel.value;
+
+        if (era){
+        if (!s || s.year_mean == null || median.year == null) return false;
+        if (era === 'new' && !(s.year_mean >= median.year)) return false;
+        if (era === 'old' && !(s.year_mean <  median.year)) return false;
+        }
+        if (obsc){
+        if (!s || s.obsc_mean == null || median.obsc == null) return false;
+        // higher obscurity = deeper cuts
+        if (obsc === 'deep'    && !(s.obsc_mean >= median.obsc)) return false;
+        if (obsc === 'classic' && !(s.obsc_mean <  median.obsc)) return false;
+        }
+        if (genre){
+        if (!topCats[station] || !topCats[station].has(genre)) return false;
+        }
+        return true;
+    }
+
+    function applyFilter(){
+        if (!DNA) return;
+        var anySelected = eraSel.value || obscSel.value || genreSel.value;
+        var cards = document.querySelectorAll('#streams-container .a-station-container');
+        var shown = 0;
+
+        cards.forEach(function(card){
+        // station name is the card id
+        if (!anySelected){
+            card.style.display = '';   // nothing chosen -> normal listing
+            return;
+        }
+        if (matches(card.id)){ card.style.display = ''; shown++; }
+        else { card.style.display = 'none'; }
+        });
+
+        if (!anySelected){
+        statusEl.textContent = '';
+        } else {
+        statusEl.textContent = shown + ' station' + (shown === 1 ? '' : 's') + ' match';
+        }
+    }
+
+    [eraSel, obscSel, genreSel].forEach(function(el){
+        el.addEventListener('change', applyFilter);
+    });
+
+    fetch('https://www.one.radio/dna/data?cacheBust=' + Math.random())
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+        DNA = data;
+        computeDerived();
+        applyFilter();
+        })
+        .catch(function(e){
+        statusEl.textContent = 'Could not load station DNA.';
+        console.error('DNA fetch failed:', e);
+        });
+    })();
 </script>
