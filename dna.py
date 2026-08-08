@@ -749,5 +749,4 @@ def dna_data():
     conn.close()
     
     resp = jsonify(compute_dna(rows))
-    resp.headers["Access-Control-Allow-Origin"] = "*"
     return resp
