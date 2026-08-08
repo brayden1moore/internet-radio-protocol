@@ -725,14 +725,14 @@ def dna():
     summaries = summarize(rows)
     misses = uncategorized(rows)
 
-    the_dna = jsonify(compute_dna(rows))
+    the_dna = compute_dna(rows)
     radar_axis, radar_data, radar_totals, spectra = the_dna['categories'], the_dna['radar'], the_dna['totals'], the_dna['spectra']
 
     year_min = min(
         (s["year_lo"] for s in spectra.values() if s["year_lo"] is not None),
         default=1950,
     )
-    
+
     return render_template_string(
         PAGE, rows=rows, summaries=summaries, misses=misses,
         radar_axis=radar_axis, radar_data=radar_data, radar_totals=radar_totals,
