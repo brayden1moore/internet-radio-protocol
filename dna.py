@@ -11,7 +11,6 @@ import genres
 
 DB_PATH = Path("/var/www/internet-radio-protocol/plays.db")
 app = Flask(__name__)
-CORS(app, resources={r"/dna/*": {"origins": ["https://one.radio", "https://www.one.radio"]}})
 
 PAGE = """
 <!doctype html><meta charset="utf-8">
