@@ -130,32 +130,34 @@
         
         <div class="streams-container" id="favorites-container"></div>
 
-        <div id="finder">
-            <div id="finder-sentence">
-                I'm looking for a station where I can hear
-                <select class="finder-select" id="finder-era">
-                <option value="">new or old</option>
-                <option value="new">new</option>
-                <option value="old">old</option>
-                </select>
-                ,
-                <select class="finder-select" id="finder-obsc">
-                <option value="">deep cuts or classics</option>
-                <option value="deep">deep cuts</option>
-                <option value="classic">classics</option>
-                </select>
-                in
-                <select class="finder-select" id="finder-genre">
-                <option value="">any genre</option>
-                </select>
-                .
-            </div>
-            <div id="finder-status"></div>
-        </div>
-
         <div id="shows-now" class="category-header" data-controls="shows-container">Shows On Now</div>
         <div  id="show-container-container">
         <div  id="shows-container"></div></div>
+
+        <div id="finder">
+        <div id="finder-sentence">
+            I'm looking for a station where I can hear
+            <select class="finder-select" id="finder-era">
+            <option value="">new or old</option>
+            <option value="new">new</option>
+            <option value="old">old</option>
+            </select>
+        
+            <select class="finder-select" id="finder-obsc">
+            <option value="">deep cuts or classics</option>
+            <option value="deep">deep cuts</option>
+            <option value="classic">classics</option>
+            </select>
+            in
+            <span id="finder-genre-wrap">
+            <span id="finder-genre-slot">any genre</span>
+            <div id="finder-genre-menu"></div>
+            </span>
+            .
+        </div>
+        <div id="finder-status"></div>
+        <div id="finder-results"></div>
+        </div>
 
         <div id="view-selector">
             <img class="view-icon" id="list-button" src="assets/listicon.png">
@@ -231,15 +233,15 @@
     #finder {
         border: 1px solid black;
         margin: 20px 0 25px 0;
-        padding: 15px;
-        font-size: 14pt;
+        padding: 10px;
+        font-size: 12pt;
         letter-spacing: -0.05em;
         background: rgb(243,243,243);
     }
     #finder-sentence { line-height: 2.2; }
     .finder-select {
         font-family: 'Archivo Light';
-        font-size: 13pt;
+        font-size: 12pt;
         letter-spacing: -0.05em;
         background-color: yellow;
         border: 1px solid black;
@@ -247,9 +249,83 @@
         cursor: pointer;
         -webkit-appearance: none;
         appearance: none;
+        border-radius: 0px;
     }
-    .finder-select:hover { background-color: white; }
-    #finder-status { margin-top: 10px; font-size: 10pt; opacity: 0.6; }
+    #finder-genre-menu {
+        margin-top: -8px;
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 100;
+        background: white;
+        border: 1px solid black;
+        min-width: 140px;
+    }
+    #finder-genre-slot { 
+        background-color: yellow;
+        cursor: pointer; 
+        border: 1px solid black;
+        border-radius: 0px;
+        padding: 3px 5px;
+    }
+    .finder-select:hover, #finder-genre-slot:hover { background-color: white; }
+    #finder-status { 
+        margin-top: 0px; 
+        font-size: 10pt; 
+        opacity: 0.6; 
+    }
+    #finder-results {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .finder-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid black;
+        background: white;
+        padding: 5px 10px 5px 5px;
+        cursor: pointer;
+        max-width: 240px;
+        user-select: none;
+    }
+    .finder-pill:hover { background: #FFFF00; }
+    .finder-pill img {
+        height: 28px;
+        width: 28px;
+        object-fit: cover;
+        border: 0.5px solid black;
+        flex-shrink: 0;
+    }
+    .finder-pill-text { overflow: hidden; }
+    .finder-pill-name {
+        font-size: 10pt;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .finder-pill-oneliner {
+        font-size: 8pt;
+        opacity: 0.6;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .finder-genre-option {
+        padding: 0px 5px;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .finder-genre-option:hover {
+        background-color: rgb(243,243,243);
+    }
+
+    #finder-genre-wrap { position: relative; display: inline-block; }
+
 
     #support-button {
         height: 38px;
@@ -4017,7 +4093,6 @@
 
     var eraSel = document.getElementById('finder-era');
     var obscSel = document.getElementById('finder-obsc');
-    var genreSel = document.getElementById('finder-genre');
     var statusEl = document.getElementById('finder-status');
 
     function medianOf(vals){
@@ -4047,19 +4122,17 @@
         });
 
         // populate genre dropdown with categories that are some station's top-3
+        
         var present = {};
         Object.values(topCats).forEach(function(set){ set.forEach(function(c){ present[c] = true; }); });
-        Object.keys(present).sort().forEach(function(c){
-        var o = document.createElement('option');
-        o.value = c; o.textContent = c;
-        genreSel.appendChild(o);
-        });
+        buildGenrePicker(Object.keys(present).sort());
     }
 
     // Does one station pass the currently-selected clauses?
     function matches(station){
         var s = (DNA.spectra || {})[station];
-        var era = eraSel.value, obsc = obscSel.value, genre = genreSel.value;
+        var era = eraSel.value, obsc = obscSel.value;
+        var genres = selectedGenres();   // array of chosen categories
 
         if (era){
         if (!s || s.year_mean == null || median.year == null) return false;
@@ -4068,40 +4141,118 @@
         }
         if (obsc){
         if (!s || s.obsc_mean == null || median.obsc == null) return false;
-        // higher obscurity = deeper cuts
         if (obsc === 'deep'    && !(s.obsc_mean >= median.obsc)) return false;
         if (obsc === 'classic' && !(s.obsc_mean <  median.obsc)) return false;
         }
-        if (genre){
-        if (!topCats[station] || !topCats[station].has(genre)) return false;
+        if (genres.length){
+        var top = topCats[station];
+        if (!top) return false;
+        // OR: at least one selected genre is in the station's top 3
+        var hit = genres.some(function(g){ return top.has(g); });
+        if (!hit) return false;
         }
         return true;
     }
 
-    function applyFilter(){
-        if (!DNA) return;
-        var anySelected = eraSel.value || obscSel.value || genreSel.value;
-        var cards = document.querySelectorAll('#streams-container .a-station-container');
-        var shown = 0;
-
-        cards.forEach(function(card){
-        // station name is the card id
-        if (!anySelected){
-            card.style.display = '';   // nothing chosen -> normal listing
-            return;
-        }
-        if (matches(card.id)){ card.style.display = ''; shown++; }
-        else { card.style.display = 'none'; }
-        });
-
-        if (!anySelected){
-        statusEl.textContent = '';
-        } else {
-        statusEl.textContent = shown + ' station' + (shown === 1 ? '' : 's') + ' match';
-        }
+    function fitSelect(sel){
+        var tmp = document.createElement('span');
+        var cs = getComputedStyle(sel);
+        tmp.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;' +
+        'font-family:' + cs.fontFamily + ';font-size:' + cs.fontSize +
+        ';letter-spacing:' + cs.letterSpacing;
+        tmp.textContent = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '';
+        document.body.appendChild(tmp);
+        sel.style.width = (tmp.offsetWidth + 28) + 'px';  // +padding/arrow room
+        tmp.remove();
     }
 
-    [eraSel, obscSel, genreSel].forEach(function(el){
+    var chosenGenres = new Set();
+
+    function selectedGenres(){ return Array.from(chosenGenres); }
+
+    function buildGenrePicker(categories){
+        var slot = document.getElementById('finder-genre-slot'); 
+        var menu = document.getElementById('finder-genre-menu');
+
+        categories.forEach(function(c){
+        var opt = document.createElement('div');
+        opt.className = 'finder-genre-option';
+        opt.textContent = c;
+        opt.addEventListener('click', function(){
+            if (chosenGenres.has(c)){ chosenGenres.delete(c); opt.classList.remove('chosen'); }
+            else { chosenGenres.add(c); opt.classList.add('chosen'); }
+            renderGenreSlot();
+            applyFilter();
+        });
+        menu.appendChild(opt);
+        });
+
+        function renderGenreSlot(){
+            var g = Array.from(chosenGenres);
+            slot.textContent = !g.length ? 'any genre'
+                : g.length === 1 ? g[0]
+                : g[0] + ' +' + (g.length - 1);
+            }
+        renderGenreSlot();
+
+        slot.addEventListener('click', function(){
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+    }
+
+    document.addEventListener('click', function(e){
+      var wrap = document.getElementById('finder-genre-wrap');
+      var menu = document.getElementById('finder-genre-menu');
+      if (wrap && !wrap.contains(e.target)) menu.style.display = 'none';
+    });
+
+    function applyFilter(){
+        if (!DNA) return;
+        var resultsEl = document.getElementById('finder-results');
+        var anySelected = eraSel.value || obscSel.value || selectedGenres().length;
+
+        fitSelect(eraSel);
+        fitSelect(obscSel);
+
+        resultsEl.innerHTML = '';
+
+        if (!anySelected){
+        statusEl.textContent = 'All stations match.';
+        return;
+        }
+
+        // Which stations exist as cards right now (so pills are always playable)
+        var cards = document.querySelectorAll('#streams-container .a-station-container');
+        var byId = {};
+        cards.forEach(function(c){ byId[c.id] = c; });
+
+        var shown = 0;
+        Object.keys(byId).forEach(function(name){
+        if (!matches(name)) return;
+        shown++;
+
+        var card = byId[name];
+        var logo = card.querySelector('.a-logo');
+        var oneLiner = card.dataset.oneLiner || '';
+
+        var pill = document.createElement('div');
+        pill.className = 'finder-pill';
+        pill.innerHTML =
+            '<img src="' + (logo ? logo.src : 'assets/justear.png') + '">' +
+            '<div class="finder-pill-text">' +
+            '<div class="finder-pill-name"></div>' +
+            '</div>';
+        // set text via textContent to avoid HTML injection from names/one-liners
+        pill.querySelector('.finder-pill-name').textContent = name;
+
+        pill.addEventListener('click', function(){ chooseStation(name); });
+        resultsEl.appendChild(pill);
+        });
+
+        statusEl.textContent = shown + ' station' + (shown === 1 ? '' : 's') + ' match'  + (shown === 1 ? 'es.' : '.');
+    }
+
+    [eraSel, obscSel].forEach(function(el){
         el.addEventListener('change', applyFilter);
     });
 
