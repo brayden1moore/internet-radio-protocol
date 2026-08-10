@@ -28,7 +28,14 @@ STYLE = """
         font-size: 34pt;
         color: black;
   }
-  h2{font-size:1rem;margin:1.5rem 0 .5rem;}
+  h2 {
+      border-bottom: 1px solid black;
+      font-size: 1rem;
+      margin: 0;
+      border-bottom: 0px;
+      padding: 3px 10px;
+      border-bottom: 1px solid black;
+   }
   table{border-collapse:collapse;width:100%;table-layout:fixed}
   th,td{text-align:left;padding:4px 10px;border-bottom:1px solid #eee;
         overflow:hidden;text-overflow:ellipsis}
@@ -70,30 +77,56 @@ STYLE = """
   }
 
   #radar-chart {
-    background-color: rgb(243,243,243);
     display: block;
     box-sizing: border-box;
-    height: 560px;
-    width: 560px;
-    border: 1px solid black;
+    height: 522px;
+    width: 522px;
+
   }
 
   #plays-chart, #year-chart {
-      border: 1px solid black;
-      background-color: rgb(243,243,243);
+      padding: 5px;
   }
+
+  #plays-chart {
+    display: block;
+    box-sizing: border-box;
+    height: 178px;
+    width: 356px;
+}
 
   #chart-div {
-    display:block;
+    width: fit-content;
+    display: block;
+    border: 1px solid black;
   }
 
+  #spectra-div {
+    border-left: 1px solid black;
+    /* border: 1px solid black; */
+    width: 356px;
+  }
+
+  #radar-similar {
+    white-space: nowrap;
+    border-bottom: 1px solid black;
+    height: 86px !important;
+    /* margin: .5rem 0 1rem; */
+    display: flex;
+    gap: .5rem;
+    text-wrap: var();
+    flex-wrap: wrap;
+    overflow: revert-layer;
+    padding: 10px;
+    /* width: 100%; */
+  }
+    
   @media (orientation: landscape)  {
     #chart-div {
         display:flex;
     }
     #spectra-div {
-        margin-left: 30px;
-        margin-top: 50px;
+        margin-left: -1px;
     }
     #left-div {
         width: 560px;
@@ -165,20 +198,22 @@ DNA_PANEL = """
 <div id="chart-div">
 
     <div id="left-div">
-        <h2 style="margin-top: 0px;">Most Similar Genre Makeup</h2>
-        <div id="radar-similar" style="white-space:nowrap; margin:.5rem 0 1rem;display:flex;gap:.5rem;overflow:scroll;"></div>
         <div style="max-width:560px;">
+        <h2 style="margin-top: 0px;">Genre Makeup</h2>
         <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
         </div>
     </div>
 
     <div id="spectra-div">
+        <h2 style="margin-top: 0px;">Most Similar</h2>
+        <div id="radar-similar" style="white-space:nowrap; margin:.5rem 0 1rem;display:flex;gap:.5rem;overflow:scroll;"></div>
+
         <h2>Era <small>(release year, mean ±1 SD)</small></h2>
         <div style="max-width:560px;">
         <canvas id="year-chart" role="img" aria-label="Average release year with spread for the selected station"></canvas>
         </div>
 
-        <h2>Obscurity <small>(0 = most played, 100 = most obscure, vs all stations)</small></h2>
+        <h2>Obscurity style="border-top:1px solid black;" <small>(0 = most played, 100 = most obscure, vs all stations)</small></h2>
         <div style="max-width:560px;">
         <canvas id="plays-chart" role="img" aria-label="Average last.fm playcount with spread for the selected station"></canvas>
         </div>
