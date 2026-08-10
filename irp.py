@@ -3015,7 +3015,7 @@ def get_mixtapes():
         'Labyrinth':['Electronic','Glitch'],
         'Low Key':['Lo-fi','Hip-Hop'],
         'Memory Lane':['Folk','Psychedelic'],
-        'Otaku':['OST','Anime'],
+        'Otaku':['OST','Japanese'],
         'Poolside':['Balearic','Pop'],
         'Rap House':['Trap','Drill'],
         'Sheet Music':['Classical'],
