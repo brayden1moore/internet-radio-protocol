@@ -746,8 +746,8 @@ def load_rows():
     conn.close()
     return rows
 
-def render_dna(template, rows, **extra):
-    the_dna = compute_dna(rows)
+def render_dna(template, play_rows, **extra):
+    the_dna = compute_dna(play_rows)
     radar_axis, radar_data = the_dna["categories"], the_dna["radar"]
     radar_totals, spectra = the_dna["totals"], the_dna["spectra"]
     year_min = min(
