@@ -198,7 +198,7 @@ DNA_PANEL = """
 <div id="chart-div">
 
     <div id="left-div">
-        <div style="max-width:560px;">
+        <div style="max-width:560px;  height:551px;">
         <h2 style="margin-top: 0px;">Genre Makeup</h2>
         <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
         </div>
@@ -214,7 +214,7 @@ DNA_PANEL = """
         </div>
 
         <h2 style="border-top:1px solid black;">Obscurity <small>(0 = most played, 100 = most obscure)</small></h2>
-        <div style="max-width:560px; height:551px;">
+        <div style="max-width:560px;">
         <canvas id="plays-chart" role="img" aria-label="Average last.fm playcount with spread for the selected station"></canvas>
         </div>
     </div>
