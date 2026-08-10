@@ -206,14 +206,14 @@ DNA_PANEL = """
 
     <div id="spectra-div">
         <h2 style="margin-top: 0px;">Most Similar</h2>
-        <div id="radar-similar" style="white-space:nowrap; margin:.5rem 0 1rem;display:flex;gap:.5rem;overflow:scroll;"></div>
+        <div id="radar-similar"></div>
 
         <h2>Era <small>(release year, mean ±1 SD)</small></h2>
         <div style="max-width:560px;">
         <canvas id="year-chart" role="img" aria-label="Average release year with spread for the selected station"></canvas>
         </div>
 
-        <h2>Obscurity style="border-top:1px solid black;" <small>(0 = most played, 100 = most obscure, vs all stations)</small></h2>
+        <h2 style="border-top:1px solid black;">Obscurity <small>(0 = most played, 100 = most obscure, vs all stations)</small></h2>
         <div style="max-width:560px;">
         <canvas id="plays-chart" role="img" aria-label="Average last.fm playcount with spread for the selected station"></canvas>
         </div>
