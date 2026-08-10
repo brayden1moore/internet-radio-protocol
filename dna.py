@@ -383,10 +383,11 @@ var yearChart = makeSpectrum("year-chart", {
   var RADAR_AXIS = {{ radar_axis|tojson }};
   var RADAR_DATA = {{ radar_data|tojson }};
   var RADAR_TOTALS = {{ radar_totals|tojson }};
+  var PIN_STATION = {{ pin_station|tojson }};
 
   console.log('RADAR DATA');
   console.log(RADAR_DATA);
-console.log('RADAR TOTALS');
+  console.log('RADAR TOTALS');
   console.log(RADAR_TOTALS);
   console.log('RADAR AXIS');
   console.log(RADAR_AXIS);
