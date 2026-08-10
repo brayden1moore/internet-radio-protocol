@@ -115,85 +115,6 @@ PAGE = """
   <select id="radar-station" style="font:inherit;padding:4px 8px;background-color: yellow;height: 33px !important;outline: none !important;border-radius: 0px !important;"></select>
   <span id="radar-n" style="margin-left:.75rem;color:#888"></span>
 </div>
-
-
-<h2>Polls <small>({{rows|length}})</small></h2>
-<div class="scroll">
-<table class="plays sortable">
-  <thead>
-  <tr>
-    <th class=c-time>time (UTC)</th><th class=c-station>station</th><th class=c-source>source</th>
-    <th class=c-artist>artist</th><th class=c-title>title</th><th class=c-label>label</th>
-    <th class=c-genre>genre</th><th class="c-year num" data-type=num>year</th><th class="c-plays num" data-type=num>last.fm plays</th>
-    <th class=c-genre>category</th>
-    <th class=c-genre>categories</th>
-  </tr>
-  </thead>
-  <tbody>
-  {% for r in rows %}
-  <tr class="{{ 'miss' if not r['matched'] else '' }}">
-    <td class=wrap>{{ r['ts'][:19].replace('T',' ') }}</td>
-    <td>{{ r['station'] }}</td>
-    <td>{{ r['source'] }}</td>
-    <td>{{ r['artist'] or '' }}</td>
-    <td>{{ r['title'] or '' }}</td>
-    <td>{{ r['acr_label'] or '' }}</td>
-    <td>{{ r['acr_genres'] or r['mb_genre'] or r['lf_tags'] or '' }}</td>
-    <td>{{ r['acr_release'][:4] if r['acr_release'] else (r['mb_year'] or '') }}</td>
-    <td class=num>{{ '{:,}'.format(r['lf_playcount']) if r['lf_playcount'] else '' }}</td>
-    <td>{{ r['category'] or '' }}</td>
-    <td>{{ r['categories'] or '' }}</td>
-  </tr>
-  {% endfor %}
-  </tbody>
-</table>
-</div>
-
-<h2>Summary <small>({{summaries|length}} stations)</small></h2>
-<div class="scroll">
-<table class="summary sortable">
-  <thead>
-  <tr>
-    <th>station</th><th class=num data-type=num>polled</th><th class=num data-type=num>id'd</th><th class=num data-type=num>id rate</th>
-    <th>top artist</th><th class=num data-type=num>avg yr</th><th class=num data-type=num>yr stdev</th>
-    <th>top category</th><th class=num data-type=num>avg plays</th><th class=txt>most popular</th><th class=txt>least popular</th>
-  </tr>
-  </thead>
-  <tbody>
-  {% for s in summaries %}
-  <tr>
-    <td>{{ s.station }}</td>
-    <td class=num>{{ '{:,}'.format(s.total) }}</td>
-    <td class=num>{{ '{:,}'.format(s.identified) }}</td>
-    <td class=num>{{ '%.0f'|format(s.id_rate) }}%</td>
-    <td class=txt>{{ s.top_artist }}{% if s.top_artist_n %} ({{ s.top_artist_n }}){% endif %}</td>
-    <td class=num>{{ s.avg_year or '—' }}</td>
-    <td class=num>{{ s.year_stdev or '—' }}</td>
-    <td>{{ s.top_category }}{% if s.top_category_n %} ({{ s.top_category_n }}){% endif %}</td>
-    <td class=num>{{ '{:,}'.format(s.avg_plays) if s.avg_plays else '—' }}</td>
-    <td class=txt>{{ s.most_popular }}</td>
-    <td class=txt>{{ s.least_popular }}</td>
-  </tr>
-  {% endfor %}
-  </tbody>
-</table>
-</div>
-
-<h2>Uncategorized tags <small>({{misses|length}} distinct, from unresolved rows only)</small></h2>
-<div class="scroll">
-<table class="summary sortable">
-  <thead>
-  <tr><th>tag</th><th class=num data-type=num>count</th></tr>
-  </thead>
-  <tbody>
-  {% for tag, n in misses %}
-  <tr>
-    <td>{{ tag }}</td>
-    <td class=num>{{ n }}</td>
-  </tr>
-  {% endfor %}
-  </tbody>
-</table>
 </div>
 
 
@@ -543,7 +464,82 @@ PAGE = STYLE + """
 <h2 style="margin-top:0px;">Station</h2>
 """ + DNA_PANEL + """
 <h2>Polls <small>({{rows|length}})</small></h2>
-... all your existing tables ...
+<div class="scroll">
+<table class="plays sortable">
+  <thead>
+  <tr>
+    <th class=c-time>time (UTC)</th><th class=c-station>station</th><th class=c-source>source</th>
+    <th class=c-artist>artist</th><th class=c-title>title</th><th class=c-label>label</th>
+    <th class=c-genre>genre</th><th class="c-year num" data-type=num>year</th><th class="c-plays num" data-type=num>last.fm plays</th>
+    <th class=c-genre>category</th>
+    <th class=c-genre>categories</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for r in rows %}
+  <tr class="{{ 'miss' if not r['matched'] else '' }}">
+    <td class=wrap>{{ r['ts'][:19].replace('T',' ') }}</td>
+    <td>{{ r['station'] }}</td>
+    <td>{{ r['source'] }}</td>
+    <td>{{ r['artist'] or '' }}</td>
+    <td>{{ r['title'] or '' }}</td>
+    <td>{{ r['acr_label'] or '' }}</td>
+    <td>{{ r['acr_genres'] or r['mb_genre'] or r['lf_tags'] or '' }}</td>
+    <td>{{ r['acr_release'][:4] if r['acr_release'] else (r['mb_year'] or '') }}</td>
+    <td class=num>{{ '{:,}'.format(r['lf_playcount']) if r['lf_playcount'] else '' }}</td>
+    <td>{{ r['category'] or '' }}</td>
+    <td>{{ r['categories'] or '' }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+
+<h2>Summary <small>({{summaries|length}} stations)</small></h2>
+<div class="scroll">
+<table class="summary sortable">
+  <thead>
+  <tr>
+    <th>station</th><th class=num data-type=num>polled</th><th class=num data-type=num>id'd</th><th class=num data-type=num>id rate</th>
+    <th>top artist</th><th class=num data-type=num>avg yr</th><th class=num data-type=num>yr stdev</th>
+    <th>top category</th><th class=num data-type=num>avg plays</th><th class=txt>most popular</th><th class=txt>least popular</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for s in summaries %}
+  <tr>
+    <td>{{ s.station }}</td>
+    <td class=num>{{ '{:,}'.format(s.total) }}</td>
+    <td class=num>{{ '{:,}'.format(s.identified) }}</td>
+    <td class=num>{{ '%.0f'|format(s.id_rate) }}%</td>
+    <td class=txt>{{ s.top_artist }}{% if s.top_artist_n %} ({{ s.top_artist_n }}){% endif %}</td>
+    <td class=num>{{ s.avg_year or '—' }}</td>
+    <td class=num>{{ s.year_stdev or '—' }}</td>
+    <td>{{ s.top_category }}{% if s.top_category_n %} ({{ s.top_category_n }}){% endif %}</td>
+    <td class=num>{{ '{:,}'.format(s.avg_plays) if s.avg_plays else '—' }}</td>
+    <td class=txt>{{ s.most_popular }}</td>
+    <td class=txt>{{ s.least_popular }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+
+<h2>Uncategorized tags <small>({{misses|length}} distinct, from unresolved rows only)</small></h2>
+<div class="scroll">
+<table class="summary sortable">
+  <thead>
+  <tr><th>tag</th><th class=num data-type=num>count</th></tr>
+  </thead>
+  <tbody>
+  {% for tag, n in misses %}
+  <tr>
+    <td>{{ tag }}</td>
+    <td class=num>{{ n }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
 """
 
 EMBED = """<!doctype html><meta charset="utf-8"><title>One Radio DNA — {{ pin_station }}</title>
