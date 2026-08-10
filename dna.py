@@ -16,6 +16,7 @@ STYLE = """
 <style>
 @font-face{font-family:"Archivo Light";src:url("https://one.radio/assets/Archivo-Light.ttf") format("truetype");}
 @font-face{font-family:"Archivo Bold";src:url("https://one.radio/assets/Archivo-Bold.ttf") format("truetype");}
+@font-face{font-family:"Archivo SemiBold";src:url("https://one.radio/assets/Archivo-SemiBold.ttf") format("truetype");}
   body{
   letter-spacing: -0.05em;
   font:14px/1.4 "Archivo Light",system-ui,sans-serif;margin:0px;color:#111}
@@ -35,6 +36,7 @@ STYLE = """
       border-bottom: 0px;
       padding: 3px 10px;
       border-bottom: 1px solid black;
+      font-family: "Archivo SemiBold";
    }
   table{border-collapse:collapse;width:100%;table-layout:fixed}
   th,td{text-align:left;padding:4px 10px;border-bottom:1px solid #eee;
