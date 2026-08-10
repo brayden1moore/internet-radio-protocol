@@ -37,6 +37,7 @@ STYLE = """
       padding: 3px 10px;
       border-bottom: 1px solid black;
       font-family: "Archivo SemiBold";
+      font-weight: normal !important;
    }
   table{border-collapse:collapse;width:100%;table-layout:fixed}
   th,td{text-align:left;padding:4px 10px;border-bottom:1px solid #eee;
