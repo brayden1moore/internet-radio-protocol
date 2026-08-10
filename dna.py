@@ -12,12 +12,7 @@ import genres
 DB_PATH = Path("/var/www/internet-radio-protocol/plays.db")
 app = Flask(__name__)
 
-PAGE = """
-<!doctype html><meta charset="utf-8">
-<title>One Radio [DNA]</title>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=0.66">
-</head>
+STYLE = """
 <style>
 @font-face{font-family:"Archivo Light";src:url("https://one.radio/assets/Archivo-Light.ttf") format("truetype");}
 @font-face{font-family:"Archivo Bold";src:url("https://one.radio/assets/Archivo-Bold.ttf") format("truetype");}
@@ -104,7 +99,14 @@ PAGE = """
         width: 560px;
     }
   }
-</style>
+</style>"""
+
+PAGE = """
+<!doctype html><meta charset="utf-8">
+<title>One Radio [DNA]</title>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=0.66">
+</head>
 
 <h1>ONE RADIO <span class="dna">DNA</span></h1>
 
@@ -114,28 +116,6 @@ PAGE = """
   <span id="radar-n" style="margin-left:.75rem;color:#888"></span>
 </div>
 
-<div id="chart-div">
-
-    <div id="left-div">
-        <h2 style="margin-top: 0px;">Most Similar Genre Makeup</h2>
-        <div id="radar-similar" style="white-space:nowrap; margin:.5rem 0 1rem;display:flex;gap:.5rem;overflow:scroll;"></div>
-        <div style="max-width:560px;">
-        <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
-        </div>
-    </div>
-
-    <div id="spectra-div">
-        <h2>Era <small>(release year, mean ±1 SD)</small></h2>
-        <div style="max-width:560px;">
-        <canvas id="year-chart" role="img" aria-label="Average release year with spread for the selected station"></canvas>
-        </div>
-
-        <h2>Obscurity <small>(0 = most played, 100 = most obscure, vs all stations)</small></h2>
-        <div style="max-width:560px;">
-        <canvas id="plays-chart" role="img" aria-label="Average last.fm playcount with spread for the selected station"></canvas>
-        </div>
-    </div>
-</div>
 
 <h2>Polls <small>({{rows|length}})</small></h2>
 <div class="scroll">
@@ -216,8 +196,75 @@ PAGE = """
 </table>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 
+<script>
+document.querySelectorAll("table.sortable").forEach(function(table){
+  var ths = table.tHead.rows[0].cells;
+  Array.prototype.forEach.call(ths, function(th, col){
+    th.addEventListener("click", function(){
+      var tbody = table.tBodies[0];
+      var rows = Array.prototype.slice.call(tbody.rows);
+      var numeric = th.dataset.type === "num";
+      var asc = !th.classList.contains("sorted-asc");
+
+      Array.prototype.forEach.call(ths, function(h){
+        h.classList.remove("sorted-asc","sorted-desc");
+      });
+      th.classList.add(asc ? "sorted-asc" : "sorted-desc");
+
+      function val(row){
+        var t = row.cells[col].textContent.trim();
+        if(numeric){
+          var n = parseFloat(t.replace(/[^0-9.\\-]/g,""));
+          return isNaN(n) ? -Infinity : n;
+        }
+        return t.toLowerCase();
+      }
+
+      rows.sort(function(a,b){
+        var x = val(a), y = val(b);
+        if(x < y) return asc ? -1 : 1;
+        if(x > y) return asc ? 1 : -1;
+        return 0;
+      });
+      rows.forEach(function(r){ tbody.appendChild(r); });
+    });
+  });
+});
+</script>
+"""
+
+# embeddable core
+DNA_PANEL = """
+<div style="margin:.5rem 0 1rem" {{ 'hidden' if pin_station else '' }}>
+  <select id="radar-station" style="font:inherit;padding:4px 8px;background-color:yellow;height:33px!important;outline:none!important;border-radius:0px!important;"></select>
+  <span id="radar-n" style="margin-left:.75rem;color:#888"></span>
+</div>
+
+<div id="chart-div">
+
+    <div id="left-div">
+        <h2 style="margin-top: 0px;">Most Similar Genre Makeup</h2>
+        <div id="radar-similar" style="white-space:nowrap; margin:.5rem 0 1rem;display:flex;gap:.5rem;overflow:scroll;"></div>
+        <div style="max-width:560px;">
+        <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
+        </div>
+    </div>
+
+    <div id="spectra-div">
+        <h2>Era <small>(release year, mean ±1 SD)</small></h2>
+        <div style="max-width:560px;">
+        <canvas id="year-chart" role="img" aria-label="Average release year with spread for the selected station"></canvas>
+        </div>
+
+        <h2>Obscurity <small>(0 = most played, 100 = most obscure, vs all stations)</small></h2>
+        <div style="max-width:560px;">
+        <canvas id="plays-chart" role="img" aria-label="Average last.fm playcount with spread for the selected station"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 
   var SPECTRA = {{ spectra|tojson }};
@@ -354,11 +401,13 @@ console.log('RADAR TOTALS');
     var eligible = Object.keys(RADAR_DATA)
       .filter(function(s){ return (RADAR_TOTALS[s] || 0) >= 5; });
 
-    eligible.forEach(function(s){
-      var o = document.createElement("option");
-      o.value = s; o.textContent = s + " (" + RADAR_TOTALS[s] + ")";
-      sel.appendChild(o);
-    });
+    if (!PIN_STATION) {
+      eligible.forEach(function(s){
+        var o = document.createElement("option");
+        o.value = s; o.textContent = s + " (" + RADAR_TOTALS[s] + ")";
+        sel.appendChild(o);
+      });
+    }
 
     function dist(a, b){
       var s = 0;
@@ -477,51 +526,28 @@ console.log('RADAR TOTALS');
 
     sel.addEventListener("change", function(){ selectStation(sel.value); });
 
-    if (eligible.length){
-      selectStation(eligible[0]);
+    var start = PIN_STATION && RADAR_DATA[PIN_STATION] ? PIN_STATION : eligible[0];
+    if (start) {
+      if (!PIN_STATION) sel.value = start;
+      selectStation(start);
     } else {
       nLabel.textContent = "no stations with enough data yet";
     }
   })();
 </script>
-
-<script>
-document.querySelectorAll("table.sortable").forEach(function(table){
-  var ths = table.tHead.rows[0].cells;
-  Array.prototype.forEach.call(ths, function(th, col){
-    th.addEventListener("click", function(){
-      var tbody = table.tBodies[0];
-      var rows = Array.prototype.slice.call(tbody.rows);
-      var numeric = th.dataset.type === "num";
-      var asc = !th.classList.contains("sorted-asc");
-
-      Array.prototype.forEach.call(ths, function(h){
-        h.classList.remove("sorted-asc","sorted-desc");
-      });
-      th.classList.add(asc ? "sorted-asc" : "sorted-desc");
-
-      function val(row){
-        var t = row.cells[col].textContent.trim();
-        if(numeric){
-          var n = parseFloat(t.replace(/[^0-9.\\-]/g,""));
-          return isNaN(n) ? -Infinity : n;
-        }
-        return t.toLowerCase();
-      }
-
-      rows.sort(function(a,b){
-        var x = val(a), y = val(b);
-        if(x < y) return asc ? -1 : 1;
-        if(x > y) return asc ? 1 : -1;
-        return 0;
-      });
-      rows.forEach(function(r){ tbody.appendChild(r); });
-    });
-  });
-});
-</script>
 """
 
+PAGE = STYLE + """
+<h1>ONE RADIO <span class="dna">DNA</span></h1>
+<h2 style="margin-top:0px;">Station</h2>
+""" + DNA_PANEL + """
+<h2>Polls <small>({{rows|length}})</small></h2>
+... all your existing tables ...
+"""
+
+EMBED = """<!doctype html><meta charset="utf-8"><title>One Radio DNA — {{ pin_station }}</title>
+<head><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+""" + STYLE + DNA_PANEL
 
 def parse_year(r):
     if r["acr_release"] and len(r["acr_release"]) >= 4 and r["acr_release"][:4].isdigit():
@@ -716,37 +742,47 @@ def compute_dna(rows):
         "totals": radar_totals,
     }
 
-@app.route("/dna")
-def dna():
+def load_rows():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     rows = conn.execute("SELECT * FROM plays ORDER BY ts DESC").fetchall()
     conn.close()
+    return rows
 
-    summaries = summarize(rows)
-    misses = uncategorized(rows)
-
+def render_dna(template, rows, **extra):
     the_dna = compute_dna(rows)
-    radar_axis, radar_data, radar_totals, spectra = the_dna['categories'], the_dna['radar'], the_dna['totals'], the_dna['spectra']
-
+    radar_axis, radar_data = the_dna["categories"], the_dna["radar"]
+    radar_totals, spectra = the_dna["totals"], the_dna["spectra"]
     year_min = min(
         (s["year_lo"] for s in spectra.values() if s["year_lo"] is not None),
         default=1950,
     )
-
     return render_template_string(
-        PAGE, rows=rows, summaries=summaries, misses=misses,
+        template,
         radar_axis=radar_axis, radar_data=radar_data, radar_totals=radar_totals,
-        spectra=spectra, year_min=year_min,
+        spectra=spectra, year_min=year_min, **extra,
     )
 
-@app.route("/dna/data")
-def dna_data():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    rows = conn.execute("SELECT * FROM plays ORDER BY ts DESC").fetchall()
-    conn.close()
-    
-    resp = jsonify(compute_dna(rows))
+@app.route("/dna")
+def dna():
+    rows = load_rows()
+    return render_dna(
+        PAGE, rows,
+        rows=rows,
+        summaries=summarize(rows),
+        misses=uncategorized(rows),
+        pin_station=None,
+    )
+
+@app.route("/dna/<station>")
+def dna_station(station):
+    rows = load_rows()
+    totals = station_categories(rows)[2]
+    if totals.get(station, 0) < 5:
+        return f"No station {station!r} with enough data", 404
+    resp = app.make_response(render_dna(EMBED, rows, pin_station=station))
+    # so it can be iframed / fetched cross-origin from the other page
     resp.headers["Access-Control-Allow-Origin"] = "*"
+    resp.headers["X-Frame-Options"] = "ALLOWALL"
+    resp.headers.pop("X-Frame-Options", None)  # or configure CSP frame-ancestors
     return resp
