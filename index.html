@@ -30,26 +30,30 @@
             <div id="modal">
                 <div id="modal-x-container"><div id="modal-x" onClick="closeModal();"><img style="height:25px" src="assets/xicon.png"></div></div>
                 <div id="modal-content">
-                    <div id="modal-logo-container">
-                        <div id="modal-logo-and-overlay" class="logo-and-overlay">
-                            <div id="modal-play-overlay" class="play-overlay">
-                                <svg viewBox="0 0 100 100" width="60%" height="60%">
-                                    <polygon points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"/>
-                                </svg>
-                            </div>
-                            <img id="modal-logo"  src="" />
-                    </div>
-                        <div id="modal-name-and-location">
-                            <div id="modal-station-name"></div>
-                            <div id="modal-station-location"></div>
+                    <div id="modal-logo-and-links">
+                        <div id="modal-logo-container">
+                            <div id="modal-logo-and-overlay" class="logo-and-overlay">
+                                <div id="modal-play-overlay" class="play-overlay">
+                                    <svg viewBox="0 0 100 100" width="60%" height="60%">
+                                        <polygon points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <img id="modal-logo"  src="" />
                         </div>
-                    </div>
+                            <div id="modal-name-and-location">
+                                <div id="modal-station-name"></div>
+                                <div id="modal-station-location"></div>
+                            </div>
+                        </div>
 
-                    <a class="a-link support-link" id="modal-support-link" target="_blank" href="">Support</a>
-                    <div id="modal-links-container">
-                            <a class="a-link" id="modal-main-link" target="_blank" href="">Website</a>
-                            <a class="a-link" id="modal-stream-link" target="_blank" href="">Stream</a>
-                            <a class="a-link info-link" id="modal-info-link" target="_blank" href="">Data</a>
+                        <div id="modal-links">
+                            <a class="a-link support-link" id="modal-support-link" target="_blank" href=""><img class="view-icon" style="background-color: transparent !important;" src="assets/dollaricon.png"></a>
+                            <div id="modal-links-container">
+                                    <a class="a-link" id="modal-main-link" target="_blank" href=""><img class="view-icon" src="assets/webicon.png"></a>
+                                    <a class="a-link" id="modal-stream-link" target="_blank" href=""><img class="view-icon" src="assets/streamicon.png"></a>
+                                    <a class="a-link info-link" id="modal-info-link" target="_blank" href=""><img class="view-icon" src="assets/codeicon.png"></a>
+                            </div>
+                        </div>
                     </div>
 
                     <div id="modal-from-the-show" class="modal-header">Now Playing</div>
@@ -965,7 +969,7 @@
         flex: 1;
         text-align: center;
         border: 1px solid black;
-        height: 25px;
+       /*height: 25px;*/
         display: flex;
         align-items: center;
         justify-content: center;
@@ -979,7 +983,6 @@
     }
     
     .info-link {
-        display:none;
         margin-right: 0px;
     }
 
@@ -1054,6 +1057,10 @@
         transition: 0.3s ease;
     }
 
+    #modal-logo-and-links {
+        display: block;
+    }
+
     #modal {
         position: absolute;
         top: 25%;
@@ -1070,6 +1077,30 @@
         border: 1px solid black;
         overflow: scroll;
     }
+
+            #modal-logo-and-links {
+                display: block;
+                justify-content: space-between;
+            }
+
+            #modal-links {
+                width: 400px;
+                margin-top: 20px;
+                display: flex;
+                align-items: center;
+            }
+
+            #modal-support-link {
+                margin: 0;
+                margin-right: 5px;
+                flex: 0;
+            }
+
+            #modal-links-container {
+                margin: 0;
+                width: 220px;
+                flex-basis: content;
+            }
 
     #change-sort-button {
         margin-top: 0px;
@@ -2133,6 +2164,7 @@
             }
 
 
+            /* LANDSCAPE */
             #modal {
                 top: 5%;
                 width: 958px;
