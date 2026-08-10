@@ -214,7 +214,7 @@ DNA_PANEL = """
         </div>
 
         <h2 style="border-top:1px solid black;">Obscurity <small>(0 = most played, 100 = most obscure)</small></h2>
-        <div style="max-width:560px;">
+        <div style="max-width:560px; height:551px;">
         <canvas id="plays-chart" role="img" aria-label="Average last.fm playcount with spread for the selected station"></canvas>
         </div>
     </div>
