@@ -116,7 +116,7 @@ STYLE = """
     gap: .5rem;
     text-wrap: var();
     flex-wrap: wrap;
-    overflow: revert-layer;
+    overflow: scroll;
     padding: 10px;
     /* width: 100%; */
   }
@@ -448,7 +448,7 @@ var yearChart = makeSpectrum("year-chart", {
         btn.dataset.color = color;
         btn.dataset.on = "0";
         btn.style.cssText =
-          "font:inherit;padding:4px 10px;cursor:pointer;border:1px solid" + color + ";" +
+          "font:inherit;font-size:10pt;padding:4px 10px;cursor:pointer;border:1px solid" + color + ";" +
           "background:#fff;border-top:6px solid " + color + ";";
         btn.addEventListener("click", function(){
           var on = btn.dataset.on === "1";
