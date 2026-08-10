@@ -768,7 +768,6 @@ def dna():
     rows = load_rows()
     return render_dna(
         PAGE, rows,
-        rows=rows,
         summaries=summarize(rows),
         misses=uncategorized(rows),
         pin_station=None,
