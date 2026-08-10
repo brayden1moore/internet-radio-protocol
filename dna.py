@@ -18,7 +18,7 @@ STYLE = """
 @font-face{font-family:"Archivo Bold";src:url("https://one.radio/assets/Archivo-Bold.ttf") format("truetype");}
   body{
   letter-spacing: -0.05em;
-  font:14px/1.4 "Archivo Light",system-ui,sans-serif;margin:2rem;color:#111}
+  font:14px/1.4 "Archivo Light",system-ui,sans-serif;margin:0px;color:#111}
   h1{
         border-bottom: 1px solid black;
         margin-left: 0px;
