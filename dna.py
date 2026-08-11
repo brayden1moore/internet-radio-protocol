@@ -628,7 +628,7 @@ def station_spectra(rows):
         plays = [r["lf_playcount"] for r in srows
                  if r["lf_playcount"] and r["lf_playcount"] > 0]
 
-        year_mean = round(statistics.mean(years)) if years else None
+        year_mean = round(statistics.median(years)) if years else None
         year_sd = round(statistics.stdev(years), 1) if len(years) > 1 else None
 
         if plays:
