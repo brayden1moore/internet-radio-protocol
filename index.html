@@ -1761,6 +1761,14 @@
             opacity: 0.8;
         }
 
+        .show-card:has(.info-icon:hover) {
+            opacity: 1 !important;
+        }
+
+        .show-card .info-icon:hover {
+            opacity: 1 !important;
+        }
+
         .show-img {
             width: 100%;
             height: 100%;
@@ -2866,7 +2874,7 @@
                         showDiv.innerHTML = `
                             <div class="show-card">
                                 <img class="show-img" src="${showLogo}">
-                                <p class="info-icon" id="${stationName}-show-info-icon" onClick="openModal('${stationName}')" style="position: absolute; bottom: 10px; right: 10px; margin: 0; color:white; opacity: 0.8; cursor: pointer; z-index: 11;">ⓘ</p>
+                                <p class="info-icon" id="${stationName}-show-info-icon" onClick="openModal('${stationName}')" style="position: absolute; bottom: 10px; right: 10px; margin: 0; color:white; opacity: 0.5; cursor: pointer; z-index: 11;">ⓘ</p>
                                 <div class="show-overlay">
                                 <img class="show-logo" src="${logo}">
                                 <div class="show-text">
