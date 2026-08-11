@@ -2238,7 +2238,7 @@
             modalName.textContent = station;
             modalLocation.textContent = info[station]['location'];
             modalLogo.src = info[station]['logo'];
-            modalDataIframe.src = `https://one.radio/dna/${encodeURIComponent(station)}`
+            modalDataIframe.src = `https://one.radio/dna/station/${encodeURIComponent(station)}`
 
             if (info[station]['about']) {
                 modalDescription.textContent = info[station]['about'] + "";

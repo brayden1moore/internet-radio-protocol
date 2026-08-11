@@ -794,7 +794,7 @@ def dna():
         pin_station=None,
     )
 
-@app.route("/dna/<station>")
+@app.route("/dna/station/<station>")
 def dna_station(station):
     rows = load_rows()
     totals = station_categories(rows)[2]
@@ -805,4 +805,15 @@ def dna_station(station):
     resp.headers["Access-Control-Allow-Origin"] = "*"
     resp.headers["X-Frame-Options"] = "ALLOWALL"
     resp.headers.pop("X-Frame-Options", None)  # or configure CSP frame-ancestors
+    return resp
+
+@app.route("/dna/data")
+def dna_data():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute("SELECT * FROM plays ORDER BY ts DESC").fetchall()
+    conn.close()
+    
+    resp = jsonify(compute_dna(rows))
+    resp.headers["Access-Control-Allow-Origin"] = "*"
     return resp
