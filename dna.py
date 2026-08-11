@@ -298,7 +298,7 @@ var yearChart = makeSpectrum("year-chart", {
   console.log('RADAR AXIS');
   console.log(RADAR_AXIS);
 
-  var OVERLAY_COLORS = ["#00acff", "#ff0000", "#00ffa4","#FF8F00"];
+  var OVERLAY_COLORS = ["#00acff", "#ff0000", "00d186","#FF8F00"];
 
   (function(){
     var sel = document.getElementById("radar-station");
