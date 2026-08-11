@@ -99,15 +99,18 @@ STYLE = """
 }
 
   #chart-div {
-    width: fit-content;
+    width: 560px;
     display: block;
     border: 1px solid black;
   }
 
   #spectra-div {
-    border-left: 1px solid black;
-    /* border: 1px solid black; */
+    border-left: none;
     width: 356px;
+  }
+
+  #left-div {
+    border-bottom: 1px solid black;
   }
 
   #radar-similar {
@@ -126,13 +129,16 @@ STYLE = """
     
   @media (min-width: 916px)  {
     #chart-div {
+        width: fit-content;
         display:flex;
     }
     #spectra-div {
         margin-left: -1px;
+        border-left: 1px solid black;
     }
     #left-div {
         width: 560px;
+        border-bottom: none !important;
     }
   }
 </style>"""
