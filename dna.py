@@ -88,8 +88,12 @@ STYLE = """
   }
 
   #plays-chart, #year-chart {
-      padding: 5px;
-      height: 168px;
+    padding: 5px;
+    height: 168px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
   }
 
   #plays-chart {
