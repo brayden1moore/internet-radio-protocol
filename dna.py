@@ -106,7 +106,7 @@ STYLE = """
 
   #spectra-div {
     border-left: none;
-    width: 356px;
+    width: 100%;
   }
 
   #left-div {
@@ -135,7 +135,6 @@ STYLE = """
     #spectra-div {
         margin-left: -1px;
         border-left: 1px solid black;
-        width: 100%;
     }
     #left-div {
         width: 560px;
