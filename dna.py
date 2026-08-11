@@ -137,59 +137,6 @@ STYLE = """
   }
 </style>"""
 
-PAGE = """
-<!doctype html><meta charset="utf-8">
-<title>One Radio [DNA]</title>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=0.66">
-</head>
-
-<h1>ONE RADIO <span class="dna">DNA</span></h1>
-
-<h2 style="margin-top: 0px;">Station</h2>
-<div style="margin:.5rem 0 1rem">
-  <select id="radar-station" style="font:inherit;padding:4px 8px;background-color: yellow;height: 33px !important;outline: none !important;border-radius: 0px !important;"></select>
-  <span id="radar-n" style="margin-left:.75rem;color:#888"></span>
-</div>
-</div>
-
-
-<script>
-document.querySelectorAll("table.sortable").forEach(function(table){
-  var ths = table.tHead.rows[0].cells;
-  Array.prototype.forEach.call(ths, function(th, col){
-    th.addEventListener("click", function(){
-      var tbody = table.tBodies[0];
-      var rows = Array.prototype.slice.call(tbody.rows);
-      var numeric = th.dataset.type === "num";
-      var asc = !th.classList.contains("sorted-asc");
-
-      Array.prototype.forEach.call(ths, function(h){
-        h.classList.remove("sorted-asc","sorted-desc");
-      });
-      th.classList.add(asc ? "sorted-asc" : "sorted-desc");
-
-      function val(row){
-        var t = row.cells[col].textContent.trim();
-        if(numeric){
-          var n = parseFloat(t.replace(/[^0-9.\\-]/g,""));
-          return isNaN(n) ? -Infinity : n;
-        }
-        return t.toLowerCase();
-      }
-
-      rows.sort(function(a,b){
-        var x = val(a), y = val(b);
-        if(x < y) return asc ? -1 : 1;
-        if(x > y) return asc ? 1 : -1;
-        return 0;
-      });
-      rows.forEach(function(r){ tbody.appendChild(r); });
-    });
-  });
-});
-</script>
-"""
 
 # embeddable core
 DNA_PANEL = """
@@ -351,7 +298,7 @@ var yearChart = makeSpectrum("year-chart", {
   console.log('RADAR AXIS');
   console.log(RADAR_AXIS);
 
-  var OVERLAY_COLORS = ["#00acff", "#ff0000", "#00ffa4"];
+  var OVERLAY_COLORS = ["#00acff", "#ff0000", "#00ffa4","#FF8F00"];
 
   (function(){
     var sel = document.getElementById("radar-station");
@@ -387,7 +334,7 @@ var yearChart = makeSpectrum("year-chart", {
           return { s: s, d: d, sim: Math.round(100 * (1 - d / MAX_DIST)) };
         })
         .sort(function(a, b){ return a.d - b.d; })
-        .slice(0, 3);
+        .slice(0, 4);
     }
 
     function setN(s){
@@ -500,6 +447,7 @@ var yearChart = makeSpectrum("year-chart", {
 PAGE = STYLE + """
 <h1>ONE RADIO <span class="dna">DNA</span></h1>
 <h2 style="margin-top:0px;">Station</h2>
+<body style="margin:1.2em";>
 """ + DNA_PANEL + """
 <h2>Polls <small>({{rows|length}})</small></h2>
 <div class="scroll">
@@ -578,6 +526,43 @@ PAGE = STYLE + """
   {% endfor %}
   </tbody>
 </table>
+</body>
+
+<script>
+document.querySelectorAll("table.sortable").forEach(function(table){
+  var ths = table.tHead.rows[0].cells;
+  Array.prototype.forEach.call(ths, function(th, col){
+    th.addEventListener("click", function(){
+      var tbody = table.tBodies[0];
+      var rows = Array.prototype.slice.call(tbody.rows);
+      var numeric = th.dataset.type === "num";
+      var asc = !th.classList.contains("sorted-asc");
+
+      Array.prototype.forEach.call(ths, function(h){
+        h.classList.remove("sorted-asc","sorted-desc");
+      });
+      th.classList.add(asc ? "sorted-asc" : "sorted-desc");
+
+      function val(row){
+        var t = row.cells[col].textContent.trim();
+        if(numeric){
+          var n = parseFloat(t.replace(/[^0-9.\\-]/g,""));
+          return isNaN(n) ? -Infinity : n;
+        }
+        return t.toLowerCase();
+      }
+
+      rows.sort(function(a,b){
+        var x = val(a), y = val(b);
+        if(x < y) return asc ? -1 : 1;
+        if(x > y) return asc ? 1 : -1;
+        return 0;
+      });
+      rows.forEach(function(r){ tbody.appendChild(r); });
+    });
+  });
+});
+</script>
 """
 
 EMBED = """<!doctype html><meta charset="utf-8"><title>One Radio DNA — {{ pin_station }}</title>
