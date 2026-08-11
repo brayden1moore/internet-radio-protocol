@@ -149,7 +149,7 @@ DNA_PANEL = """
 
     <div id="left-div">
         <div style="max-width:560px;  height:551px;">
-        <h2 style="margin-top: 0px;">Genre Makeup n ={{radar_totals}} </h2>
+        <h2 style="margin-top: 0px;">Genre Makeup n ={{radar_totals[pin_station]}} </h2>
         <canvas id="radar-chart" role="img" aria-label="Radar chart of category frequency for the selected station"></canvas>
         </div>
     </div>
