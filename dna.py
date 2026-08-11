@@ -124,7 +124,7 @@ STYLE = """
     /* width: 100%; */
   }
     
-  @media (orientation: landscape)  {
+  @media (min-width: 916px)  {
     #chart-div {
         display:flex;
     }
