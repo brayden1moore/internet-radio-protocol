@@ -1071,11 +1071,14 @@
         font-size: 10pt;
         width: calc(100% - 37.5px);
         z-index: 11;
-        max-height: 90%;
         /* height: fit-content; */
         /* background-color: white; */
         border: 1px solid black;
         overflow: scroll;
+        height: 100%;
+        width: 100% !important;
+        top: 0;
+        z-index: 50000;
     }
 
             #modal-logo-and-links {
@@ -2168,7 +2171,6 @@
 
             /* LANDSCAPE */
             #modal {
-                top: 5%;
                 width: 958px;
             }
 
@@ -2862,8 +2864,9 @@
                         showDiv.src = showLogo;
                                 
                         showDiv.innerHTML = `
-                            <div class="show-card" onClick="chooseStation('${stationName}')">
+                            <div class="show-card">
                                 <img class="show-img" src="${showLogo}">
+                                <p class="info-icon" id="${stationName}-show-info-icon" onClick="openModal('${stationName}')" style="position: absolute; bottom: 10px; right: 10px; margin: 0; color:white; opacity: 0.8; cursor: pointer; z-index: 11;">ⓘ</p>
                                 <div class="show-overlay">
                                 <img class="show-logo" src="${logo}">
                                 <div class="show-text">
@@ -2872,6 +2875,13 @@
                                 </div>
                                 </div>
                             </div>`
+
+                        showDiv.onclick = function(event) {
+                            if (event.target.closest('.info-icon')) {
+                                return;
+                            }
+                            chooseStation(stationName);
+                        };
 
                         showContainer.appendChild(showDiv);
                         const showCard = showDiv.querySelector('.show-card');
