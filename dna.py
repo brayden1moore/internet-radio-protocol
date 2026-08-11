@@ -89,6 +89,7 @@ STYLE = """
 
   #plays-chart, #year-chart {
       padding: 5px;
+      height: 168px;
   }
 
   #plays-chart {
