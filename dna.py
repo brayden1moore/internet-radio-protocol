@@ -124,6 +124,7 @@ STYLE = """
     height: 86px !important;
     /* margin: .5rem 0 1rem; */
     display: flex;
+    color: black;
     gap: .5rem;
     text-wrap: var();
     flex-wrap: wrap;
