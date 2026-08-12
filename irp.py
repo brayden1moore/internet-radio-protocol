@@ -3018,7 +3018,7 @@ Stream(
         stream_link = 'https://stream.jettyradio.com/listen/jettyradio/radio.mp3',
         main_link = 'https://jettyradio.com',
         about = "Jetty Radio is a locally based, independent internet radio station cultivating community around the people and sounds of Santa Cruz and the Central Coast.",
-        support_link = 'https://www.gofundme.com/f/soutenir-votre-radio-marseillaise',
+        support_link = 'https://jettyradio.com/support/',
         insta_link = 'https://instagram.com/jettyradio',
         hidden = False,
         song_basis = False
