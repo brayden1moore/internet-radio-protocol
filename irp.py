@@ -1514,6 +1514,11 @@ class Stream:
             self.status = 'Live'
             self.now_playing = extract_value(info, ['current_track','title'])
 
+        elif self.name == 'City Wall':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.now_playing = extract_value(info, ['current','metadata','track_title'])
+            self.now_playing_artist = extract_value(info, ['current','metadata','artist_name'])
+
         ### MARK: STATION LOGIC END
 
     def set_last_updated(self):
@@ -3040,6 +3045,21 @@ Stream(
         support_link = 'https://buymeacoffee.com/virtualpublicnetwork',
         insta_link = 'https://instagram.com/vpn.radio',
         soundcloud_link = 'https://soundcloud.com/virtualpublicnetwork',
+        hidden = False,
+        song_basis = False
+),
+Stream(
+        name = 'City Wall',
+        logo = "https://internetradioprotocol.org/logos/citywall.png",
+        location = 'Kent',
+        lat = 51.2800275,
+        lon = 1.0802533,
+        info_link = "https://citywallradio.airtime.pro/api/live-info",
+        stream_link = 'https://citywallradio.out.airtime.pro:8000/citywallradio_a',
+        main_link = 'https://citywallradio.com',
+        about = "City Wall is a collective of DJs from East Kent, UK and beyond, discovering and curating, creating and broadcasting specialist music-driven shows.",
+        support_link = 'https://ko-fi.com/citywallradio',
+        insta_link = 'https://www.instagram.com/citywallradio/',
         hidden = False,
         song_basis = False
 )
