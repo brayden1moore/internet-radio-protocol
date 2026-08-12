@@ -197,14 +197,14 @@
 
             <div id="list-container">
                 <div id="tag-container-container">
+                    <div class="tags-container" id="location-tags-container">
+                    </div>
+                    <div class="tags-container" id="genre-tags-container">
+                    </div>
                     <div class="tags-container" id="status-tags-container">
                         <div class="tag status-tag" data-type="status" id="Live-tag">Live</div>
                         <div class="tag status-tag" data-type="status" id="Re-Run-tag">Re-Run</div>
                         <div class="tag status-tag" data-type="status" id="Offline-tag">Offline</div>
-                    </div>
-                    <div class="tags-container" id="location-tags-container">
-                    </div>
-                    <div class="tags-container" id="genre-tags-container">
                     </div>
                 </div>
 
@@ -273,7 +273,7 @@
         font-family: 'Archivo Light';
         font-size: 12pt;
         letter-spacing: -0.05em;
-        background-color: yellow;
+        background-color: rgb(243,243,243);
         border: 0.5px solid black;
         padding: 3px 6px;
         cursor: pointer;
@@ -287,7 +287,7 @@
         margin-right: 8px;
     }
     #finder-genre-menu {
-        margin-top: -6px;
+        margin-top: -2px;
         display: none;
         position: absolute;
         top: 100%;
@@ -300,7 +300,7 @@
         min-width: 140px;
     }
     #finder-genre-slot { 
-        background-color: yellow;
+        background-color: rgb(243,243,243);
         cursor: pointer; 
         border: 0.5px solid black;
         border-radius: 0px;
@@ -908,11 +908,12 @@
     }
 
     #player-name-and-tags {
-        width: calc(100vw - 175px);
+        width: fit-content;
         overflow-x: scroll;
         display: flex;
         display: flex;
-        margin-bottom: 5px;
+        align-items: center;
+        margin-bottom: 0px;
     }
 
     .play-overlay {
@@ -1203,19 +1204,22 @@
         }
 
     #player-name {
-        font-size: 14pt;
+        font-size: 16pt;
+        font-family: 'Archivo SemiBold';
         margin-bottom: 0;
-        background-color: #000000;
-        color: white;
+        /* background-color: #000000; */
+        /* color: white; */
         width: fit-content;
         margin-bottom: 0px;
-        padding: 2px 4px;
+        /* padding: 2px 4px; */
+        margin-right: 2px;
     }
 
     #player-tags {
         margin-left: 4px;
         margin-top: 0px;
         display: flex;
+        height: 18px;
     }
 
        #play-icon {
@@ -1336,13 +1340,15 @@
             margin-top: 0px;
             /* width: 100%; */
             margin-left: -0.5px;
-            height: 105px;
             border: 1px solid black;
             border-bottom: none;
             padding: 10px;
             overflow: hidden;
             transition: 0.3s ease;
             background: white;
+        }
+        .status-tag {
+            margin-bottom: 0px !important;
         }
         .tags-container {
             scrollbar-width: thin;
@@ -1356,7 +1362,8 @@
             margin-top: 0px;
         }
         #status-tags-container {
-            margin-top: 5px;
+            margin-top: 0px;
+            margin-bottom: 0px;
         }
         .active-tag {
             opacity: 1 !important;
@@ -1365,7 +1372,7 @@
             opacity: 0.5 !important;
         }
         .status-tag {
-            background-color: #ff0000;
+            background-color: #ff3434;
         }
         .location-tag {
             background-color: #00acff;
@@ -1380,7 +1387,7 @@
             /*border-radius: 20px;*/
             color: black !important;
             opacity: 1;
-            border: 0.5px solid rgb(0, 0, 0);
+            border: 0.5px solid rgb(170, 170, 170);
             margin-right: 4px;
             padding: 6px;
             padding-bottom: 7px;
@@ -1390,6 +1397,7 @@
             display: flex;
             flex-wrap: nowrap;
             flex-shrink: 0;
+            /*border-radius: 8px;*/
         }
         .tag:hover {
             opacity: 0.7;
@@ -1593,13 +1601,15 @@
             color: white;
         }
         .stream-name {
-            font-family: 'Archivo Light';
-            width: fit-content;
-            padding: 2px 4px;
+            /* border-bottom: 1px solid black; */
+            font-family: 'Archivo SemiBold';
+            width: 100%;
+            /* padding: 2px 4px; */
             letter-spacing: -0.05em;
-            background-color: rgb(17, 17, 17);
-            color:#FFFFFF !important; 
-            font-size: 12pt;}
+            /* background-color: rgb(17, 17, 17); */
+            /* color: #FFFFFF !important; */
+            font-size: 12pt;
+        }
         .links {display:none; margin-top: 10px; margin-bottom: 2px;}
 
 
@@ -1644,14 +1654,15 @@
         .station-tag {
             color: black !important;
             font-size: 8pt;
-            border:0.5px solid black;
+            border: 0.5px solid rgb(170, 170, 170);
             padding: 3px;
             margin-right: 4px;
             align-items: center;
             display: flex;
+            /*border-radius: 5px;*/
         }
         .station-tag-div {
-            margin-top: 5px;
+            margin-top: 3px;
             display: flex;
             overflow-x:scroll;
             padding-right: 15px;
@@ -1660,7 +1671,7 @@
             background-color:#00acff;
         }
         .status-station-tag {
-            background-color:#ff0000;
+            background-color:#ff3434;
         }       
         .genre-station-tag {
             background-color:#ffff00;
@@ -2114,7 +2125,7 @@
         }
 
         .stream-name {
-            font-size: 14pt;
+            font-size: 18pt;
         }
 
         .one-liner {
