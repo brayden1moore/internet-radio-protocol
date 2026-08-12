@@ -451,7 +451,7 @@ var yearChart = makeSpectrum("year-chart", {
       if (!PIN_STATION) sel.value = start;
       selectStation(start);
     } else {
-      nLabel.textContent = "no stations with enough data yet";
+      nLabel.textContent = "";
     }
   })();
 </script>
@@ -812,7 +812,7 @@ def dna_station(station):
     rows = load_rows()
     totals = station_categories(rows)[2]
     if totals.get(station, 0) < 5:
-        return f"No station {station!r} with enough data", 404
+        return f"", 404
     resp = app.make_response(render_dna(EMBED, rows, pin_station=station))
     # so it can be iframed / fetched cross-origin from the other page
     resp.headers["Access-Control-Allow-Origin"] = "*"
