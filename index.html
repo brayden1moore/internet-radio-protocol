@@ -301,17 +301,16 @@
         margin-left: 5px;
     }
     #finder-genre-menu {
-        margin-top: 0px;
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0px;
+        position: fixed;   /* was absolute */
+        top: auto;
+        left: auto;
         z-index: 99;
         overflow: scroll;
         height: 228px;
         background: white;
         border: 1px solid black;
         min-width: 140px;
+        display: none;
     }
     #finder-genre-slot { 
         cursor: pointer; 
@@ -4487,7 +4486,11 @@
         renderGenreSlot();
 
         slot.addEventListener('click', function(){
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            if (menu.style.display === 'block') { menu.style.display = 'none'; return; }
+            var r = slot.getBoundingClientRect();
+            menu.style.left = r.left + 'px';
+            menu.style.top  = (r.bottom) + 'px';
+            menu.style.display = 'block';
         });
     }
 
