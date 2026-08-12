@@ -95,7 +95,7 @@ def extract_value(json, location, sub_location=None, rule=None):
                         for idx, i in enumerate(sub_location[1:]):
                             if idx != len(sub_location) - 1: # if not last key in list
                                 value_in_list = value_in_list[i] # go one layer deeper
-                    value_list.append(value_in_list)   
+                    value_list.append(value_in_list.title())   
             else:
                 if isinstance(value, list):
                     value_list = value
@@ -1519,6 +1519,42 @@ class Stream:
             self.status = 'Live'
             self.now_playing = extract_value(info, ['current','metadata','track_title'])
             self.now_playing_artist = extract_value(info, ['current','metadata','artist_name'])
+
+        elif self.name == 'DIA! Radio':
+            now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+            params = {
+                "where[and][0][scheduledAt][less_than_equal]": now,
+                "where[and][1][scheduledEnd][greater_than]": now,
+                "where[and][2][scheduledAt][exists]": "true",
+                "sort": "scheduledAt",
+                "limit": "1",
+                "depth": "1",
+            }
+
+            headers = {
+                "Accept": "*/*",
+                "Accept-Language": "en-US,en;q=0.9",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.1 Safari/605.1.15",
+                "Referer": "https://www.diaradio.live/",
+            }
+
+            info = requests.get(
+                self.info_link,
+                params=params,
+                headers=headers,
+            ).json()
+
+            if len(info['docs']) == 1:
+                self.status = 'Live'
+            else:
+                self.status = 'Offline'
+
+            self.now_playing = extract_value(info, ['docs',0,'title'])
+            self.now_playing_description_long  = extract_value(info, ['docs',0,'description'])
+            self.now_playing_description  = extract_value(info, ['docs',0,'description'], rule='shorten')
+            self.genres = extract_value(info, ['docs',0,'genres'], rule='list_genres', sub_location=['name'])
+            self.show_logo = extract_value(info, ['docs',0,'cover','url'])
+
 
         ### MARK: STATION LOGIC END
 
@@ -3061,6 +3097,22 @@ Stream(
         about = "City Wall is a collective of DJs from East Kent, UK and beyond, discovering and curating, creating and broadcasting specialist music-driven shows.",
         support_link = 'https://ko-fi.com/citywallradio',
         insta_link = 'https://www.instagram.com/citywallradio/',
+        hidden = False,
+        song_basis = False
+),
+Stream(
+        name = 'DIA! Radio',
+        logo = "https://internetradioprotocol.org/logos/citywall.png",
+        location = 'Saint Jean de Luz',
+        lat = 43.3904862,
+        lon = -1.6554159,
+        info_link = "https://content.diaradio.live/api/episodes",
+        stream_link = 'https://livestream.diaradio.live/main',
+        main_link = 'https://www.diaradio.live/',
+        about = "DIA! is an independent, non-profit community radio founded in 2019 in the Basque Country. We connect local and global music scenes through careful listening, cultural curiosity, and human curation. From emerging artists to established underground voices, DIA! is a space where music, territory, and stories meet.",
+        support_link = 'mailto:iepa@diaradio.live',
+        insta_link = 'https://www.instagram.com/dia.radio/',
+        soundcloud_link = 'https://soundcloud.com/diaradio',
         hidden = False,
         song_basis = False
 )
