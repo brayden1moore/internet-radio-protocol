@@ -266,6 +266,7 @@
         letter-spacing: -0.05em;
         font-family: 'Favorit';
         align-self: center;
+        overflow-x: scroll;
     }
     #finder-sentence {
         height: 25px;
@@ -506,12 +507,8 @@
         display: none;
     }
 
-    .first-row-full-view {
-        height: 45px !important;
-    }
-
     .top-controls-full-view {
-        top: 65px !important;
+        top: 82px !important;
         z-index: 20001 !important;
     }
 
@@ -937,7 +934,6 @@
     }
 
     #player-name-and-tags {
-        width: fit-content;
         overflow-x: scroll;
         display: flex;
         display: flex;
@@ -1358,6 +1354,7 @@
             background-color:var(--player-color);
             display: flex;
             transition: height 0.2s ease ;
+            overflow: hidden;
         }
 
         .player-expanded {
@@ -1788,7 +1785,7 @@
 
         #show-container-container {
             overflow-x: scroll;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             margin-left: -0.5px;
             border-left: 1px solid black;
             border-right: 1px solid black;
@@ -2381,14 +2378,17 @@
             const id = player.dataset.id;
             const theStation = document.getElementById(id);  
 
+            earRotate.style.display = 'none';
+            player.classList.remove('pulsing');                
+            shareDiv.classList.remove('pulsing'); 
+
+            // force-restart the rotation
+            void earImg.offsetWidth;
+            earImg.classList.add('spinning');
+
             if (playerAudio.paused) {
                 earRotate.classList.add('fade-in-anim');
                 earRotate.style.display = 'flex';
-
-                // force-restart the rotation
-                earImg.classList.remove('spinning');
-                void earImg.offsetWidth;
-                earImg.classList.add('spinning');
 
                 playerAudio.load();
                 theStation.classList.add('pulsing');           
