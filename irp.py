@@ -1501,6 +1501,15 @@ class Stream:
             self.status = 'Live' if extract_value(info, ['result','content','media','type']) == 'live' else 'Re-Run'
             self.now_playing = extract_value(info, ['result','content','title'])
 
+        elif self.name == 'Jetty Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.status = 'Live' if extract_value(info,['live','is_live']) == True else 'Re-Run'
+            self.now_playing = extract_value(info, ['now_playing','song','title'])
+            self.now_playing_artist = extract_value(info, ['now_playing','song','artist'])
+            self.show_logo = extract_value(info, ['now_playing','song','art'])
+            self.show_logo_check()
+
+
         ### MARK: STATION LOGIC END
 
     def set_last_updated(self):
@@ -2998,6 +3007,21 @@ Stream(
         soundcloud_link = 'https://soundcloud.com/ola_radio',
         hidden = False,
         song_basis = True
+),
+Stream(
+        name = 'Jetty Radio',
+        logo = "https://internetradioprotocol.org/logos/jetty.jpg",
+        location = 'Santa Cruz',
+        lat = 37.050096,
+        lon = -121.99059,
+        info_link = "https://stream.jettyradio.com/api/nowplaying_static/jettyradio.json",
+        stream_link = 'https://stream.jettyradio.com/listen/jettyradio/radio.mp3',
+        main_link = 'https://jettyradio.com',
+        about = "Jetty Radio is a locally based, independent internet radio station cultivating community around the people and sounds of Santa Cruz and the Central Coast.",
+        support_link = 'https://www.gofundme.com/f/soutenir-votre-radio-marseillaise',
+        insta_link = 'https://instagram.com/jettyradio',
+        hidden = False,
+        song_basis = False
 )
 
 ### MARK: STREAM END
