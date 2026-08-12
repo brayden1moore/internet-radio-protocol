@@ -3010,7 +3010,7 @@ Stream(
 ),
 Stream(
         name = 'Jetty Radio',
-        logo = "https://internetradioprotocol.org/logos/jetty.jpg",
+        logo = "https://internetradioprotocol.org/logos/jetty.png",
         location = 'Santa Cruz',
         lat = 37.050096,
         lon = -121.99059,
