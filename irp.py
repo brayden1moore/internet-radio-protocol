@@ -1516,6 +1516,7 @@ class Stream:
 
         elif self.name == 'City Wall':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.status = 'Live'
             self.now_playing = extract_value(info, ['current','metadata','track_title'])
             self.now_playing_artist = extract_value(info, ['current','metadata','artist_name'])
 
