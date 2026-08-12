@@ -3102,7 +3102,7 @@ Stream(
 ),
 Stream(
         name = 'DIA! Radio',
-        logo = "https://internetradioprotocol.org/logos/citywall.png",
+        logo = "https://internetradioprotocol.org/logos/dia.png",
         location = 'Saint Jean de Luz',
         lat = 43.3904862,
         lon = -1.6554159,
