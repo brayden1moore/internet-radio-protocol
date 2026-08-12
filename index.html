@@ -84,22 +84,22 @@
 
                 <div id="second-row">
                     <div id="play-random-button">
-                        <svg viewBox="0 0 100 100" width="35px" height="80%">
+                        <svg viewBox="0 0 100 100" width="25px" height="85%" style="padding-left:5px;">
                                         <polygon id="play-random-triangle" points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"></polygon>
                         </svg>
-                        <div id="intro-div">Start listening</div>
+                        <div id="intro-div">Listen</div>
                     </div>         
                     <div id="last-up">        
                         <span id='live-count'></span><span class='last-updated'></span>
                     </div>
 
                     <a id='get-app-button' href="/app" target="_blank"><div id="ios-app" style="display:flex;">
-                        <div id="apple-logo"></div>iOS App
+                        App
                         </div>
                     </a>
 
                     <a id='support-button' href="https://ko-fi.com/oneradio" target="_blank"><div id="support-div" style="display:flex;">
-                       Give :)
+                       Support
                         </div>
                     </a>
 
@@ -153,36 +153,8 @@
             </div>
             <img class="view-icon" data-status="closed" title="Add a station from the Community Radio Index" id="plus-button" src="assets/plusicon.png">
             <div id="search-bar">
-                <input id="search-stations" placeholder='Find a station'></input>
+                <input id="search-stations" placeholder=''></input>
             </div>
-        </div>
-
-        <div id="finder">
-            <div id="finder-sentence">
-                I'm looking for a station where I can hear
-                <select class="finder-select" id="finder-era">
-                <option value="">new and old</option>
-                <option value="new">new</option>
-                <option value="old">old</option>
-                </select>
-            
-                <select class="finder-select" id="finder-obsc">
-                <option value="">deep cuts and classics</option>
-                <option value="deep">deep cuts</option>
-                <option value="classic">classics</option>
-                </select>
-                in
-                <span id="finder-genre-wrap">
-                <span id="finder-genre-slot">any genre</span>
-                <div id="finder-genre-menu"></div>
-                </span>
-                .
-                <span id="finder-undo">
-                    <img id="finder-undo-icon" src="assets/undoicon.png">
-                </span>
-            </div>
-            <div id="finder-status"></div>
-            <div id="finder-results"></div>
         </div>
 
         <div id="globe-and-list-container">
@@ -208,7 +180,30 @@
                     </div>
                 </div>
 
-                <div id="streaming-now" class="category-header" data-controls="streams-container">Stations</div>
+                <div id="finder">
+                    <div id="finder-sentence">
+                        Find me<select class="finder-select" id="finder-era">
+                        <option value="">new and old</option>
+                        <option value="new">new</option>
+                        <option value="old">old</option>
+                        </select>
+                    
+                        <select class="finder-select" id="finder-obsc">
+                        <option value="">deep cuts and classics</option>
+                        <option value="deep">deep cuts</option>
+                        <option value="classic">classics</option>
+                        </select>
+
+                        <span id="finder-genre-wrap">
+                        <span id="finder-genre-slot">any genre</span>
+                        <div id="finder-genre-menu"></div>
+                        </span>
+                        <img id="finder-undo" src="assets/undoicon.png">
+                    </div>
+                    <div id="finder-status"></div>
+                    <div id="finder-results"></div>
+                </div>
+
                 <div class="streams-container" id="streams-container"></div>
 
                 <div id="category-container-container">
@@ -241,10 +236,15 @@
     }
 
     #finder-undo {
-        margin-left: 8px;
-        height: 22px;
-        opacity: 0.3;
+        height: 19px;
+        opacity: 0.5;
         cursor: pointer;
+        position: relative;
+        /* top: 5px; */
+        left: 5px;
+        margin-top: 0px;
+        padding: 0px;
+        /* filter: invert(); */
         display: none;
     }
 
@@ -254,59 +254,68 @@
 
     #finder-undo-icon {
         height: 100%;
+        width: 22px;
     }
 
     #finder {
         border: 1px solid black;
         border-bottom: none;
         margin: 0px 0 0px -0.5px;
-        padding: 10px 10px;
+        padding: 9px;
         font-size: 12pt;
         letter-spacing: -0.05em;
-        background: white;
+        font-family: 'Favorit';
     }
     #finder-sentence {
+        height: 25px;
+        color:rgb(0, 0, 0);
         line-height: 1.7;
-        display: block;
+        display: flex;
+        text-wrap: nowrap;
+        font-size: 10pt;
     }
     .finder-select {
-        font-family: 'Archivo Light';
-        font-size: 12pt;
+        font-family: 'Favorit';
+        font-size: 10pt;
         letter-spacing: -0.05em;
-        background-color: rgb(243,243,243);
-        border: 0.5px solid black;
+        background-color: rgb(0, 0, 0);
+        border: 1px solid white;
         padding: 3px 6px;
         cursor: pointer;
         -webkit-appearance: none;
         appearance: none;
         border-radius: 0px;
-        margin-left: 8px;
-        color: black;
+        margin-left: 0px;
+        color: white;
     }
+
     #finder-obsc {
-        margin-right: 8px;
+        margin-right: 5px;
+        margin-left: 0px;
+    }
+    #finder-era {
+        margin-right: 5px;
+        margin-left: 5px;
     }
     #finder-genre-menu {
-        margin-top: -2px;
+        margin-top: 0px;
         display: none;
         position: absolute;
         top: 100%;
-        left: 0;
+        left: 0px;
         z-index: 99;
         overflow: scroll;
         height: 228px;
         background: white;
-        border: 0.5px solid black;
+        border: 1px solid black;
         min-width: 140px;
     }
     #finder-genre-slot { 
-        background-color: rgb(243,243,243);
         cursor: pointer; 
-        border: 0.5px solid black;
         border-radius: 0px;
         padding: 3px 5px;
     }
-    .finder-select:hover, #finder-genre-slot:hover { background-color: white; }
+    .finder-select:hover, #finder-genre-slot:hover { background-color: gray; }
     #finder-status { 
         margin-top: 0px; 
         font-size: 10pt; 
@@ -323,19 +332,21 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        border: 1px solid black;
-        background: white;
+        border: 1px solid rgb(255, 255, 255);
+        background: rgb(0, 0, 0);
         padding: 5px 10px 5px 5px;
         cursor: pointer;
         max-width: 240px;
         user-select: none;
+        color:white;
     }
-    .finder-pill:hover { background: #FFFF00; }
+    .finder-pill:hover { background: #FFFF00; color: black; border-color: rgb(0, 0, 0); }
+    .finder-pill:hover img {border-color: black;}
     .finder-pill img {
         height: 35px;
         width: 35px;
         object-fit: cover;
-        border: 0.5px solid black;
+        border: 1px solid #ffffff;
         flex-shrink: 0;
     }
     .finder-pill-text { overflow: hidden; }
@@ -343,10 +354,11 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-family: 'Archivo SemiBold';
     }
     .finder-pill-oneliner {
         font-size:  10pt;
-        opacity: 0.3;
+        opacity: 0.4;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -356,16 +368,23 @@
         padding: 0px 5px;
         cursor: pointer;
         white-space: nowrap;
+        color:black;
     }
 
     .finder-genre-option:hover {
         background-color: rgb(243,243,243);
+        color:black;
     }
 
     #finder-genre-wrap { 
         position: relative; 
         display: inline-block; 
-        margin-left: 8px;
+        margin-left: 0px;
+        font-family: 'Favorit';
+        font-size: 10pt;
+        color: rgb(255, 255, 255);
+        background-color: rgb(0, 0, 0) !important;
+        border: 1px solid white;
     }
 
     .finder-genre-option.chosen {
@@ -377,7 +396,7 @@
     }
 
     #support-button {
-        height: 38px;
+        height: 100%;
         display: flex;
         text-decoration: none;
         border: none;
@@ -385,10 +404,10 @@
         align-items: center;
         color: black;
         padding: 0px 7.5px;
-        width: 55px;
         justify-content: center;
         text-align: center;
         background-color: white;
+        width: 55px;
         /*background: linear-gradient(139deg, yellow, rgb(255, 255, 0) 50.84%, rgb(6, 172, 255) 76.89%, color(display-p3 0.9175 0.2 0.1372));*/
         border-left: 1px solid black;
     }
@@ -396,7 +415,6 @@
     #support-button:hover {
         background: black !important;
         color: white;
-        border-left: 1px solid white;
     }
 
     .custom-remove {
@@ -432,9 +450,10 @@
         height: 29px;
         padding: 3px 5px;
         transition: 0.2s ease;
-        width: 247px;
+        width: 300px;
         font-size: 16px;
-        font-family: "Archivo Light";
+        font-family: "Favorit";
+        padding-left: 10px;
         /* border-right: 1px solid black; */
     }
 
@@ -797,7 +816,6 @@
         letter-spacing: -0.05em;
         font-size: 18pt;
         -webkit-text-stroke: 0.2px rgb(0, 0, 0); 
-        color: rgb(243,243,243); 
         overflow: hidden;
         box-sizing: border-box;
         z-index: 1;
@@ -806,6 +824,8 @@
 
     #everythingelse {
         text-transform: lowercase;
+        width: fit-content;
+        display: none;
     }
 
     #intro-text-container {
@@ -850,30 +870,35 @@
     }
 
     #second-row {
+        height: 30px;
         display: flex;
         align-items: center;
         justify-content: flex-start;
+        background-color: white;
+        font-family: 'Favorit';
+        text-transform: uppercase;
     }
 
     #get-app-button {
-        color:rgb(255, 255, 255); 
+        color:rgb(0, 0, 0); 
         border-bottom: none !important; 
         text-decoration: none;
         cursor: pointer;
         border-left: 1px solid black;
-        padding-left: 10px;
-        padding-right: 10px;
-        height: 38px;
+        padding-left: 7.5px;
+        padding-right: 7.5px;
+        height: 100%;
         display: none;
-        background-color: rgb(0, 0, 0);
+        background-color: rgb(255, 255, 255);
         align-items: center;
         justify-self: end;
         margin-left: auto;
+
     }
 
     #get-app-button:hover {
-        color: rgb(0, 0, 0);
-        background-color: rgb(255, 255, 255);
+        color: rgb(255, 255, 255);
+        background-color: rgb(0, 0, 0);
     }
     
     .station-name-and-tag-div {
@@ -881,16 +906,19 @@
     }
 
     .category-header {
-        cursor: pointer;
         border: 1px solid black;
-        font-family: 'Archivo Light';
+        font-family: 'Favorit';
         letter-spacing: -0.05em;
-        font-size: 12pt;
+        font-size: 10pt;
         margin-left: -0.5px;
         padding: 10px;
-        padding-top: 10px;
-        padding-bottom: 10px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        height: 30px;
         background-color: white;
+        text-transform: none;
+        display: flex;
+        align-items: center;
     }
 
     #text-container {
@@ -900,11 +928,10 @@
     }        
     #live-count {
         margin-right: 2px;
-        display: none;
     }
 
     .last-updated {
-        margin-left: 4px;
+        margin-left: 0px;
     }
 
     #player-name-and-tags {
@@ -935,12 +962,13 @@
 
     #modal-station-location {
         background-color: #00acff;
-        border: 0.5px solid black;
+        border: 1px solid black;
         width: fit-content;
         padding: 4px;
         margin-top: 7px;
         font-size: 10pt;
         color: black;
+        font-family: 'Favorit';
     }
 
     #modal-data-iframe{
@@ -1003,14 +1031,14 @@
 
     #modal-station-name {
         width: fit-content;
-        padding: 4px;
+        /* padding: 4px; */
         padding-right: 9px;
-        padding-left: 9px;
-        color: white;
-        background-color: black;
+        /* padding-left: 9px; */
+        /* color: white; */
+        /* background-color: black; */
         font-size: 22px;
         letter-spacing: -0.05em;
-        font-family: 'Archivo Light';
+        font-family: 'Archivo SemiBold';
     }
 
     #modal-name-and-location {
@@ -1128,12 +1156,12 @@
     background-color: rgb(243, 243, 243);
       border: none;
       height: 100%;
+      width: 100%;
       padding: 3px;
-      transition: 0.2s ease;
-        width: 95px;
-        font-size: 16px;
-        padding: 3px 10px;
-        font-family: "Archivo Light";
+     transition: 0.2s ease;
+    font-size: 16px;
+    padding: 3px 10px;
+    font-family: "Favorit";
       
     }
 
@@ -1149,6 +1177,7 @@
         height: 29px;
         display: flex;
         align-items: end;
+        width: 145px;
         justify-content: space-between;
     }
 
@@ -1342,7 +1371,7 @@
             margin-left: -0.5px;
             border: 1px solid black;
             border-bottom: none;
-            padding: 10px;
+            padding: 9px;
             overflow: hidden;
             transition: 0.3s ease;
             background: white;
@@ -1381,13 +1410,13 @@
             background-color: #ffff00;
         }
         .tag {
-            height: 15px;
+            height: 10px;
             width: fit-content;
             cursor: pointer;
             /*border-radius: 20px;*/
             color: black !important;
             opacity: 1;
-            border: 0.5px solid rgb(170, 170, 170);
+            border: 1px solid rgb(0, 0, 0);
             margin-right: 4px;
             padding: 6px;
             padding-bottom: 7px;
@@ -1395,9 +1424,12 @@
             padding-right: 9px;
             margin-bottom: 4px;
             display: flex;
+            align-items: center;
             flex-wrap: nowrap;
             flex-shrink: 0;
             /*border-radius: 8px;*/
+            font-family: 'Favorit';
+            font-size: 10pt;
         }
         .tag:hover {
             opacity: 0.7;
@@ -1413,6 +1445,8 @@
             padding-right: 12px;
             padding-left: 0px;   
             font-size: 10pt;
+            font-family: 'Favorit';
+            text-transform: uppercase;
         }
 
         #top-bar {
@@ -1422,7 +1456,7 @@
         width: calc(100% - 37.5px);
         z-index: 100;
         /* remove margin-top / margin-bottom */
-        background: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 1);
         backdrop-filter: saturate(180%) blur(20px);
         -webkit-backdrop-filter: saturate(180%) blur(20px);
         border: 1px solid black;
@@ -1440,8 +1474,15 @@
         }
 
         #last-up {
+            font-family: 'Favorit';
+            text-transform: none;
+            width: fit-content;
+            padding: 7px;
+            text-wrap: nowrap;
+        }
+
+        .last-updated {
             display: none;
-            padding-left: 10px;
         }
         #second-bar {
             align-items: center;
@@ -1453,7 +1494,6 @@
             border-right: 1px solid black;
             color: rgb(0, 0, 0);
             width: 100%;
-            height: 38px;
         }
 
         #play-random-button {
@@ -1467,12 +1507,11 @@
             font-size: 18pt;
             opacity: 1;
             font-size: 12pt;
-            padding: 2px 0px;
             padding-left: 0px;
             padding-right: 0px;
             border-right: 1px solid black;
             color: rgb(255, 255, 255);
-            height: 34px;
+            height: 100%;
         }
 
         #play-random-button:hover {
@@ -1654,11 +1693,12 @@
         .station-tag {
             color: black !important;
             font-size: 8pt;
-            border: 0.5px solid rgb(170, 170, 170);
+            border: 1px solid rgb(0, 0, 0);
             padding: 3px;
             margin-right: 4px;
             align-items: center;
             display: flex;
+            font-family: 'Favorit';
             /*border-radius: 5px;*/
         }
         .station-tag-div {
@@ -1695,12 +1735,12 @@
             padding: 10px; 
             overflow-x:hidden; 
             overflow-y:hidden; 
-            border:0.5px solid black; 
+            border:1px solid black; 
             align-items: center; 
             display: flex; 
             white-space: nowrap;
-            margin-left: -0.5px;
-            margin-top: -0.5px;
+            margin-left: -1px;
+            margin-top: -1px;
             padding-left: 0px;
             background-color: white;
         }
@@ -1748,7 +1788,7 @@
             overflow-x: scroll;
             margin-bottom: 25px;
             margin-left: -0.5px;
-            border-left: 0.5px solid black;
+            border-left: 1px solid black;
             border-right: 1px solid black;
             border-bottom: 0.5px solid black;
         }
@@ -1897,7 +1937,7 @@
             margin-right:10px; 
             cursor: pointer; 
             flex-shrink: 0;
-            border-right: 0.5px solid black;
+            border-right: 1px solid black;
             border-left: 0.5px solid black;
             margin-left: -0.5px;
         }
@@ -1949,6 +1989,7 @@
         @font-face {font-family: "Archivo Bold";src: url("https://one.radio/assets/Archivo-Bold.ttf") format("truetype");}
         @font-face {font-family: "Archivo SemiBold";src: url("https://one.radio/assets/Archivo-SemiBold.ttf") format("truetype");}
         @font-face {font-family: "Archivo Light";src: url("https://one.radio/assets/Archivo-Light.ttf") format("truetype");}
+        @font-face {font-family: "Favorit";src: url("https://one.radio/assets/ABCFavoritMono-Regular.otf") format("truetype");}
 
 
         a {
@@ -2021,12 +2062,12 @@
             grid-template-columns: 1fr; 
             gap: 0px; 
             overflow: visible;  
-            margin-top: -1px; 
+            margin-top: 0px; 
             margin-left: -0.5px;
             margin-bottom:25px;       
             border: 1px solid black; 
-            border-right: 0.5px solid black;
-            border-bottom: 0.5px solid black;
+            border-right: 0px solid black;
+            border-bottom: 0px solid black;
         }
 
     @media (min-width: 916px) {
@@ -2041,7 +2082,6 @@
         }
 
         #finder-sentence { 
-            display: flex;
             align-items: center;
         }
 
@@ -2094,7 +2134,7 @@
 
         .streams-container {
             margin-top: 0px; 
-            margin-left: 0px;     
+            margin-left: 0.5px;
             border: none; 
         }
 
@@ -2113,6 +2153,10 @@
 
         #live-count {
             display: flex;
+        }
+
+        .last-updated {
+            display: none;
         }
 
         #intro-div {
@@ -2215,12 +2259,19 @@
             } 
 
             .a-show-container {
-                height: 200px;
+                height: 260px;
+            }
+            .show-card-expanded {
+                width: 350px !important;
             }
         }
         </style><script>
 
-        const form = document.getElementById('test-form');
+        // Set search placeholder
+        const searchBar = document.getElementById('search-stations');
+        const queries = ['"london"', '"accra"', '"drum & bass"', '"live"', '"raw"'];
+        const random = Math.floor(Math.random() * queries.length);
+        searchBar.placeholder = queries[random];
         //form.submit();
 
         const modalContainer = document.getElementById('modal-container');
@@ -2839,7 +2890,7 @@
             const updatedOneLiners = [];
             const offliners = [];
 
-            let showsAdded = document.querySelectorAll('.a-show-container').length;
+            let showsAdded = 0 //document.querySelectorAll('.a-show-container').length;
 
             keys.forEach(function(stationName) {
                 const station = data[stationName];
@@ -3065,8 +3116,8 @@
             })
             
             const liveCount = document.querySelector('#live-count');
-            liveCount.textContent = `${live + offline + rerun} stations, ${live} live, ${offline} offline. `;
-
+            liveCount.textContent = `${live + offline + rerun} stations`;
+            document.getElementById('shows-now').textContent = `Shows On Now (${showsAdded})`;
             const hitsContainer = document.getElementById('hits');
             
             fetch(`https://one.radio/status?cacheBust=${Math.random()}`)
@@ -3501,6 +3552,7 @@
 
         //ears();
 
+        /*
         const headers = document.querySelectorAll('.category-header');
         headers.forEach(header => {
             header.addEventListener('click', () => {
@@ -3520,6 +3572,7 @@
                 }
             })
         })
+            */
 
 
         // ios
@@ -4057,7 +4110,7 @@
     const addStationSearch = document.getElementById('add-station-search');
     plusButton.addEventListener('click', ()=> {
         if (plusButton.dataset.status == 'closed') {
-            addStation.style.width = 234 + 'px';
+            addStation.style.width = 292 + 'px';
             addStation.style.overflowX = 'visible';
             plusButton.src = 'assets/xicon.png';
             plusButton.dataset.status = 'open';
@@ -4463,7 +4516,7 @@
             undoEl.style.display = 'none';
             return;
         } else {
-            undoEl.style.display = 'block';
+            undoEl.style.display = 'inline';
         }
 
         // Which stations exist as cards right now (so pills are always playable)
@@ -4478,6 +4531,9 @@
         var matched = Object.keys(byId).filter(matches);
         matched.sort(function(a, b){ return score(b) - score(a); });  // high score first
 
+        if (matched.length == 0) {
+            resultsEl.innerHTML = 'No matches :(';
+        }
         matched.forEach(function(name){
             shown++;
             var card = byId[name];
@@ -4538,4 +4594,5 @@
         console.error('DNA fetch failed:', e);
         });
     })();
+
 </script>
