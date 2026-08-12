@@ -1509,6 +1509,10 @@ class Stream:
             self.show_logo = extract_value(info, ['now_playing','song','art'])
             self.show_logo_check()
 
+        elif self.name == 'Virtual Public Network':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.status = 'Live'
+            self.now_playing = extract_value(info, ['current_track','title'])
 
         ### MARK: STATION LOGIC END
 
@@ -3020,6 +3024,22 @@ Stream(
         about = "Jetty Radio is a locally based, independent internet radio station cultivating community around the people and sounds of Santa Cruz and the Central Coast.",
         support_link = 'https://jettyradio.com/support/',
         insta_link = 'https://instagram.com/jettyradio',
+        hidden = False,
+        song_basis = False
+),
+Stream(
+        name = 'Virtual Public Network',
+        logo = "https://internetradioprotocol.org/logos/vpn.jpg",
+        location = 'Los Angeles',
+        lat = 34.0536909,
+        lon = -118.242766,
+        info_link = "https://public.radio.co/stations/s9f2323f0d/status",
+        stream_link = 'https://streaming.radio.co/s9f2323f0d/listen',
+        main_link = 'https://www.virtualpublic.net/',
+        about = "VPN (Virtual Public Network) is an LA-based radio platform and creative community streaming 24/7. We’re here to foster connection through mediums you can see, feel, and hear.",
+        support_link = 'https://buymeacoffee.com/virtualpublicnetwork',
+        insta_link = 'https://instagram.com/vpn.radio',
+        soundcloud_link = 'https://soundcloud.com/virtualpublicnetwork',
         hidden = False,
         song_basis = False
 )
