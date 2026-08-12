@@ -2156,7 +2156,8 @@
         }
 
         .last-updated {
-            display: none;
+            margin-left: 5px;
+            display: block;
         }
 
         #intro-div {
@@ -3135,7 +3136,7 @@
                         });
                         lastUpdatedValue = formatter.format(lastUpdateDate);
                         const lastUpdated = document.querySelector('.last-updated');
-                        lastUpdated.textContent = 'Updated ' + lastUpdatedValue;
+                        lastUpdated.textContent = 'last updated ' + lastUpdatedValue;
                         lastUpdated.classList.add('flash');
                         setTimeout(function() {
                             lastUpdated.classList.add('flash-out');
