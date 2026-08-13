@@ -112,7 +112,7 @@ def send_email(stations, to_review):
     '''
 
     msg = MIMEMultipart()
-    msg['From'] = 'brayden@one.radio'
+    msg['From'] = 'brayden@braydenmoore.com'
     msg['To'] = 'brayden@one.radio'
     msg['Subject'] = f'Review {stations}'
     msg.attach(MIMEText(pprint.pformat(to_review).replace("},","\n\n").replace(": {","\n").replace('{','').replace('}','').replace("'",'').replace('-nowPlaying: ','')))
