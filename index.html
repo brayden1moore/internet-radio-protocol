@@ -3126,7 +3126,7 @@
             })
             
             const liveCount = document.querySelector('#live-count');
-            liveCount.textContent = `${live + offline + rerun} of the worlds best curated, independent internet radio stations`;
+            liveCount.textContent = `${live + offline + rerun} of the worlds best curated, independent internet radio stations. `;
             document.getElementById('shows-now').textContent = `Shows On Now (${showsAdded})`;
             const hitsContainer = document.getElementById('hits');
             
@@ -3145,7 +3145,7 @@
                         });
                         lastUpdatedValue = formatter.format(lastUpdateDate);
                         const lastUpdated = document.querySelector('.last-updated');
-                        lastUpdated.textContent = 'last updated ' + lastUpdatedValue;
+                        lastUpdated.textContent = 'Last updated ' + lastUpdatedValue;
                         lastUpdated.classList.add('flash');
                         setTimeout(function() {
                             lastUpdated.classList.add('flash-out');
