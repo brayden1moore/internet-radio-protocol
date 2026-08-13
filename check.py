@@ -124,7 +124,7 @@ def send_email(stations, to_review):
 
     try:
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-            server.login("brayden@one.radio", passw)
+            server.login("brayden@braydenmoore.com", passw)
             server.send_message(msg)
             print('Email Sent')
     except Exception as e:
