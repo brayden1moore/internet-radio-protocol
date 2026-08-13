@@ -1569,6 +1569,8 @@ class Stream:
             self.now_playing_description  = extract_value(info, ['docs',0,'description'], rule='shorten')
             self.genres = extract_value(info, ['docs',0,'genres'], rule='list_genres', sub_location=['name'])
             self.show_logo = extract_value(info, ['docs',0,'cover','url'])
+            if 'cosmic channeling' in self.now_playing.lower():
+                self.show_logo = None
 
             if self.now_playing == None:
                 self.now_playing = 'DIA! Archives'
