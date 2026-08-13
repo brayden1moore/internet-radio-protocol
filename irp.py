@@ -1547,13 +1547,16 @@ class Stream:
             if len(info['docs']) == 1:
                 self.status = 'Live'
             else:
-                self.status = 'Offline'
+                self.status = 'Re-Run'
 
             self.now_playing = extract_value(info, ['docs',0,'title'])
             self.now_playing_description_long  = extract_value(info, ['docs',0,'description'])
             self.now_playing_description  = extract_value(info, ['docs',0,'description'], rule='shorten')
             self.genres = extract_value(info, ['docs',0,'genres'], rule='list_genres', sub_location=['name'])
             self.show_logo = extract_value(info, ['docs',0,'cover','url'])
+
+            if self.now_playing == None:
+                self.now_playing = 'DIA! Archives'
 
 
         ### MARK: STATION LOGIC END
