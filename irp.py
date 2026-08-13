@@ -1345,7 +1345,7 @@ class Stream:
                 "cf_clearance": "TOEQsRZ9G.Q6Nel6ukBg_O8FMnO1PLLQpohuuAFkjYI-1786640655-1.2.1.1-QYPM1wA.Ny2Ubg7PDLzOqCq.4Zw_3hRHQjLs6b7tITL60KlVP5pHeNZTBKc23eTe9Nn6RVy.kyI3nVZM5_IRSErCVyZYDUJvKH548_EuUb1HB.wfFlDEZ3mOmJZWUqbxgj3lnMGIch9FLMGQTv.1lwt_hdWmEhnssw4qaHQ27vV.x3BeLV6knPD5R2cA8CZ.jvhgL0vYtg.KCFtNJNmZfPdtNzsm5aL2s5j3w30Qz2vrDRbg.QIQ2PkjkttSYqPw2Nv4Vu2Tkm.BDbGgU1SZDHPT1NnXNi8Dqy.NJNCgUn__EO8nr8U6YptBxVZfjsb4aMsz2nizqMznuH_Lc4ZfxDZbnYw8FUrcEq0RYRn6JBXL.3V9sQrr9lTrQ8hd08a.rl7wpCdGd26evQkLJfGPvzyUy8sekMS3P234ntSdfGTHc9rTNlHXfNP1sRk3F88c",
             }
 
-            info = requests.get(self.info_link, headers=headers, cookies=cookies,  imeout=TIMEOUT).json()
+            info = requests.get(self.info_link, headers=headers, cookies=cookies,  timeout=TIMEOUT).json()
             self.status = 'Live'
             self.now_playing = extract_value(info, ['title'])
 
