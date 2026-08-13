@@ -3154,10 +3154,9 @@
 
                         lastUpdatedValue = formatter.format(lastUpdateDate);
                         const updatedText = 'Last updated ' + lastUpdatedValue + '.';
-                        if (!marqueeSetup) {
-                            marqueeText(lastUp, liveText + updatedText, { speed: 40 });
-                            marqueeSetup = true;
-                        } 
+
+                        marqueeText(lastUp, liveText + updatedText, { speed: 40 });
+
             
 
                         /*
