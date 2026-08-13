@@ -3315,6 +3315,7 @@ def main_loop():
                     "hidden": v['hidden'],
                 }
                 summary_list.append(summary_item)
+            summary_list.sort(key=lambda item: item['name'].casefold())
             summary = {
                 "stations":summary_list
             }
