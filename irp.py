@@ -3068,7 +3068,7 @@ Stream(
         stream_link = 'https://ola-radio.radiocult.fm/stream',
         main_link = 'https://www.olaradio.fr/',
         about = "Ola Radio is the Marseille-based cultural online radio specializing in electronic music and avant-garde aesthetics. It brings together over 80 residents from Marseille, France, and around the world. Established in 2019, Ola aims to unite actors from various musical scenes and provide a creative platform for emerging artists.",
-        support_link = 'https://www.gofundme.com/f/soutenir-votre-radio-marseillaise',
+        support_link = 'https://www.helloasso.com/associations/ola-radio/formulaires/1',
         insta_link = 'https://www.instagram.com/ola_radio/',
         soundcloud_link = 'https://soundcloud.com/ola_radio',
         hidden = False,
