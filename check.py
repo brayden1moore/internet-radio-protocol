@@ -112,7 +112,7 @@ def send_email(stations, to_review):
     '''
 
     msg = MIMEMultipart()
-    msg['From'] = 'brayden@braydenmoore.com'
+    msg['From'] = 'brayden@one.radio'
     msg['To'] = 'brayden@one.radio'
     msg['Subject'] = f'Review {stations}'
     msg.attach(MIMEText(pprint.pformat(to_review).replace("},","\n\n").replace(": {","\n").replace('{','').replace('}','').replace("'",'').replace('-nowPlaying: ','')))
@@ -124,7 +124,7 @@ def send_email(stations, to_review):
 
     try:
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-            server.login("brayden@braydenmoore.com", passw)
+            server.login("brayden@one.radio", passw)
             server.send_message(msg)
             print('Email Sent')
     except Exception as e:
