@@ -36,7 +36,7 @@
                     
 
 <!-- STATION_DATA_START -->
-<!-- STATION_DATA_END --></head><body style="font-family:Archivo Light; padding:10px; padding-top: 0px;">
+<!-- STATION_DATA_END --></head><body style="font-family:Archivo Light;">
 
         <div id="modal-container">
             <div id="modal-bg" onClick="closeModal();"></div>
@@ -888,6 +888,7 @@
         background-color: white;
         font-family: 'Favorit';
         text-transform: uppercase;
+        width: 100%;
     }
 
     #get-app-button {
@@ -1487,9 +1488,11 @@
         #last-up {
             font-family: 'Favorit';
             text-transform: none;
-            width: fit-content;
             padding: 9px;
-            text-wrap: nowrap;
+            white-space: nowrap;  
+            flex: 1;             
+            min-width: 0;         
+            overflow: hidden;
         }
 
         .last-updated {
@@ -1973,7 +1976,9 @@
             /*margin-top:246px;*/
             background-color: #FFFFFF; 
             font-size: 10pt; 
+            padding: 10px;
             padding-bottom: 15vh !important;
+            padding-top: 133px !important;
         }
 
         .the-header {
@@ -3125,10 +3130,12 @@
                 offlineContainer.appendChild(station);
             })
             
-            const liveCount = document.querySelector('#live-count');
-            liveCount.textContent = `${live + offline + rerun} of the world's best curated internet radio stations. `;
+            const liveText = `${live + offline + rerun} of the world's best curated internet radio stations. `;
+
             document.getElementById('shows-now').textContent = `Shows On Now (${showsAdded})`;
             const hitsContainer = document.getElementById('hits');
+
+            const lastUp = document.getElementById('last-up');
             
             fetch(`https://one.radio/status?cacheBust=${Math.random()}`)
                     .then(response => response.json())
@@ -3143,17 +3150,27 @@
                             minute: '2-digit',
                             hour12: true
                         });
+
                         lastUpdatedValue = formatter.format(lastUpdateDate);
+                        const updatedText = 'Last updated ' + lastUpdatedValue + '.';
+                        marqueeText(lastUp, liveText + updatedText, { speed: 40 });
+
+                        /*
+                        if (lastUp._marqueeCleanup) lastUp._marqueeCleanup();
+                        
                         const lastUpdated = document.querySelector('.last-updated');
                         lastUpdated.textContent = 'Last updated ' + lastUpdatedValue;
+                        lastUp._marqueeOriginalHTML = null;
+
                         lastUpdated.classList.add('flash');
                         setTimeout(function() {
                             lastUpdated.classList.add('flash-out');
                             lastUpdated.classList.remove('flash');
                         }, 300);
-                        setTimeout(function() {
-                            lastUpdated.classList.remove('flash-out');
-                        }, 1100);
+                        setTimeout(() => {
+                        lastUpdated.classList.remove('flash-out');
+                        
+                        }, 1100);*/
 
                         calculateMarquees(updatedOneLiners);
 
@@ -3162,6 +3179,19 @@
 
                     });
         }
+
+        // top-level, once
+        let lastUpResizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(lastUpResizeTimer);
+            lastUpResizeTimer = setTimeout(() => {
+                const lastUp = document.getElementById('last-up');
+                const text = lastUp._mqText;
+                if (!text) return;
+                lastUp._mqText = null;
+                marqueeText(lastUp, text, { speed: 40 });
+            }, 150);
+        });
 
         function populateTags(data) {
             // create locations and genres
@@ -3715,8 +3745,6 @@
         everythingElse.style.opacity = String(1 - p);
         everythingElse.style.pointerEvents = p > 0.9 ? 'none' : '';
 
-        document.body.style.paddingTop =
-            (barFullHeight + topOffset + 30 - Math.min(y, collapseDistance)) + 'px';
         }
 
         //window.addEventListener('scroll', onScroll, { passive: true });
@@ -4609,6 +4637,61 @@
         });
     })();
 
+
+    function marqueeText(el, text, opts = {}) {
+        const { speed = 25, gap = 40, pause = 3 } = opts;
+
+        // Same text already scrolling = leave running
+        if (el._mqText === text) return;
+        el._mqText = text;
+
+        if (el._mqStyle) el._mqStyle.remove();
+        el.innerHTML = '';
+        el.style.whiteSpace = 'nowrap';
+
+        // Measure
+        const probe = document.createElement('span');
+        probe.style.cssText = 'white-space:nowrap; visibility:hidden; position:absolute;';
+        probe.textContent = text;
+        el.appendChild(probe);
+        const overflow = probe.offsetWidth > el.clientWidth;
+        el.removeChild(probe);
+
+        if (!overflow) {
+            el.textContent = text;
+            el._mqStyle = null;
+            return;
+        }
+
+        el.style.overflow = 'hidden';
+        const scroller = document.createElement('div');
+        scroller.style.cssText =
+            'display:inline-flex; white-space:nowrap; will-change:transform;';
+
+        const a = document.createElement('span');
+        a.style.marginRight = gap + 'px';
+        a.textContent = text;
+        const b = a.cloneNode(true);
+        scroller.append(a, b);
+        el.appendChild(scroller);
+
+        const distance = a.offsetWidth + gap;
+        const scrollDur = distance / speed;
+        const total = scrollDur + pause;                
+        const holdPct = (pause / total) * 100;         
+
+        const uid = Math.random().toString(36).slice(2, 7);
+        const name = 'mq-' + uid;
+        const style = document.createElement('style');
+        style.textContent =
+            `@keyframes ${name}{` +
+            `0%{transform:translateX(0)}` +
+            `${holdPct}%{transform:translateX(0)}` +
+            `100%{transform:translateX(-${distance}px)}}`;
+        document.head.appendChild(style);
+        scroller.style.animation = `${name} ${total}s linear infinite`;
+        el._mqStyle = style;
+    }
 </script>
 
 <script type="application/ld+json">
