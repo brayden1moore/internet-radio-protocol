@@ -2886,6 +2886,7 @@
             console.log('container display:', getComputedStyle(document.getElementById('genre-tags-container')).display);            
         }
 
+        let marqueeSetup = false;
         function populateStations(data, needSort=false) {
             var rerun = 0;
             var live = 0;
@@ -3153,7 +3154,11 @@
 
                         lastUpdatedValue = formatter.format(lastUpdateDate);
                         const updatedText = 'Last updated ' + lastUpdatedValue + '.';
-                        marqueeText(lastUp, liveText + updatedText, { speed: 40 });
+                        if (!marqueeSetup) {
+                            marqueeText(lastUp, liveText + updatedText, { speed: 40 });
+                            marqueeSetup = true;
+                        } 
+            
 
                         /*
                         if (lastUp._marqueeCleanup) lastUp._marqueeCleanup();
