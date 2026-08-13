@@ -3180,16 +3180,21 @@
                     });
         }
 
-        // top-level, once
+        // recalc marquee on resize
         let lastUpResizeTimer;
+        let lastWinWidth = window.innerWidth;
+
         window.addEventListener('resize', () => {
+            if (window.innerWidth === lastWinWidth) return;
+            lastWinWidth = window.innerWidth;
+
             clearTimeout(lastUpResizeTimer);
             lastUpResizeTimer = setTimeout(() => {
                 const lastUp = document.getElementById('last-up');
                 const text = lastUp._mqText;
                 if (!text) return;
                 lastUp._mqText = null;
-                marqueeText(lastUp, text, { speed: 40 });
+                marqueeText(lastUp, text, { speed: 40, pause: 1.5 });
             }, 150);
         });
 
