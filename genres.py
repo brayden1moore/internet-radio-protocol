@@ -10,7 +10,7 @@ GENRE_ORDER = [
     'Pop',
     'Rock',
     'Alternative',
-    'Folk / Singer-Songwriter',
+    'Folk',
     'Country',
     'World',
     'Reggae / Caribbean',
@@ -223,13 +223,13 @@ GENRE_MAP = {
     "video game music": "Soundtrack / Score",
     "game": "Soundtrack / Score",
  
-    # Folk / Singer-Songwriter
-    "Folk": "Folk / Singer-Songwriter",
-    "Singer-Songwriter": "Folk / Singer-Songwriter",
-    "Singer-Songwriter / Folk : Contemporary Folk": "Folk / Singer-Songwriter",
-    "Singer/Songwriter": "Folk / Singer-Songwriter",
-    "Singer & Songwriter": "Folk / Singer-Songwriter",
-    "Singer / Songwriter": "Folk / Singer-Songwriter",
+    # Folk
+    "Folk": "Folk",
+    "Singer-Songwriter": "Folk",
+    "Singer-Songwriter / Folk : Contemporary Folk": "Folk",
+    "Singer/Songwriter": "Folk",
+    "Singer & Songwriter": "Folk",
+    "Singer / Songwriter": "Folk",
  
     # Country
     "Country": "Country",
@@ -290,8 +290,8 @@ _ALIAS = {
     "tech house": "House",
     "drum and bass": "Drum & Bass",
     "dnb": "Drum & Bass",
-    "singer-songwriter": "Folk / Singer-Songwriter",
-    "folk": "Folk / Singer-Songwriter",
+    "singer-songwriter": "Folk",
+    "folk": "Folk",
     "reggae": "Reggae / Caribbean",
     "ska": "Reggae / Caribbean",
     "reggaeton": "Reggae / Caribbean",
