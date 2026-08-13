@@ -2774,7 +2774,7 @@ Stream(
         logo = "https://internetradioprotocol.org/logos/tirk.png",
         location = 'Riga',
         info_link = "https://public.radio.co/api/v2/s216811754/track/current",
-        stream_link = 'https://s3.radio.co/s216811754/listen.m3u',
+        stream_link = 'https://s3.radio.co:80/s216811754/listen',
         main_link = 'https://tirkultura.lv',
         about = 'Tīrkultūra is an interdisciplinary contemporary culture platform working mainly through the medium of sound. Tīrkultura is a listener-powered, non-commercial, and non-profit online radio station, based in Riga, Latvia.',
         support_link = 'mailto:reinis@tirkultura.net',
