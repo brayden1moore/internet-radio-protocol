@@ -3364,7 +3364,8 @@ def main_loop():
                 'Radiation from computer screens is boiling your eyes. Use your ears.',
                 'You might hear something.',
                 'Be like the fox who makes more tracks than necessary, some in the wrong direction.',
-                'Somewhere out there, a song is playing for you.'
+                'Somewhere out there, a song is playing for you.',
+                f'{status["total"] - status["hidden"]} of the best curated internet radio stations, meticulously tracked.',
             ]
             status['app_tagline'] = taglines[datetime.fromtimestamp(time.time()).hour % len(taglines)]
 
