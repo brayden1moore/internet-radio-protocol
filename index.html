@@ -600,7 +600,7 @@
     }
 
     .globe-list-station-info {
-        width: calc(100% - 70px);
+        width: calc(100% - 60px);
         display: block;
         position: relative;
     }
@@ -820,7 +820,7 @@
     }
 
     #intro {
-        display: block;
+        display: flex;
         align-items: center;
         font-family: 'Archivo Bold';
         padding: 10px;
@@ -830,7 +830,8 @@
         overflow: hidden;
         box-sizing: border-box;
         z-index: 1;
-        max-height: 100%;
+        max-height: 60px;
+        height: 60px;
     }
 
     #everythingelse {
@@ -868,8 +869,8 @@
 
 
     #main-logo {
-        height: 70px; 
-        width: 70px;
+        height: 60px; 
+        width: 60px;
         margin-left: 0px;
     }
 
@@ -1982,7 +1983,7 @@
             font-size: 10pt; 
             padding: 10px;
             padding-bottom: 15vh !important;
-            padding-top: 133px !important;
+            padding-top: 123px !important;
         }
 
         .the-header {
@@ -2106,7 +2107,7 @@
         }
 
         .top-controls-full-view {
-                top: 70px !important;
+                top: 60px !important;
             }
 
         .first-row-full-view {
@@ -2238,11 +2239,11 @@
 
         @media (orientation: landscape) {
             .first-row-full-view {
-                height: 70px !important;
+                height: 60px !important;
             }
 
             .top-controls-full-view {
-                top: 90px !important;
+                top: 60px !important;
             }
         
             #globe-station-list-container {
@@ -2254,8 +2255,8 @@
             }
 
             #main-logo {
-                height: 70px; 
-                width: 70px;
+                height: 60px; 
+                width: 60px;
             }
 
 
@@ -3740,6 +3741,8 @@
             collapseDistance = (introFullHeight - logoHeight);
             barFullHeight = topBar.offsetHeight;
 
+            console.log(introFullHeight);
+            console.log(collapseDistance);
             updateHeader();
         }
 
@@ -3763,8 +3766,8 @@
 
         let resizeRAF;
         window.addEventListener('resize', () => {
-            cancelAnimationFrame(resizeRAF);
-            resizeRAF = requestAnimationFrame(measure);
+            //cancelAnimationFrame(resizeRAF);
+            //resizeRAF = requestAnimationFrame(measure);
         });
 
         measure();
