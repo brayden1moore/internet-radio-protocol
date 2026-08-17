@@ -1579,6 +1579,14 @@ class Stream:
             if self.now_playing == None:
                 self.now_playing = 'DIA! Archives'
 
+        elif self.name == 'LACE Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.status = 'Re-Run' if extract_value(info, ['result','status']) == 'defaultPlaylist' else 'Live'
+            self.now_playing = extract_value(info, ['result','metadata','title'])
+            self.now_playing_artist = extract_value(info, ['result','metadata','artist'])
+            self.show_logo = extract_value(info, ['result','metadata','artwork','default'])
+            self.now_playing_description_long = extract_value(info, ['result','metadata','notes'])
+            self.now_playing_description = extract_value(info, ['result','metadata','notes'], rule='shorten')
 
         ### MARK: STATION LOGIC END
 
@@ -3139,7 +3147,24 @@ Stream(
         soundcloud_link = 'https://soundcloud.com/diaradio',
         hidden = False,
         song_basis = False
+),
+Stream(
+        name = 'LACE Radio',
+        logo = "https://internetradioprotocol.org/logos/lace.png",
+        location = 'PARIS',
+        lat = 48.88,
+        lon =  2.42,
+        info_link = "https://api.radiocult.fm/api/station/lace-radio-5fed5746/schedule/live",
+        stream_link = ' https://lace-radio-5fed5746.radiocult.fm/stream',
+        main_link = 'https://www.laceradio.live/',
+        about = "LACE is a community-run and independent web radio whose organization is transparent, voluntary, and based on shared responsibility.A lacework woven collectively by its residents, volunteers, and listeners, it intertwines the threads of a community curious about radio art forms and diverse music. Combining care for the collective with a demanding program, it seeks out rough edges and experimentation. Curated with care, it connects scenes, labels, and collectives, offering a space for sharing music outside dominant circuits.",
+        support_link = 'https://www.helloasso.com/associations/lace/formulaires/2',
+        insta_link = 'https://www.instagram.com/laceradio/',
+        soundcloud_link = 'https://soundcloud.com/laceradio',
+        hidden = False,
+        song_basis = False
 )
+
 
 ### MARK: STREAM END
 ]
