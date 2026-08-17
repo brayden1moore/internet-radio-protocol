@@ -3151,7 +3151,7 @@ Stream(
 Stream(
         name = 'LACE Radio',
         logo = "https://internetradioprotocol.org/logos/lace.png",
-        location = 'PARIS',
+        location = 'Paris',
         lat = 48.88,
         lon =  2.42,
         info_link = "https://api.radiocult.fm/api/station/lace-radio-5fed5746/schedule/live",
