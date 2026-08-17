@@ -1588,6 +1588,19 @@ class Stream:
             self.now_playing_description_long = extract_value(info, ['result','metadata','notes'])
             self.now_playing_description = extract_value(info, ['result','metadata','notes'], rule='shorten')
 
+        elif self.name == 'Calotropis Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.now_playing = extract_value(info, ['now_playing','song','title'])
+            self.now_playing_artist = extract_value(info, ['now_playing','song','artist'])
+            self.status = 'Live' if extract_value(info, ['live','is_live']) == True else 'Re-Run'
+
+        elif self.name == 'Gegen Den Strom FM':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.now_playing_subtitle = extract_value(info, ['shows','current','name'])
+            self.now_playing = extract_value(info, ['tracks','current','metadata','track_title'])
+            self.now_playing = extract_value(info, ['tracks','current','metadata','artist_name'])
+            self.status = 'Re-Run' if extract_value(info, ['sources','livedj']) == 'off' else 'Live'
+
         ### MARK: STATION LOGIC END
 
     def set_last_updated(self):
@@ -3155,12 +3168,44 @@ Stream(
         lat = 48.88,
         lon =  2.42,
         info_link = "https://api.radiocult.fm/api/station/lace-radio-5fed5746/schedule/live",
-        stream_link = ' https://lace-radio-5fed5746.radiocult.fm/stream',
+        stream_link = 'https://lace-radio-5fed5746.radiocult.fm/stream',
         main_link = 'https://www.laceradio.live/',
         about = "LACE is a community-run and independent web radio whose organization is transparent, voluntary, and based on shared responsibility.A lacework woven collectively by its residents, volunteers, and listeners, it intertwines the threads of a community curious about radio art forms and diverse music. Combining care for the collective with a demanding program, it seeks out rough edges and experimentation. Curated with care, it connects scenes, labels, and collectives, offering a space for sharing music outside dominant circuits.",
         support_link = 'https://www.helloasso.com/associations/lace/formulaires/2',
         insta_link = 'https://www.instagram.com/laceradio/',
         soundcloud_link = 'https://soundcloud.com/laceradio',
+        hidden = False,
+        song_basis = False
+),
+Stream(
+        name = 'Calotropis Radio',
+        logo = "https://internetradioprotocol.org/logos/calotropis.png",
+        location = 'Nairobi',
+        lat = -1.286389,
+        lon = 36.817223,
+        info_link = "https://radio.calotropis.xyz/api/nowplaying/1",
+        stream_link = 'https://radio.calotropis.xyz:8000/radio.mp3',
+        main_link = 'https://www.calotropis.xys/',
+        about = "Calotropis is a community-based radio that believes in the importance of the ongoing pulse of music and making; aiming to stretch the radiophonic by dancing in the archives, collaborating with the underground, and, in their words, ‘never forgetting the skies beyond the sky’. Calotropis orients the vocabulary of its practice around two principles of faith:  1) access to the event, and 2) the becoming of the radio.",
+        support_link = 'mailto:radiocalotropis@gmail.com',
+        insta_link = 'https://www.instagram.com/calotropis.xyz/',
+        soundcloud_link = None,
+        hidden = True,
+        song_basis = True
+),
+Stream(
+        name = 'Gegen Den Strom FM',
+        logo = "https://internetradioprotocol.org/logos/gds.png",
+        location = 'Zurich',
+        lat = 47.36667,
+        lon = 8.55,
+        info_link = "https://live.gds.fm/api/live-info-v2?timezone=utc",
+        stream_link = 'https://live.gds.fm/main.mp3',
+        main_link = 'https://gds.fm',
+        about = "GDS.FM (Zürichs Radio gegen den Strom) ist eine unabhängige und werbefreie Plattform für Musikschaffende. Wir setzen uns dafür ein, dass die lokale kulturelle Vielfalt über Radio und durch Veranstaltungen zugänglich gemacht wird. ",
+        support_link = 'https://gds.fm/member',
+        insta_link = 'https://www.instagram.com/gdsfm/',
+        soundcloud_link = None,
         hidden = False,
         song_basis = False
 )
