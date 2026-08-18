@@ -3216,7 +3216,7 @@ Stream(
 ),
 Stream(
         name = 'Rytmabad Radio',
-        logo = "https://internetradioprotocol.org/logos/rytmabad.jpeg",
+        logo = "https://internetradioprotocol.org/logos/rytmabad.jpg",
         location = 'Tashkent',
         lat = 41.311081,
         lon = 69.240562,
