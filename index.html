@@ -147,7 +147,12 @@
             </div>
         </div>
         <!--<div id="intro-div">Up-to-the-minute information and direct stream links for the world's best internet radio stations. Click a logo to tune in, donate to a station if you like it, and follow me on Instagram, <a class='insta-link' target='_blank' href='https://www.instagram.com/scud.works/'>@scud.works</a>. Last updated <span class='last-updated'></span><span class='live-count'></span>.</div>-->
-        
+        <a id="app-store-icon" href="https://apps.apple.com/us/app/one-radio-by-scud/id6747141008">
+            <img class="squiggle" src="assets/squiggle.svg">
+            <img class="squiggle" src="assets/squiggle.svg">
+            <img style="position:absolute" src="assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg">
+        </a>
+
         <div class="streams-container" id="favorites-container"></div>
 
         <div id="shows-now" class="category-header" data-controls="shows-container">Shows On Now</div>
@@ -244,6 +249,21 @@
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
 
+    .squiggle {
+        height: 15px;
+    }
+    #app-store-icon {
+        margin-bottom: 22px;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: center;
+        background-color: transparent;
+        border: none;
+    }
+    #app-store-icon:hover {
+        background-color: transparent !important;
+    }
     #list-button {
         display: none;
     }
@@ -422,7 +442,7 @@
         justify-content: center;
         text-align: center;
         background-color: white;
-        width: 55px;
+        width: 45px;
         /*background: linear-gradient(139deg, yellow, rgb(255, 255, 0) 50.84%, rgb(6, 172, 255) 76.89%, color(display-p3 0.9175 0.2 0.1372));*/
         border-left: 1px solid black;
     }
@@ -2100,6 +2120,10 @@
     }
     @media (min-aspect-ratio: 8/10)  {
 
+        #support-button {
+            width: 60px;
+        }
+
         #last-up {
             display: flex;
         }
@@ -3629,7 +3653,7 @@
 
         // ios
         var iOS = /(iPhone)/g.test(navigator.userAgent);
-        const getTheApp = document.getElementById('get-app-button');
+        const getTheApp = document.getElementById('app-store-icon');
         getTheApp.addEventListener('click',()=> {
             appUrl = getTheApp.href;
             window.location = appUrl;
@@ -3638,7 +3662,7 @@
             getTheApp.style.display = 'flex';
         }
         else {
-            getTheApp.style.display = 'flex';
+            getTheApp.style.display = 'none';
         }
 
         function marqueeInside(container, pauseSeconds = 1) {
