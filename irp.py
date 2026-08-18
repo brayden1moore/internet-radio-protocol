@@ -1596,10 +1596,15 @@ class Stream:
 
         elif self.name == 'Gegen Den Strom FM':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
-            self.now_playing_subtitle = extract_value(info, ['shows','current','name'])
             self.now_playing = extract_value(info, ['tracks','current','metadata','track_title'])
             self.now_playing_artist = extract_value(info, ['tracks','current','metadata','artist_name'])
-            self.status = 'Re-Run' if extract_value(info, ['sources','livedj']) == 'off' else 'Live'
+            self.status = 'Re-Run' if extract_value(info, ['live','livedj']) == 'off' else 'Live'
+
+        elif self.name == 'Rytmabad Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.now_playing = extract_value(info, ['now_playing','song','title'])
+            self.now_playing_artist = extract_value(info, ['now_playing','song','artist'])
+            self.status = 'Live' if extract_value(info, ['live','is_live']) == True else 'Re-Run'
 
         ### MARK: STATION LOGIC END
 
@@ -3205,6 +3210,22 @@ Stream(
         about = "GDS.FM (Zürichs Radio gegen den Strom) ist eine unabhängige und werbefreie Plattform für Musikschaffende. Wir setzen uns dafür ein, dass die lokale kulturelle Vielfalt über Radio und durch Veranstaltungen zugänglich gemacht wird. ",
         support_link = 'https://gds.fm/member',
         insta_link = 'https://www.instagram.com/gdsfm/',
+        soundcloud_link = None,
+        hidden = False,
+        song_basis = False
+),
+Stream(
+        name = 'Rytmabad Radio',
+        logo = "https://internetradioprotocol.org/logos/rytmabad.jpeg",
+        location = 'Tashkent',
+        lat = 41.311081,
+        lon = 69.240562,
+        info_link = "https://radio.filmtastic.uz/api/nowplaying/rytmabad",
+        stream_link = 'https://radio.filmtastic.uz/listen/rytmabad/radio.mp3',
+        main_link = 'https://rytmabad.radio/',
+        about = "Community radio based in Tashkent, Uzbekistan.",
+        support_link = 'https://t.me/rytmabot',
+        insta_link = 'https://www.instagram.com/rytmabad.radio/',
         soundcloud_link = None,
         hidden = False,
         song_basis = False
