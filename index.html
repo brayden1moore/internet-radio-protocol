@@ -150,7 +150,7 @@
         <a id="app-store-icon" href="https://apps.apple.com/us/app/one-radio-by-scud/id6747141008">
             <img class="squiggle" src="assets/squiggle.svg">
             <img class="squiggle" src="assets/squiggle.svg">
-            <img style="position:absolute" src="assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg">
+            <!--<img style="position:absolute" src="assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg">-->
         </a>
 
         <div class="streams-container" id="favorites-container"></div>
@@ -923,7 +923,7 @@
         padding-left: 7.5px;
         padding-right: 7.5px;
         height: 100%;
-        display: none;
+        display: flex;
         background-color: rgb(255, 255, 255);
         align-items: center;
         justify-self: end;
@@ -3663,7 +3663,7 @@
         })
         if (iOS) {
             getTheApp.style.display = 'none';
-            appMenuOption.style.display = 'none'
+            appMenuOption.style.display = 'flex'
         }
         else {
             getTheApp.style.display = 'none';
