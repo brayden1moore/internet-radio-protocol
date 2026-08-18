@@ -484,7 +484,6 @@
     #globe-and-list-container {
         margin-left: -0.5px;
         width: calc(100% - 1.5px);
-        /*height: 70vh;*/
     }
 
     #full-view-toggle img {
@@ -723,6 +722,7 @@
         display: none;
         position: relative;
         width: 100%;
+        min-height: 70vh;
     }
 
     #globe-container {
@@ -1516,7 +1516,7 @@
         #play-random-button {
             align-items: center;
             cursor: pointer;
-            width: fit-content;
+            /*width: 80px;*/
             display: flex;
             background-color: lab(0% 0 0);
             border: none;
@@ -1820,7 +1820,7 @@
         .show-card {
             opacity: 0;
             transform: translateY(8px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            transition: opacity 0.2s ease, transform 0.3s ease;
             width: 200px;
             position: relative;
             height: 100%;
@@ -1834,7 +1834,7 @@
         }
 
         .show-card:hover {
-            opacity: 0.8;
+            opacity: 0.9;
         }
 
         .show-card:has(.info-icon:hover) {
@@ -2109,12 +2109,9 @@
         }
 
         .top-controls-full-view {
-                top: 60px !important;
+                top: 72px !important;
             }
 
-        .first-row-full-view {
-            height: 55px !important;
-        }
 
         #full-view-toggle {
             width: 25px;
@@ -2245,7 +2242,7 @@
             }
 
             .top-controls-full-view {
-                top: 60px !important;
+                top: 72px !important;
             }
         
             #globe-station-list-container {
