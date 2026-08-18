@@ -3653,6 +3653,7 @@
 
         // ios
         var iOS = /(iPhone)/g.test(navigator.userAgent);
+        const appMenuOption = document.getElementById('get-app-button');
         const getTheApp = document.getElementById('app-store-icon');
         getTheApp.addEventListener('click',()=> {
             appUrl = getTheApp.href;
@@ -3660,9 +3661,11 @@
         })
         if (iOS) {
             getTheApp.style.display = 'flex';
+            appMenuOption.style.display = 'none'
         }
         else {
             getTheApp.style.display = 'none';
+            appMenuOption.style.display = 'flex'
         }
 
         function marqueeInside(container, pauseSeconds = 1) {
