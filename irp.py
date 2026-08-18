@@ -3190,12 +3190,12 @@ Stream(
         lon = 36.817223,
         info_link = "https://radio.calotropis.xyz/api/nowplaying/1",
         stream_link = 'https://radio.calotropis.xyz:8000/radio.mp3',
-        main_link = 'https://www.calotropis.xys/',
+        main_link = 'https://www.calotropis.xyz/',
         about = "Calotropis is a community-based radio that believes in the importance of the ongoing pulse of music and making; aiming to stretch the radiophonic by dancing in the archives, collaborating with the underground, and, in their words, ‘never forgetting the skies beyond the sky’. Calotropis orients the vocabulary of its practice around two principles of faith:  1) access to the event, and 2) the becoming of the radio.",
         support_link = 'mailto:radiocalotropis@gmail.com',
         insta_link = 'https://www.instagram.com/calotropis.xyz/',
         soundcloud_link = None,
-        hidden = True,
+        hidden = False,
         song_basis = True
 ),
 Stream(
