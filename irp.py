@@ -1501,7 +1501,11 @@ class Stream:
             if self.now_playing:
                 self.status = 'Live'
             else:
-                self.status = 'Offline'
+                info = requests.get('https://operator.streamnerd.nl/api/live-info-v2', timeout=TIMEOUT).json()
+                self.now_playing = extract_value(info, ['tracks','current','metadata','track_title'])
+                self.status = 'Re-Run'
+                if self.now_playing == None:
+                    self.status = 'Offline'
 
         elif self.name == 'Mouthfull Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
