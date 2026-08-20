@@ -3344,7 +3344,7 @@ def write_stub(v):
     safe = name.replace(' ', '_')
     title = html.escape(f'{name} on One Radio', quote=True)
     one_liner = html.escape(v.get('oneLiner', ''), quote=True)
-    image = f'{BASE}/logos/{safe}.png'          
+    image = v['logo']    
     target = f'{BASE}/?station={quote(name)}'   
 
     doc = f'''<!DOCTYPE html>
