@@ -1304,6 +1304,10 @@ class Stream:
             else:
                 self.now_playing = None
                 self.status = 'Offline'
+
+            if self.now_playing == 'Off Air':
+                self.status = 'Offline'
+                self.now_playing_artist = None
         
         elif self.name == 'Lahmacun':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
