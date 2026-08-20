@@ -1702,8 +1702,8 @@ class Stream:
         card.paste(ear, (ex, ey), ear)  # alpha mask keeps white 
 
         # black divider at the seam
-        draw = ImageDraw.Draw(card)
-        draw.rectangle([panel - border // 2, 0, panel + border // 2, H], fill=(0, 0, 0))
+        #draw = ImageDraw.Draw(card)
+        #//draw.rectangle([panel - border // 2, 0, panel + border // 2, H], fill=(0, 0, 0))
 
         os.makedirs('share', exist_ok=True)
         card.save(f'share/{safe}.png', format='PNG', optimize=True)
