@@ -1693,7 +1693,7 @@ class Stream:
 
         # ---- right: white panel with centered ear ----
         ear = Image.open('assets/sticker.png').convert('RGBA')
-        target = int(panel * 0.8)  # fit into 80% of the panel
+        target = int(panel * 1)  # fit into 80% of the panel
         ew, eh = ear.size
         scale = min(target / ew, target / eh)
         ear = ear.resize((int(ew * scale), int(eh * scale)), Image.LANCZOS)
