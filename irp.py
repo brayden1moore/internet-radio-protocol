@@ -1692,7 +1692,7 @@ class Stream:
         card.paste(logo, (0, 0))
 
         # ---- right: white panel with centered ear ----
-        ear = Image.open('assets/justear.png').convert('RGBA')
+        ear = Image.open('assets/sticker.png').convert('RGBA')
         target = int(panel * 0.8)  # fit into 80% of the panel
         ew, eh = ear.size
         scale = min(target / ew, target / eh)
