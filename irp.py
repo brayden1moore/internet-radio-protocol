@@ -1673,6 +1673,42 @@ class Stream:
         if requests.get(self.show_logo, timeout=3).status_code not in  [200,403]:
             self.show_logo = None
 
+    def make_share_card(self):
+        safe = self.name.replace(' ', '_')
+        logo_file = self.logo.replace('https://internetradioprotocol.org/', '')
+
+        W, H = 1200, 600
+        panel = 600
+        border = 12  # inner black border thickness on the left panel
+
+        card = Image.new('RGB', (W, H), (255, 255, 255))
+
+        # ---- left: station logo, cropped square, cover-filled ----
+        logo = Image.open(logo_file).convert('RGB')
+        w, h = logo.size
+        s = min(w, h)
+        logo = logo.crop(((w - s) // 2, (h - s) // 2, (w + s) // 2, (h + s) // 2))
+        logo = logo.resize((panel, panel), Image.LANCZOS)
+        card.paste(logo, (0, 0))
+
+        # inner black border on the left panel
+        draw = ImageDraw.Draw(card)
+        for i in range(border):
+            draw.rectangle([i, i, panel - 1 - i, H - 1 - i], outline=(0, 0, 0))
+
+        # ---- right: white panel with centered ear ----
+        ear = Image.open('assets/justear.png').convert('RGBA')
+        target = int(panel * 0.8)  # fit into 80% of the panel
+        ew, eh = ear.size
+        scale = min(target / ew, target / eh)
+        ear = ear.resize((int(ew * scale), int(eh * scale)), Image.LANCZOS)
+        ex = panel + (panel - ear.width) // 2
+        ey = (H - ear.height) // 2
+        card.paste(ear, (ex, ey), ear)  # alpha mask keeps white bg
+
+        os.makedirs('share', exist_ok=True)
+        card.save(f'share/{safe}.png', format='PNG', optimize=True)
+
     def process_logos(self):
         logo_file = self.logo.replace('https://internetradioprotocol.org/', '')
 
@@ -1709,6 +1745,8 @@ class Stream:
         raw = raw.translate(LSB_LOOKUP)
         with open(f"logos/{safe}.xbm", "wb") as f:
             f.write(raw)
+
+        self.make_share_card()
 
 ## define streams
 streams = [
@@ -3342,9 +3380,9 @@ STUB_DIR = 's'
 def write_stub(v):
     name = v['name']
     safe = name.replace(' ', '_')
+    image = f'{BASE}/share/{safe}.png'
     title = html.escape(f'{name} on One Radio', quote=True)
     one_liner = html.escape(v.get('oneLiner', ''), quote=True)
-    image = v['logo_png']    
     target = f'{BASE}/?station={quote(name)}'   
 
     doc = f'''<!DOCTYPE html>
@@ -3354,7 +3392,7 @@ def write_stub(v):
             <meta property="og:description" content="{one_liner}">
             <meta property="og:image" content="{image}">
             <meta property="og:image:width" content="1200">
-            <meta property="og:image:height" content="630">
+            <meta property="og:image:height" content="600">
             <meta property="og:url" content="{target}">
             <meta name="twitter:card" content="summary_large_image">
             <meta http-equiv="refresh" content="0; url={target}">
@@ -3366,7 +3404,10 @@ def write_stub(v):
     with open(os.path.join(STUB_DIR, f'{safe}.html'), 'w') as f:
         f.write(doc)
 
+
+
 def main_loop():
+
     last_processed = {} 
 
     while True:
