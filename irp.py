@@ -3332,8 +3332,42 @@ def process_stream(stream):
         print(stream.name, 'Error', error)
         return (stream.name, error, stream.hidden)
 
+import html
+from urllib.parse import quote
+import os
+
+BASE = 'https://one.radio'
+STUB_DIR = 's'
+
+def write_stub(v):
+    name = v['name']
+    safe = name.replace(' ', '_')
+    title = html.escape(f'{name} on One Radio', quote=True)
+    one_liner = html.escape(v.get('oneLiner', ''), quote=True)
+    image = f'{BASE}/logos/{safe}.png'          
+    target = f'{BASE}/?station={quote(name)}'   
+
+    doc = f'''<!DOCTYPE html>
+            <head>
+            <meta charset="utf-8">
+            <meta property="og:title" content="{title}">
+            <meta property="og:description" content="{one_liner}">
+            <meta property="og:image" content="{image}">
+            <meta property="og:image:width" content="1200">
+            <meta property="og:image:height" content="630">
+            <meta property="og:url" content="{target}">
+            <meta name="twitter:card" content="summary_large_image">
+            <meta http-equiv="refresh" content="0; url={target}">
+            <script>location.replace("{target}");</script>
+            </head>
+            <body><a href="{target}">Continue to One Radio</a></body>'''
+
+    os.makedirs(STUB_DIR, exist_ok=True)
+    with open(os.path.join(STUB_DIR, f'{safe}.html'), 'w') as f:
+        f.write(doc)
+
 def main_loop():
-    last_processed = {}  # stream name -> epoch of last processing
+    last_processed = {} 
 
     while True:
         try:
@@ -3416,6 +3450,11 @@ def main_loop():
             }
             with open('summary.json', 'w') as f:
                 json.dump(summary, f, indent=4, sort_keys=True, default=str)
+
+            # make stubs
+            for item in summary_list:
+                if not item['hidden']:
+                    write_stub(item)
 
             error_lines = [val for key, val in error_dict.items()]
             with open('errorlog.txt', 'w') as log:
