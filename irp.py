@@ -1679,7 +1679,7 @@ class Stream:
 
         W, H = 1200, 600
         panel = 600
-        border = 12  # inner black border thickness on the left panel
+        border = 6  # inner black border thickness on the left panel
 
         card = Image.new('RGB', (W, H), (255, 255, 255))
 
@@ -1693,8 +1693,7 @@ class Stream:
 
         # inner black border on the left panel
         draw = ImageDraw.Draw(card)
-        for i in range(border):
-            draw.rectangle([i, i, panel - 1 - i, H - 1 - i], outline=(0, 0, 0))
+        draw.rectangle([w-border/2, 0, w + border, H], fill=(0, 0, 0))
 
         # ---- right: white panel with centered ear ----
         ear = Image.open('assets/justear.png').convert('RGBA')
