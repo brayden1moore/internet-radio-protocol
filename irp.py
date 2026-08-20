@@ -1679,7 +1679,7 @@ class Stream:
 
         W, H = 1200, 600
         panel = 600
-        border = 6  # inner black border thickness on the left panel
+        border = 12  # inner black border thickness on the left panel
 
         card = Image.new('RGB', (W, H), (255, 255, 255))
 
@@ -1699,14 +1699,14 @@ class Stream:
         ear = ear.resize((int(ew * scale), int(eh * scale)), Image.LANCZOS)
         ex = panel + (panel - ear.width) // 2
         ey = (H - ear.height) // 2
-        card.paste(ear, (ex, ey), ear)  # alpha mask keeps white bg
-
-        os.makedirs('share', exist_ok=True)
-        card.save(f'share/{safe}.png', format='PNG', optimize=True)
+        card.paste(ear, (ex, ey), ear)  # alpha mask keeps white 
 
         # black divider at the seam
         draw = ImageDraw.Draw(card)
         draw.rectangle([panel - border // 2, 0, panel + border // 2, H], fill=(0, 0, 0))
+
+        os.makedirs('share', exist_ok=True)
+        card.save(f'share/{safe}.png', format='PNG', optimize=True)
 
 
     def process_logos(self):
