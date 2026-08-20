@@ -3440,7 +3440,7 @@ def main_loop():
                     "streamLink": v['streamLink'],
                     "logo": f'https://one.radio/logos/{safe}.xbm',  
                     "logo_png_base": f'https://one.radio/logos/{safe}',  
-                    "logo_png": {v["logo"]},
+                    "logo_png": v["logo"],
                     "logo_hash": getattr(v, 'logo_hash', None),
                     "hidden": v['hidden'],
                 }
