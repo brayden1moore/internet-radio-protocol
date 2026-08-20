@@ -1679,7 +1679,7 @@ class Stream:
 
         W, H = 1200, 600
         panel = 600
-        border = 12  # inner black border thickness on the left panel
+        border = 6  # inner black border thickness on the left panel
 
         card = Image.new('RGB', (W, H), (255, 255, 255))
 
