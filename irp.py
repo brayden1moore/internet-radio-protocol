@@ -3344,7 +3344,7 @@ def write_stub(v):
     safe = name.replace(' ', '_')
     title = html.escape(f'{name} on One Radio', quote=True)
     one_liner = html.escape(v.get('oneLiner', ''), quote=True)
-    image = v['logo']    
+    image = v['logo_png']    
     target = f'{BASE}/?station={quote(name)}'   
 
     doc = f'''<!DOCTYPE html>
@@ -3440,6 +3440,7 @@ def main_loop():
                     "streamLink": v['streamLink'],
                     "logo": f'https://one.radio/logos/{safe}.xbm',  
                     "logo_png_base": f'https://one.radio/logos/{safe}',  
+                    "logo_png": f'https://one.radio/logos/{v["logo"]}',
                     "logo_hash": getattr(v, 'logo_hash', None),
                     "hidden": v['hidden'],
                 }
