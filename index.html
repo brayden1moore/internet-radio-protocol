@@ -2035,6 +2035,7 @@
         @font-face {font-family: "Archivo SemiBold";src: url("https://one.radio/assets/Archivo-SemiBold.ttf") format("truetype");}
         @font-face {font-family: "Archivo Light";src: url("https://one.radio/assets/Archivo-Light.ttf") format("truetype");}
         @font-face {font-family: "Favorit";src: url("https://one.radio/assets/ABCFavoritMono-Regular.otf") format("truetype");}
+        /*@font-face {font-family: "Favorit";src: url("https://one.radio/assets/Archivo-Regular.ttf") format("truetype");}*/
 
 
         a {
@@ -3485,8 +3486,8 @@
       const copiedText = document.getElementById("copied");
 
       shareIcon.addEventListener("click", function() {
-          const id = player.getAttribute("data-id").replaceAll(" ","%20");
-          const urlToCopy = `${window.location.origin}/?station=${id}`;
+          const id = player.getAttribute("data-id").replaceAll(" ","_");
+          const urlToCopy = `${window.location.origin}/s/${id}.html`;
           
           navigator.clipboard.writeText(urlToCopy).then(() => {
               shareIcon.className = "fa-solid fa-check";
