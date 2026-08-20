@@ -1691,10 +1691,6 @@ class Stream:
         logo = logo.resize((panel, panel), Image.LANCZOS)
         card.paste(logo, (0, 0))
 
-        # inner black border on the left panel
-        draw = ImageDraw.Draw(card)
-        draw.rectangle([w-border/2, 0, w + border, H], fill=(0, 0, 0))
-
         # ---- right: white panel with centered ear ----
         ear = Image.open('assets/justear.png').convert('RGBA')
         target = int(panel * 0.8)  # fit into 80% of the panel
@@ -1707,6 +1703,11 @@ class Stream:
 
         os.makedirs('share', exist_ok=True)
         card.save(f'share/{safe}.png', format='PNG', optimize=True)
+
+        # black divider at the seam
+        draw = ImageDraw.Draw(card)
+        draw.rectangle([panel - border // 2, 0, panel + border // 2, H], fill=(0, 0, 0))
+
 
     def process_logos(self):
         logo_file = self.logo.replace('https://internetradioprotocol.org/', '')
