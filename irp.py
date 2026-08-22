@@ -715,6 +715,7 @@ class Stream:
                 except Exception as e:
                     print(e)
                     self.show_logo = None
+                self.stream_check()
 
             except:
                 self.now_playing = None
@@ -841,12 +842,16 @@ class Stream:
         elif self.name == 'Subtle Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             try:
-                self.now_playing = info['shows']['current']['name']
-                self.now_playing_description = info['shows']['current']['description']
-                self.now_playing_subtitle = info['tracks']['current']['name'].lstrip(' - ').replace('.mp3','')
-                self.status = 'Live'
+                self.status = 'Re-Run' if extract_value(info, ['result','status']) == 'defaultPlaylist' else 'Live'
+                if self.status == 'Re-Run':
+                    self.now_playing = 'Subtle Selects'
+                    self.now_playing_subtitle = extract_value(info, ['result','metadata','filename']).replace('.mp3','')
+                else:
+                    self.now_playing = extract_value(info, ['result','metadata','title'])
+                    self.now_playing_subtitle = None
             except:
                 self.now_playing = None
+                self.now_playing_subtitle = None
                 self.status = 'Offline'
 
         elif self.name == "Monotonic Radio":
@@ -2494,8 +2499,8 @@ Stream(
         location = "London",
         lat = 51.5074456,
         lon = -0.1277653,
-        info_link = "https://subtle.airtime.pro/api/live-info-v2",
-        stream_link = "https://subtle.out.airtime.pro/subtle_a",
+        info_link = "https://api.radiocult.fm/api/station/subtle-radio-dd2656d9/schedule/live",#"https://subtle.airtime.pro/api/live-info-v2",
+        stream_link = "https://subtle-radio-dd2656d9.radiocult.fm/stream",
         main_link = "https://www.subtleradio.com",
         about = "We Are Various is an online community radio station currently transmitting from inside Witzli Poetzli, Trix & Het Bos. Beats and pixels. Demos and expos. Rewinds and flashlights. Camera and musica obscura.",
         support_link = "https://www.subtle.store",
