@@ -1677,6 +1677,7 @@ class Stream:
             except:
                 self.status = 'Offline'
                 self.now_playing = None
+                self.show_logo = None
 
     def show_logo_check(self):
         if requests.get(self.show_logo, timeout=3).status_code not in  [200,403]:
