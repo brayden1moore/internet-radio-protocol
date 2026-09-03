@@ -1625,6 +1625,10 @@ class Stream:
             self.listeners = extract_value(info, ['listeners'])
             self.status = 'Re-Run' if extract_value(info, ['live']) == 0 else 'Live'
 
+        elif self.name == 'Retreat Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.now_playing = extract_value(info, ['tracks','current','track_title'])
+
 
         ### MARK: STATION LOGIC END
 
@@ -3318,6 +3322,22 @@ Stream(
         support_link = 'https://boosty.to/kurs_radio/donate',
         insta_link = 'https://www.instagram.com/kurs.radio/',
         soundcloud_link = 'https://soundcloud.com/kurs_radio',
+        hidden = False,
+        song_basis = False
+),
+Stream(
+        name = 'Retreat Radio',
+        logo = "https://internetradioprotocol.org/logos/retreat.jpg",
+        location = 'Malmö',
+        lat = 55.60587,
+        lon =  13.00073,
+        info_link = "https://retreatradio.airtime.pro/api/live-info-v2",
+        stream_link = 'https://retreatradio.out.airtime.pro/retreatradio_b',
+        main_link = 'https://www.retreatradio.net',
+        about = "Retreat Radio is an independent, non-commercial radio station, broadcasting from Malmö, Scandinavia and beyond.",
+        support_link = 'https://www.patreon.com/retreatradio',
+        insta_link = 'https://www.instagram.com/retreatradio',
+        soundcloud_link = 'https://soundcloud.com/retreatradio',
         hidden = False,
         song_basis = False
 )
