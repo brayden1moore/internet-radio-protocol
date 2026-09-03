@@ -1627,7 +1627,8 @@ class Stream:
 
         elif self.name == 'Retreat Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
-            self.now_playing = extract_value(info, ['tracks','current','track_title'])
+            self.now_playing = extract_value(info, ['tracks','current','metadata','track_title'])
+            self.status = 'Live'
 
 
         ### MARK: STATION LOGIC END
