@@ -1628,10 +1628,10 @@ class Stream:
             self.status = 'Re-Run' if extract_value(info, ['live']) == 0 else 'Live'
             if self.now_playing == None:
                 response = requests.get(self.main_link, timeout=TIMEOUT).text
-                soup = BeautifulSoup(response, features='html.parser')
-                marquee = soup.find_all(attrs={'class':"marquee-track"})[1]
-                if marquee:
-                    self.now_playing = marquee.getText().strip()
+                m = re.search(r'\\"data\\":(\{\\"current\\".*?\\"live\\":\w+\})', response)
+                raw = m.group(1).replace('\\"', '"').replace('\\\\', '\\')
+                data = json.loads(raw)
+                self.now_playing = data["current"]
 
         elif self.name == 'Retreat Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
