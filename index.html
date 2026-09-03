@@ -883,7 +883,6 @@
         display: flex;
         height: auto;
         border-bottom: 1px solid black;
-        justify-content: space-between;
     }
 
 
@@ -2120,6 +2119,10 @@
         }
     }
     @media (min-aspect-ratio: 8/10)  {
+
+        #first-row {
+            justify-content: space-between;
+        }
 
         .row-item:not(:first-child) {
             border-left: 1px solid black;
