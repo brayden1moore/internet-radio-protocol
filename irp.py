@@ -1619,6 +1619,13 @@ class Stream:
             self.now_playing_artist = extract_value(info, ['now_playing','song','artist'])
             self.status = 'Live' if extract_value(info, ['live','is_live']) == True else 'Re-Run'
 
+        elif self.name == 'KURS Radio':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.now_playing = extract_value(info, ['song'])
+            self.listeners = extract_value(info, ['listeners'])
+            self.status = 'Re-Run' if extract_value(info, ['live']) == 0 else 'Live'
+
+
         ### MARK: STATION LOGIC END
 
     def set_last_updated(self):
@@ -3279,6 +3286,38 @@ Stream(
         support_link = 'https://t.me/rytmabot',
         insta_link = 'https://www.instagram.com/rytmabad.radio/',
         soundcloud_link = None,
+        hidden = False,
+        song_basis = False
+),
+Stream(
+        name = 'Blue Moon Radio',
+        logo = "https://internetradioprotocol.org/logos/bluemoon.png",
+        location = 'Detroit',
+        lat = 42.331429,
+        lon = -83.045753,
+        info_link = "https://api.radiocult.fm/api/station/blue-moon-radio/schedule/live",
+        stream_link = 'https://blue-moon-radio.radiocult.fm/stream',
+        main_link = 'https://bluemoonradio.live/',
+        about = "BLUE MOON RADIO (BMR) is a community internet radio station that began in 2023 in Detroit, Michigan.  We feature emerging and established Detroit DJs, musicians, storytellers, talk show hosts, producers, and other communications-oriented sonic lovers- especially highlighting Detroit’s legacy of experimental and genre-bending Black music and spirit. ",
+        support_link = 'https://www.patreon.com/cw/BLUEMOONRADIO444/membership',
+        insta_link = 'https://www.instagram.com/rytmabad.radio/',
+        soundcloud_link = None,
+        hidden = True,
+        song_basis = False
+),
+Stream(
+        name = 'KURS Radio',
+        logo = "https://internetradioprotocol.org/logos/kurs.jpg",
+        location = 'Saint Petersburg',
+        lat = 59.9606739,
+        lon = 30.1586551,
+        info_link = "https://myradio24.com/users/kursradio/status.json",
+        stream_link = 'https://myradio24.org/kursradio',
+        main_link = 'https://kursradio.live/',
+        about = "KURS is an independent, non-profit online community radio station based at Kultura Record Store. We exist to bring people together, to discover and nurture new talents from across the country, to unveil the hidden and the unknown, and to share with the world what is happening deep within the local scene. Open to all genres, initiatives, and ideas, we are redefining what 'radio' means for our community, and we are always searching for the unexpected and the captivating. Our journey is endless and boundless. Join us on air and beyond.",
+        support_link = 'https://boosty.to/kurs_radio/donate',
+        insta_link = 'https://www.instagram.com/kurs.radio/',
+        soundcloud_link = 'https://soundcloud.com/kurs_radio',
         hidden = False,
         song_basis = False
 )
