@@ -1611,6 +1611,8 @@ class Stream:
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.now_playing = extract_value(info, ['tracks','current','metadata','track_title'])
             self.now_playing_artist = extract_value(info, ['tracks','current','metadata','artist_name'])
+            if self.now_playing == None:
+                self.now_playing = extract_value(info, ['tracks','current','name'])
             self.status = 'Re-Run' if extract_value(info, ['live','livedj']) == 'off' else 'Live'
 
         elif self.name == 'Rytmabad Radio':
