@@ -879,10 +879,6 @@
     }
     */
 
-    .row-item:not(:first-child) {
-        border-left: 1px solid black;
-    }
-
     #first-row {
         display: flex;
         height: auto;
@@ -2124,6 +2120,10 @@
         }
     }
     @media (min-aspect-ratio: 8/10)  {
+
+        .row-item:not(:first-child) {
+            border-left: 1px solid black;
+        }
 
         #support-button {
             width: 60px;
