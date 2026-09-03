@@ -1140,7 +1140,7 @@ class Stream:
                 self.now_playing = "Offline"
 
         elif self.name == 'KALX':
-            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            info = requests.get(self.info_link + '/?cacheBust=' + str(random.randint(0,1000000)), timeout=TIMEOUT).json()
             self.show_logo = None
             self.now_playing_artist = None
             self.now_playing_subtitle = None
