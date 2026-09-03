@@ -223,10 +223,11 @@ def musicbrainz(artist, title):
             year = y if year is None else min(year, y)
     return {"genre": genres[0] if genres else None, "year": year}
 
-def play_count(conn, name):
-    return conn.execute(
-        "SELECT COUNT(*) FROM plays WHERE station=?", (name,)
-    ).fetchone()[0]
+def last_play(conn, name):
+    row = conn.execute(
+        "SELECT COUNT(*), MAX(ts) FROM plays WHERE station=?", (name,)
+    ).fetchone()
+    return row[0], row[1]
 
 # --------------------------------------------------------------------------
 # Main loop
@@ -252,10 +253,13 @@ def main():
     for key, st in stations.items():
         name = st.get("name", key)
         print(name)
-        if play_count(conn, name) >= 200:
-            skipped += 1
-            print(f"[skip] {name} (already polled 200+ times)")
-            continue
+        count, last_ts = last_play(conn, name)
+        if count >= 200 and last_ts:
+            age = datetime.now(timezone.utc) - datetime.fromisoformat(last_ts)
+            if age.total_seconds() < 5 * 3600:
+                skipped += 1
+                print(f"[skip] {name} (200+ plays, last polled {age.total_seconds()/3600:.1f}h ago)")
+                continue
 
         track = identify(st)
 
