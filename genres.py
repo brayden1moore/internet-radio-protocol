@@ -32,6 +32,10 @@ GENRE_MAP = {
     "Drum & Bass - Jungle" : "Drum & Bass",
     "Ram Drum & Bass": "Drum & Bass",
     "dance - drum & bass / jungle": "Drum & Bass",
+    "jungle": "Drum & Bass",
+    "ragga jungle": "Drum & Bass",
+    "footwork": "Drum & Bass",
+    "juke": "Drum & Bass",
 
     # Techno
     "Dance - Techno": "Techno",
@@ -39,6 +43,7 @@ GENRE_MAP = {
     "Techno/House": "Techno",
     "Techno": "Techno",
     "Techno/Electronica": "Techno",
+    "electronic - techno": "Techno",
  
     # House
     "House": "House",
@@ -46,6 +51,14 @@ GENRE_MAP = {
     "Dance - Deep House": "House",
     "Dance - Bass House": "House",
     "Electronic - Electro House": "House",
+    "house - deep": "House",
+    "house - afro": "House",
+    "house - soulful": "House",
+    "house - disco": "House",
+    "afro house": "House",
+    "dance - afro house": "House",
+    "amapiano": "House",
+    "gqom": "House",
  
     # Electronic
     "Dance": "Electronic",
@@ -76,6 +89,17 @@ GENRE_MAP = {
     "breaks":"Electronic",
     "electronic: others...": "Electronic",
     "deconstructed club":"Electronic",
+    "trance": "Electronic",
+    "psytrance": "Electronic",
+    "progressive trance": "Electronic",
+    "uplifting trance": "Electronic",
+    "dance - electro": "Electronic",
+    "dance - breaks": "Electronic",
+    "glitch hop": "Electronic",
+    "electronic: dance": "Electronic",
+    "electro|dance": "Electronic",
+    "electronica/dance": "Electronic",
+    "bass": "Electronic",
  
     # Ambient
     "Ambient": "Ambient",
@@ -93,6 +117,10 @@ GENRE_MAP = {
     "Experimental...": "Ambient",
     "noise": "Ambient",
     "Easy Listening": "Ambient",
+    "dance - down beat / trip hop": "Ambient",
+    "sound collage": "Ambient",
+    "vaporwave": "Ambient",
+    "slushwave": "Ambient",
  
     # Rock
     "Alternative/Punk": "Rock",
@@ -109,6 +137,34 @@ GENRE_MAP = {
     "Industrial/Noise": "Rock",
     "Rock - Progressive": "Rock",
     "progressive rock": "Rock", 
+    "black metal": "Rock",
+    "doom metal": "Rock",
+    "death metal": "Rock",
+    "sludge": "Rock",
+    "heavy metal": "Rock",
+    "thrash metal": "Rock",
+    "grindcore": "Rock",
+    "stoner rock": "Rock",
+    "stoner metal": "Rock",
+    "stoner": "Rock",
+    "doom": "Rock",
+    "funeral doom metal": "Rock",
+    "metalcore": "Rock",
+    "power metal": "Rock",
+    "brutal death metal": "Rock",
+    "atmospheric black metal": "Rock",
+    "post-metal": "Rock",
+    "hardcore": "Rock",
+    "hardcore punk": "Rock",
+    "emo": "Rock",
+    "psychedelic rock": "Rock",
+    "garage rock": "Rock",
+    "post-rock": "Rock",
+    "classic rock": "Rock",
+    "pop - rock: rock": "Rock",
+    "blues": "Rock",
+    "delta blues": "Rock",
+    "classic blues": "Rock",
  
     # Alternative
     "post-punk": "Alternative",
@@ -130,6 +186,10 @@ GENRE_MAP = {
     "Pop - Rock: Alternative - Indie": "Alternative",
     "Alternative - Indie Pop": "Alternative",
     "Indie Dance": "Alternative",
+    "alternative - indie rock": "Alternative",
+    "pop - alternative": "Alternative",
+    "new wave": "Alternative",
+    "alternative/indie italiana": "Alternative",
  
     # Pop
     "Pop": "Pop",
@@ -140,11 +200,19 @@ GENRE_MAP = {
     "Pop - Rock": "Pop",
     "Pop - Italo": "Pop",
     "synthpop": "Pop",
+    "adult contemporary": "Pop",
+    "french pop": "Pop",
+    "french pop: french pop": "Pop",
+    "pop/rock italiano": "Pop",
+    "variã©tã© franã§aise": "Pop",
+    "variété française": "Pop",
  
     # Disco
     "Soul & Funk": "Disco",
     "Funk": "Disco",
     "Disco": "Disco",
+    "dance - nu disco / disco": "Disco",
+    "r&b/soul - disco": "Disco",
  
     # Soul
     "Contemporary R&B": "Soul",
@@ -157,6 +225,9 @@ GENRE_MAP = {
     "R&B/Soul - Funk & Soul": "Soul",
     "R&B/Soul/Funk": "Soul",
     "contemporary": "Soul",
+    "funk / soul": "Soul",
+    "soul / funk: soul": "Soul",
+    "gospel": "Soul",
  
     # Hip-Hop
     "Dirty South": "Hip-Hop",
@@ -170,6 +241,12 @@ GENRE_MAP = {
     "Hip Hop / Rap": "Hip-Hop",
     "Hip Hop/Rap - French Hip Hop": "Hip-Hop",
     "Hip-hop/Rap": "Hip-Hop",
+    "hip hop/rap - uk hip hop": "Hip-Hop",
+    "hip hop: rap / hip hop": "Hip-Hop",
+    "experimental hip hop": "Hip-Hop",
+    "chopped and screwed": "Hip-Hop",
+    "deconstructed trap": "Hip-Hop",
+    "lo-fi": "Hip-Hop",
  
     # Reggae
     "Dancehall": "Reggae",
@@ -197,6 +274,10 @@ GENRE_MAP = {
     "Latin Urban": "Latin",
     "Brazilian": "Latin",
     "Latin Music": "Latin",
+    "brazilian - mpb": "Latin",
+    "brazilian music": "Latin",
+    "bossa nova": "Latin",
+    "latin pop": "Latin",
  
     # Jazz
     "Instrumental jazz": "Jazz",
@@ -205,6 +286,11 @@ GENRE_MAP = {
     "Jazz: Electro Jazz": "Jazz",
     "Jazz - World": "Jazz",
     "jazz: contemporary jazz":"Jazz",
+    "jazz - contemporary": "Jazz",
+    "jazz - classic": "Jazz",
+    "jazz - jazz funk": "Jazz",
+    "jazz - nu jazz / acid jazz": "Jazz",
+    "jazz - fusion": "Jazz",
 
     # Classical
     "Church Organ": "Classical",
@@ -212,6 +298,8 @@ GENRE_MAP = {
     "Neo-Classical": "Classical",
     "Classique": "Classical",
     "Classical - Baroque": "Classical",
+    "contemporary classical": "Classical",
+    "classical crossover": "Classical",
  
     # Soundtrack
     "Film Scores": "Soundtrack",
@@ -222,6 +310,11 @@ GENRE_MAP = {
     "soundtrack": "Soundtrack",
     "video game music": "Soundtrack",
     "game": "Soundtrack",
+    "soundtracks: movie soundtracks": "Soundtrack",
+    "soundtracks: video games": "Soundtrack",
+    "musiques de films": "Soundtrack",
+    "films/jeux vidã©o": "Soundtrack",
+    "films/jeux vidéo": "Soundtrack",
  
     # Folk
     "Folk": "Folk",
@@ -251,12 +344,22 @@ GENRE_MAP = {
     "African Music": "World",
     "Musique africaine": "World",
     "japanese": "World",
+    "world music: africa": "World",
+    "world music: maghreb": "World",
+    "world music: world - fusion - others...": "World",
+    "arabic": "World",
+    "arabic pop": "World",
+    "afrobeats": "World",
  
     # Other
     "Anime": "Other",
     "Comedy": "Other",
     "Holiday": "Other",
-    "j-pop": "Other"
+    "j-pop": "Other",
+    "spoken word": "Other",
+    "karaoke": "Other",
+    "christian": "Other",
+    "k-pop": "Other",
 }
 
 
@@ -307,113 +410,18 @@ _JUNK = {
     "acoustic", "american", "british", "australian", "english", "usa",
     "amazing", "love", "sexy", "party", "summer", "classic", "oldies",
     "mellow", "spanish",
+
+    # platform / playlist / library noise
+    "all", "miscellaneous: compilations", "vhs", "moja muzika",
+    # labels & imprints
+    "nyege nyege tapes", "anjunabeats",
+    # instruments and credits, not genres
+    "piano", "guitar", "xylophone", "composer",
+    # place names
+    "los angeles",
+    # country / nationality tags
+    "ukraine", "ukrainian", "iceland", "icelandic", "croatia", "croatian",
+    "serbia", "serbian", "slovenia", "ex-yu", "france", "french",
+    "german", "germany", "sweden", "swedish", "netherlands",
+    "uk", "united states", "mexico", "colombia", "uganda", "korean",
 }
-
-
-def categorize(genre, default="Other"):
-    return GENRE_MAP.get(genre, default)
-
-
-def _is_junk(tag):
-    if tag in _JUNK:
-        return True
-    s = tag.rstrip("s")
-    return s.isdigit() 
-
-
-def _match_tag(tag):
-    """Resolve one raw tag (ACR-clean or Last.fm-messy) to a category, or None."""
-    t = tag.strip().strip('"').lower()
-    if not t or _is_junk(t):
-        return None
-    return _CI.get(t) or _ALIAS.get(t)
-
-
-def _split(cell):
-    if not cell or not isinstance(cell, str):
-        return []
-    return [p for p in (x.strip().strip('"') for x in cell.split(",")) if p]
-
-
-def resolve_categories(acr_genres, lf_tags=None):
-    cats = []
-    for raw in _split(acr_genres):                      
-        c = GENRE_MAP.get(raw) or _CI.get(raw.lower())
-        if c and c not in cats:
-            cats.append(c)
-    if not cats:                                       
-        for raw in _split(lf_tags):
-            c = _match_tag(raw)
-            if c and c not in cats:
-                cats.append(c)
-    return cats
-
-
-def map_genres(cell):
-    return resolve_categories(cell, None)
-
-
-# Separator for the multi-category DB column
-CATEGORY_SEP = ";"
-
-
-def resolve_row(acr_genres, lf_tags=None):
-    cats = resolve_categories(acr_genres, lf_tags)
-    if not cats:
-        return None, None
-    return cats[0], CATEGORY_SEP.join(cats)
-
- 
-def all_categories():
-    produced = set(GENRE_MAP.values()) | set(_ALIAS.values())
-    missing = produced - set(GENRE_ORDER)
-    if missing:
-        raise ValueError(f"GENRE_ORDER missing categories: {sorted(missing)}")
-    return list(GENRE_ORDER)
-
-def add_categories(df, acr_col="acr_genres", lf_col="lf_tags"):
-    """
-    Add two columns to a copy of df:
-        categories -- list[str] of all resolved categories per row
-        category   -- the primary (first) category, or None
-    Explode on 'categories' for per-genre counting.
-    """
-    out = df.copy()
-    lf = out[lf_col] if lf_col in out.columns else None
-    out["categories"] = [
-        resolve_categories(a, l)
-        for a, l in zip(out[acr_col], lf if lf is not None else [None] * len(out))
-    ]
-    out["category"] = [c[0] if c else None for c in out["categories"]]
-    # Semicolon-joined string, matching what the poller/backfill store in the DB.
-    out["categories_str"] = [
-        CATEGORY_SEP.join(c) if c else None for c in out["categories"]
-    ]
-    return out
-
- 
-def unresolved_tags_for_row(acr_genres, lf_tags=None):
-    """
-    For a row that resolved to NO category, return the list of its raw tags that
-    failed to match (lowercased, junk excluded). Use this to build a "true miss"
-    review list: only call it on rows where resolve_row(...) returned no primary.
-    """
-    out = []
-    for raw in _split(acr_genres) + _split(lf_tags):
-        t = raw.strip().strip('"').lower()
-        if not t or _is_junk(t):
-            continue
-        if _match_tag(raw) is None and t not in out:
-            out.append(t)
-    return out
-
-def unmapped_tags(df, acr_col="acr_genres", lf_col="lf_tags", top=None):
-    from collections import Counter
-    miss = Counter()
-    cols = [acr_col] + ([lf_col] if lf_col in df.columns else [])
-    for col in cols:
-        for cell in df[col].dropna():
-            for raw in _split(cell):
-                if _match_tag(raw) is None:
-                    miss[raw.lower()] += 1
-    return miss.most_common(top) if top else miss
