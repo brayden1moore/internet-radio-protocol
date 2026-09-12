@@ -1,16 +1,29 @@
 import re
+import io
+import csv
 import json
 import sqlite3
+import threading
 import statistics
 from pathlib import Path
+from functools import lru_cache
 from collections import Counter
-from flask import Flask, render_template_string, jsonify
+from flask import Flask, render_template_string, jsonify, request, Response
 
 
 import genres
 
 DB_PATH = Path("/var/www/internet-radio-protocol/plays.db")
 app = Flask(__name__)
+
+# Columns each consumer actually needs. The aggregates skip ts/source/acr_label/
+# mb_genre entirely, which keeps 100k rows from carrying dead weight.
+AGG_COLS = ("station, artist, title, matched, category, categories, "
+            "acr_genres, lf_tags, acr_release, mb_year, lf_playcount")
+TABLE_COLS = ("ts, station, source, artist, title, acr_label, acr_genres, mb_genre, "
+              "lf_tags, acr_release, mb_year, lf_playcount, matched, category, categories")
+
+DEFAULT_ROW_LIMIT = 500
 
 STYLE = """
 <style>
@@ -78,6 +91,20 @@ STYLE = """
     /* -webkit-text-stroke: 0px !important; */
     color: black;
   }
+
+  a.dl {
+    float: right;
+    margin: -1px 0 0 8px;
+    padding: 2px 10px;
+    border: 1px solid black;
+    background: yellow;
+    color: black;
+    font-family: "Archivo Light";
+    font-size: 9pt;
+    text-decoration: none;
+    letter-spacing: -0.03em;
+  }
+  a.dl:hover{background:#000;color:yellow}
 
   #radar-chart {
     display: block;
@@ -462,7 +489,9 @@ PAGE = STYLE + """
 <h2 style="margin-top:0px;">Station</h2>
 <body style="margin:1.2em";>
 """ + DNA_PANEL + """
-<h2>Polls <small>({{rows|length}})</small></h2>
+<h2>Polls <small>(latest {{ '{:,}'.format(rows|length) }} of {{ '{:,}'.format(total_rows) }})</small>
+  <a class="dl" href="/dna/plays.csv">CSV ↓</a>
+</h2>
 <div class="scroll">
 <table class="plays sortable">
   <thead>
@@ -524,7 +553,9 @@ PAGE = STYLE + """
 </table>
 </div>
 
-<h2>Uncategorized tags <small>({{misses|length}} distinct, from unresolved rows only)</small></h2>
+<h2>Uncategorized tags <small>({{misses|length}} distinct, from unresolved rows only)</small>
+  <a class="dl" href="/dna/tags.csv">CSV ↓</a>
+</h2>
 <div class="scroll">
 <table class="summary sortable">
   <thead>
@@ -582,6 +613,85 @@ EMBED = """<!doctype html><meta charset="utf-8"><title>One Radio DNA — {{ pin_
 <head><meta name="viewport" content="width=device-width, initial-scale=1"></head>
 """ + STYLE + DNA_PANEL
 
+# Compile once at import instead of re-parsing the template on every request.
+PAGE_T = app.jinja_env.from_string(PAGE)
+EMBED_T = app.jinja_env.from_string(EMBED)
+
+
+# ---------------------------------------------------------------- db access
+
+def _conn():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def ensure_indexes():
+    """Cheap no-op after the first run; makes the LIMIT query a range scan."""
+    try:
+        conn = _conn()
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_plays_ts ON plays(ts DESC)")
+        conn.commit()
+        conn.close()
+    except sqlite3.Error:
+        pass  # read-only db or missing table — not fatal
+
+
+def load_agg_rows():
+    """Every row, but only the columns the aggregates read. No ORDER BY."""
+    conn = _conn()
+    try:
+        return conn.execute(f"SELECT {AGG_COLS} FROM plays").fetchall()
+    finally:
+        conn.close()
+
+
+def load_recent_rows(limit=DEFAULT_ROW_LIMIT):
+    conn = _conn()
+    try:
+        return conn.execute(
+            f"SELECT {TABLE_COLS} FROM plays ORDER BY ts DESC LIMIT ?", (limit,)
+        ).fetchall()
+    finally:
+        conn.close()
+
+
+# ------------------------------------------------------------ aggregate cache
+
+_cache = {}
+_cache_lock = threading.Lock()
+
+
+def _db_version():
+    """(count, max ts) — changes exactly when new polls land."""
+    conn = _conn()
+    try:
+        return tuple(conn.execute("SELECT COUNT(*), MAX(ts) FROM plays").fetchone())
+    finally:
+        conn.close()
+
+
+def aggregates():
+    ver = _db_version()
+    with _cache_lock:
+        if _cache.get("ver") == ver:
+            return _cache["val"]
+
+    rows = load_agg_rows()
+    val = {
+        "dna": compute_dna(rows),
+        "summaries": summarize(rows),
+        "misses_all": uncategorized_counts(rows),
+        "total_rows": ver[0] or 0,
+    }
+
+    with _cache_lock:
+        _cache.update(ver=ver, val=val)
+    return val
+
+
+# -------------------------------------------------------------------- parsing
+
 def parse_year(r):
     if r["acr_release"] and len(r["acr_release"]) >= 4 and r["acr_release"][:4].isdigit():
         return int(r["acr_release"][:4])
@@ -607,15 +717,24 @@ def parse_genres(raw):
             out.append(g)
     return out
 
-def uncategorized(rows):
-    """Count tags from rows that resolved to NO category"""
+
+@lru_cache(maxsize=None)
+def _unresolved(acr_genres, lf_tags):
+    """Distinct (acr_genres, lf_tags) pairs are a tiny fraction of 100k rows."""
+    return tuple(genres.unresolved_tags_for_row(acr_genres, lf_tags))
+
+
+def uncategorized_counts(rows):
+    """Counter of tags from rows that resolved to NO category."""
     misses = Counter()
     for r in rows:
         if not r["matched"] or r["category"]:
-            continue  
-        for tag in genres.unresolved_tags_for_row(r["acr_genres"], r["lf_tags"]):
-            misses[tag] += 1
-    return [(tag, n) for tag, n in misses.most_common() if n > 2]
+            continue
+        misses.update(_unresolved(r["acr_genres"], r["lf_tags"]))
+    return misses
+
+
+# ----------------------------------------------------------------- aggregates
 
 def station_spectra(rows):
     """
@@ -701,6 +820,7 @@ def station_spectra(rows):
         }
     return out
 
+
 def summarize(rows):
     by_station = {}
     for r in rows:
@@ -745,6 +865,7 @@ def summarize(rows):
         })
     return summaries
 
+
 def station_categories(rows):
     axis = genres.all_categories()
     idx = {c: i for i, c in enumerate(axis)}
@@ -766,6 +887,7 @@ def station_categories(rows):
         data[station] = [round(100 * cnt.get(c, 0) / hits, 1) for c in axis]
     return axis, data, totals
 
+
 def compute_dna(rows):
     radar_axis, radar_data, radar_totals = station_categories(rows)
     return {
@@ -775,58 +897,97 @@ def compute_dna(rows):
         "totals": radar_totals,
     }
 
-def load_rows():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    rows = conn.execute("SELECT * FROM plays ORDER BY ts DESC").fetchall()
-    conn.close()
-    return rows
 
-def render_dna(template, play_rows, **extra):
-    the_dna = compute_dna(play_rows)
-    radar_axis, radar_data = the_dna["categories"], the_dna["radar"]
-    radar_totals, spectra = the_dna["totals"], the_dna["spectra"]
+# ------------------------------------------------------------------ rendering
+
+def render_dna(template, dna, **extra):
+    radar_axis, radar_data = dna["categories"], dna["radar"]
+    radar_totals, spectra = dna["totals"], dna["spectra"]
     year_min = min(
         (s["year_lo"] for s in spectra.values() if s["year_lo"] is not None),
         default=1950,
     )
-    return render_template_string(
-        template,
+    return template.render(
         radar_axis=radar_axis, radar_data=radar_data, radar_totals=radar_totals,
         spectra=spectra, year_min=year_min, **extra,
     )
 
+
+def csv_response(header, row_iter, filename):
+    buf = io.StringIO()
+    w = csv.writer(buf)
+    w.writerow(header)
+    w.writerows(row_iter)
+    return Response(
+        buf.getvalue(),
+        mimetype="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={filename}"},
+    )
+
+
+# --------------------------------------------------------------------- routes
+
 @app.route("/dna")
 def dna():
-    rows = load_rows()
+    limit = request.args.get("n", DEFAULT_ROW_LIMIT, type=int)
+    limit = max(1, min(limit, 20000))
+    agg = aggregates()
     return render_dna(
-        PAGE, rows,
-        rows=rows,
-        summaries=summarize(rows),
-        misses=uncategorized(rows),
+        PAGE_T, agg["dna"],
+        rows=load_recent_rows(limit),
+        total_rows=agg["total_rows"],
+        summaries=agg["summaries"],
+        misses=[(t, n) for t, n in agg["misses_all"].most_common() if n > 2],
         pin_station=None,
     )
 
+
 @app.route("/dna/station/<station>")
 def dna_station(station):
-    rows = load_rows()
-    totals = station_categories(rows)[2]
-    if totals.get(station, 0) < 5:
-        return f"", 404
-    resp = app.make_response(render_dna(EMBED, rows, pin_station=station))
+    dna_ = aggregates()["dna"]
+    if dna_["totals"].get(station, 0) < 5:
+        return "", 404
+    resp = app.make_response(render_dna(EMBED_T, dna_, pin_station=station))
     # so it can be iframed / fetched cross-origin from the other page
     resp.headers["Access-Control-Allow-Origin"] = "*"
-    resp.headers["X-Frame-Options"] = "ALLOWALL"
     resp.headers.pop("X-Frame-Options", None)  # or configure CSP frame-ancestors
     return resp
 
+
 @app.route("/dna/data")
 def dna_data():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    rows = conn.execute("SELECT * FROM plays ORDER BY ts DESC").fetchall()
-    conn.close()
-    
-    resp = jsonify(compute_dna(rows))
+    resp = jsonify(aggregates()["dna"])
     resp.headers["Access-Control-Allow-Origin"] = "*"
     return resp
+
+
+@app.route("/dna/tags.csv")
+def dna_tags_csv():
+    """Uncategorized tags + blank category column, ready to be filled in."""
+    min_n = request.args.get("min", 1, type=int)
+    rows = ((tag, n, "") for tag, n in aggregates()["misses_all"].most_common()
+            if n >= min_n)
+    return csv_response(["tag", "count", "category"], rows, "uncategorized-tags.csv")
+
+
+@app.route("/dna/categories.csv")
+def dna_categories_csv():
+    """The existing category vocabulary, so mappings can be checked against it."""
+    return csv_response(["category"], ((c,) for c in genres.all_categories()),
+                        "categories.csv")
+
+
+@app.route("/dna/plays.csv")
+def dna_plays_csv():
+    """Full poll export — not capped, unlike the on-page table."""
+    conn = _conn()
+    try:
+        cur = conn.execute(f"SELECT {TABLE_COLS} FROM plays ORDER BY ts DESC")
+        header = [d[0] for d in cur.description]
+        rows = [tuple(r) for r in cur]
+    finally:
+        conn.close()
+    return csv_response(header, rows, "plays.csv")
+
+
+ensure_indexes()
