@@ -1680,15 +1680,14 @@ class Stream:
                 self.now_playing_artist = None
 
         elif self.name == 'fbi.radio':
-            query = "query GetEpisodes($broadcastStatus: [Episode_broadcastStatus_Input], $limit: Int) {\n  Episodes(limit: $limit, sort: \"-airedAt\", where: {broadcastStatus: {in: $broadcastStatus}}) {\n    docs {\n      title\n      broadcastStatus\n      program { title }\n    }\n  }\n}"
+            query = "query GetEpisodes($broadcastStatus: [Episode_broadcastStatus_Input], $limit: Int) {\n  Episodes(limit: $limit, sort: \"-airedAt\", where: {broadcastStatus: {in: $broadcastStatus}}) {\n    docs {\n      title\n      broadcastStatus\n      program { title }\n      image { sizes { square_800 { url } } }\n    }\n  }\n}"
             payload = {"operationName": "GetEpisodes", "variables": {"broadcastStatus": "on_air", "limit": 1}, "query": query}
             info = requests.post(self.info_link, json=payload, timeout=TIMEOUT).json()
             doc = extract_value(info, ['data', 'Episodes', 'docs', 0])
             if doc:
                 self.now_playing = extract_value(doc, ['title'])
-                logo_id = extract_value(doc, ['image', 'id'])
-                if logo_id:
-                    self.show_logo = 'https://media.fbi.radio/images/' + logo_id
+                self.now_playing_subtitle = extract_value(doc, ['program', 'title'])
+                self.show_logo = extract_value(doc, ['image', 'sizes', 'square_800', 'url'])
                 self.status = 'Live'
             else:
                 self.now_playing = None
