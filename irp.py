@@ -1686,14 +1686,12 @@ class Stream:
             doc = extract_value(info, ['data', 'Episodes', 'docs', 0])
             if doc:
                 self.now_playing = extract_value(doc, ['title'])
-                self.now_playing_subtitle = extract_value(doc, ['program', 'title'])
                 logo_id = extract_value(doc, ['image', 'id'])
                 if logo_id:
                     self.show_logo = 'https://media.fbi.radio/images/' + logo_id
                 self.status = 'Live'
             else:
                 self.now_playing = None
-                self.now_playing_subtitle = None
                 self.status = 'Offline'
                 self.show_logo = None
 
