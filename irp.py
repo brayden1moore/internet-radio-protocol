@@ -1686,7 +1686,6 @@ class Stream:
             doc = extract_value(info, ['data', 'Episodes', 'docs', 0])
             if doc:
                 self.now_playing = extract_value(doc, ['title'])
-                self.now_playing_subtitle = extract_value(doc, ['program', 'title'])
                 self.show_logo = extract_value(doc, ['image', 'sizes', 'square_800', 'url'])
                 self.status = 'Live'
             else:
