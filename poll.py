@@ -12,6 +12,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 
 import genres
+import station_stats
 import backfill_categories
 from artist_tags import ensure_cache, artist_top_tags
 
@@ -49,7 +50,6 @@ CREATE TABLE IF NOT EXISTS plays (
     -- Last.fm popularity
     lf_playcount  INTEGER,
     lf_listeners  INTEGER,
-    lf_tags       TEXT,                     -- comma-joined community tags
     lf_tags       TEXT,                     -- comma-joined community tags
     -- Consolidated categories
     category      TEXT,                     -- primary consolidated category
@@ -248,6 +248,7 @@ def main():
     stats = backfill_categories.recompute(conn)
     if stats["changed"]:
         print(f"  recategorized {stats['changed']} rows to current mapping")
+        station_stats.recompute(conn)
 
     matched = nomatch = skipped = 0
     for key, st in stations.items():
@@ -323,9 +324,12 @@ def main():
         genre = track.get("acr_genres") or (", ".join(lf["tags"][:3]) if lf and lf["tags"] else "?")
         print(f"[log ] {name} ({track['source']}): {track['artist']} - {track['title']}  [{genre}; {pop}]")
 
+    roll = station_stats.recompute(conn)
+    print(f"  rolled up {roll['stations']} stations, "
+          f"{roll['genre_rows']} genre rows, {roll['tags']} unmapped tags")
+
     conn.close()
     print(f"\nDone. {matched} matched, {nomatch} no-match, {skipped} skipped -> {DB_PATH}")
-
 
 if __name__ == "__main__":
     main()

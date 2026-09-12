@@ -1,25 +1,16 @@
-import re
 import io
 import csv
-import json
 import sqlite3
 import threading
-import statistics
 from pathlib import Path
-from functools import lru_cache
-from collections import Counter
-from flask import Flask, render_template_string, jsonify, request, Response
-
+from flask import Flask, jsonify, request, Response
 
 import genres
+import station_stats
 
 DB_PATH = Path("/var/www/internet-radio-protocol/plays.db")
 app = Flask(__name__)
 
-# Columns each consumer actually needs. The aggregates skip ts/source/acr_label/
-# mb_genre entirely, which keeps 100k rows from carrying dead weight.
-AGG_COLS = ("station, artist, title, matched, category, categories, "
-            "acr_genres, lf_tags, acr_release, mb_year, lf_playcount")
 TABLE_COLS = ("ts, station, source, artist, title, acr_label, acr_genres, mb_genre, "
               "lf_tags, acr_release, mb_year, lf_playcount, matched, category, categories")
 
@@ -81,6 +72,17 @@ STYLE = """
   table.plays td.wrap{white-space:normal}
 
   .scroll{max-height:500px;overflow-y:auto;border:1px solid black}
+  .scroll-x{overflow-x:auto}
+
+  /* The stations table is wide (one column per genre), so it scrolls
+     sideways instead of being squeezed to fit. */
+  table.stations{table-layout:auto;width:max-content;min-width:100%}
+  table.stations th,table.stations td{white-space:nowrap}
+  table.stations td.txt{max-width:220px;overflow:hidden;text-overflow:ellipsis}
+  table.stations .g{border-left:1px solid #f0f0f0}
+  table.stations th.g{font-size:10px;letter-spacing:0}
+  table.stations td.z{color:#ddd}
+  table.stations .sep{border-left:1px solid #bbb}
 
   .dna {
     margin-left: 5px;
@@ -88,7 +90,6 @@ STYLE = """
     border: 1px solid black;
     background-color: yellow;
     font-family: "Archivo Light";
-    /* -webkit-text-stroke: 0px !important; */
     color: black;
   }
 
@@ -149,7 +150,6 @@ STYLE = """
     white-space: nowrap;
     border-bottom: 1px solid black;
     height: 86px !important;
-    /* margin: .5rem 0 1rem; */
     display: flex;
     color: black;
     gap: .5rem;
@@ -157,9 +157,8 @@ STYLE = """
     flex-wrap: wrap;
     overflow: scroll;
     padding: 10px;
-    /* width: 100%; */
   }
-    
+
   @media (min-width: 916px)  {
     #chart-div {
         width: fit-content;
@@ -198,14 +197,14 @@ DNA_PANEL = """
         <h2 style="margin-top: 0px;">Most Similar</h2>
         <div id="radar-similar"></div>
 
-        <h2>Era <small>(release year, mean ±1 SD)</small></h2>
+        <h2>Era <small>(release year, median &plusmn;1 SD)</small></h2>
         <div style="max-width:560px;">
-        <canvas id="year-chart" role="img" aria-label="Average release year with spread for the selected station"></canvas>
+        <canvas id="year-chart" role="img" aria-label="Median release year with spread for the selected station"></canvas>
         </div>
 
         <h2 style="border-top:1px solid black;">Obscurity <small>(0 = most played, 100 = most obscure)</small></h2>
         <div style="max-width:560px;">
-        <canvas id="plays-chart" role="img" aria-label="Average last.fm playcount with spread for the selected station"></canvas>
+        <canvas id="plays-chart" role="img" aria-label="Relative obscurity with spread for the selected station"></canvas>
         </div>
     </div>
 </div>
@@ -214,8 +213,6 @@ DNA_PANEL = """
 <script>
 
   var SPECTRA = {{ spectra|tojson }};
-  console.log("SPECTRA");
-  console.log(SPECTRA);
 
   // Minimal horizontal error-bar plugin: draws a whisker from lo->hi with a
   // center mean dot, for a single-point dataset carrying {lo, hi, mean}.
@@ -269,18 +266,19 @@ DNA_PANEL = """
     });
   }
 
-var YEAR_MIN = {{ year_min|tojson }};
-var YEAR_MAX = new Date().getFullYear();
-var yearChart = makeSpectrum("year-chart", {
+  var YEAR_MIN = {{ year_min|tojson }};
+  var YEAR_MAX = {{ year_max|tojson }};
+  var yearChart = makeSpectrum("year-chart", {
     x: {
       type: "linear", min: YEAR_MIN, max: YEAR_MAX,
       ticks: { callback: function(v){ return String(v); } }
     }
-  });  var playsChart = makeSpectrum("plays-chart", {
+  });
+  var playsChart = makeSpectrum("plays-chart", {
     x: { type: "linear", min: 0, max: 100 }
   });
 
- function spectrumWhiskers(station){
+  function spectrumWhiskers(station){
     // returns {year:[...], plays:[...]} base whisker arrays for a station
     var s = SPECTRA[station] || {};
     var year = (s.year_mean != null)
@@ -331,13 +329,6 @@ var yearChart = makeSpectrum("year-chart", {
   var RADAR_TOTALS = {{ radar_totals|tojson }};
   var PIN_STATION = {{ pin_station|tojson }};
 
-  console.log('RADAR DATA');
-  console.log(RADAR_DATA);
-  console.log('RADAR TOTALS');
-  console.log(RADAR_TOTALS);
-  console.log('RADAR AXIS');
-  console.log(RADAR_AXIS);
-
   var OVERLAY_COLORS = ["#00acff", "#ff0000", "#00d186","#FF8F00"];
 
   (function(){
@@ -362,7 +353,7 @@ var yearChart = makeSpectrum("year-chart", {
       return Math.sqrt(s);
     }
 
-    // The 3 eligible stations whose proportion vectors are nearest `station`.
+    // The 4 eligible stations whose proportion vectors are nearest `station`.
     var MAX_DIST = 100 * Math.SQRT2;   // ~141.4, two disjoint proportion vectors
 
     function nearest(station){
@@ -446,13 +437,13 @@ var yearChart = makeSpectrum("year-chart", {
             chart.data.datasets = chart.data.datasets.filter(function(d){
               return !(d.order === 1 && d.label === other);
             });
-            removeSpectrumOverlay(other);        
+            removeSpectrumOverlay(other);
             btn.dataset.on = "0";
             btn.style.background = "#fff";
             btn.style.color = "#000";
           } else {
             chart.data.datasets.push(overlayDataset(other, color));
-            addSpectrumOverlay(other, color);      
+            addSpectrumOverlay(other, color);
             btn.dataset.on = "1";
             btn.style.background = color;
             btn.style.color = "#fff";
@@ -468,7 +459,7 @@ var yearChart = makeSpectrum("year-chart", {
       chart.update();
       setN(station);
       renderSimilar(station);
-      updateSpectra(station);    
+      updateSpectra(station);
     }
 
     sel.addEventListener("change", function(){ selectStation(sel.value); });
@@ -489,8 +480,57 @@ PAGE = STYLE + """
 <h2 style="margin-top:0px;">Station</h2>
 <body style="margin:1.2em";>
 """ + DNA_PANEL + """
+<h2>Stations <small>({{ stations|length }}, genre columns are % of that station's category hits)</small>
+  <a class="dl" href="/dna/stations.csv">CSV &darr;</a>
+</h2>
+<div class="scroll scroll-x">
+<table class="stations sortable">
+  <thead>
+  <tr>
+    <th>station</th>
+    <th class=num data-type=num>polled</th>
+    <th class=num data-type=num>id'd</th>
+    <th class=num data-type=num>id rate</th>
+    <th class="num sep" data-type=num>avg yr</th>
+    <th class=num data-type=num>yr sd</th>
+    <th class="num sep" data-type=num>avg plays</th>
+    <th class=num data-type=num>lf cover</th>
+    <th class=num data-type=num>obscurity</th>
+    <th class=sep>top artist</th>
+    <th>top category</th>
+    <th class=txt>most popular</th>
+    <th class=txt>least popular</th>
+    {% for c in axis %}<th class="num g{{ ' sep' if loop.first else '' }}" data-type=num>{{ c }}</th>{% endfor %}
+  </tr>
+  </thead>
+  <tbody>
+  {% for s in stations %}
+  <tr>
+    <td>{{ s.station }}</td>
+    <td class=num>{{ '{:,}'.format(s.polled) }}</td>
+    <td class=num>{{ '{:,}'.format(s.identified) }}</td>
+    <td class=num>{{ '%.0f'|format(s.id_rate) }}%</td>
+    <td class="num sep">{{ s.avg_year or '—' }}</td>
+    <td class=num>{{ s.year_stdev or '—' }}</td>
+    <td class="num sep">{{ '{:,}'.format(s.avg_playcount) if s.avg_playcount else '—' }}</td>
+    <td class=num>{{ '%.0f'|format(s.coverage_pct) ~ '%' if s.coverage_pct is not none else '—' }}</td>
+    <td class=num>{{ s.obscurity if s.obscurity is not none else '—' }}</td>
+    <td class=sep>{{ s.top_artist or '—' }}{% if s.top_artist_n %} ({{ s.top_artist_n }}){% endif %}</td>
+    <td>{{ s.top_category or '—' }}{% if s.top_category_n %} ({{ s.top_category_n }}){% endif %}</td>
+    <td class=txt>{{ s.most_popular or '—' }}</td>
+    <td class=txt>{{ s.least_popular or '—' }}</td>
+    {% for c in axis %}
+      {% set v = s.genres[c] %}
+      <td class="num g{{ ' sep' if loop.first else '' }}{{ ' z' if not v else '' }}">{{ '%.1f'|format(v) if v else '·' }}</td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+
 <h2>Polls <small>(latest {{ '{:,}'.format(rows|length) }} of {{ '{:,}'.format(total_rows) }})</small>
-  <a class="dl" href="/dna/plays.csv">CSV ↓</a>
+  <a class="dl" href="/dna/plays.csv">CSV &darr;</a>
 </h2>
 <div class="scroll">
 <table class="plays sortable">
@@ -523,38 +563,8 @@ PAGE = STYLE + """
 </table>
 </div>
 
-<h2>Summary <small>({{summaries|length}} stations)</small></h2>
-<div class="scroll">
-<table class="summary sortable">
-  <thead>
-  <tr>
-    <th>station</th><th class=num data-type=num>polled</th><th class=num data-type=num>id'd</th><th class=num data-type=num>id rate</th>
-    <th>top artist</th><th class=num data-type=num>avg yr</th><th class=num data-type=num>yr stdev</th>
-    <th>top category</th><th class=num data-type=num>avg plays</th><th class=txt>most popular</th><th class=txt>least popular</th>
-  </tr>
-  </thead>
-  <tbody>
-  {% for s in summaries %}
-  <tr>
-    <td>{{ s.station }}</td>
-    <td class=num>{{ '{:,}'.format(s.total) }}</td>
-    <td class=num>{{ '{:,}'.format(s.identified) }}</td>
-    <td class=num>{{ '%.0f'|format(s.id_rate) }}%</td>
-    <td class=txt>{{ s.top_artist }}{% if s.top_artist_n %} ({{ s.top_artist_n }}){% endif %}</td>
-    <td class=num>{{ s.avg_year or '—' }}</td>
-    <td class=num>{{ s.year_stdev or '—' }}</td>
-    <td>{{ s.top_category }}{% if s.top_category_n %} ({{ s.top_category_n }}){% endif %}</td>
-    <td class=num>{{ '{:,}'.format(s.avg_plays) if s.avg_plays else '—' }}</td>
-    <td class=txt>{{ s.most_popular }}</td>
-    <td class=txt>{{ s.least_popular }}</td>
-  </tr>
-  {% endfor %}
-  </tbody>
-</table>
-</div>
-
-<h2>Uncategorized tags <small>({{misses|length}} distinct, from unresolved rows only)</small>
-  <a class="dl" href="/dna/tags.csv">CSV ↓</a>
+<h2>Uncategorized tags <small>({{ misses|length }} distinct, from unresolved rows only)</small>
+  <a class="dl" href="/dna/tags.csv">CSV &darr;</a>
 </h2>
 <div class="scroll">
 <table class="summary sortable">
@@ -570,6 +580,7 @@ PAGE = STYLE + """
   {% endfor %}
   </tbody>
 </table>
+</div>
 </body>
 
 <script>
@@ -613,7 +624,7 @@ EMBED = """<!doctype html><meta charset="utf-8"><title>One Radio DNA — {{ pin_
 <head><meta name="viewport" content="width=device-width, initial-scale=1"></head>
 """ + STYLE + DNA_PANEL
 
-# Compile once at import instead of re-parsing the template on every request.
+# Compile once at import instead of re-parsing on every request.
 PAGE_T = app.jinja_env.from_string(PAGE)
 EMBED_T = app.jinja_env.from_string(EMBED)
 
@@ -630,286 +641,59 @@ def ensure_indexes():
     """Cheap no-op after the first run; makes the LIMIT query a range scan."""
     try:
         conn = _conn()
-        conn.execute("CREATE INDEX IF NOT EXISTS idx_plays_ts ON plays(ts DESC)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_plays_ts_desc ON plays(ts DESC)")
         conn.commit()
         conn.close()
     except sqlite3.Error:
         pass  # read-only db or missing table — not fatal
 
 
-def load_agg_rows():
-    """Every row, but only the columns the aggregates read. No ORDER BY."""
-    conn = _conn()
-    try:
-        return conn.execute(f"SELECT {AGG_COLS} FROM plays").fetchall()
-    finally:
-        conn.close()
+def load_recent_rows(conn, limit=DEFAULT_ROW_LIMIT):
+    return conn.execute(
+        f"SELECT {TABLE_COLS} FROM plays ORDER BY ts DESC LIMIT ?", (limit,)
+    ).fetchall()
 
 
-def load_recent_rows(limit=DEFAULT_ROW_LIMIT):
-    conn = _conn()
-    try:
-        return conn.execute(
-            f"SELECT {TABLE_COLS} FROM plays ORDER BY ts DESC LIMIT ?", (limit,)
-        ).fetchall()
-    finally:
-        conn.close()
+def total_rows(conn):
+    return conn.execute("SELECT COUNT(*) FROM plays").fetchone()[0]
 
 
-# ------------------------------------------------------------ aggregate cache
+# ------------------------------------------------------------ rollup cache
+# The rollups are small, but they're read on every request. Cache them against
+# station_stats.version(), which changes only when the poller recomputes.
 
 _cache = {}
 _cache_lock = threading.Lock()
 
 
-def _db_version():
-    """(count, max ts) — changes exactly when new polls land."""
-    conn = _conn()
-    try:
-        return tuple(conn.execute("SELECT COUNT(*), MAX(ts) FROM plays").fetchone())
-    finally:
-        conn.close()
-
-
-def aggregates():
-    ver = _db_version()
+def rollups(conn):
+    ver = station_stats.version(conn)
     with _cache_lock:
         if _cache.get("ver") == ver:
             return _cache["val"]
 
-    rows = load_agg_rows()
     val = {
-        "dna": compute_dna(rows),
-        "summaries": summarize(rows),
-        "misses_all": uncategorized_counts(rows),
-        "total_rows": ver[0] or 0,
+        "dna": station_stats.dna_payload(conn),
+        "stations": station_stats.station_table(conn),
+        "misses": station_stats.uncategorized(conn, min_n=3),
     }
-
     with _cache_lock:
         _cache.update(ver=ver, val=val)
     return val
 
 
-# -------------------------------------------------------------------- parsing
-
-def parse_year(r):
-    if r["acr_release"] and len(r["acr_release"]) >= 4 and r["acr_release"][:4].isdigit():
-        return int(r["acr_release"][:4])
-    if r["mb_year"]:
-        try:
-            return int(str(r["mb_year"])[:4])
-        except (ValueError, TypeError):
-            return None
-    return None
-
-
-def parse_genres(raw):
-    """Split messy genre/tag strings into normalized tokens."""
-    if not raw:
-        return []
-    # split on commas, semicolons, slashes, pipes
-    parts = re.split(r"[,;/|]+", str(raw))
-    out = []
-    for p in parts:
-        g = p.strip().strip("\"'[]{}").lower()
-        g = re.sub(r"\s+", " ", g)
-        if g and g not in ("n/a", "none", "unknown", "null"):
-            out.append(g)
-    return out
-
-
-@lru_cache(maxsize=None)
-def _unresolved(acr_genres, lf_tags):
-    """Distinct (acr_genres, lf_tags) pairs are a tiny fraction of 100k rows."""
-    return tuple(genres.unresolved_tags_for_row(acr_genres, lf_tags))
-
-
-def uncategorized_counts(rows):
-    """Counter of tags from rows that resolved to NO category."""
-    misses = Counter()
-    for r in rows:
-        if not r["matched"] or r["category"]:
-            continue
-        misses.update(_unresolved(r["acr_genres"], r["lf_tags"]))
-    return misses
-
-
-# ----------------------------------------------------------------- aggregates
-
-def station_spectra(rows):
-    """
-    Per-station stats for the era and obscurity spectrums.
-    - Era: linear mean/SD of release year, excluding future years (bad ACR/MB data).
-    - Obscurity: percentile rank of the station's geometric-mean last.fm plays
-      among all stations. 0 = highest avg plays (most popular), 100 = lowest
-      (most obscure). Whisker maps the station's play mean ±1 SD onto the same
-      rank axis, so the spread shows where its range sits relative to all stations.
-    """
-    import math
-    from datetime import datetime, timezone
-    this_year = datetime.now(timezone.utc).year
-
-    by_station = {}
-    for r in rows:
-        by_station.setdefault(r["station"], []).append(r)
-
-    # Pass 1: per-station geometric-mean plays (linear-space year stats too).
-    tmp = {}
-    for station, srows in by_station.items():
-        years = [y for y in (parse_year(r) for r in srows) if y and y <= this_year]
-        plays = [r["lf_playcount"] for r in srows
-                 if r["lf_playcount"] and r["lf_playcount"] > 0]
-
-        year_mean = round(statistics.median(years)) if years else None
-        year_sd = round(statistics.stdev(years), 1) if len(years) > 1 else None
-
-        if plays:
-            logs = [math.log10(p) for p in plays]
-            lm = statistics.mean(logs)
-            lsd = statistics.stdev(logs) if len(logs) > 1 else 0
-            gmean = 10 ** lm
-            g_lo = 10 ** (lm - lsd)
-            g_hi = 10 ** (lm + lsd)
-        else:
-            gmean = g_lo = g_hi = None
-
-        tmp[station] = {
-            "year_mean": year_mean, "year_sd": year_sd,
-            "year_lo": (year_mean - year_sd) if (year_mean and year_sd) else year_mean,
-            "year_hi": this_year,
-            "n_year": len(years),
-            "gmean": gmean, "g_lo": g_lo, "g_hi": g_hi,
-            "n_plays": len(plays),
-        }
-
-    # Pass 2: rank-map geometric means to 0-100 obscurity.
-    ranked = sorted(g["gmean"] for g in tmp.values() if g["gmean"] is not None)
-    n = len(ranked)
-
-    def obscurity(val):
-        """0 = most plays, 100 = fewest, by interpolated percentile rank."""
-        if val is None or n == 0:
-            return None
-        if n == 1:
-            return 50
-        import bisect
-        i = bisect.bisect_left(ranked, val)
-        if i <= 0:
-            frac = 0.0
-        elif i >= n:
-            frac = float(n - 1)
-        else:
-            lo, hi = ranked[i - 1], ranked[i]
-            frac = (i - 1) + ((val - lo) / (hi - lo) if hi > lo else 0)
-        pct = frac / (n - 1)          # 0 = fewest plays, 1 = most
-        return round(100 * (1 - pct))  # invert -> obscurity
-
-    out = {}
-    for station, g in tmp.items():
-        out[station] = {
-            "year_mean": g["year_mean"], "year_sd": g["year_sd"],
-            "year_lo": g["year_lo"], "year_hi": g["year_hi"],
-            "n_year": g["n_year"],
-            # obscurity axis (0-100). whisker endpoints swap: hi plays -> low obscurity.
-            "obsc_mean": obscurity(g["gmean"]),
-            "obsc_lo": obscurity(g["g_hi"]),   # more plays -> lower obscurity number
-            "obsc_hi": obscurity(g["g_lo"]),   # fewer plays -> higher obscurity number
-            "n_plays": g["n_plays"],
-            # keep raw geomean for the label if you want to show actual plays
-            "plays_gmean": round(g["gmean"]) if g["gmean"] else None,
-        }
-    return out
-
-
-def summarize(rows):
-    by_station = {}
-    for r in rows:
-        by_station.setdefault(r["station"], []).append(r)
-
-    summaries = []
-    for station, srows in sorted(by_station.items()):
-        total = len(srows)
-        matched = [r for r in srows if r["matched"]]
-        identified = len(matched)
-
-        artists = Counter(r["artist"] for r in srows if r["artist"])
-        top_artist = artists.most_common(1)
-
-        categories = Counter()
-        for r in srows:
-            raw = r["category"] 
-            categories.update(parse_genres(raw))
-        top_category = categories.most_common(1)
-
-        years = [y for y in (parse_year(r) for r in srows) if y]
-        plays = [(r["lf_playcount"], r) for r in srows if r["lf_playcount"]]
-
-        def track_label(r):
-            a, t = r["artist"] or "?", r["title"] or "?"
-            return f"{a} — {t}"
-
-        summaries.append({
-            "station": station,
-            "total": total,
-            "identified": identified,
-            "id_rate": (identified / total * 100) if total else 0,
-            "top_artist": top_artist[0][0] if top_artist else "—",
-            "top_artist_n": top_artist[0][1] if top_artist else None,
-            "avg_year": round(statistics.mean(years)) if years else None,
-            "year_stdev": round(statistics.stdev(years), 1) if len(years) > 1 else None,
-            "top_category": top_category[0][0] if top_category else "—",
-            "top_category_n": top_category[0][1] if top_category else None,
-            "avg_plays": round(statistics.mean([p for p, _ in plays])) if plays else None,
-            "most_popular": track_label(max(plays, key=lambda x: x[0])[1]) if plays else "—",
-            "least_popular": track_label(min(plays, key=lambda x: x[0])[1]) if plays else "—",
-        })
-    return summaries
-
-
-def station_categories(rows):
-    axis = genres.all_categories()
-    idx = {c: i for i, c in enumerate(axis)}
-    counts = {}
-    totals = {}
-    for r in rows:
-        if not r["matched"] or not r["categories"]:
-            continue
-        cnt = counts.setdefault(r["station"], Counter())
-        totals[r["station"]] = totals.get(r["station"], 0) + 1   
-        for c in r["categories"].split(";"):
-            if c in idx:
-                cnt[c] += 1
-    data = {}
-    for station, cnt in counts.items():
-        hits = sum(cnt.values())
-        if not hits:
-            continue
-        data[station] = [round(100 * cnt.get(c, 0) / hits, 1) for c in axis]
-    return axis, data, totals
-
-
-def compute_dna(rows):
-    radar_axis, radar_data, radar_totals = station_categories(rows)
-    return {
-        "categories": radar_axis,
-        "radar": radar_data,
-        "spectra": station_spectra(rows),
-        "totals": radar_totals,
-    }
-
-
-# ------------------------------------------------------------------ rendering
+# ------------------------------------------------------------------ render
 
 def render_dna(template, dna, **extra):
-    radar_axis, radar_data = dna["categories"], dna["radar"]
-    radar_totals, spectra = dna["totals"], dna["spectra"]
-    year_min = min(
-        (s["year_lo"] for s in spectra.values() if s["year_lo"] is not None),
-        default=1950,
-    )
+    spectra = dna["spectra"]
+    year_min = min((s["year_lo"] for s in spectra.values() if s["year_lo"] is not None),
+                   default=1950)
+    year_max = max((s["year_hi"] for s in spectra.values() if s["year_hi"] is not None),
+                   default=2025)
     return template.render(
-        radar_axis=radar_axis, radar_data=radar_data, radar_totals=radar_totals,
-        spectra=spectra, year_min=year_min, **extra,
+        radar_axis=dna["categories"], radar_data=dna["radar"],
+        radar_totals=dna["totals"], spectra=spectra,
+        year_min=year_min, year_max=year_max, **extra,
     )
 
 
@@ -919,8 +703,7 @@ def csv_response(header, row_iter, filename):
     w.writerow(header)
     w.writerows(row_iter)
     return Response(
-        buf.getvalue(),
-        mimetype="text/csv",
+        buf.getvalue(), mimetype="text/csv",
         headers={"Content-Disposition": f"attachment; filename={filename}"},
     )
 
@@ -929,23 +712,31 @@ def csv_response(header, row_iter, filename):
 
 @app.route("/dna")
 def dna():
-    limit = request.args.get("n", DEFAULT_ROW_LIMIT, type=int)
-    limit = max(1, min(limit, 20000))
-    agg = aggregates()
-    return render_dna(
-        PAGE_T, agg["dna"],
-        rows=load_recent_rows(limit),
-        total_rows=agg["total_rows"],
-        summaries=agg["summaries"],
-        misses=[(t, n) for t, n in agg["misses_all"].most_common() if n > 2],
-        pin_station=None,
-    )
+    limit = max(1, min(request.args.get("n", DEFAULT_ROW_LIMIT, type=int), 20000))
+    conn = _conn()
+    try:
+        r = rollups(conn)
+        return render_dna(
+            PAGE_T, r["dna"],
+            axis=r["dna"]["categories"],
+            stations=r["stations"],
+            misses=r["misses"],
+            rows=load_recent_rows(conn, limit),
+            total_rows=total_rows(conn),
+            pin_station=None,
+        )
+    finally:
+        conn.close()
 
 
 @app.route("/dna/station/<station>")
 def dna_station(station):
-    dna_ = aggregates()["dna"]
-    if dna_["totals"].get(station, 0) < 5:
+    conn = _conn()
+    try:
+        dna_ = rollups(conn)["dna"]
+    finally:
+        conn.close()
+    if dna_["totals"].get(station, 0) < station_stats.MIN_CATEGORIZED:
         return "", 404
     resp = app.make_response(render_dna(EMBED_T, dna_, pin_station=station))
     # so it can be iframed / fetched cross-origin from the other page
@@ -956,23 +747,47 @@ def dna_station(station):
 
 @app.route("/dna/data")
 def dna_data():
-    resp = jsonify(aggregates()["dna"])
+    conn = _conn()
+    try:
+        resp = jsonify(rollups(conn)["dna"])
+    finally:
+        conn.close()
     resp.headers["Access-Control-Allow-Origin"] = "*"
     return resp
 
 
+@app.route("/dna/stations.csv")
+def dna_stations_csv():
+    conn = _conn()
+    try:
+        stations = rollups(conn)["stations"]
+        axis = rollups(conn)["dna"]["categories"]
+    finally:
+        conn.close()
+    if not stations:
+        return csv_response(["station"], [], "stations.csv")
+
+    base = [k for k in stations[0] if k not in ("genres", "computed_at")]
+    header = base + [f"pct_{c}" for c in axis]
+    rows = ([s[k] for k in base] + [s["genres"][c] for c in axis] for s in stations)
+    return csv_response(header, rows, "stations.csv")
+
+
 @app.route("/dna/tags.csv")
 def dna_tags_csv():
-    """Uncategorized tags + blank category column, ready to be filled in."""
+    """Uncategorized tags + a blank category column, ready to be filled in."""
     min_n = request.args.get("min", 1, type=int)
-    rows = ((tag, n, "") for tag, n in aggregates()["misses_all"].most_common()
-            if n >= min_n)
+    conn = _conn()
+    try:
+        rows = [(tag, n, "") for tag, n in station_stats.uncategorized(conn, min_n)]
+    finally:
+        conn.close()
     return csv_response(["tag", "count", "category"], rows, "uncategorized-tags.csv")
 
 
 @app.route("/dna/categories.csv")
 def dna_categories_csv():
-    """The existing category vocabulary, so mappings can be checked against it."""
+    """The existing category vocabulary, to check mappings against."""
     return csv_response(["category"], ((c,) for c in genres.all_categories()),
                         "categories.csv")
 
