@@ -13,6 +13,8 @@
     <meta name="twitter:description" content="The world's best curated internet radio stations for the palate-expanding, non-algorithmic music discovery pleasure of those unafraid to listen through friction.">
     <meta name="twitter:image" content="https://www.one.radio/assets/ogimage.png">
     <link rel="canonical" href="https://www.one.radio">
+
+    <script>try{if(localStorage.getItem('darkMode')==='true')document.documentElement.classList.add('dark');}catch(e){}</script>
     
     <script defer src="https://cloud.umami.is/script.js" data-website-id="8362bf37-0d81-4f25-9ee8-027269410e08"></script>
     <script src="https://cdn.jsdelivr.net/npm/globe.gl"></script>
@@ -116,6 +118,8 @@
                        Support
                         </div>
                     </a>
+
+                    <div id="dark-toggle">Dark</div>
 
                 </div>
         </div>
@@ -306,7 +310,6 @@
     }
     #finder-sentence {
         height: 25px;
-        color:rgb(0, 0, 0);
         line-height: 1.7;
         display: flex;
         text-wrap: nowrap;
@@ -2313,6 +2316,162 @@
                 width: 350px !important;
             }
         }
+
+        #dark-toggle {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0px;
+            width: 45px;
+            background-color: white;
+            color: black;
+            border-left: 1px solid black;
+            cursor: pointer;
+            user-select: none;
+        }
+        #dark-toggle:hover { background: black; color: white; }
+        @media (min-aspect-ratio: 8/10) { #dark-toggle { width: 60px; } }
+        
+        
+        /* ---- tokens ---- */
+        .dark {
+            --line: #2a2a2a;                 /* gray outlines */
+            --panel: #0d0d0d;             /* card / surface */
+            --accent: #ffff00;            /* unchanged brand yellow */
+            --pulse: dark-pulse;          /* reuses your existing keyframes */
+            --player-paused-color: #1c1c1c;
+            background-color: #000;       /* kills white flash on load */
+            color-scheme: dark;
+        }
+        
+        .dark body { background-color: #000; color: #fff; }
+        
+        
+        /* ---- top bar ---- */
+        .dark #top-bar { background: rgba(0,0,0,0.9); border-color: var(--line); color: #fff; }
+        .dark #first-row { border-bottom-color: var(--line); }
+        .dark #logo-container { background: transparent; border-right-color: var(--line); }
+        .dark .row-item:not(:first-child) { border-left-color: var(--line); }
+        .dark #second-row { background-color: #000; }
+        .dark #intro { -webkit-text-stroke-color: #fff; }
+        .dark #oneradio { color: #fff; -webkit-text-stroke: 1px #fff; }
+        
+        
+        .dark #play-random-button { border-right-color: var(--line); }
+        /*
+        .dark #play-random-triangle { fill: #000; stroke: #000; }
+        .dark #play-random-button:hover { background-color: var(--accent); color: #000; }
+        .dark #play-random-button:hover #play-random-triangle { fill: #000; }
+        */
+
+        .dark #get-app-button,
+        .dark #support-button,
+        .dark #dark-toggle { background-color: #000; color: #fff; border-left-color: var(--line); }
+        .dark #get-app-button:hover,
+        .dark #support-button:hover,
+        .dark #dark-toggle:hover { background: #fff !important; color: #000; }
+        
+        
+        /* ---- station cards ---- */
+        .dark .a-station-container { background-color: var(--panel); color: #fff; border-color: var(--line); }
+        .dark .a-station-container:hover { background-color: var(--accent); color: #000; }
+        .dark .a-station-container:hover .favorite-star,
+        .dark .a-station-container:hover .favorite-star-favorited,
+        .dark .a-station-container:hover .custom-remove { color: #000; }
+        .dark .favorite-star { color: #FFFF00; }
+        .dark .logo-and-overlay { border-color: var(--line); }
+        .dark .streams-container { border-color: var(--line); }
+        .dark .category-header { background-color: #000; border-color: var(--line); }
+        
+        /* shows strip */
+        .dark #show-container-container { border-color: var(--line); }
+        .dark .a-show-container { background-color: var(--panel); border-color: var(--line); }
+        
+        
+        /* ---- view selector + icon buttons ---- */
+        .dark #view-selector { border-color: var(--line); }
+        .dark .view-icon:not(:last-child) { border-right-color: #d1d1d1; }
+        .dark #plus-button { border-left-color: #d1d1d1; }
+        .dark #view-selector .view-icon { background-color: transparent; filter: invert(1); }
+        .dark #view-selector .view-icon:hover { background-color: var(--accent); filter: none; }
+        .dark #finder-undo { filter: invert(1); }
+        .dark #modal-x img { filter: invert(1); }
+        
+        .dark #full-view-toggle { background-color: var(--panel); border-color: var(--line); }
+        .dark #full-view-toggle img { filter: invert(1); }
+        .dark #full-view-toggle:hover { filter: none; background-color: var(--accent); }
+        .dark #full-view-toggle:hover img { filter: none; }
+        
+        
+        /* ---- search inputs ---- */
+        .dark #search-stations,
+        .dark #add-station-search { background-color: #1a1a1a; color: #fff; }
+        .dark #search-stations::placeholder,
+        .dark #add-station-search::placeholder { color: #777; }
+        .dark #add-station-search { border-left-color: var(--line); }
+        
+        
+        /* ---- finder ---- */
+        .dark #finder { border-color: var(--line); color: #fff; }
+        .dark .finder-select,
+        .dark #finder-genre-wrap { background-color: #fff !important; color: #000; border-color: var(--line); }
+        .dark #finder-genre-menu { background: var(--panel); border-color: var(--line); }
+        .dark .finder-genre-option { color: #fff; }
+        .dark .finder-genre-option:hover { background-color: #222; color: #fff; }
+        .dark .finder-genre-option.chosen { background-color: #222; color: #888; }
+        .dark .finder-genre-option.chosen:hover { background-color: #2b2b2b; }
+        .dark .finder-pill { background: var(--panel); color: #fff; border-color: var(--line); }
+        .dark .finder-pill:hover { background: var(--accent); color: #000; border-color: #000; }
+        .dark .finder-pill img { border-color: var(--line); }
+        .dark .finder-pill:hover img { border-color: #000; }
+        
+        
+        /* ---- tags ---- */
+        .dark #tag-container-container { background: #000; border-color: var(--line); }
+        .dark .tag { border-color: var(--line); }
+        
+        
+        /* ---- player ---- */
+        .dark #player { border-color: var(--line); }
+        .dark #player-img-div { border-color: var(--line); }
+        .dark #player.player-paused,
+        .dark #share-icon.player-paused { color: #fff; }
+        .dark #player.player-paused #play-icon path,
+        .dark #player.player-paused #pause-icon g { fill: #fff; }
+        
+        
+        /* ---- modal ---- */
+        .dark #modal { background: rgba(12,12,12,0.9); border-color: var(--line); color: #fff; }
+        .dark #modal-logo-and-overlay { border-color: var(--line) !important; }
+        .dark .modal-header { color: #fff; border-bottom-color: var(--line); }
+        .dark .a-link { background-color: #fff; color: #000; border-color: var(--line); }
+        .dark .a-link.support-link { background-color: var(--accent); }
+        .dark .a-link:hover { background-color: var(--accent) !important; color: #000 !important; }
+        .dark .a-link:hover .view-icon,
+        .dark .a-link .view-icon:hover { filter: none; background-color: transparent; }
+        
+        
+        /* ---- globe ---- */
+        .dark #globe-container-container { border-color: var(--line); }
+        .dark #globe-container canvas { filter: invert(1); }   /* landmasses only — the HTML markers sit above the canvas */
+        .dark #globe-station-list-container { background: rgba(0,0,0,0.35); border-right-color: var(--line); }
+        .dark #globe-station-city-name { border-bottom-color: var(--line); }
+        .dark #globe-station-list { border-bottom-color: var(--line); }
+        .dark .globe-list-station:not(:last-child) { border-bottom-color: var(--line); }
+        .dark .globe-list-station:hover { background-color: var(--accent); color: #000; }
+        .dark .globe-list-station-logo { border-right-color: var(--line); }
+        .dark .more-arrow { border-color: var(--line); }
+        .dark .more-arrow:hover { background-color: #fff; color: #000; }
+        .dark .full-view { background-color: #000; }
+        
+        
+        /* ---- footer ---- */
+        .dark a { color: #fff; border-bottom-color: var(--line); }
+        .dark a:hover { background-color: #fff; color: #000; }
+        .dark #scud-logo { filter: invert(1); }
+        
         </style><script>
 
         // Set search placeholder
@@ -3518,89 +3677,37 @@
         const titleText = document.getElementById('title');
         //const mainLogo = document.getElementById('main-logo');
         
-        let dark = localStorage.getItem('darkMode') === 'true';
-
-        function toggleDark(setDark = false) {
+        (function () {
+            const KEY = 'darkMode';
             const root = document.documentElement;
-            
-            if (!dark | setDark) {
-                // make dark mode
-                document.querySelectorAll('.a-station-container').forEach(station => {
-                    station.classList.add('dark-station');
-                });
-                document.querySelectorAll('.stream-name').forEach(station => {
-                    station.classList.add('dark-stream-name');
-                });
-                document.querySelectorAll('.favorite-star').forEach(station => {
-                    station.classList.add('dark-favorite-star');
-                });
-                document.querySelectorAll('.logo-and-overlay').forEach(station => {
-                    station.classList.add('dark-logo-overlay');
-                });
-                document.querySelectorAll('.tag').forEach(station => {
-                    station.classList.add('dark-tag');
-                });
-                document.body.classList.add('dark-background');
-                document.querySelector("#change-sort-icon").classList.add('dark-sort-icon');
-                document.querySelector("#search-bar").classList.add('dark-sort-icon');
-                //title.classList.add('dark-title');
-                //document.querySelector('#top-bar').classList.add('dark-top-bar');
-                //document.querySelector('#second-bar').classList.add('dark-second-bar');
-                //document.querySelector('#play-random-button').classList.add('dark-play');
-                document.querySelector('#text-container').classList.add('dark-text-container');
-                //document.querySelector('#play-random-triangle').classList.add('dark-play');
-                document.querySelector('#scud-logo').classList.add('dark-scud');
-                document.querySelector('#modal').classList.add('dark-modal');
-                document.querySelector('#modal-station-name').classList.add('dark-modal-station-name');
-                document.querySelector('#dark-link').textContent = 'Light';
-                //mainLogo.src = 'assets/earswhite.png';
-                root.style.setProperty('--pulse', 'dark-pulse');
-                
-                dark = true;
+        
+            function setDark(on) {
+                root.classList.toggle('dark', on);
+                const btn = document.getElementById('dark-toggle');
+                if (btn) btn.textContent = on ? 'Light' : 'Dark';
+                try { localStorage.setItem(KEY, on); } catch (e) {}
+            }
+        
+            // exposed so you can call toggleDark() / toggleDark(true) from anywhere
+            window.toggleDark = function (force) {
+                setDark(typeof force === 'boolean' ? force : !root.classList.contains('dark'));
+            };
+        
+            function init() {
+                const btn = document.getElementById('dark-toggle');
+                if (btn && !btn.dataset.wired) {
+                    btn.dataset.wired = '1';
+                    btn.addEventListener('click', function () { window.toggleDark(); });
+                }
+                setDark(localStorage.getItem(KEY) === 'true');
+            }
+        
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
             } else {
-                // make light mode
-                document.querySelectorAll('.a-station-container').forEach(station => {
-                    station.classList.remove('dark-station');
-                });
-                document.querySelectorAll('.stream-name').forEach(station => {
-                    station.classList.remove('dark-stream-name');
-                });
-                document.querySelectorAll('.favorite-star').forEach(station => {
-                    station.classList.remove('dark-favorite-star');
-                });
-                document.querySelectorAll('.logo-and-overlay').forEach(station => {
-                    station.classList.remove('dark-logo-overlay');
-                });
-                document.querySelectorAll('.tag').forEach(station => {
-                    station.classList.remove('dark-tag');
-                });
-                document.body.classList.remove('dark-background');
-                document.querySelector("#change-sort-icon").classList.remove('dark-sort-icon');
-                document.querySelector("#search-bar").classList.remove('dark-sort-icon');
-                title.classList.remove('dark-title');
-                document.querySelector('#top-bar').classList.remove('dark-top-bar');
-                document.querySelector('#second-bar').classList.remove('dark-second-bar');
-                document.querySelector('#play-random-button').classList.remove('dark-play');
-                document.querySelector('#text-container').classList.remove('dark-text-container');
-                document.querySelector('#play-random-triangle').classList.remove('dark-play');
-                document.querySelector('#scud-logo').classList.remove('dark-scud');
-                document.querySelector('#modal').classList.remove('dark-modal');
-                document.querySelector('#modal-station-name').classList.remove('dark-modal-station-name');
-                document.querySelector('#dark-link').textContent = 'Dark';
-                //mainLogo.src = 'assets/ears.png'; 
-                root.style.setProperty('--pulse', 'pulse');
-                
-                dark = false;
+                init();
             }
-            
-            localStorage.setItem('darkMode', dark);
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            if (dark) {
-                toggleDark(true);
-            }
-        });
+        })();
         
         // search 
         const searchInput = document.getElementById('search-stations');
@@ -4333,14 +4440,15 @@
         addStationResults.style.cssText = `
             position: absolute;
             top: 35px;
-            right: -37px;
-            width: 269px;
+            right: -2px;
+            width: 292.5px;
             max-height: 300px;
             overflow-y: auto;
             background: white;
             border: 1px solid black;
             z-index: 10001;
-            display: none;
+            display: block;
+            color: black;
         `;
         document.getElementById('add-station').appendChild(addStationResults);
         document.getElementById('add-station').style.position = 'relative';
