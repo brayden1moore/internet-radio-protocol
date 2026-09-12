@@ -1641,6 +1641,43 @@ class Stream:
                 self.now_playing = extract_value(info, ['tracks','current','metadata','track_title'])
                 self.status = 'Re-Run'
 
+        elif self.name == 'Radio Aparat':
+            headers = {
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Sec-Fetch-Site": "same-origin",
+                "Sec-Fetch-Dest": "document",
+                "Sec-Fetch-Mode": "navigate",
+                "Accept-Language": "en-US,en;q=0.9",
+                "User-Agent": (
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/605.1.15 (KHTML, like Gecko) "
+                    "Version/26.1 Safari/605.1.15"
+                ),
+                "Referer": "https://www.google.com/",
+            }
+
+            cookies = {
+                "_ga": "GA1.1.1232385581.1783920249",
+                "_ga_7JRX7PV391": "GS2.1.s1789191060$o4$g1$t1789191476$j6$l0$h0",
+                "click-here": "clicked",
+            }
+
+            webpage = requests.get(self.main_link, headers=headers, cookies=cookies).text
+            soup = BeautifulSoup(webpage, 'html.parser')
+            now_playing = soup.find_all("span", "now-playing")[0].get_text() # host name
+            if now_playing:
+                self.status = 'Live'
+                now_playing = now_playing[2:]
+                if ' - ' in now_playing:
+                    self.now_playing = now_playing.split(' - ')[1]
+                    self.now_playing_artist = now_playing.split(' - ')[0]
+                else:
+                    self.now_playing = now_playing
+                    self.now_playing_artist = None
+            else:
+                self.status = 'Offline'
+                self.now_playing = None
+                self.now_playing_artist = None
 
         ### MARK: STATION LOGIC END
 
@@ -3352,6 +3389,22 @@ Stream(
         soundcloud_link = 'https://soundcloud.com/retreatradio',
         hidden = False,
         song_basis = False
+),
+Stream(
+        name = 'Radio Aparat',
+        logo = "https://internetradioprotocol.org/logos/aparat.png",
+        location = 'Belgrade',
+        lat = 44.787197,
+        lon =  20.457273,
+        info_link = "https://radioaparat.rs",
+        stream_link = 'https://stream4.rcast.net/72355/',
+        main_link = 'https://radioaparat.rs',
+        about = "radioAPARAT je internet radio stanica nastala novembra 2016. u prostoru galerije Kolektiv u Karađorđevoj ulici u beogradskoj Savamali. Od od januara 2020. emituje program iz Drinčićeve ulice na Dorćolu. Program čine društveno-angažovane, muzičke, kulturno-obrazovne i zabavne emisije koje možete slušati premijerno na https://radioaparat.com ili odloženo ovde.",
+        support_link = 'mailto:radio@radioaparat.com',
+        insta_link = 'https://www.instagram.com/radioaparat/',
+        soundcloud_link = None,
+        hidden = False,
+        song_basis = True
 )
 
 
