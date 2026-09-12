@@ -13,10 +13,10 @@ GENRE_ORDER = [
     'Folk',
     'Country',
     'World',
-    'Reggae / Caribbean',
+    'Reggae',
     'Latin',
     'Jazz',
-    'Soundtrack / Score',
+    'Soundtrack',
     'Classical',
     'Other',
 ]
@@ -171,15 +171,15 @@ GENRE_MAP = {
     "Hip Hop/Rap - French Hip Hop": "Hip-Hop",
     "Hip-hop/Rap": "Hip-Hop",
  
-    # Reggae / Caribbean
-    "Dancehall": "Reggae / Caribbean",
-    "Dancehall/Ragga": "Reggae / Caribbean",
-    "REGGAE/SKA": "Reggae / Caribbean",
-    "Reggae": "Reggae / Caribbean",
-    "Central America/Carribean": "Reggae / Caribbean",
-    "Reggae/Ska": "Reggae / Caribbean",
-    "Bachata": "Reggae / Caribbean",
-    "Reggae: Reggae": "Reggae / Caribbean",
+    # Reggae
+    "Dancehall": "Reggae",
+    "Dancehall/Ragga": "Reggae",
+    "REGGAE/SKA": "Reggae",
+    "Reggae": "Reggae",
+    "Central America/Carribean": "Reggae",
+    "Reggae/Ska": "Reggae",
+    "Bachata": "Reggae",
+    "Reggae: Reggae": "Reggae",
  
     # Latin
     "mpb": "Latin",
@@ -213,15 +213,15 @@ GENRE_MAP = {
     "Classique": "Classical",
     "Classical - Baroque": "Classical",
  
-    # Soundtrack / Score
-    "Film Scores": "Soundtrack / Score",
-    "Films/Games": "Soundtrack / Score",
-    "Score/Romance": "Soundtrack / Score",
-    "Soundtracks": "Soundtrack / Score",
-    "SOUNDTRACKS/CAST ALBUMS": "Soundtrack / Score",
-    "soundtrack": "Soundtrack / Score",
-    "video game music": "Soundtrack / Score",
-    "game": "Soundtrack / Score",
+    # Soundtrack
+    "Film Scores": "Soundtrack",
+    "Films/Games": "Soundtrack",
+    "Score/Romance": "Soundtrack",
+    "Soundtracks": "Soundtrack",
+    "SOUNDTRACKS/CAST ALBUMS": "Soundtrack",
+    "soundtrack": "Soundtrack",
+    "video game music": "Soundtrack",
+    "game": "Soundtrack",
  
     # Folk
     "Folk": "Folk",
@@ -292,10 +292,10 @@ _ALIAS = {
     "dnb": "Drum & Bass",
     "singer-songwriter": "Folk",
     "folk": "Folk",
-    "reggae": "Reggae / Caribbean",
-    "ska": "Reggae / Caribbean",
-    "reggaeton": "Reggae / Caribbean",
-    "dembow": "Reggae / Caribbean",
+    "reggae": "Reggae",
+    "ska": "Reggae",
+    "reggaeton": "Reggae",
+    "dembow": "Reggae",
     "afrobeat": "World",
     "world": "World",
 }
