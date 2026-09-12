@@ -1,6 +1,7 @@
 import io
 import csv
 import sqlite3
+import colorsys
 import threading
 from pathlib import Path
 from flask import Flask, jsonify, request, Response
@@ -79,10 +80,14 @@ STYLE = """
   table.stations{table-layout:auto;width:max-content;min-width:100%}
   table.stations th,table.stations td{white-space:nowrap}
   table.stations td.txt{max-width:220px;overflow:hidden;text-overflow:ellipsis}
-  table.stations .g{border-left:1px solid #f0f0f0}
-  table.stations th.g{font-size:10px;letter-spacing:0}
+  table.stations .g{border-left:1px solid rgba(0,0,0,.05);text-align:center}
+  table.stations th.g{font-size:10px;letter-spacing:0;padding-top:6px}
+  table.stations td.g{border-bottom:1px solid #fff}
   table.stations td.z{color:#ddd}
   table.stations .sep{border-left:1px solid #bbb}
+  /* Row hover must not repaint the shaded cells, or the heat map flickers. */
+  table.stations tr:hover td:not(.g){background:#fafafa}
+  table.stations tr:hover{background:none}
 
   .dna {
     margin-left: 5px;
@@ -500,7 +505,8 @@ PAGE = STYLE + """
     <th>top category</th>
     <th class=txt>most popular</th>
     <th class=txt>least popular</th>
-    {% for c in axis %}<th class="num g{{ ' sep' if loop.first else '' }}" data-type=num>{{ c }}</th>{% endfor %}
+    {% for c in axis %}<th class="num g{{ ' sep' if loop.first else '' }}" data-type=num
+        style="border-top:5px solid {{ genre_hex[c] }}">{{ c }}</th>{% endfor %}
   </tr>
   </thead>
   <tbody>
@@ -521,7 +527,8 @@ PAGE = STYLE + """
     <td class=txt>{{ s.least_popular or '—' }}</td>
     {% for c in axis %}
       {% set v = s.genres[c] %}
-      <td class="num g{{ ' sep' if loop.first else '' }}{{ ' z' if not v else '' }}">{{ '%.1f'|format(v) if v else '·' }}</td>
+      <td class="num g{{ ' sep' if loop.first else '' }}{{ ' z' if not v else '' }}"
+          style="{{ s.cells[c] }}">{{ '%.1f'|format(v) if v else '·' }}</td>
     {% endfor %}
   </tr>
   {% endfor %}
@@ -658,6 +665,89 @@ def total_rows(conn):
     return conn.execute("SELECT COUNT(*) FROM plays").fetchone()[0]
 
 
+# ----------------------------------------------------------- genre colouring
+
+# GENRE_ORDER is already laid out as a spectrum, so walking the hue wheel in the
+# same order means neighbouring genres get neighbouring colours — the palette
+# carries the same adjacency the radar axis does. Stops short of a full wrap so
+# the last category doesn't collide with the first.
+HUE_SPAN = 0.86
+FILL_SATURATION = 0.72
+
+# Raw HSL at a fixed lightness is perceptually lopsided: yellow-green lands
+# around 5x the relative luminance of blue, so an identical share would look
+# far heavier in the House column than in the Jazz one. Hue should carry the
+# category and alpha should carry the magnitude — hue must not also modulate
+# apparent intensity. So each hue's lightness is tuned to hit one target
+# luminance, which also flattens text contrast across the row.
+TARGET_LUMINANCE = 0.42
+
+# Cell shading. Alpha is normalised against the largest share in the table
+# rather than against 100, or everything would be near-invisible: a station
+# spread over 20 genres rarely puts more than 40% anywhere. GAMMA < 1 lifts the
+# middle of the range so small-but-real shares stay legible.
+ALPHA_FLOOR = 0.08
+ALPHA_CEILING = 0.85
+GAMMA = 0.65
+
+
+def _rel_luminance(rgb01):
+    """WCAG relative luminance from 0-1 floats."""
+    def ch(v):
+        return v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4
+    r, g, b = (ch(v) for v in rgb01)
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def _at_luminance(hue, target, sat=FILL_SATURATION):
+    """Bisect HSL lightness until this hue hits the target luminance."""
+    lo, hi = 0.0, 1.0
+    rgb = (0.0, 0.0, 0.0)
+    for _ in range(24):
+        mid = (lo + hi) / 2
+        rgb = colorsys.hls_to_rgb(hue, mid, sat)
+        if _rel_luminance(rgb) < target:
+            lo = mid
+        else:
+            hi = mid
+    return rgb
+
+
+def genre_palette(axis):
+    """category -> (r, g, b), a luminance-flat hue ramp following the axis order."""
+    n = max(len(axis), 1)
+    out = {}
+    for i, c in enumerate(axis):
+        rgb = _at_luminance((i / n) * HUE_SPAN, TARGET_LUMINANCE)
+        out[c] = tuple(round(v * 255) for v in rgb)
+    return out
+
+
+def _hex(rgb):
+    return "#%02x%02x%02x" % rgb
+
+
+def _shade(rgb, pct, gmax):
+    """Inline background for one genre cell, or '' when the share is zero."""
+    if not pct:
+        return ""
+    t = min(pct / gmax, 1.0) ** GAMMA if gmax else 0.0
+    a = ALPHA_FLOOR + (ALPHA_CEILING - ALPHA_FLOOR) * t
+    return f"background:rgba({rgb[0]},{rgb[1]},{rgb[2]},{a:.3f})"
+
+
+def attach_shading(stations, axis):
+    """
+    Precompute each station's genre cell styles. Done once per rollup rather
+    than per render, and kept out of the template so Jinja stays declarative.
+    """
+    palette = genre_palette(axis)
+    gmax = max((v for s in stations for v in s["genres"].values()), default=0.0)
+    for s in stations:
+        s["cells"] = {c: _shade(palette[c], s["genres"][c], gmax) for c in axis}
+    return {c: _hex(palette[c]) for c in axis}, gmax
+
+
 # ------------------------------------------------------------ rollup cache
 # The rollups are small, but they're read on every request. Cache them against
 # station_stats.version(), which changes only when the poller recomputes.
@@ -672,9 +762,14 @@ def rollups(conn):
         if _cache.get("ver") == ver:
             return _cache["val"]
 
+    payload = station_stats.dna_payload(conn)
+    stations = station_stats.station_table(conn)
+    genre_hex, gmax = attach_shading(stations, payload["categories"])
     val = {
-        "dna": station_stats.dna_payload(conn),
-        "stations": station_stats.station_table(conn),
+        "dna": payload,
+        "stations": stations,
+        "genre_hex": genre_hex,
+        "genre_max": gmax,
         "misses": station_stats.uncategorized(conn, min_n=3),
     }
     with _cache_lock:
@@ -720,6 +815,7 @@ def dna():
             PAGE_T, r["dna"],
             axis=r["dna"]["categories"],
             stations=r["stations"],
+            genre_hex=r["genre_hex"],
             misses=r["misses"],
             rows=load_recent_rows(conn, limit),
             total_rows=total_rows(conn),
@@ -767,7 +863,7 @@ def dna_stations_csv():
     if not stations:
         return csv_response(["station"], [], "stations.csv")
 
-    base = [k for k in stations[0] if k not in ("genres", "computed_at")]
+    base = [k for k in stations[0] if k not in ("genres", "cells", "computed_at")]
     header = base + [f"pct_{c}" for c in axis]
     rows = ([s[k] for k in base] + [s["genres"][c] for c in axis] for s in stations)
     return csv_response(header, rows, "stations.csv")
