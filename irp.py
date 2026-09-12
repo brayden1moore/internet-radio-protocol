@@ -1679,6 +1679,19 @@ class Stream:
                 self.now_playing = None
                 self.now_playing_artist = None
 
+        elif self.name == 'fbi.radio':
+            query = "query GetEpisodes($broadcastStatus: [Episode_broadcastStatus_Input], $limit: Int) {\n  Episodes(limit: $limit, sort: \"-airedAt\", where: {broadcastStatus: {in: $broadcastStatus}}) {\n    docs {\n      title\n      broadcastStatus\n      program { title }\n    }\n  }\n}"
+            payload = {"operationName": "GetEpisodes", "variables": {"broadcastStatus": "on_air", "limit": 1}, "query": query}
+            info = requests.post(self.info_link, json=payload, timeout=TIMEOUT).json()
+            doc = extract_value(info, ['data', 'Episodes', 'docs', 0])
+            if doc:
+                self.now_playing = extract_value(doc, ['title'])
+                self.now_playing_subtitle = extract_value(doc, ['program', 'title'])
+                self.status = 'Live'
+            else:
+                self.now_playing = None
+                self.status = 'Offline'
+
         ### MARK: STATION LOGIC END
 
     def set_last_updated(self):
@@ -3145,13 +3158,13 @@ Stream(
         location = 'Sydney',
         lat = -33.8698439,
         lon = 151.2082848,
-        info_link = "https://admin.operator-radio.com/api/sets/livenow",
+        info_link = "https://www.fbi.radio/payload-api/graphql",
         stream_link = 'https://streamer.fbiradio.com/stream',
         main_link = 'https://fbi.radio/',
-        about = "Operator is an online radio station and cultural platform dedicated to enriching the music and cultural landscape of Rotterdam and beyond, with a special focus on alternative sounds and underrepresented stories. We curate both on- and offline events, placing emphasis on talent development, experimentation, and nightlife culture. By putting Rotterdam on the map locally, nationally, and internationally, we showcase our creators to the world.",
-        support_link = 'https://www.paypal.com/paypalme/operatorradio',
-        insta_link = 'https://www.instagram.com/operator.radio/',
-        hidden = True,
+        about = "fbi.radio is an independent, not for profit community radio station. We are an evolving community of local broadcasters and creatives. Every day, our hundreds of dedicated volunteers champion new local music, voices and stories.",
+        support_link = 'https://www.fbi.radio/support',
+        insta_link = 'https://www.instagram.com/fbiradio',
+        hidden = False,
         song_basis= False
 ),
 Stream(
