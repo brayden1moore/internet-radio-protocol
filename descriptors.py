@@ -214,7 +214,7 @@ OBSC_LEAD = {
     "underground": "Leans underground",
     "balanced":    "An even balance of familiar and obscure",
     "familiar":    "Leans familiar",
-    "popular":     "Mostly well-known music",
+    "popular":     "Mostly popular music",
 }
 
 # obsc_track_sd / 28.87, where 1.0 is as varied as the whole track pool. Most
@@ -231,7 +231,7 @@ OBSC_SPREAD = {
     "wide":    ", pulled from across the whole range",
     "mixed":   ", with a fair mix either side",
     "focused": "",
-    "narrow":  ", and rarely straying from it",
+    "narrow":  ", and rarely strays from it",
 }
 
 # A station is genuinely split, rather than merely varied, when BOTH tails are
