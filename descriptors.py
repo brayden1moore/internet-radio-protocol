@@ -135,8 +135,8 @@ ERA_LEAD = {
     "brandnew": "Almost entirely new releases",
     "current":  "Mostly current releases",
     "recent":   "Mostly recent releases",
-    "tens":     "Centred on the 2010s",
-    "aughts":   "Centred on the late 2000s",
+    "tens":     "Centered on the 2010s",
+    "aughts":   "Centered on the late 2000s",
     "older":    "Rooted in older records",
 }
 
