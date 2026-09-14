@@ -6,6 +6,7 @@ from collections import Counter
 from datetime import datetime, timezone
 
 import genres
+import descriptors
 
 
 SCHEMA = """
@@ -54,7 +55,6 @@ CREATE TABLE IF NOT EXISTS station_stats (
     share_middle      REAL,
     share_underground REAL,              -- plays scoring >= 67
     obsc_polarity     REAL,              -- share_popular + share_underground
-    obsc_descriptor   TEXT,              -- NULL below MIN_FOR_SHAPE plays
     top_artist        TEXT,
     top_artist_n      INTEGER,
     top_category      TEXT,
@@ -99,8 +99,13 @@ MIGRATIONS = [
     ("share_middle", "REAL"),
     ("share_underground", "REAL"),
     ("obsc_polarity", "REAL"),
-    ("obsc_descriptor", "TEXT"),
 ]
+
+# Columns that used to be written and are now generated on read. Dropped on
+# migration so nothing downstream picks up a stale sentence: obsc_descriptor was
+# stored by an earlier calibration that put 78 of 100 stations into the same two
+# phrasings, and it stayed in the database long after the wording had moved on.
+RETIRED = ["obsc_descriptor"]
 
 # Imputed playcount for a track last.fm has no entry for. 0 places it just below
 # a track with a single scrobble, which is about right: absent from the database
@@ -123,22 +128,6 @@ UNIFORM_SD = 100 / math.sqrt(12)          # 28.87
 # Tercile cuts on the 0-100 track obscurity axis.
 POPULAR_BELOW = 33.0
 UNDERGROUND_ABOVE = 67.0
-
-# Descriptor thresholds, gathered here so they can be tuned against real
-# stations without touching describe(). Anchored to what a station drawing
-# evenly from the whole pool would post: spread 1.00, middle share 0.34.
-LEAN_UNDERGROUND = 60.0      # obsc_track_mean at or above this leans obscure
-LEAN_POPULAR = 40.0          # at or below this leans familiar
-SPREAD_FOCUSED = 0.70        # below this the station stays in one lane
-SPREAD_WIDE = 0.95           # at or above this it covers the network's range
-# Bimodal needs a hollow middle, not merely a wide one: 0.15 sits well under the
-# 0.34 a uniform station would post, so only a real gap qualifies.
-BIMODAL_MIDDLE_MAX = 0.15
-BIMODAL_POLARITY_MIN = 0.85
-
-# Above this share of imputed NULLs the distribution is describing last.fm's
-# coverage rather than the station's programming.
-IMPUTED_WARN = 0.30
 
 # Distinct (artist, title) pairs define the obscurity axis, so a track on heavy
 # rotation counts once and cannot drag the scale toward itself. Set False to
@@ -267,82 +256,6 @@ def _track_shape(values, n_imputed=0):
     }
 
 
-def describe(s):
-    """
-    One plain sentence for the station panel, or None if the sample is too small
-    to say anything. Reads the mean for the lean and the spread for the variety,
-    with polarity promoted over both when a station is genuinely split: a station
-    that alternates chart-pop and unknowns has a middling mean it never actually
-    visits, so "balanced" would be the wrong word for it.
-
-    Accepts either a _track_shape() dict or a sqlite3.Row from station_stats.
-    """
-    if s is None:
-        return None
-    get = s.get if hasattr(s, "get") else (lambda k, d=None: s[k])
-
-    n = get("n_scored") or get("identified") or 0
-    mean, spread = get("obsc_track_mean"), get("obsc_spread")
-    if n < MIN_FOR_SHAPE or mean is None or spread is None:
-        return None
-
-    if (get("obsc_polarity") >= BIMODAL_POLARITY_MIN
-            and get("share_middle") <= BIMODAL_MIDDLE_MAX
-            and spread >= SPREAD_WIDE):
-        if mean >= LEAN_UNDERGROUND:
-            return "Swings between familiar tracks and deep cuts, mostly the deep end"
-        if mean <= LEAN_POPULAR:
-            return "Swings between familiar tracks and deep cuts, mostly the familiar end"
-        return "Swings between chart-familiar and deep cuts, with little in between"
-
-    if mean >= LEAN_UNDERGROUND:
-        lean = "underground"
-    elif mean <= LEAN_POPULAR:
-        lean = "popular"
-    else:
-        lean = "balanced"
-
-    if spread < SPREAD_FOCUSED:
-        variety = "focused"
-    elif spread < SPREAD_WIDE:
-        variety = "mixed"
-    else:
-        variety = "wide"
-
-    return {
-        ("underground", "focused"): "Heavy slant toward underground music",
-        ("underground", "mixed"):   "Mostly underground, with some familiar names",
-        ("underground", "wide"):    "Mix of underground and popular music with a lean toward underground",
-        ("balanced", "focused"):    "Sticks to music that is neither obscure nor chart-familiar",
-        ("balanced", "mixed"):      "Broad mix of popular and underground music",
-        ("balanced", "wide"):       "Equal balance of popular and underground music",
-        ("popular", "focused"):     "Heavy slant toward well-known music",
-        ("popular", "mixed"):       "Mostly well-known, with some deeper cuts",
-        ("popular", "wide"):        "Mix of underground and popular music with a lean toward popular",
-    }[(lean, variety)]
-
-
-def caveat(s):
-    """
-    Flag when the shape is an artefact of last.fm coverage rather than
-    programming. Imputed tracks all pile onto 100, so a station with many of them
-    looks deep and looks split whether or not it is: a pure chart-pop station
-    with half its lookups failing is numerically indistinguishable from a
-    genuinely bimodal one.
-    """
-    if s is None:
-        return None
-    get = s.get if hasattr(s, "get") else (lambda k, d=None: s[k])
-    identified = get("identified") or get("n_scored") or 0
-    missing = get("n_missing") or get("n_imputed") or 0
-    if not identified:
-        return None
-    share = missing / identified
-    if share >= IMPUTED_WARN:
-        return (f"{share:.0%} of plays had no last.fm entry and were counted as "
-                f"maximally obscure")
-    return None
-
 
 # ---------------------------------------------------------------------------
 # Gather
@@ -433,7 +346,7 @@ def _gather(conn):
 
 
 def _migrate(conn):
-    """Add the distribution columns to a station_stats that predates them."""
+    """Bring an existing station_stats up to the current column set."""
     have = {r[1] for r in conn.execute("PRAGMA table_info(station_stats)")}
     if not have:
         return
@@ -442,6 +355,13 @@ def _migrate(conn):
             if name not in have:
                 conn.execute(
                     f"ALTER TABLE station_stats ADD COLUMN {name} {kind}")
+        for name in RETIRED:
+            if name in have:
+                try:
+                    conn.execute(
+                        f"ALTER TABLE station_stats DROP COLUMN {name}")
+                except Exception:
+                    pass          # SQLite < 3.35; a stale column is harmless
 
 
 def recompute(conn, this_year=None, min_tag_count=1):
@@ -521,7 +441,6 @@ def recompute(conn, this_year=None, min_tag_count=1):
         for col in ("obsc_spread", "obsc_qskew", "share_popular",
                     "share_middle", "share_underground", "obsc_polarity"):
             stats[station][col] = round(shape[col], 3) if shape else None
-        stats[station]["obsc_descriptor"] = describe(shape) if shape else None
 
     # Pass 2: cross-station percentile ranks. Only stations with enough
     # identified plays define the scale, so one station with three logs can't
@@ -554,7 +473,7 @@ def recompute(conn, this_year=None, min_tag_count=1):
         "obscurity_known", "obsc_track_mean", "obsc_track_sd", "obsc_spread",
         "obscurity_lo", "obscurity_hi", "obsc_p10", "obsc_p50", "obsc_p90",
         "obsc_qskew", "share_popular", "share_middle", "share_underground",
-        "obsc_polarity", "obsc_descriptor", "top_artist", "top_artist_n",
+        "obsc_polarity", "top_artist", "top_artist_n",
         "top_category", "top_category_n", "most_popular", "least_popular",
     )
 
@@ -589,13 +508,20 @@ def recompute(conn, this_year=None, min_tag_count=1):
 # Read helpers. All of these hit only the rollup tables.
 # ---------------------------------------------------------------------------
 
-def _genre_pct(conn):
-    pct = {}
-    for station, category, p in conn.execute(
-        "SELECT station, category, pct FROM station_genres"
+def _genre_pct(conn, with_counts=False):
+    """
+    {station: {category: pct}}, or {station: [(category, pct, n)]} when
+    with_counts -- the descriptor needs n to gate on sample size.
+    """
+    out = {}
+    for station, category, p, n in conn.execute(
+        "SELECT station, category, pct, n FROM station_genres"
     ):
-        pct.setdefault(station, {})[category] = p
-    return pct
+        if with_counts:
+            out.setdefault(station, []).append((category, p, n))
+        else:
+            out.setdefault(station, {})[category] = p
+    return out
 
 
 def dna_payload(conn):
@@ -605,9 +531,14 @@ def dna_payload(conn):
     obsc_mean stays the station-against-stations rank the scrubber already
     plots, so nothing moves. The obsc_* shape fields are the track-against-
     tracks scale: draw whiskers around obsc_track_mean, not around obsc_mean.
+
+    The three prose fields are generated here rather than stored, so editing a
+    phrase in descriptors.py takes effect on the next request instead of on the
+    next recompute.
     """
     axis = genres.all_categories()
     pct = _genre_pct(conn)
+    gsent = _genre_pct(conn, with_counts=True)
 
     radar, totals, spectra = {}, {}, {}
     for row in conn.execute(
@@ -615,16 +546,23 @@ def dna_payload(conn):
         "       n_year, obscurity, n_known, n_missing, identified,"
         "       obsc_track_mean, obsc_track_sd, obsc_spread, obscurity_lo,"
         "       obscurity_hi, obsc_p10, obsc_p50, obsc_p90, obsc_qskew,"
-        "       share_popular, share_middle, share_underground, obsc_polarity,"
-        "       obsc_descriptor"
+        "       share_popular, share_middle, share_underground, obsc_polarity"
         "  FROM station_stats"
     ):
         (station, categorized, median_year, year_sd, year_lo, year_hi,
          n_year, obsc, n_known, n_missing, identified,
          t_mean, t_sd, spread, p25, p75, p10, p50, p90, qskew,
-         s_pop, s_mid, s_und, polarity, descriptor) = row
+         s_pop, s_mid, s_und, polarity) = row
         if not categorized:
             continue
+        prose = descriptors.describe_station(
+            {"median_year": median_year, "year_stdev": year_sd,
+             "n_year": n_year, "year_lo": year_lo,
+             "obsc_track_mean": t_mean, "obsc_spread": spread,
+             "share_popular": s_pop, "share_middle": s_mid,
+             "share_underground": s_und, "identified": identified,
+             "n_missing": n_missing},
+            gsent.get(station))
         got = pct.get(station, {})
         radar[station] = [got.get(c, 0.0) for c in axis]
         totals[station] = categorized
@@ -641,9 +579,11 @@ def dna_payload(conn):
             "obsc_qskew": qskew,
             "share_popular": s_pop, "share_middle": s_mid,
             "share_underground": s_und, "obsc_polarity": polarity,
-            "descriptor": descriptor,
-            "coverage_warning": caveat(
-                {"identified": identified, "n_missing": n_missing}),
+            # prose
+            "genre_descriptor": prose["genres"],
+            "era_descriptor": prose["era"],
+            "obsc_descriptor": prose["obscurity"],
+            "coverage_warning": prose["warning"],
         }
     return {"categories": axis, "radar": radar,
             "totals": totals, "spectra": spectra}
@@ -656,6 +596,7 @@ def station_table(conn, min_categorized=MIN_CATEGORIZED):
     """
     axis = genres.all_categories()
     pct = _genre_pct(conn)
+    gsent = _genre_pct(conn, with_counts=True)
 
     out = []
     for row in conn.execute(
@@ -667,7 +608,11 @@ def station_table(conn, min_categorized=MIN_CATEGORIZED):
         d = dict(row)
         got = pct.get(d["station"], {})
         d["genres"] = {c: got.get(c, 0.0) for c in axis}
-        d["coverage_warning"] = caveat(d)
+        prose = descriptors.describe_station(d, gsent.get(d["station"]))
+        d["genre_descriptor"] = prose["genres"]
+        d["era_descriptor"] = prose["era"]
+        d["obsc_descriptor"] = prose["obscurity"]
+        d["coverage_warning"] = prose["warning"]
         out.append(d)
     return out
 
@@ -705,7 +650,7 @@ def obscurity_leaders(conn, kind="underground", limit=10):
         "split": "obsc_polarity DESC, share_middle ASC",
     }[kind]
     return conn.execute(
-        "SELECT station, obsc_track_mean, obsc_spread, obsc_descriptor"
+        "SELECT station, obsc_track_mean, obsc_spread"
         "  FROM station_stats"
         " WHERE identified >= ? AND obsc_track_mean IS NOT NULL"
         f" ORDER BY {order} LIMIT ?",
