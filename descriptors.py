@@ -230,7 +230,7 @@ OBSC_SPREAD_BANDS = (
 OBSC_SPREAD = {
     "wide":    ", pulled from across the whole range",
     "mixed":   ", with a fair mix either side",
-    "focused": ", and mostly staying in that lane",
+    "focused": "",
     "narrow":  ", and rarely straying from it",
 }
 
