@@ -44,8 +44,8 @@ GENRE_LEAD = {
     "lean":       "Strong focus on {}",
     "slight":     "Focus on {}",
     "mixed":      "Variety, but leans toward {}",
-    "trace":      "Wide variety, slight lean toward {}",
-    "negligible": "Wide variety across genres",
+    "trace":      "Wide genre variety, slight lean toward {}",
+    "negligible": "Wide genre variety",
 }
 
 GENRE_CO_LEAD = dict(GENRE_LEAD, slight="A balance of {}", lean="A balance of {}")
@@ -229,7 +229,7 @@ OBSC_SPREAD_BANDS = (
 
 OBSC_SPREAD = {
     "wide":    ", pulled from across the whole range",
-    "mixed":   ", with a fair mix from either side",
+    "mixed":   ", with a mix from either side",
     "focused": "",
     "narrow":  ", and rarely strays from it",
 }
