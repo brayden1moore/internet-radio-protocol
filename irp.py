@@ -1799,12 +1799,12 @@ class Stream:
         tmp = {}
         logo = Image.open(logo_file).convert('RGB')
 
-        for i in [96, 60, 25, 176, 216]:
+        for i in [96, 60, 25, 176, 216, 320]:
             tmp[f'logo_{i}'] = logo.resize((i, i)).convert('RGB')
 
         # write PNG for the Pi 
         safe = self.name.replace(' ', '_')
-        for i in ['96', '60', '25', '176', '216']:
+        for i in ['96', '60', '25', '176', '216','320']:
             buf = io.BytesIO()
             tmp[f'logo_{i}'].save(buf, format='PNG', optimize=True)
             data = buf.getvalue()
