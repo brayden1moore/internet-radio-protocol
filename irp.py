@@ -858,6 +858,7 @@ class Stream:
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
 
             self.status = "Offline"
+            self.show_logo = None
             try:
                 self.now_playing = info['now_playing']
                 if info['source'] == 'live':
@@ -866,6 +867,8 @@ class Stream:
                 else: 
                     self.stream_link = 'https://monotonicradio.com/stream'
                     self.status = "Re-Run"
+                    if info['thumbnail']:
+                        self.show_logo = 'https://monotonicradio.com/' + info['thumbnail']
             except:
                 pass
             self.now_playing_description = info.get('video_description')
