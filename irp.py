@@ -1871,7 +1871,8 @@ Stream(
         main_link = "https://www.worldwidefm.net",
         about = "Worldwide FM curates and champions underground music, stories and culture from around the world. We showcase diverse and emerging talent. We build connections between artists, listeners and music communities. Our mission is to support and encourage the development of music cultures that originate from local, independent and community-driven moments around the world. Our radio programming, content production and special projects explore and connect the evolving diversity of global creativity across music. Founded in 2016 by internationally renowned DJ and broadcaster Gilles Peterson, we’re an independent community of music lovers, creators and organisers in nearly every corner of the world.",
         support_link = "https://www.worldwidefm.net/membership",
-        insta_link = "https://www.instagram.com/worldwide.fm"
+        insta_link = "https://www.instagram.com/worldwide.fm",
+        bmo_desc='Jazz and soul heavy London-based station with an ear for global music. '
 ),
 Stream(
         name = "Soho Radio",
@@ -2185,7 +2186,8 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
-        song_basis = True
+        song_basis = True,
+        bmo_desc='In and of the internet, KWSX is like a nonstop playlist made for you by an online friend with impeccable taste.'
 ),
 Stream(
         name = "Kiosk Radio",
@@ -2200,7 +2202,8 @@ Stream(
         support_link = "https://shop.kioskradio.com",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        bmo_desc='Broadcasting from a wood shack in a Brussels park, Kiosk DJs play electronic music to make you move.'
 ),
 Stream(
         name = "Kool FM",
@@ -2790,7 +2793,8 @@ Stream(
         support_link = "https://radiorelativa.eu/support",
         insta_link = "https://www.instagram.com/relativaradio/",
         bandcamp_link = "",
-        soundcloud_link = "https://soundcloud.com/radio-relativa"
+        soundcloud_link = "https://soundcloud.com/radio-relativa",
+        bmo_desc='A Madrid-based station that pulls from the depths to uncover hidden gems wherever it goes, from ambient to electro pop.'
 ),
 Stream(
         name = "Radio Vilnius",
@@ -3398,7 +3402,8 @@ Stream(
         insta_link = 'https://www.instagram.com/rytmabad.radio/',
         soundcloud_link = None,
         hidden = False,
-        song_basis = False
+        song_basis = False,
+        bmo_desc="Non-stop dance bangers from Uzbekistan’s capital city."
 ),
 Stream(
         name = 'Blue Moon Radio',
