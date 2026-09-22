@@ -136,7 +136,7 @@ class Stream:
     from each station and convert it into a dict to be served at /info.
     '''
 
-    def __init__(self, from_dict=None, lat=None, lon=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, status=None, show_logo=None, now_playing=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False, genres=None, tuner_only=False, category=None, song_basis=False, cri_id=None):
+    def __init__(self, from_dict=None, lat=None, bmo_desc=None, lon=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, status=None, show_logo=None, now_playing=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False, genres=None, tuner_only=False, category=None, song_basis=False, cri_id=None):
         # station info 
         self.name = name
         self.cri_id = cri_id or cri.get(name)
@@ -157,6 +157,7 @@ class Stream:
         self.song_basis = song_basis
         self.lat = lat
         self.lon = lon
+        self.bmo_desc = bmo_desc
 
         # show info
         self.status = status
@@ -202,6 +203,7 @@ class Stream:
             self.cri_id = from_dict.get('criId')
             self.lat = from_dict.get('lat')
             self.lon = from_dict.get('lon')
+            self.bmo_desc = from_dict.get('bmo_desc')
 
     def to_dict(self):
 
@@ -219,6 +221,7 @@ class Stream:
             "criId":self.cri_id,
             "lat":self.lat,
             "lon":self.lon,
+            "bmoDesc":self.bmo_desc,
 
             "infoLink": self.info_link,
             "streamLink": self.stream_link,
@@ -1906,7 +1909,8 @@ Stream(
         support_link = "mailto:info@chimurenga.co.za",
         insta_link = "https://www.instagram.com/chimurenga_sa/?hl=en",
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        bmo_desc = "Fascinating African music and poetry selections from boundary-pushing arts platform Chimurenga."
 ),
 Stream(
         name = "BFF.fm",
@@ -1922,7 +1926,8 @@ Stream(
         insta_link = "https://www.instagram.com/bffdotfm",
         bandcamp_link = None,
         soundcloud_link = None,
-        song_basis = True
+        song_basis = True,
+        bmo_desc = "Fun mix of underground and classic alt and pop music selected by a range of Bay Area DJs."
 ),
 Stream(
         name = "Bloop Radio",
@@ -1954,7 +1959,8 @@ Stream(
         insta_link = "https://instagram.com/ckutmusic/",
         bandcamp_link = None,
         soundcloud_link = "https://soundcloud.com/radiockut",
-        category='Student'
+        category='Student',
+        bmo_desc = "McGill's campus radio is one of North America's best. Solid, long running indie rock and reggae shows, and well curated throughout." 
 ),
 Stream(
         name = "Clyde Built Radio",
@@ -2015,7 +2021,8 @@ Stream(
         support_link = "https://www.dublab.com/support/memberships",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        bmo_desc = "The best of the west. Thoughtfully curated selections around the genre spectrum, from deep soul cuts to the frontier of electronic experimentation." 
 ),
 Stream(
         name = "Fault Radio",
