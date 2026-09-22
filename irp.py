@@ -2205,7 +2205,7 @@ Stream(
         lat = 45.763420,
         lon = 4.834277,
         info_link = "https://api.lyl.live/graphql",
-        stream_link = "https://radio.lyl.live/hls/live.m3u8",
+        stream_link = "https://radio.lyl.live/hls/aac_hifi.m3u8",
         main_link = "https://lyl.live",
         about = "Broadcasting live from Unité Centrale in Lyon, La Tour Orion in Paris, Brasserie Atlas in Brussels and Les Ateliers de la Ville in Marseille.",
         support_link = "https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=C37FVDHHSZCA6",
