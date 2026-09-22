@@ -2226,7 +2226,8 @@ Stream(
         support_link = "https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=7QPWGHQ5QLXWC&source=url&ssrt=1752175580020",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        bmo_desc = "Oakland's best DJs playing a broad range of pop, dance, alt, and electronic music for a long-running local institution."
 ),
 Stream(
         name = "Monotonic Radio",
@@ -2271,7 +2272,8 @@ Stream(
         support_link = "https://www.nts.live/supporters",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        bmo_desc = "The standard for internet radio. Top-tier, genre-agnostic curation that balances experimentation with deep appreciation for the timeless."
 ),
 Stream(
         name = "NTS 2",
@@ -2286,7 +2288,8 @@ Stream(
         support_link = "https://www.nts.live/supporters",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        bmo_desc = "The standard for internet radio. Top-tier, genre-agnostic curation that balances experimentation with deep appreciation for the timeless."
 ),
 Stream(
         name = "Noods Radio",
@@ -2362,7 +2365,8 @@ Stream(
         support_link = "https://www.paypal.com/GB/fundraiser/charity/4920746",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        bmo_desc = "High quality Palestine-based radio with a focus on global sounds."
 ),
 Stream(
         name = "Radio Banda Larga",
@@ -2454,7 +2458,8 @@ Stream(
         insta_link = 'https://www.instagram.com/radiosygma/',
         bandcamp_link = 'https://radiosygma.bandcamp.com/',
         soundcloud_link = 'https://soundcloud.com/radiosygma',
-        genres = ['Experimental']
+        genres = ['Experimental'],
+        bmo_desc = "A favorite for ambient music. You are guaranteed to hear something you've never even dreamed of. A wealth of inspiration."
 ),
 Stream(
         name = "Rinse FR",
@@ -2484,7 +2489,8 @@ Stream(
         support_link = "https://www.rinse.fm/shop/",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        bmo_desc = "A pirate radio OG highlighting cuts bubbling up from London's dance music innovators."
 ),
 Stream(
         name = "SF 10-33",
@@ -2515,7 +2521,8 @@ Stream(
         support_link = "https://www.rinse.fm/shop/",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        bmo_desc = "Solid, egoless dance music from Bristol's underground."
 ),
 Stream(
         name = "Shared Frequencies",
@@ -2670,7 +2677,8 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
-        category='Student'
+        category='Student',
+        bmo_desc = "The best in college radio, NYU's campus station has consistently been at the forefront of new and underground music."
 ),
 Stream(
         name = "We Are Various",
@@ -2793,7 +2801,8 @@ Stream(
         support_link = "https://t.me/rukhlive",
         insta_link = "https://www.instagram.com/rukh.live/",
         bandcamp_link = "",
-        soundcloud_link = "https://www.soundcloud.com/rukh-radio"
+        soundcloud_link = "https://www.soundcloud.com/rukh-radio",
+        bmo_desc = "If you aren't from Ukraine, you've likely never heard Rukh's rare alt rock selections, and you'll be thankful once you do."
 )
 ,
 Stream(
@@ -2957,7 +2966,8 @@ Stream(
         about = 'A platform founded in 2016. Experimental community radio constantly in the making. Broadcasting on 107.1FM in Seyðisfjörður and online. Seyðisfjörður is a small town on Iceland’s east coast. Our radio-room is in Herðubreið Community Center. Holding our antenna up high on the roof. Connecting local residents with remote residents with anyone who tunes in. Sharing sounds of thoughts with sounds of music. Confusing radio with magic with worldbuilding with belonging. Weaving the act of listening with the act of radio-making into the act of community. An open-ended network of people and places. Glowing from transience, togetherness and a sentiment of significance. The haptic experience of keeping in touch. Through radio. Forever.',
         support_link = 'https://www.lungaschool.is/en/collaborators',
         insta_link = 'https://www.instagram.com/seydisfjordur.community.radio/',
-        song_basis = True
+        song_basis = True,
+        bmo_desc = "Beautiful, mind-expanding, and deeply rare selections from Iceland's eastern tip."
 ),
 Stream(
         name = 'Lahmacun',
@@ -3070,7 +3080,8 @@ Stream(
         support_link = 'https://www.zabrijradio.org/contact',
         insta_link = 'https://www.instagram.com/zabrijradio/',
         genres = ['Balkan'],
-        song_basis = True
+        song_basis = True,
+        bmo_desc = "A goldmine of Balkan pop and rock from Croatia's capital city."
 ),
 Stream(
         name = 'Zone Est Radio',
@@ -3192,7 +3203,8 @@ Stream(
         support_link = 'mailto:mouthfull.space@gmail.com',
         insta_link = 'https://www.instagram.com/__mouthfull__',
         hidden = False,
-        song_basis = True
+        song_basis = True,
+        bmo_desc = "New Zealand's capital city radio provides a good bet for music that's easy on the ears. A blend of well-loved cuts from a range of genres."
 ),
 Stream(
         name = 'UHDW',
@@ -3223,7 +3235,8 @@ Stream(
         insta_link = 'https://www.instagram.com/duuuradio',
         bandcamp_link = 'https://duuueditions.bandcamp.com',
         hidden = False,
-        song_basis = True
+        song_basis = True,
+        bmo_desc = "Vocal experimentations often in the French language. Come to Duuu with an open mind and leave having heard something unique to this one of a kind station."
 ),
 Stream(
         name = 'Ola Radio',
