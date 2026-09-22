@@ -44,7 +44,7 @@ GENRE_LEAD = {
     "lean":       "Strong focus on {}",
     "slight":     "Focus on {}",
     "mixed":      "Variety, but leans toward {}",
-    "trace":      "Wide genre variety, slight lean toward {}",
+    "trace":      "Wide genre variety, with a slight lean toward {}",
     "negligible": "Wide genre variety",
 }
 
@@ -156,8 +156,8 @@ ERA_SPAN = {
     "sprawling": ", but drawing on records from {decade} onward",
     "wide":      ", but reaching back into {decade}",
     "broad":     ", with a fair reach back",
-    "narrow":    ", and staying close to that",
-    "tight":     ", and almost nothing outside that",
+    "narrow":    "",
+    "tight":     ", rarely straying",
 }
 
 # Below this many dated tracks the span is noise.
