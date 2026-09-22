@@ -542,14 +542,14 @@ def dna_payload(conn):
 
     radar, totals, spectra = {}, {}, {}
     for row in conn.execute(
-        "SELECT station, categorized, median_year, year_stdev, year_lo, year_hi,"
+        "SELECT station, categorized, median_year, avg_year, year_stdev, year_lo, year_hi,"
         "       n_year, obscurity, n_known, n_missing, identified,"
         "       obsc_track_mean, obsc_track_sd, obsc_spread, obscurity_lo,"
         "       obscurity_hi, obsc_p10, obsc_p50, obsc_p90, obsc_qskew,"
         "       share_popular, share_middle, share_underground, obsc_polarity"
         "  FROM station_stats"
     ):
-        (station, categorized, median_year, year_sd, year_lo, year_hi,
+        (station, categorized, median_year, avg_year, year_sd, year_lo, year_hi,
          n_year, obsc, n_known, n_missing, identified,
          t_mean, t_sd, spread, p25, p75, p10, p50, p90, qskew,
          s_pop, s_mid, s_und, polarity) = row
@@ -567,7 +567,7 @@ def dna_payload(conn):
         radar[station] = [got.get(c, 0.0) for c in axis]
         totals[station] = categorized
         spectra[station] = {
-            "year_mean": median_year, "year_sd": year_sd,
+            "year_mean": avg_year, "year_sd": year_sd,
             "year_lo": year_lo, "year_hi": year_hi, "n_year": n_year,
             "obsc_mean": obsc,
             "n_plays": n_known, "n_missing": n_missing,
