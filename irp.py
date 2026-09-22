@@ -1927,7 +1927,7 @@ Stream(
         bandcamp_link = None,
         soundcloud_link = None,
         song_basis = True,
-        bmo_desc = "Fun mix of underground and classic alt and pop music selected by a range of Bay Area DJs."
+        bmo_desc = "A fun mix of underground and classic alternative music selected by a range of Bay Area DJs."
 ),
 Stream(
         name = "Bloop Radio",
@@ -1960,7 +1960,7 @@ Stream(
         bandcamp_link = None,
         soundcloud_link = "https://soundcloud.com/radiockut",
         category='Student',
-        bmo_desc = "McGill's campus radio is one of North America's best. Solid, long running indie rock and reggae shows, and well curated throughout." 
+        bmo_desc = "McGill's campus radio is one of North America's best. Solid, long running indie rock and reggae shows, and well curated music throughout." 
 ),
 Stream(
         name = "Clyde Built Radio",
@@ -2195,7 +2195,8 @@ Stream(
         support_link = "https://www.rinse.fm/shop/",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        bmo_desc = "Non-stop jungle and dnb with raucous hosts who have no fear of the mic. It's what pirate radio was meant to be."
 ),
 Stream(
         name = "LYL Radio",
