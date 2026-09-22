@@ -727,8 +727,28 @@ class Stream:
 
         elif self.name == 'LYL Radio':
             try:
-                info = requests.post(self.info_link,data={"variables":{},"query":"{\n  onair {\n    title\n    hls\n    __typename\n  }\n}\n"}, timeout=TIMEOUT)
-                self.now_playing = info.json()['data']['onair']['title']
+                url = self.info_link
+
+                headers = {
+                    "Accept": "*/*",
+                    "Accept-Language": "en-US,en;q=0.9",
+                    "Content-Type": "application/json",
+                    "Priority": "u=3, i",
+                    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.1 Safari/605.1.15",
+                    "Referer": "https://lyl.live/",
+                    "Origin": "https://lyl.live",
+                }
+
+                payload = {
+                    "variables": {},
+                    "query": "{\n  onair {\n    title\n    hls\n    __typename\n  }\n}\n",
+                }
+
+                response = requests.post(url, json=payload, headers=headers, timeout=TIMEOUT)
+                response.raise_for_status()
+
+                data = response.json()
+                self.now_playing = extract_value(data, ["data","onair",'title'])
                 if "WE'LL BE BACK" not in self.now_playing:
                     self.status = 'Live'
                 else:
@@ -2204,7 +2224,7 @@ Stream(
         location = "Lyon",
         lat = 45.763420,
         lon = 4.834277,
-        info_link = "https://api.lyl.live/graphql",
+        info_link = "https://strapi.lyl.live/graphql",
         stream_link = "https://radio.lyl.live/hls/aac_hifi.m3u8",
         main_link = "https://lyl.live",
         about = "Broadcasting live from Unité Centrale in Lyon, La Tour Orion in Paris, Brasserie Atlas in Brussels and Les Ateliers de la Ville in Marseille.",
