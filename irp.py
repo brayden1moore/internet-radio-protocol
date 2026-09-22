@@ -3311,7 +3311,8 @@ Stream(
         insta_link = 'https://instagram.com/vpn.radio',
         soundcloud_link = 'https://soundcloud.com/virtualpublicnetwork',
         hidden = False,
-        song_basis = False
+        song_basis = False,
+        bmo_desc="Expect a mix of deep house, smooth downtempo, and club rollers from this LA-based outfit."
 ),
 Stream(
         name = 'City Wall',
