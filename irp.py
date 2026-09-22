@@ -592,10 +592,13 @@ class Stream:
 
         elif self.name == 'We Are Various':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
-            self.status = 'Live' if info['is_online'] == True else 'Offline'
-            self.additional_info = None
-            self.listeners = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
             self.now_playing = info['now_playing']['song']['title'] # simple show title
+            if 'OFF AIR' in self.now_playing:
+                self.status = 'Offline'
+            else:
+                self.status = 'Live' if info['is_online'] == True else 'Offline'
+                self.additional_info = None
+                self.listeners = f"{info['listeners']['current']} listener{s(info['listeners']['current'])}" # listener count if available
 
         elif self.name == 'KWSX':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
@@ -2976,7 +2979,8 @@ Stream(
         support_link = 'mailto:reinis@tirkultura.net',
         soundcloud_link = 'https://soundcloud.com/tirkultura',
         insta_link = 'https://www.instagram.com/tirkultura/',
-        song_basis = True
+        song_basis = True,
+        bmo_desc='Beautiful, often airy and melancholic sounds for curious minds playing from Riga, Latvia.'
 ),
 Stream(
         name = 'Seyðisfjörður Community Radio',
