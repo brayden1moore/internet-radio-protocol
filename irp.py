@@ -1888,7 +1888,8 @@ Stream(
         main_link = "https://sohoradio.com/",
         about = "From its grass-roots founding in 2014, Soho Radio has grown to be an influential voice and amplifier for music and culture, bringing together people from Soho, London, the UK and globally. We are an online radio station broadcasting 250+ shows a month live from Soho and from New York to the world.",
         support_link = "https://sohoradiolondon.store",
-        insta_link = "https://www.instagram.com/sohoradio/"
+        insta_link = "https://www.instagram.com/sohoradio/",
+        bmo_desc="Crowd-pleasing selections across jazz, soul, rock, and more from this beloved London station."
 ),
 Stream(
         name = "Cashmere Radio",
@@ -2107,7 +2108,8 @@ Stream(
         support_link = "https://www.internetpublicradio.live/ipr-plus",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        bmo_desc="A Guadalajaran outfit blasting hard-hitting dance music 24/7."
 ),
 Stream(
         name = "KEXP",
@@ -2925,7 +2927,8 @@ Stream(
         main_link = "https://chunt.org",
         about = '"To chunt is divine"',
         support_link = "https://ra.co/promoters/118280",
-        insta_link = "https://www.instagram.com/chuntongo"
+        insta_link = "https://www.instagram.com/chuntongo",
+        bmo_desc="A quirky London outfit playing equal parts balearic pop and club bangers."
 ),
 Stream(
         name = 'Palanga Street',
@@ -3186,7 +3189,8 @@ Stream(
         insta_link = 'https://www.instagram.com/kxlu/',
         hidden = False,
         song_basis= False,
-        genres=['Student']
+        genres=['Student'],
+        bmo_desc="An exemplary American college radio station playing well-curated pop, alt, and rock spanning generations and transcending borders."
 ),
 Stream(
         name = 'Operator Radio',
@@ -3216,7 +3220,8 @@ Stream(
         support_link = 'https://www.fbi.radio/support',
         insta_link = 'https://www.instagram.com/fbiradio',
         hidden = False,
-        song_basis= False
+        song_basis= False,
+        bmo_desc="An Australian station specializing in top-notch alternative. But don't be surprised to hear experimental electronic in the mix as well."
 ),
 Stream(
         name = 'Mouthfull Radio',
@@ -3391,7 +3396,8 @@ Stream(
         insta_link = 'https://www.instagram.com/gdsfm/',
         soundcloud_link = None,
         hidden = False,
-        song_basis = False
+        song_basis = False,
+        bmo_desc="Ear-pleasing -- but never boring -- selections in alt, jazz, and soul from Zürich's premier online radio station."
 ),
 Stream(
         name = 'Rytmabad Radio',
