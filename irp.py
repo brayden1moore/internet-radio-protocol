@@ -2031,7 +2031,8 @@ Stream(
         support_link = "https://doyou.world/collections/memberships",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        bmo_desc="Heads will know Do!!You!!! has some of the most consistently high-quality, thoughtfully dug selections from some of the most experienced DJs in London."
 ),
 Stream(
         name = "Dublab",
