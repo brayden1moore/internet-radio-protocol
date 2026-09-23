@@ -2126,7 +2126,8 @@ Stream(
         bandcamp_link = None,
         soundcloud_link = None,
         hidden= False,
-        song_basis= True
+        song_basis= True,
+        bmo_desc="Your mom's favorite station on One Radio for good reason. A west coast institution playing the best in safe-for-radio selections across alt, rock, and pop."
 ),
 Stream(
         name = "KJazz",
@@ -2623,11 +2624,12 @@ Stream(
         info_link = "https://api.radiocult.fm/api/station/subtle-radio-dd2656d9/schedule/live",#"https://subtle.airtime.pro/api/live-info-v2",
         stream_link = "https://subtle-radio-dd2656d9.radiocult.fm/stream",
         main_link = "https://www.subtleradio.com",
-        about = "We Are Various is an online community radio station currently transmitting from inside Witzli Poetzli, Trix & Het Bos. Beats and pixels. Demos and expos. Rewinds and flashlights. Camera and musica obscura.",
+        about = "Subtle Radio is a community-led radio station based in Hackney, London, broadcasting 24/7 to a global audience. Since 2018, we've been dedicated to supporting grassroots electronic music, giving a voice to emerging DJs, producers, and collectives who shape the underground sound of today and tomorrow.",
         support_link = "https://www.subtle.store",
         insta_link = "https://www.instagram.com/subtleradio/",
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        bmo_desc="Prepare yourself for frenetic breaks and booming footwork from this high-energy London-based station."
 ),
 Stream(
         name = "SutroFM",
