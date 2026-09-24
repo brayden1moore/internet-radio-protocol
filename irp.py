@@ -1568,6 +1568,11 @@ class Stream:
             self.status = 'Live' if extract_value(info, ['result','content','media','type']) == 'live' else 'Re-Run'
             self.now_playing = extract_value(info, ['result','content','title'])
 
+            if extract_value(info, ['result','metadata','title']):
+                self.now_playing_subtitle = extract_value(info, ['result','content','title'])
+                self.now_playing = extract_value(info, ['result','metadata','title'])
+                self.now_playing_artist = extract_value(info, ['result','metadata','artist'])
+
         elif self.name == 'Jetty Radio':
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.status = 'Live' if extract_value(info,['live','is_live']) == True else 'Re-Run'
@@ -2187,6 +2192,7 @@ Stream(
         soundcloud_link = None,
         genres = ['Student'],
         category='Student',
+        song_basis=True,
         bmo_desc="A solid San Francisco college radio station playing primarily alt rock."
 ),
 Stream(
@@ -2357,7 +2363,8 @@ Stream(
         support_link = "https://oroko.live/support",
         insta_link = "https://www.instagram.com/orokoradio/",
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        bmo_desc="A Ghanaian outfit featuring bright sounds from and influenced by the African continent."
 ),
 Stream(
         name = "Particle FM",
@@ -2894,7 +2901,8 @@ Stream(
         genres = ['Student','Jazz'],
         category = 'Student',
         status = 'Live',
-        song_basis = True
+        song_basis = True,
+        bmo_desc="Columbia's campus radio is one of the US's longest-running college stations and a prime source for jazz music."
 ),
 Stream(
         name = "Datafruits FM",
