@@ -70,6 +70,10 @@
                         </div>
 
                     </div>
+                    <div id="modal-blurb-div">
+                        <div id="modal-from-us" class="modal-header"></div>
+                        <div id="modal-blurb" class="modal-description"></div>
+                    </div>
 
                     <div id="modal-from-the-show" class="modal-header">Now Playing</div>
                     <div class="modal-description" id="modal-show-container">
@@ -77,12 +81,13 @@
                         <div id="modal-subtitle-container"></div>
                     </div>
 
-                    <div id="modal-blurb-div">
-                        <div id="modal-from-us" class="modal-header">From One Radio</div>
-                        <div id="modal-blurb" class="modal-description"></div>
+                    <div id="modal-dna">
+                        <div id="modal-similar">
+                            <div class="modal-header">You Might Like</div>
+                            <div id="modal-similar-list"></div>
+                        </div>
+                        <div id="modal-radar"></div>
                     </div>
-
-                    <iframe id="modal-data-iframe"></iframe>
                 </div>
                 
             </div>
@@ -1013,14 +1018,91 @@
         font-family: 'Favorit';
     }
 
-    #modal-data-iframe{
-        display: block;
-        border:none;
-        outline:none;
-        width: 100%;
-        height: 1085px;
-        margin-top: 20px;
+    #modal-similar-list {
+        max-height: 27rem;
+        overflow: scroll;
+        border-bottom: 1px solid black;
     }
+
+    #modal-dna {
+        display: none;    
+        flex-direction: column-reverse;
+        gap: 20px;
+        margin-top: 20px;
+        margin-bottom: 90px;
+    }
+    #modal-radar {
+        width: 100%;
+        margin: 0 auto;
+    }
+    .radar-svg { display: block; width: 100%; height: auto; overflow: visible; }
+    .radar-spokes { stroke: currentColor; stroke-opacity: 0.3; stroke-width: 1; fill: none; }
+    .radar-base {
+        fill: currentColor;
+        stroke: currentColor;
+        stroke-width: 1;
+        stroke-linejoin: round;
+        transform-box: view-box;
+        transform-origin: center;
+        animation: radarGrow 0.6s ease-out;
+    }
+    .radar-overlay {
+        fill: rgba(255, 255, 0, 0.35);
+        stroke: #FFFF00;
+        stroke-width: 1.5;
+        stroke-linejoin: round;
+        opacity: 0;
+        transition: opacity 0.15s;
+        pointer-events: none;
+    }
+    .radar-overlay.on { opacity: 1; }
+    .radar-label { font-family: 'Favorit'; font-size: 11px; fill: currentColor; }
+    @keyframes radarGrow { from { transform: scale(0); } to { transform: scale(1); } }
+    @media (prefers-reduced-motion: reduce) { .radar-base { animation: none; } }
+
+    #modal-similar { flex: 1; min-width: 0;}
+    #modal-similar .modal-header { margin-top: 0; }
+    .similar-row {
+        display: flex;
+        align-items: center;
+        height: 50px;
+        cursor: pointer;
+        border-bottom: 1px solid black;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+    }
+    .similar-row:hover { background-color: #FFFF00; color: black; }
+    .similar-row img {
+        height: 100%;
+        width: 50px;
+        flex-shrink: 0;
+        object-fit: cover;
+        border-right: 1px solid black;
+        margin-right: 10px;
+    }
+    .similar-text { flex: 1; min-width: 0; }
+    .similar-name {
+        font-family: 'Archivo SemiBold';
+        font-size: 12pt;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .similar-meta {
+        font-family: 'Favorit';
+        font-size: 10pt;
+        opacity: 0.5;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .similar-row .info-icon { margin: 0 10px; cursor: pointer; }
+
+    @media (min-width: 916px) {
+        #modal-dna { flex-direction: row; align-items: flex-start; }
+        #modal-radar { flex: 0 0 500px; margin: 0; }
+        #modal-similar {max-width: 30%;}
+    }
+
+    .dark .similar-row,
+    .dark .similar-row img { border-color: var(--line); }
+    .dark .similar-row:hover { background-color: var(--accent); color: #000; }
 
     .modal-header {
         border: none;
@@ -2505,7 +2587,6 @@
         const modalInfoLink = document.getElementById('modal-info-link');
         const modalSupportLink = document.getElementById('modal-support-link');
         const modalShow = document.getElementById('modal-show-container');
-        const modalDataIframe = document.getElementById('modal-data-iframe');
         const modalBlurb = document.getElementById('modal-blurb');
         const modalBlurbDiv = document.getElementById('modal-blurb-div');
 
@@ -2515,8 +2596,10 @@
             modalName.textContent = station;
             modalLocation.textContent = info[station]['location'];
             modalLogo.src = info[station]['logo'];
-            modalDataIframe.src = `https://one.radio/dna/station/${encodeURIComponent(station)}`
             modalBlurbDiv.style.display = 'None';
+
+            modalContainer.dataset.station = station;
+            renderStationDNA(station);
 
             if (info[station]['bmoDesc']) {
                 modalBlurbDiv.style.display = 'block';
@@ -2535,10 +2618,10 @@
                 subtitleText = info[station]['oneLiner'];
             }
             if (info[station]['nowPlayingAdditionalInfo'] != null) { 
-                subtitleText = subtitleText + '<br>' +  info[station]['nowPlayingAdditionalInfo'];
+                subtitleText = subtitleText + '<br><br>' +  info[station]['nowPlayingAdditionalInfo'];
             }
             if (info[station]['nowPlayingDescriptionLong'] != null) { 
-                subtitleText = subtitleText + '<br>' +  info[station]['nowPlayingDescriptionLong'];
+                subtitleText = subtitleText + '<br><br>' +  info[station]['nowPlayingDescriptionLong'];
             }            
             /*if (info[station]['showLogo'] != null) {
                 modalShowLogo.innerHTML = `<div id="modal-show-logo"><img style="width:100%;"src=${info[station]['showLogo']}></div>`;
@@ -4522,6 +4605,181 @@
         }
     });
 
+    // ---- Station DNA: radar + You Might Like ----
+    const DNA_URL = 'https://www.one.radio/dna/data';
+    const DNA_MIN_TOTAL = 5;               
+    const DNA_MAX_AGE = 10 * 60 * 1000;    
+    const SIMILAR_COUNT = 15;
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const RADAR = { size: 440, r: 125, labelGap: 12 };
+
+    let dnaCache = null, dnaFetchedAt = 0, dnaPromise = null;
+
+    function loadDNA(force = false) {
+        const fresh = dnaCache && (Date.now() - dnaFetchedAt < DNA_MAX_AGE);
+        if (fresh && !force) return Promise.resolve(dnaCache);
+        if (dnaPromise) return dnaPromise;
+        dnaPromise = fetch(`${DNA_URL}?cacheBust=${Math.random()}`)
+            .then(r => r.json())
+            .then(data => { dnaCache = data; dnaFetchedAt = Date.now(); return data; })
+            .catch(err => { if (dnaCache) return dnaCache; throw err; })
+            .finally(() => { dnaPromise = null; });
+        return dnaPromise;
+    }
+
+    const modalDNA = document.getElementById('modal-dna');
+    const modalRadar = document.getElementById('modal-radar');
+    const modalSimilar = document.getElementById('modal-similar');
+    const modalSimilarList = document.getElementById('modal-similar-list');
+
+    function niceMax(values) {
+        const raw = Math.max(1, ...values);
+        const step = Math.pow(10, Math.floor(Math.log10(raw)));
+        return Math.ceil(raw / step) * step;
+    }
+
+    function radarPoints(values, max, n) {
+        const c = RADAR.size / 2;
+        return values.map((v, i) => {
+            const a = -Math.PI / 2 + 2 * Math.PI * i / n;
+            const r = (v / max) * RADAR.r;
+            return `${(c + Math.cos(a) * r).toFixed(1)},${(c + Math.sin(a) * r).toFixed(1)}`;
+        }).join(' ');
+    }
+
+    function buildRadar(categories, values, max) {
+        const n = categories.length;
+        const c = RADAR.size / 2;
+        const angle = i => -Math.PI / 2 + 2 * Math.PI * i / n;
+        const el = (tag, attrs) => {
+            const node = document.createElementNS(SVG_NS, tag);
+            for (const k in attrs) node.setAttribute(k, attrs[k]);
+            return node;
+        };
+
+        const svg = el('svg', {
+            viewBox: `0 0 ${RADAR.size} ${RADAR.size}`,
+            class: 'radar-svg', role: 'img', 'aria-label': 'Genre makeup'
+        });
+
+        let spokes = '';
+        for (let i = 0; i < n; i++) {
+            const a = angle(i);
+            spokes += `M${c} ${c}L${(c + Math.cos(a) * RADAR.r).toFixed(1)} ${(c + Math.sin(a) * RADAR.r).toFixed(1)}`;
+        }
+        svg.appendChild(el('path', { d: spokes, class: 'radar-spokes' }));
+        svg.appendChild(el('polygon', { points: radarPoints(values, max, n), class: 'radar-base' }));
+
+        const overlay = el('polygon', { points: radarPoints(values, max, n), class: 'radar-overlay' });
+        svg.appendChild(overlay);
+
+        categories.forEach((cat, i) => {
+            const a = angle(i), cos = Math.cos(a), sin = Math.sin(a);
+            const vertical = Math.abs(cos) < 0.2;
+            const gap = RADAR.labelGap + (vertical ? 6 : 0);
+            const label = el('text', {
+                x: (c + cos * (RADAR.r + gap)).toFixed(1),
+                y: (c + sin * (RADAR.r + gap)).toFixed(1),
+                'text-anchor': vertical ? 'middle' : (cos > 0 ? 'start' : 'end'),
+                'dominant-baseline': 'middle',
+                class: 'radar-label'
+            });
+            label.textContent = cat;
+            svg.appendChild(label);
+        });
+
+        return {
+            svg,
+            showOverlay(vec) {
+                overlay.setAttribute('points', radarPoints(vec, max, n));
+                overlay.classList.add('on');
+            },
+            hideOverlay() { overlay.classList.remove('on'); }
+        };
+    }
+
+    // Nearest stations by Euclidean distance over the genre vector
+    function similarStations(dna, station, limit) {
+        const base = dna.radar[station];
+        if (!base) return [];
+        const maxDist = 100 * Math.SQRT2;
+        return Object.keys(dna.radar)
+            .filter(name =>
+                name !== station &&
+                (dna.totals[name] || 0) >= DNA_MIN_TOTAL &&
+                dna.radar[name].length === base.length &&
+                info && info[name] && info[name].status !== 'Offline' &&
+                document.getElementById(name))
+            .map(name => {
+                const vec = dna.radar[name];
+                let sum = 0;
+                for (let i = 0; i < base.length; i++) { const d = base[i] - vec[i]; sum += d * d; }
+                const d = Math.sqrt(sum);
+                return { name, d, pct: Math.round(100 * (1 - d / maxDist)) };
+            })
+            .sort((a, b) => a.d - b.d)
+            .slice(0, limit);
+    }
+
+    function renderSimilar(dna, similar, radar) {
+        modalSimilar.style.display = similar.length ? '' : 'none';
+        similar.forEach(s => {
+            const st = info[s.name];
+
+            const row = document.createElement('div');
+            row.className = 'similar-row';
+
+            const img = document.createElement('img');
+            img.src = st.logo;
+            img.alt = '';
+
+            const text = document.createElement('div');
+            text.className = 'similar-text';
+            const name = document.createElement('div');
+            name.className = 'similar-name';
+            name.textContent = s.name;
+            const meta = document.createElement('div');
+            meta.className = 'similar-meta';
+            meta.textContent = `${s.pct}% match · ${st.location}`;
+            text.append(name, meta);
+
+            const infoBtn = document.createElement('p');
+            infoBtn.className = 'info-icon';
+            infoBtn.textContent = 'ⓘ';
+            infoBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                openModal(s.name);
+                document.getElementById('modal').scrollTop = 0;
+            });
+
+            row.append(img, text, infoBtn);
+            row.addEventListener('mouseenter', () => radar.showOverlay(dna.radar[s.name]));
+            row.addEventListener('mouseleave', () => radar.hideOverlay());
+            row.addEventListener('click', () => chooseStation(s.name));
+            modalSimilarList.appendChild(row);
+        });
+    }
+
+    function renderStationDNA(station) {
+        modalDNA.style.display = 'none';
+        modalRadar.innerHTML = '';
+        modalSimilarList.innerHTML = '';
+
+        loadDNA().then(dna => {
+            if (modalContainer.dataset.station !== station) return;   // modal moved on while loading
+            const vec = dna.radar && dna.radar[station];
+            if (!vec || (dna.totals[station] || 0) < DNA_MIN_TOTAL) return;
+
+            const similar = similarStations(dna, station, SIMILAR_COUNT);
+            const all = similar.reduce((acc, s) => acc.concat(dna.radar[s.name]), vec.slice());
+            const radar = buildRadar(dna.categories, vec, niceMax(all));
+
+            modalRadar.appendChild(radar.svg);
+            renderSimilar(dna, similar, radar);
+            modalDNA.style.display = 'flex';
+        }).catch(err => console.error('DNA fetch failed:', err));
+    }
+
     // MARK Natural Lang Search
     (function(){
     var DNA = null;
@@ -4785,9 +5043,8 @@
 
     undoEl.addEventListener('click', resetFilters);
 
-    fetch('https://www.one.radio/dna/data?cacheBust=' + Math.random())
-        .then(function(r){ return r.json(); })
-        .then(function(data){
+    loadDNA()
+    .then(function(data){
         DNA = data;
         computeDerived();
         RANGES = normRanges();
