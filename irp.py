@@ -1151,6 +1151,12 @@ class Stream:
             self.now_playing_subtitle = extract_value(info, ['broadcast','title'])
             self.now_playing_description = extract_value(info, ['show','summary'])
             self.now_playing_artist = extract_value(info, ['show','users'], ['display_name'], rule='list')
+
+            if extract_value(info, ['track']):
+                self.now_playing = extract_value(info, ['track','song','title'])
+                self.now_playing_artist = extract_value(info, ['track','song','artist'])
+                self.now_playing_subtitle = extract_value(info, ['show','title'])
+
             self.status = "Live" if self.now_playing else "Offline"
 
         elif self.name == 'program audio':
@@ -2079,7 +2085,8 @@ Stream(
         support_link = "https://www.patreon.com/hkcr",
         insta_link = "https://www.instagram.com/hkcronline/",
         bandcamp_link = None,
-        soundcloud_link = "https://soundcloud.com/hkcrlive"
+        soundcloud_link = "https://soundcloud.com/hkcrlive",
+        bmo_desc="Often exploring the fringes of electronic music, Hong Kong Community Radio is a prime example of boundary-pushing internet radio."
 ),
 Stream(
         name = "HydeFM",
@@ -2179,7 +2186,8 @@ Stream(
         bandcamp_link = "https://kusforg.bandcamp.com",
         soundcloud_link = None,
         genres = ['Student'],
-        category='Student'
+        category='Student',
+        bmo_desc="A solid San Francisco college radio station playing primarily alt rock."
 ),
 Stream(
         name = "KWSX",
