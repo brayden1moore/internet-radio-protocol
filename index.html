@@ -77,7 +77,12 @@
                         <div id="modal-subtitle-container"></div>
                     </div>
 
-                    <div id="modal-from-the-station" class="modal-header">About the Station</div>
+                    <div id="modal-blurb-div">
+                        <div id="modal-from-us" class="modal-header">From One Radio</div>
+                        <div id="modal-blurb" class="modal-description"></div>
+                    </div>
+
+                    <div id="modal-from-the-station" class="modal-header">From the Station</div>
                     <div id="modal-description-container" class="modal-description"></div>
 
                     <iframe id="modal-data-iframe"></iframe>
@@ -253,6 +258,10 @@
         </div>
         <div id="scud-logo-div"><img id="scud-logo" src='/assets/scudlogo.png'></div>
         </body></html><style>
+
+    #modal-blurb-div {
+        display: none;
+    }
 
     .squiggle {
         height: 15px;
@@ -701,7 +710,7 @@
     }
 
     #view-selector {
-        border: solid 1px black;
+        border: 1px solid black;
         height: 35px;
         margin-bottom: -1px;
         margin-left: -0.5px;
@@ -830,6 +839,7 @@
     #modal-description-container {
         max-height: 100px;
         overflow-y: scroll;
+        display: none;
     }
 
     #apple-logo {
@@ -2500,6 +2510,8 @@
         const modalSupportLink = document.getElementById('modal-support-link');
         const modalShow = document.getElementById('modal-show-container');
         const modalDataIframe = document.getElementById('modal-data-iframe');
+        const modalBlurb = document.getElementById('modal-blurb');
+        const modalBlurbDiv = document.getElementById('modal-blurb-div');
 
         function openModal(station) {
             modalContainer.style.display = 'flex';
@@ -2508,6 +2520,13 @@
             modalLocation.textContent = info[station]['location'];
             modalLogo.src = info[station]['logo'];
             modalDataIframe.src = `https://one.radio/dna/station/${encodeURIComponent(station)}`
+            modalDescription.textContent = '';
+            modalBlurbDiv.style.display = 'None';
+
+            if (info[station]['bmoDesc']) {
+                modalBlurbDiv.style.display = 'block';
+                modalBlurb.textContent = info[station]['bmoDesc'];
+            }
 
             if (info[station]['about']) {
                 modalDescription.textContent = info[station]['about'] + "";
@@ -2517,15 +2536,12 @@
             modalSubtitleHeader.style.display = 'none';
             modalSubtitle.style.display = 'none';
             modalShow.style.display = 'none';
-            if (info[station]['nowPlaying'] != null) { 
+            if (info[station]['oneLiner'] != null) { 
 
                 modalSubtitle.style.display = 'block';
                 modalSubtitleHeader.style.display = 'block';
                 modalShow.style.display = 'block';
-                subtitleText = info[station]['nowPlaying'];
-            }
-            if (info[station]['nowPlayingSubtitle'] != null) { 
-                subtitleText = subtitleText + '<br>' +  info[station]['nowPlayingSubtitle'];
+                subtitleText = info[station]['oneLiner'];
             }
             if (info[station]['nowPlayingAdditionalInfo'] != null) { 
                 subtitleText = subtitleText + '<br>' +  info[station]['nowPlayingAdditionalInfo'];

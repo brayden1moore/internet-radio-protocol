@@ -2915,7 +2915,8 @@ Stream(
         support_link = "https://datafruits.fm/support",
         insta_link = "https://www.instagram.com/datafruits",
         tuner_only = False,
-        status = 'Live'
+        status = 'Live',
+        bmo_desc="Datafruits invites listeners into a freakish corner of internet radio where truly anything goes. Noisy dance, schizophrenic pop, beeps. Your ears will cry red tears of joy."
 ),
 Stream(
         name = "WCFM",
@@ -3399,7 +3400,8 @@ Stream(
         insta_link = 'https://www.instagram.com/calotropis.xyz/',
         soundcloud_link = None,
         hidden = False,
-        song_basis = True
+        song_basis = True,
+        bmo_desc="A young Kenyan station playing music you will want to pocket for your next time hosting guests. Sunny global folk, reggae, jazz, and soul."
 ),
 Stream(
         name = 'Gegen Den Strom FM',

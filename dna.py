@@ -185,7 +185,7 @@ STYLE = """
 # embeddable core
 DNA_PANEL = """
 <div style="margin:.5rem 0 1rem" {{ 'hidden' if pin_station else '' }}>
-  <select id="radar-station" style="font:inherit;padding:4px 8px;background-color:yellow;height:33px!important;outline:none!important;border-radius:0px!important;"></select>
+  <select id="radar-station" style="font:inherit;padding:4px 8px;background-color:black;height:33px!important;outline:none!important;border-radius:0px!important;"></select>
   <span id="radar-n" style="margin-left:.75rem;color:#888"></span>
 </div>
 
