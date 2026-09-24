@@ -82,9 +82,6 @@
                         <div id="modal-blurb" class="modal-description"></div>
                     </div>
 
-                    <div id="modal-from-the-station" class="modal-header">From the Station</div>
-                    <div id="modal-description-container" class="modal-description"></div>
-
                     <iframe id="modal-data-iframe"></iframe>
                 </div>
                 
@@ -2503,7 +2500,6 @@
         const modalSubtitleHeader = document.getElementById('modal-from-the-show');
         const modalSubtitle = document.getElementById('modal-subtitle-container');
         const modalShowLogo = document.getElementById('modal-show-logo-container');
-        const modalDescription = document.getElementById('modal-description-container');
         const modalMainLink = document.getElementById('modal-main-link');
         const modalStreamLink = document.getElementById('modal-stream-link');
         const modalInfoLink = document.getElementById('modal-info-link');
@@ -2520,16 +2516,11 @@
             modalLocation.textContent = info[station]['location'];
             modalLogo.src = info[station]['logo'];
             modalDataIframe.src = `https://one.radio/dna/station/${encodeURIComponent(station)}`
-            modalDescription.textContent = '';
             modalBlurbDiv.style.display = 'None';
 
             if (info[station]['bmoDesc']) {
                 modalBlurbDiv.style.display = 'block';
                 modalBlurb.textContent = info[station]['bmoDesc'];
-            }
-
-            if (info[station]['about']) {
-                modalDescription.textContent = info[station]['about'] + "";
             }
 
             let subtitleText = '';
