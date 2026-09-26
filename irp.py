@@ -1915,7 +1915,8 @@ Stream(
         support_link = "https://cashmereradio.bandcamp.com/",
         insta_link = "https://www.instagram.com/cashmere_radio/",
         bandcamp_link = "https://cashmereradio.bandcamp.com/",
-        soundcloud_link = "https://www.mixcloud.com/CashmereRadio/"
+        soundcloud_link = "https://www.mixcloud.com/CashmereRadio/",
+        bmo_desc="A heady German station playing a broad range of imaginative sounds from 80s Egyptian pop to 2020s experimental ambient to live spoken word."
 ),
 Stream(
         name = "Refuge Worldwide",
@@ -2348,7 +2349,8 @@ Stream(
         support_link = "https://noodsradio.com/luvers",
         insta_link = "https://www.instagram.com/noodsradio/",
         bandcamp_link = "https://dummyhand.bandcamp.com",
-        soundcloud_link = "https://www.mixcloud.com/NoodsRadio/"
+        soundcloud_link = "https://www.mixcloud.com/NoodsRadio/",
+        bmo_desc="A Bristol-based station playing a mix of sounds that internet radio lovers will welcome with well-curated, sometimes off-kilter music."
 ),
 Stream(
         name = "Oroko Radio",
@@ -2801,7 +2803,8 @@ Stream(
         insta_link = "https://www.instagram.com/veneno.live/",
         bandcamp_link = "",
         soundcloud_link = "",
-        hidden = False
+        hidden = False,
+        bmo_desc='Diverse dance music (and occasionally pop) from this popular Brazilian station.'
 ),
 Stream(
         name = "Radio Relativa",
@@ -2833,7 +2836,8 @@ Stream(
         insta_link = "https://instagram.com/radiovilnius",
         bandcamp_link = "",
         soundcloud_link = "",
-        hidden=False
+        hidden=False,
+        bmo_desc='A Lithuanian station made to make you wonder "where has this song been all my life?" If you catch Radio Vilnius at the right time for you, you will understand.'
 ),
 Stream(
         name = "Rukh Radio",
@@ -2883,7 +2887,8 @@ Stream(
         tuner_only = False,
         genres = ['Student'],
         category='Student',
-        song_basis=True
+        song_basis=True,
+        bmo_desc="An example of solid American college radio. Good, pleasant curation by students who care about the art."
 ),
 Stream(
         name = "WKCR",
@@ -3032,7 +3037,8 @@ Stream(
         about = 'Lahmacun.hu is an online music & more radio from Budapest.',
         support_link = 'https://lahmacun.hu/donate',
         insta_link = 'http://instagram.com/lahmacunradio',
-        bandcamp_link = 'https://lahmacunradio.bandcamp.com/'
+        bandcamp_link = 'https://lahmacunradio.bandcamp.com/',
+        bmo_desc="Boundary-pushing, scrappy radio station based in Hungary's capital city."
 ),
 Stream(
         name = 'Gatekeeper Radio',
@@ -3320,7 +3326,8 @@ Stream(
         support_link = 'https://jettyradio.com/support/',
         insta_link = 'https://instagram.com/jettyradio',
         hidden = False,
-        song_basis = False
+        song_basis = False,
+        bmo_desc="A bright light in radio playing tapped-in electronic and pop music. Expect to hear the best thing you can only find on Soundcloud."
 ),
 Stream(
         name = 'Virtual Public Network',
@@ -3368,7 +3375,8 @@ Stream(
         insta_link = 'https://www.instagram.com/dia.radio/',
         soundcloud_link = 'https://soundcloud.com/diaradio',
         hidden = False,
-        song_basis = False
+        song_basis = False,
+        bmo_desc="A French outfit typically playing techno and techno-adjacent music who does not fear experimentation."
 ),
 Stream(
         name = 'LACE Radio',
