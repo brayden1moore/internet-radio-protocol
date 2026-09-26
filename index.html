@@ -61,6 +61,7 @@
                                     <a class="a-link support-link" id="modal-support-link" target="_blank" href=""><img class="view-icon" style="background-color: transparent !important;" src="assets/dollaricon.png"></a>
                                     <div id="modal-links-container">
                                                 <a class="a-link" id="modal-main-link" target="_blank" href=""><img class="view-icon" src="assets/webicon.png"></a>
+                                                <a class="a-link" id="modal-insta-link" target="_blank" href=""><img class="view-icon" src="assets/igicon.png"></a>
                                                 <a class="a-link" id="modal-stream-link" target="_blank" href=""><img class="view-icon" src="assets/streamicon.png"></a>
                                                 <a class="a-link info-link" id="modal-info-link" target="_blank" href=""><img class="view-icon" src="assets/codeicon.png"></a>
                                     </div>
@@ -1044,15 +1045,15 @@
         stroke-linejoin: round;
         transform-box: view-box;
         transform-origin: center;
-        animation: radarGrow 0.6s ease-out;
+        animation: radarGrow 0.6s ease;
     }
     .radar-overlay {
-        fill: rgba(255, 255, 0, 0.35);
+        fill: rgba(255, 255, 0, 0.8);
         stroke: #FFFF00;
         stroke-width: 1.5;
         stroke-linejoin: round;
         opacity: 0;
-        transition: opacity 0.15s;
+        transition: opacity 0.15s ease;
         pointer-events: none;
     }
     .radar-overlay.on { opacity: 1; }
@@ -2079,7 +2080,7 @@
         }
 
         .playing {
-            color: black;
+            color: black !important;
             background-color: #FFFF00 !important;
         }
 
@@ -2583,6 +2584,7 @@
         const modalSubtitle = document.getElementById('modal-subtitle-container');
         const modalShowLogo = document.getElementById('modal-show-logo-container');
         const modalMainLink = document.getElementById('modal-main-link');
+        const modalInstaLink = document.getElementById('modal-insta-link');
         const modalStreamLink = document.getElementById('modal-stream-link');
         const modalInfoLink = document.getElementById('modal-info-link');
         const modalSupportLink = document.getElementById('modal-support-link');
@@ -2629,6 +2631,7 @@
             modalSubtitle.innerHTML = subtitleText;
 
             modalMainLink.href = info[station]['mainLink'];
+            modalInstaLink.href = info[station]['instaLink'];
             modalStreamLink.href = info[station]['streamLink'];
             modalInfoLink.href = info[station]['infoLink'];
             modalSupportLink.href = info[station]['supportLink'];
