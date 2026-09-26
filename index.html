@@ -2785,23 +2785,28 @@
             }
         });
 
+        let randomlyPlayed = new Set();
+
         function playRandom() {
-            let alreadyPlaying = true;
-            let offline = true;
-            const stationContainers = document.querySelectorAll('.a-station-container');
-            const idList = Array.from(stationContainers).map(container => container.id);
-            let oneLiner = '';
-            let id = '';
-            while (alreadyPlaying || offline) {
-                let choice = Math.floor(Math.random() * idList.length);
-                id = idList[choice];
-                alreadyPlaying = !document.getElementById(`${id}-audio`).paused;
-                offline = document.getElementById(id).dataset.status == "Offline";
-                if (!alreadyPlaying && !offline) {
-                        const container = document.getElementById(id);
-                        oneLiner = container.dataset.oneLiner;
-                }
+            const current = player.dataset.id;
+
+            const eligible = Array.from(document.querySelectorAll('.a-station-container'))
+                .filter(el => el.dataset.status !== 'Offline' && document.getElementById(`${el.id}-audio`))
+                .map(el => el.id);
+            if (eligible.length === 0) return;
+
+            if (current) randomlyPlayed.add(current);
+
+            let pool = eligible.filter(id => !randomlyPlayed.has(id));
+
+            if (pool.length === 0) {
+                randomlyPlayed.clear();
+                pool = eligible.filter(id => id !== current);
+                if (pool.length === 0) pool = eligible; // only one station online
             }
+
+            const id = pool[Math.floor(Math.random() * pool.length)];
+            randomlyPlayed.add(id);
             chooseStation(id, true);
         }
 

@@ -3510,7 +3510,8 @@ Stream(
         insta_link = 'https://www.instagram.com/radioaparat/',
         soundcloud_link = None,
         hidden = False,
-        song_basis = True
+        song_basis = True,
+        bmo_desc="A fun mix of mega hits from the West with Serbian gems sprinkled in. Don't always trust what song it says is playing!"
 )
 
 
