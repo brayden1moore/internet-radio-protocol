@@ -1567,6 +1567,8 @@ class Stream:
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.status = 'Live' if extract_value(info, ['result','content','media','type']) == 'live' else 'Re-Run'
             self.now_playing = extract_value(info, ['result','content','title'])
+            self.now_playing_subtitle = None
+            self.now_playing_artist = None
 
             if extract_value(info, ['result','metadata','title']):
                 self.now_playing_subtitle = extract_value(info, ['result','content','title'])
@@ -3066,7 +3068,8 @@ Stream(
         about = "Since 2017 we’ve been sharing music from DJs, selectors and artists from Ukraine and all over the world. Running by a small team of enthusiasts led by the idea of creating a platform for self-expression of those who are in love with music.",
         support_link = 'https://20ftradio.net/donate',
         insta_link = 'https://www.instagram.com/20ftradio/?hl=en',
-        soundcloud_link = 'https://soundcloud.com/20ft_radio'
+        soundcloud_link = 'https://soundcloud.com/20ft_radio',
+        bmo_desc="Dance-heavy radio outfit based in Kyiv."
 ),
 Stream(
         name = 'Parea Radio',
