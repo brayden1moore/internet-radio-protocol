@@ -168,7 +168,7 @@
 
         <div class="streams-container" id="favorites-container"></div>
 
-        <div id="shows-now" class="category-header" data-controls="shows-container">Shows On Now</div>
+        <div id="shows-now" class="category-header" data-controls="shows-container">Shows on now</div>
         <div  id="show-container-container">
         <div  id="shows-container"></div></div>
 
@@ -310,9 +310,9 @@
     }
 
     #finder {
-        border: 1px solid black;
+        border: 1px solid white;
         margin: 0px 0 0px -0.5px;
-        padding: 9px;
+        padding: 9px 0px;
         padding-bottom: 7px;
         font-size: 12pt;
         letter-spacing: -0.05em;
@@ -359,7 +359,7 @@
         overflow: scroll;
         height: 228px;
         background: white;
-        border: 1px solid black;
+        border: 1px solid white;
         min-width: 140px;
         display: none;
     }
@@ -379,22 +379,20 @@
         display: flex;
         flex-wrap: wrap;
         gap: 6px;
-        padding-bottom: 2px;
+        padding-bottom: 14px;
     }
     .finder-pill {
         display: flex;
         align-items: center;
         gap: 8px;
-        border: 1px solid rgb(255, 255, 255);
-        background: rgb(0, 0, 0);
+        background: rgb(243, 243, 243);
         padding: 5px 10px 5px 5px;
         cursor: pointer;
         max-width: 240px;
         user-select: none;
-        color:white;
+        color:rgb(0, 0, 0);
     }
     .finder-pill:hover { background: #FFFF00; color: black; border-color: rgb(0, 0, 0); }
-    .finder-pill:hover img {border-color: black;}
     .finder-pill img {
         height: 35px;
         width: 35px;
@@ -462,7 +460,7 @@
         background-color: white;
         width: 45px;
         /*background: linear-gradient(139deg, yellow, rgb(255, 255, 0) 50.84%, rgb(6, 172, 255) 76.89%, color(display-p3 0.9175 0.2 0.1372));*/
-        border-left: 1px solid black;
+        border-left: 1px solid white;
     }
 
     #support-button:hover {
@@ -488,7 +486,7 @@
     #add-station-search:focus{
       outline: none;
       border: none;
-      border-left: 1px solid black;
+      border-left: 1px solid white;
       border-bottom: 1px solid yellow;
       height: 28px;
       padding-bottom: 2.5px;
@@ -499,7 +497,7 @@
         appearance: none;
         background-color: rgb(243, 243, 243);
         border: none;
-        border-left: 1px solid black;
+        border-left: 1px solid white;
         height: 29px;
         padding: 3px 5px;
         transition: 0.2s ease;
@@ -507,7 +505,7 @@
         font-size: 16px;
         font-family: "Favorit";
         padding-left: 10px;
-        /* border-right: 1px solid black; */
+        /* border-right: 1px solid white; */
     }
 
     #add-station {
@@ -530,7 +528,7 @@
     }
 
     #full-view-toggle {
-        border: 1px solid black;
+        border: 1px solid white;
         position: absolute;
         top: 0;
         margin-top: 10px;
@@ -590,7 +588,7 @@
         padding-top: 0px;
         align-items: center;
         font-size: 9pt;
-        border: 1px solid black;
+        border: 1px solid white;
         border-left: none;
         justify-content: center;
         display: flex;
@@ -610,7 +608,7 @@
         overflow: hidden;
         max-height: 282px;
         transition: max-height 0.2s;
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid white;
     }
 
     .globe-list-station {
@@ -650,7 +648,7 @@
         top: 0;
         left: 0;
         z-index: 99;
-        border-right: 1px solid black;
+        border-right: 1px solid white;
         width: calc(100% - 71px);
         display: none;
     }
@@ -659,7 +657,7 @@
         padding: 5px;
         min-width: 61px;
         font-size: 12pt;
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid white;
     }
 
     .globe-marker {
@@ -673,7 +671,7 @@
         height: 20px;
         width: 20px;
         background-color: yellow;
-        border: 1px solid black;
+        border: 1px solid white;
         opacity: 0.8;
         transition: 0.2s;
         display: flex;
@@ -713,7 +711,7 @@
     }
 
     #view-selector {
-        border: 1px solid black;
+        border: 1px solid white;
         height: 35px;
         margin-bottom: -1px;
         margin-left: -0.5px;
@@ -729,7 +727,7 @@
     }
 
     #plus-button {
-        border-left: 1px solid black;
+        border-left: 1px solid white;
     }
     
     .view-icon {
@@ -741,7 +739,7 @@
     }
 
     .view-icon:not(:last-child) {
-        border-right: 1px solid black;
+        border-right: 1px solid white;
     }
 
     .view-icon:hover {
@@ -750,7 +748,7 @@
 
 
     #globe-container-container {
-        border: 1px solid black;
+        border: 1px solid white;
         margin-bottom: 25px;
         overflow: hidden;
         padding: 0;
@@ -891,14 +889,14 @@
 
     /*
     .row-item:nth-child(1) {
-        border-right: 1px solid black;
+        border-right: 1px solid white;
     }
     */
 
     #first-row {
         display: flex;
         height: auto;
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid white;
     }
 
 
@@ -913,7 +911,7 @@
         background-color: white;
         display: flex;
         align-items: center;
-        border-right: 1px solid black;
+        border-right: 1px solid white;
     }
 
     #second-row {
@@ -921,7 +919,6 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        background-color: white;
         font-family: 'Favorit';
         text-transform: uppercase;
         width: 100%;
@@ -932,7 +929,7 @@
         border-bottom: none !important; 
         text-decoration: none;
         cursor: pointer;
-        border-left: 1px solid black;
+        border-left: 1px solid white;
         padding-left: 7.5px;
         padding-right: 7.5px;
         height: 100%;
@@ -954,12 +951,12 @@
     }
 
     .category-header {
-        border: 1px solid black;
+        border: 1px solid white;
         font-family: 'Favorit';
         letter-spacing: -0.05em;
         font-size: 10pt;
         margin-left: -0.5px;
-        padding: 10px;
+        padding: 0px;
         padding-top: 0px;
         padding-bottom: 0px;
         height: 30px;
@@ -1010,7 +1007,7 @@
 
     #modal-station-location {
         background-color: #00acff;
-        border: 1px solid black;
+        border: 1px solid white;
         width: fit-content;
         padding: 4px;
         margin-top: 7px;
@@ -1022,7 +1019,7 @@
     #modal-similar-list {
         max-height: 27rem;
         overflow: scroll;
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid white;
     }
 
     #modal-dna {
@@ -1030,7 +1027,7 @@
         flex-direction: column-reverse;
         gap: 20px;
         margin-top: 20px;
-        margin-bottom: 90px;
+        margin-bottom: 20px;
     }
     #modal-radar {
         width: 100%;
@@ -1068,9 +1065,9 @@
         align-items: center;
         height: 50px;
         cursor: pointer;
-        border-bottom: 1px solid black;
-        border-left: 1px solid black;
-        border-right: 1px solid black;
+        border-bottom: 1px solid white;
+        border-left: 1px solid white;
+        border-right: 1px solid white;
     }
     .similar-row:hover { background-color: #FFFF00; color: black; }
     .similar-row img {
@@ -1078,7 +1075,7 @@
         width: 50px;
         flex-shrink: 0;
         object-fit: cover;
-        border-right: 1px solid black;
+        border-right: 1px solid white;
         margin-right: 10px;
     }
     .similar-text { flex: 1; min-width: 0; }
@@ -1107,7 +1104,7 @@
 
     .modal-header {
         border: none;
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid white;
         margin-bottom: 0px;
         padding: 8px 0px;
         margin-top: 15px;
@@ -1128,7 +1125,7 @@
         margin-right: 5px;
         flex: 1;
         text-align: center;
-        border: 1px solid black;
+        border: 1px solid white;
        /*height: 25px;*/
         display: flex;
         align-items: center;
@@ -1186,12 +1183,17 @@
         padding: 5px;
         justify-content: right;
         display: flex;
+        position: sticky;       /* pin to the top of the modal's scroll area */
+        top: 0;
+        z-index: 5;             /* stay above logos/links as they scroll under */
+        pointer-events: none;   /* the empty strip shouldn't block content beneath it */
     }
 
     #modal-x {
         padding: 10px;
         cursor: pointer;
         width: fit-content;
+        pointer-events: auto;
     }
 
     #modal-container {
@@ -1222,8 +1224,8 @@
     }
 
     #modal {
-        position: absolute;
-        top: 25%;
+        /* position: absolute; */
+        /* top: 25%; */
         margin-left: -1px;
         background: rgba(255, 255, 255, 0.85);
         backdrop-filter: saturate(180%) blur(20px);
@@ -1233,12 +1235,13 @@
         z-index: 11;
         /* height: fit-content; */
         /* background-color: white; */
-        border: 1px solid black;
+        border: 1px solid white;
         overflow: scroll;
-        height: 100%;
-        width: 100% !important;
-        top: 0;
+        height: 90%;
+        width: 90% !important;
+        /* top: 0; */
         z-index: 50000;
+        /* overflow: hidden; */
     }
 
             #modal-logo-and-links {
@@ -1433,7 +1436,7 @@
         #player-img-div {
             height: 45px;
             width: 45px;
-            border: 1px solid black;
+            border: 1px solid white;
             position: relative;  
             margin-right: 13px;
         }
@@ -1486,7 +1489,7 @@
         }
 
         .player-expanded {
-            border: 1px solid black;
+            border: 1px solid white;
             height: 60px !important;
         }
         ::-webkit-scrollbar {
@@ -1496,9 +1499,9 @@
             margin-top: 0px;
             /* width: 100%; */
             margin-left: -0.5px;
-            border: 1px solid black;
+            border: 1px solid white;
             border-bottom: none;
-            padding: 9px;
+            padding: 9px 0px;
             overflow: hidden;
             transition: 0.3s ease;
             background: white;
@@ -1543,7 +1546,7 @@
             /*border-radius: 20px;*/
             color: black !important;
             opacity: 1;
-            border: 1px solid rgb(0, 0, 0);
+            /*border: 1px solid rgb(255, 255, 255);*/
             margin-right: 4px;
             padding: 6px;
             padding-bottom: 7px;
@@ -1583,10 +1586,10 @@
         width: calc(100% - 37.5px);
         z-index: 100;
         /* remove margin-top / margin-bottom */
-        background: rgba(255, 255, 255, 1);
+        background: rgba(255, 255, 255, 0.5);
         backdrop-filter: saturate(180%) blur(20px);
         -webkit-backdrop-filter: saturate(180%) blur(20px);
-        border: 1px solid black;
+        border: 1px solid white;
         display: block;
         align-items: center;
         color: black;
@@ -1617,10 +1620,9 @@
             align-items: center;
             display: flex;
             z-index: 200;
-            background-color: #ffffff;
-            border-bottom: 1px solid black;
-            border-left: 1px solid black;
-            border-right: 1px solid black;
+            border-bottom: 1px solid white;
+            border-left: 1px solid white;
+            border-right: 1px solid white;
             color: rgb(0, 0, 0);
             width: 100%;
         }
@@ -1638,7 +1640,7 @@
             font-size: 12pt;
             padding-left: 0px;
             padding-right: 0px;
-            border-right: 1px solid black;
+            border-right: 1px solid white;
             color: rgb(255, 255, 255);
             height: 100%;
         }
@@ -1770,7 +1772,7 @@
             color: white;
         }
         .stream-name {
-            /* border-bottom: 1px solid black; */
+            /* border-bottom: 1px solid white; */
             font-family: 'Archivo SemiBold';
             width: 100%;
             /* padding: 2px 4px; */
@@ -1825,7 +1827,7 @@
         .station-tag {
             color: black !important;
             font-size: 8pt;
-            border: 1px solid rgb(0, 0, 0);
+            /*border: 1px solid rgb(255, 255, 255);*/
             padding: 3px;
             margin-right: 4px;
             align-items: center;
@@ -1867,14 +1869,15 @@
             padding: 10px; 
             overflow-x:hidden; 
             overflow-y:hidden; 
-            border:1px solid black; 
-            align-items: center; 
-            display: flex; 
+            border: white 1px solid;
+            border-left: 1px solid rgb(243, 243,243);
+            align-items: center;
+            display: flex;
             white-space: nowrap;
             margin-left: -1px;
             margin-top: -1px;
             padding-left: 0px;
-            background-color: white;
+            background-color: rgb(243, 243,243);
         }
 
         .a-station-container:hover {
@@ -1898,7 +1901,7 @@
             padding: 0px; 
             overflow-x:hidden; 
             overflow-y:hidden; 
-            border:0.5px solid black; 
+            margin-right: 1px;
             align-items: center; 
             display: flex; 
             white-space: nowrap;
@@ -1920,9 +1923,9 @@
             overflow-x: scroll;
             margin-bottom: 20px;
             margin-left: -0.5px;
-            border-left: 1px solid black;
-            border-right: 1px solid black;
-            border-bottom: 0.5px solid black;
+            border-left: 1px solid white;
+            border-right: 1px solid white;
+            border-bottom: 0.5px solid rgb(255, 255, 255);
         }
 
         .a-show-container:hover {
@@ -1956,7 +1959,6 @@
         .show-card .info-icon:hover {
             opacity: 1 !important;
         }
-
         .show-img {
             width: 100%;
             height: 100%;
@@ -2059,7 +2061,7 @@
         #modal-logo-and-overlay { 
             height: 110px;
             width: 110px;
-            border: 1px solid black !important;   
+            border: 1px solid white !important;   
         }
 
         .logo-and-overlay {
@@ -2070,7 +2072,7 @@
             margin-right:10px; 
             cursor: pointer; 
             flex-shrink: 0;
-            border-right: 1px solid black;
+            border-right: 1px solid white;
             border-left: 0.5px solid black;
             margin-left: -0.5px;
         }
@@ -2132,7 +2134,7 @@
         a {
             font-size: 10pt; 
             color:#000000; 
-            border-bottom: 1px solid black; 
+            border-bottom: 1px solid white; 
             text-decoration: none;
             cursor: pointer;
         }
@@ -2202,7 +2204,7 @@
             margin-top: -1px; 
             margin-left: -0.5px;
             margin-bottom:25px;       
-            border: 1px solid black; 
+            border: 1px solid white; 
             border-right: 0px solid black;
             border-bottom: 0px solid black;
         }
@@ -2219,7 +2221,7 @@
         }
 
         .row-item:not(:first-child) {
-            border-left: 1px solid black;
+            border-left: 1px solid white;
         }
 
         #support-button {
@@ -2335,6 +2337,7 @@
         .a-station-container {
             padding-left: 10px;
             height:105px;
+            margin-left: 0px !important;
         }
         
         .dragging {
@@ -2351,7 +2354,7 @@
         .logo-and-overlay {
             width:100px; 
             height:100px;
-            border: 1px solid black; 
+            border: 1px solid rgb(255, 255, 255); 
         }
         .a-logo {
             width: 100%;
@@ -2401,10 +2404,10 @@
             } 
 
             .a-show-container {
-                height: 260px;
+                height: 310px;
             }
             .show-card-expanded {
-                width: 350px !important;
+                width: 400px !important;
             }
         }
 
@@ -2418,7 +2421,7 @@
            /* width: 45px; */
             background-color: white;
             color: black;
-            border-left: 1px solid black;
+            border-left: 1px solid white;
             cursor: pointer;
             user-select: none;
         }
@@ -2426,7 +2429,7 @@
         
         /* ---- tokens ---- */
         .dark {
-            --line: #2a2a2a;                 /* gray outlines */
+            --line: #000000;                 /* gray outlines */
             --panel: #0d0d0d;             /* card / surface */
             --accent: #ffff00;            /* unchanged brand yellow */
             --pulse: dark-pulse;          /* reuses your existing keyframes */
@@ -2439,11 +2442,10 @@
         
         
         /* ---- top bar ---- */
-        .dark #top-bar { background: rgba(0,0,0,0.9); border-color: var(--line); color: #fff; }
+        .dark #top-bar { background: rgba(0,0,0,0.4); border-color: var(--line); color: #fff; }
         .dark #first-row { border-bottom-color: var(--line); }
         .dark #logo-container { background: transparent; border-right-color: var(--line); }
         .dark .row-item:not(:first-child) { border-left-color: var(--line); }
-        .dark #second-row { background-color: #000; }
         .dark #intro { -webkit-text-stroke-color: #fff; }
         .dark #oneradio { color: #fff; -webkit-text-stroke: 1px #fff; }
         
@@ -2470,7 +2472,7 @@
         .dark .a-station-container:hover .favorite-star-favorited,
         .dark .a-station-container:hover .custom-remove { color: #000; }
         .dark .favorite-star { color: #FFFF00; }
-        .dark .logo-and-overlay { border-color: var(--line); }
+        .dark .logo-and-overlay { border: none !important; }
         .dark .streams-container { border-color: var(--line); }
         .dark .category-header { background-color: #000; border-color: var(--line); }
         
@@ -2481,8 +2483,8 @@
         
         /* ---- view selector + icon buttons ---- */
         .dark #view-selector { border-color: var(--line); }
-        .dark .view-icon:not(:last-child) { border-right-color: #d1d1d1; }
-        .dark #plus-button { border-left-color: #d1d1d1; }
+        .dark .view-icon:not(:last-child) { border-right: none; }
+        .dark #plus-button { border-left: none; }
         .dark #view-selector .view-icon { background-color: transparent; filter: invert(1); }
         .dark #view-selector .view-icon:hover { background-color: var(--accent); filter: none; }
         .dark #finder-undo { filter: invert(1); }
@@ -2565,14 +2567,85 @@
 
         // Set search placeholder
         const searchBar = document.getElementById('search-stations');
-        const queries = ['"london"', '"accra"', '"drum & bass"', '"live"', '"raw"'];
+        const queries = ['Search'];
         const random = Math.floor(Math.random() * queries.length);
         searchBar.placeholder = queries[random];
         //form.submit();
 
         const modalContainer = document.getElementById('modal-container');
+        const modalEl = document.getElementById('modal');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let modalOpen = false;
+        let modalAnim = null;
+        let modalOrigin = null;     // the ⓘ element the modal grew out of
+        let lastInfoClick = null;
+
+        // Remember which ⓘ was clicked. Capture phase runs before the inline
+        // onClick="openModal(...)" handlers, so openModal can find it.
+        document.addEventListener('click', (e) => {
+            const icon = e.target.closest('.info-icon');
+            if (icon) lastInfoClick = { el: icon, t: performance.now() };
+        }, true);
+
+        // Icon center, expressed relative to the modal's box (for transform-origin)
+        function modalTransformOrigin() {
+            const el = modalOrigin;
+            if (!el || !el.isConnected) return null;
+            const r = el.getBoundingClientRect();
+            if (!r.width && !r.height) return null;   // icon hidden (filtered out, etc.)
+            const m = modalEl.getBoundingClientRect();
+            return `${r.left + r.width / 2 - m.left}px ${r.top + r.height / 2 - m.top}px`;
+        }
+
+        function animateModalIn() {
+            const recent = lastInfoClick && (performance.now() - lastInfoClick.t < 1000);
+            modalOrigin = recent ? lastInfoClick.el : null;
+            lastInfoClick = null;
+
+            if (modalAnim) { modalAnim.onfinish = null; modalAnim.cancel(); }
+            modalContainer.style.display = 'flex';
+            modalEl.scrollTop = 0;
+            modalOpen = true;
+            void modalEl.offsetWidth;   // commit layout so the backdrop fade actually transitions
+
+            const origin = modalTransformOrigin();
+            modalEl.style.transformOrigin = origin || 'center center';
+            modalBg.style.opacity = 0.3;
+
+            const from = reduceMotion.matches ? 'none' : (origin ? 'scale(0.02)' : 'scale(0.96)');
+            modalAnim = modalEl.animate(
+                [{ transform: from, opacity: 0 }, { transform: 'none', opacity: 1 }],
+                { duration: reduceMotion.matches ? 150 : 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
+            );
+            modalAnim.onfinish = () => { modalAnim = null; };
+        }
+
         function closeModal() {
-            modalContainer.style.display = 'none';
+            if (!modalOpen) return;
+            modalOpen = false;
+            modalBg.style.opacity = 0;
+
+            const done = () => {
+                modalAnim = null;
+                modalContainer.style.display = 'none';
+            };
+
+            // Closed while still opening: just run the open animation backwards
+            if (modalAnim && modalAnim.playState === 'running') {
+                modalAnim.onfinish = done;
+                modalAnim.reverse();
+                return;
+            }
+
+            // Re-measure in case the icon moved (e.g. list re-sorted while open)
+            const origin = modalTransformOrigin();
+            modalEl.style.transformOrigin = origin || 'center center';
+            const to = reduceMotion.matches ? 'none' : (origin ? 'scale(0.02)' : 'scale(0.96)');
+            modalAnim = modalEl.animate(
+                [{ transform: 'none', opacity: 1 }, { transform: to, opacity: 0 }],
+                { duration: reduceMotion.matches ? 120 : 280, easing: 'cubic-bezier(0.6, 0, 0.75, 0)' }
+            );
+            modalAnim.onfinish = done;
         }
 
         const modalName = document.getElementById('modal-station-name');
@@ -2594,7 +2667,7 @@
         const modalBlurbDiv = document.getElementById('modal-blurb-div');
 
         function openModal(station) {
-            modalContainer.style.display = 'flex';
+            const wasOpen = modalOpen;   // e.g. clicking ⓘ in "You Might Like" just swaps content
             modalShowLogo.innerHTML = '';
             modalName.textContent = station;
             modalLocation.textContent = info[station]['location'];
@@ -2637,7 +2710,7 @@
             modalInfoLink.href = info[station]['infoLink'];
             modalSupportLink.href = info[station]['supportLink'];
 
-            modalBg.style.opacity = 0.3;
+            if (!wasOpen) animateModalIn();
             // set up play button
             modalLogoAndPlayOverlay.onclick = function(event) {
                 chooseStation(station);
@@ -2740,7 +2813,7 @@
                 const oneLiner = station.dataset.oneLiner;
                 const logo = station.querySelector('.a-logo').src;
 
-                playerInfoIcon.addEventListener('click', () => { openModal(id); });
+                playerInfoIcon.onclick = () => { openModal(id); };   // replace, don't stack listeners
 
                 playerImg.src = logo;
                 player.dataset.id = id;
@@ -3425,7 +3498,7 @@
             
             const liveText = `${live + offline + rerun} of the world's best curated internet radio stations, meticulously tracked. `;
 
-            document.getElementById('shows-now').textContent = `Shows On Now (${showsAdded})`;
+            document.getElementById('shows-now').textContent = `Shows on now (${showsAdded})`;
             const hitsContainer = document.getElementById('hits');
 
             const lastUp = document.getElementById('last-up');
@@ -4542,7 +4615,7 @@
             max-height: 300px;
             overflow-y: auto;
             background: white;
-            border: 1px solid black;
+            border: 1px solid white;
             z-index: 10001;
             display: block;
             color: black;
@@ -4569,7 +4642,7 @@
         matches.slice(0, 30).forEach(u => {
             const row = document.createElement('div');
             row.style.cssText = `
-                display: flex; align-items: center; gap: 8px;
+                display: flex; font-family: 'Favorit'; align-items: center; gap: 8px;
                 padding: 6px; cursor: pointer; border-bottom: 0.5px solid black;
             `;
             row.onmouseenter = () => row.style.background = 'yellow';
