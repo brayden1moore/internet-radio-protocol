@@ -3776,7 +3776,7 @@ def main_loop():
             }
 
             taglines = [
-                f'{status["total"] - status["hidden"]} of the best independent, human-curated radio stations for the non-algorithmic, palate-expanding, music discovery pleasure of those unafraid to listen through friction.',
+                f'{status["total"] - status["hidden"]} of the best curated internet radio stations for the music discovery pleasure of those unafraid to listen through friction.',
                 'As soon as the generals and the politicos can predict the motions of your mind, lose it.',
                 'Radiation from computer screens is boiling your eyes. Use your ears.',
                 'You might hear something.',
