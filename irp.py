@@ -3535,7 +3535,7 @@ Stream(
         soundcloud_link = "https://soundcloud.com/jerome_fm",
         hidden = False,
         song_basis = False,
-        bmo_desc="A freaked-out station from a small town in Pennsylvania. Experimental, electronic-heavy, and very fun."
+        bmo_desc="A freaked-out station from a small town in Pennsylvania. Experimental and very fun."
 )
 
 
