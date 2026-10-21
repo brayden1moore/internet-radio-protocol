@@ -1735,6 +1735,12 @@ class Stream:
                 self.status = 'Offline'
                 self.show_logo = None
 
+        elif self.name == 'Jerome FM':
+            info = requests.get(self.info_link, timeout=TIMEOUT).json()
+            self.now_playing = extract_value(info, ['icestats','source','title'])
+            self.listeners = extract_value(info, ['icestats','source','listeners'])
+            self.status = 'Live'
+
         ### MARK: STATION LOGIC END
 
     def set_last_updated(self):
@@ -3512,6 +3518,24 @@ Stream(
         hidden = False,
         song_basis = True,
         bmo_desc="A fun mix of mega hits from the West with Serbian gems sprinkled in. Don't always trust what song it says is playing!"
+)
+,
+Stream(
+        name = 'Jerome FM',
+        logo = "https://internetradioprotocol.org/logos/jerome.png",
+        location = 'Hanover',
+        lat = 39.8043,
+        lon =  -76.9842,
+        info_link = "https://radio.jeromefm.live/status-json.xsl",
+        stream_link = 'https://radio.jeromefm.live/stream',
+        main_link = 'https://jeromefm.live',
+        about = "Based in Pennsylvania, JEROME was founded in 2016 by Matt Lutz as an experimental label and platform dedicated to music driven by ideas rather than genre or popularity. Originally launched as a mixfile series to provide a voice for lesser-known talent, the project has since evolved into a label featuring releases from artists such as Worli, Morten HD, BLEID, Lensk, and more. JEROME is embarking on a new chapter: JEROME FM. This digital radio station serves as a home for our friends and collaborators to explore diverse musical territories, both past and present.",
+        support_link = 'https://jeromefm.live/get-involved',
+        insta_link = 'https://www.instagram.com/jerome_sound/',
+        soundcloud_link = "https://soundcloud.com/jerome_fm",
+        hidden = False,
+        song_basis = False,
+        bmo_desc="A freaked-out station from a small town in Pennsylvania. Experimental, electronic-heavy, and very fun."
 )
 
 
