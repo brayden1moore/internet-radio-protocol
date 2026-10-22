@@ -14,7 +14,16 @@
     <meta name="twitter:image" content="https://www.one.radio/assets/ogimage.png">
     <link rel="canonical" href="https://www.one.radio">
 
-    <script>try{if(localStorage.getItem('darkMode')==='true')document.documentElement.classList.add('dark');}catch(e){}</script>
+    <script>
+        // Dark mode is switched off for now; flip to true to bring back the toggle
+        // and viewers' saved preference (still stored under localStorage 'darkMode').
+        window.DARK_MODE_ENABLED = false;
+        if (window.DARK_MODE_ENABLED) {
+            document.documentElement.classList.add('dark-enabled');
+            try { if (localStorage.getItem('darkMode') === 'true') document.documentElement.classList.add('dark'); } catch (e) {}
+        }
+    </script>
+    <style>html:not(.dark-enabled) #dark-toggle { display: none !important; }</style>
     
     <script defer src="https://cloud.umami.is/script.js" data-website-id="8362bf37-0d81-4f25-9ee8-027269410e08"></script>
     <script src="https://cdn.jsdelivr.net/npm/globe.gl"></script>
@@ -4150,6 +4159,10 @@
             };
         
             function init() {
+                if (!window.DARK_MODE_ENABLED) {
+                    root.classList.remove('dark');   // forced light; saved preference left untouched
+                    return;
+                }
                 const btn = document.getElementById('dark-toggle');
                 if (btn && !btn.dataset.wired) {
                     btn.dataset.wired = '1';
