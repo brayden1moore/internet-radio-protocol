@@ -35,7 +35,6 @@ STYLE = """
         color: black;
   }
   h2 {
-      border-bottom: 1px solid black;
       font-size: 1rem;
       margin: 0;
       border-bottom: 0px;
@@ -489,7 +488,7 @@ PAGE_STYLE = """
        font:13px/1.4 "Archivo Light",system-ui,sans-serif}
   h1{margin:0 0 24px;padding-bottom:14px;border-bottom:1px solid #000;
      font:normal 34pt/1 "Archivo Bold",sans-serif;letter-spacing:-0.05em}
-  .dna{margin-left:5px;padding:4px 12px;border:1px solid #000;background:var(--yellow);
+  .dna{margin-left:5px;padding:4px 12px;background:var(--yellow);
        font:normal 34pt/1 "Archivo Light",sans-serif}
 
   section{margin-bottom:36px}
