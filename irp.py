@@ -3060,7 +3060,8 @@ Stream(
         about = 'GATEKEEPER RADIO represents an innovative initiative, transforming urban spaces into vibrant temporary radio stations while also launching an online platform for creative collaboration. Its bringing together creatives from the realms of art, music, science, digital media, and society, fostering connections through artistic inquiries and the exploration of new potentials.',
         support_link = 'mailto:mail@gatekeeperradio.com',
         insta_link = 'https://www.instagram.com/gatekeeper_radio/',
-        song_basis = True
+        song_basis = True,
+        hidden= True
 ),
 Stream(
         name = '20ft Radio',
