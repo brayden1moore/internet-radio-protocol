@@ -700,12 +700,17 @@ def network_payload(conn, this_year=None):
 
     songs = {}   # key -> [categories, year, playcount]
     artists = set()
+    stations = set()
+    first_ts = None
     n_plays = 0
-    for (artist, title, categories, acr_release, mb_year, plays) in conn.execute(
-        "SELECT artist, title, categories, acr_release, mb_year, lf_playcount"
+    for (ts, station, artist, title, categories, acr_release, mb_year, plays) in conn.execute(
+        "SELECT ts, station, artist, title, categories, acr_release, mb_year, lf_playcount"
         "  FROM plays WHERE matched = 1"
     ):
         n_plays += 1
+        stations.add(station)
+        if ts and (first_ts is None or ts < first_ts):
+            first_ts = ts
         key = ((artist or "").strip().lower(), (title or "").strip().lower())
         if key[0]:
             artists.add(key[0])
@@ -746,10 +751,15 @@ def network_payload(conn, this_year=None):
 
     total_hits = sum(cat_hits.values()) or 1
     year_list = sorted(years.elements())
+    # songs Last.fm doesn't know count as 0 plays
+    playcounts = sorted((p or 0) for _, _, p in songs.values())
     top = cat_hits.most_common(1)
     return {
         "n_songs": len(songs),
         "n_artists": len(artists),
+        "n_stations": len(stations),
+        "first_ts": first_ts,
+        "median_playcount": round(statistics.median(playcounts)) if playcounts else None,
         "top_genre": top[0][0] if top else None,
         "top_genre_pct": 100 * top[0][1] / total_hits if top else 0,
         "n_plays": n_plays,
