@@ -787,7 +787,7 @@ def network_payload(conn, this_year=None):
             for s in songs.values()
             if s[1] == year_med and s[2] and s[3] and s[4]
         )
-        examples = [{"artist": a, "title": t, "playcount": p} for _, a, t, p in near[:8]]
+        examples = [{"artist": a, "title": t, "playcount": p} for _, a, t, p in near[:20] if 'Wop' not in a]
     top = cat_hits.most_common(1)
     return {
         "n_songs": len(songs),
