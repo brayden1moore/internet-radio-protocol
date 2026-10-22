@@ -1007,7 +1007,7 @@ def dna_network():
 @app.route("/dna/songs/<station>")
 def dna_songs(station):
     """A few random distinct songs identified on one station (station pop-up)."""
-    n = max(1, min(request.args.get("n", 5, type=int), 20))
+    n = max(1, min(request.args.get("n", 10, type=int), 20))
     conn = _conn()
     try:
         rows = conn.execute(
