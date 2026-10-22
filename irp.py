@@ -2974,7 +2974,8 @@ Stream(
         main_link = 'https://palanga.live/',
         about = 'PSR is an independent community radio based in Vilnius, Lithuania. Established in 2017 in a flat on Palanga Street, we embraced a DIY philosophy that continues to inspire us to this day and fuels the engagement of our community. As a voluntary team we strive to foster a safe and inclusive environment for the creation of free cultural expression locally and online.',
         support_link = 'https://palanga.live/donate',
-        insta_link = 'https://www.instagram.com/palanga_street_radio/'
+        insta_link = 'https://www.instagram.com/palanga_street_radio/',
+        bmo_desc='As Independent Community Radio Network co-founders, Palanga Street is an important fixture of international internet radio, and its playful and eclectic curation embodies it well.'
 ),
 Stream(
         name = 'Dublin Digital Radio',
