@@ -1004,6 +1004,29 @@ def dna_network():
     return resp
 
 
+@app.route("/dna/songs/<station>")
+def dna_songs(station):
+    """A few random distinct songs identified on one station (station pop-up)."""
+    n = max(1, min(request.args.get("n", 5, type=int), 20))
+    conn = _conn()
+    try:
+        rows = conn.execute(
+            "SELECT artist, title, MAX(COALESCE(SUBSTR(acr_release, 1, 4), mb_year)) AS year"
+            "  FROM plays"
+            " WHERE station = ? AND matched = 1"
+            "   AND TRIM(COALESCE(artist, '')) != '' AND TRIM(COALESCE(title, '')) != ''"
+            " GROUP BY LOWER(TRIM(artist)), LOWER(TRIM(title))"
+            " ORDER BY RANDOM() LIMIT ?",
+            (station, n),
+        ).fetchall()
+    finally:
+        conn.close()
+    resp = jsonify([{"artist": r["artist"], "title": r["title"], "year": r["year"]} for r in rows])
+    resp.headers["Access-Control-Allow-Origin"] = "*"
+    resp.headers["Cache-Control"] = "no-store"
+    return resp
+
+
 @app.route("/dna/stations.csv")
 def dna_stations_csv():
     conn = _conn()
