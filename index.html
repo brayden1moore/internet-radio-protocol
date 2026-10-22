@@ -44,6 +44,72 @@
             <div id="modal-bg" onClick="closeModal();"></div>
             <div id="modal">
                 <div id="modal-x-container"><div id="modal-x" onClick="closeModal();"><img style="height:30px" src="assets/xicon.png"></div></div>
+                <div id="about-content">
+                    <div id="about-title">About</div>
+
+                    <div id="about-mission">
+                        <p class="about-lead">We search broadly and listen deeply to identify, centralize, and monitor the world’s best-curated internet radio.</p>
+
+                        <div class="about-step" id="about-heard">
+                            <p id="about-totals"></p>
+                        <div id="about-charts">
+                            <div class="about-section">
+                                <div class="modal-header">Obscurity</div>
+                                <div id="about-obsc"></div>
+                                <div class="about-readout" id="about-obsc-readout"></div>
+                            </div>
+                            <div class="about-section">
+                                <div class="modal-header">Genres</div>
+                                <div id="about-genres"></div>
+                                <div class="about-readout" id="about-genres-readout"></div>
+                            </div>
+                            <div class="about-section">
+                                <div class="modal-header">Release year</div>
+                                <div id="about-years"></div>
+                                <div class="about-readout" id="about-years-readout"></div>
+                            </div>
+                        </div>
+                        </div>
+
+                        <div class="about-step">
+                            <div class="modal-header">When considering a station, we ask</div>
+                            <ol>
+                                <li>Does this station exhibit <b>thoughtful curation</b>?</li>
+                                <li>Does it broadcast audio to an <b>accessible internet endpoint</b> (not just Twitch or YouTube)?</li>
+                                <li>Is it <b>independent, listener-supported, student-run, and/or a community institution</b>?</li>
+                                <li>Is there something <b>unique or interesting</b> about this station (its location, genre focus, attitude)?</li>
+                            </ol>
+                        </div>
+
+                        <div class="about-step">
+                            <div class="modal-header">Then we compile</div>
+                            <ol>
+                                <li><b>Basic information</b> (name, location, logo, website, socials)</li>
+                                <li><b>Support information</b> (where to donate or contribute to the station)</li>
+                                <li><b>Stream endpoint</b> (where does the music play?)</li>
+                                <li><b>Data endpoint and structure</b> (where can we find what’s playing, and how do we parse the information?)</li>
+                                <li><b>How we’d describe it to a friend</b></li>
+                            </ol>
+                        </div>
+
+                        <div class="about-step">
+                            <div class="modal-header">And then we monitor</div>
+                            <p><b>Every minute,</b> we check what’s playing (the show, and if available, artwork, song, artist, DJ, genres, description, listener count) and publish it across our One Radio platforms.</p>
+                            <p><b>Every 15 minutes</b> (for freshly added stations) or every few hours (for stations we’ve already gotten a good picture of), we listen in to what’s playing using either the station-provided song info or, if that’s not available, a Shazam-like service called ACRCloud. We then look up the song across a handful of databases (e.g. <a href="https://www.last.fm" target="_blank">Last.fm</a>) to gather information about its <b>genre</b>, <b>release year</b>, and <b>obscurity</b> (e.g. how many plays does this track have?) and record it. You can see this information at <a href="https://www.one.radio/dna" target="_blank">one.radio/dna</a> and summarized for each station by clicking the “ⓘ” button or “DNA” in the app.</p>
+                            <p>Our goal in tracking this information is equally to help <b>inform your discovery</b> as it is for us to keep our fingers on the pulses of the stations we feature and <b>the ever-evolving character of the top echelon of internet radio</b> as a whole.</p>
+                        </div>
+
+                        <div class="about-belief">
+                            <p>We believe in the value of serendipitous music discovery and the beauty of listening through friction. We hope you hear something that makes you fall as in love with the form as we have.</p>
+                        </div>
+
+                        <div class="about-step">
+                            <div class="modal-header">If you have suggestions</div>
+                            <p>Please email <a href="mailto:brayden@one.radio">brayden@one.radio</a>, message us on Instagram (<a href="https://instagram.com/one.radio" target="_blank">@one.radio</a>), or <a href="https://docs.google.com/forms/d/e/1FAIpQLScswUI86tUx0-Lt8i5e4ZdjyX5IJCP7fbZxfNqVmKxGNyLoXg/viewform" target="_blank">request a station through our form</a>.</p>
+                        </div>
+                    </div>
+
+                </div>
                 <div id="modal-content">
                     <div id="modal-logo-and-links">
                         <div id="modal-logo-container">
@@ -71,15 +137,15 @@
                         </div>
 
                     </div>
-                    <div id="modal-blurb-div">
-                        <div id="modal-from-us" class="modal-header"></div>
-                        <div id="modal-blurb" class="modal-description"></div>
-                    </div>
-
                     <div id="modal-from-the-show" class="modal-header">Now Playing</div>
                     <div class="modal-description" id="modal-show-container">
                         <div id="modal-show-logo-container"></div>
                         <div id="modal-subtitle-container"></div>
+                    </div>
+
+                    <div id="modal-blurb-div">
+                        <div id="modal-from-us" class="modal-header">About the Station</div>
+                        <div id="modal-blurb" class="modal-description"></div>
                     </div>
 
                     <div id="modal-dna">
@@ -88,6 +154,24 @@
                             <div id="modal-similar-list"></div>
                         </div>
                         <div id="modal-radar"></div>
+                        <div id="modal-metrics">
+                            <div class="metric" id="metric-obsc">
+                                <div class="modal-header">Obscurity</div>
+                                <div class="metric-value"></div>
+                                <div class="metric-compare"></div>
+                            </div>
+                            <div class="metric" id="metric-year">
+                                <div class="modal-header">Median Release</div>
+                                <div class="metric-value"></div>
+                                <div class="metric-compare"></div>
+                            </div>
+
+                            <div class="metric-warning"></div>
+                            <div id="modal-songs">
+                                <div class="modal-header"></div>
+                                <div id="modal-songs-list"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -116,6 +200,8 @@
                     <div id="last-up">        
                         <span id='live-count'></span><span class='last-updated'></span>
                     </div>
+
+                    <div id="about-button">About</div>
 
                     <a id='get-app-button' href="/app" target="_blank"><div id="ios-app" style="display:flex;">
                         App
@@ -171,6 +257,8 @@
         <div id="shows-now" class="category-header" data-controls="shows-container">Shows on now</div>
         <div  id="show-container-container">
         <div  id="shows-container"></div></div>
+
+        <div id="shelves"></div>
 
         <div id="view-selector">
             <img  class="view-icon" id="change-sort-icon"  onclick="sortStations(true)">
@@ -255,7 +343,7 @@
             <a target="_blank" href="/info">API</a> 
             <a href="mailto:bmo@one.radio">Email</a>  
             <!--<a target="_blank" href="https://github.com/brayden1moore/internet-radio-protocol">GitHub</a>  -->
-            <a class='insta-link' target='_blank' href='https://www.instagram.com/scudradios/'>Instagram</a><br><br>
+            <a class='insta-link' target='_blank' href='https://www.instagram.com/one.radio/'>Instagram</a><br><br>
             <a target="_blank" href="https://forms.gle/eWZTmtNRinxrtz587">Request a Station</a><br><br>
             <span id="hits"></span>&nbsp;visits
         </div>
@@ -1019,13 +1107,24 @@
 
     #modal-similar-list {
         max-height: 27rem;
-        overflow: scroll;
+        overflow-y: auto;
         border-bottom: 1px solid white;
     }
+    /* scrollable lists: fade the bottom edge while there's more below */
+    #modal-similar-list.has-more, #modal-songs-list.has-more {
+        -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent);
+                mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent);
+    }
+    @media (hover: hover) {
+        /* wheel-scrolling a list shouldn't drag the whole modal once it hits the end */
+        #modal-similar-list, #modal-songs-list { overscroll-behavior: contain; }
+    }
+    /* phones: show ~5 songs, scroll for the rest */
+    #modal-songs-list { max-height: 245px; overflow-y: auto; }
 
     #modal-dna {
         display: none;    
-        flex-direction: column-reverse;
+        flex-direction: column;
         gap: 20px;
         margin-top: 20px;
         margin-bottom: 20px;
@@ -1055,11 +1154,34 @@
         pointer-events: none;
     }
     .radar-overlay.on { opacity: 1; }
-    .radar-label { font-family: 'Favorit'; font-size: 11px; fill: currentColor; }
+    .radar-label { font-family: 'Favorit'; font-size: 11px; fill: currentColor; text-rendering: geometricPrecision; }
     @keyframes radarGrow { from { transform: scale(0); } to { transform: scale(1); } }
     @media (prefers-reduced-motion: reduce) { .radar-base { animation: none; } }
 
-    #modal-similar { flex: 1; min-width: 0;}
+    #modal-similar { flex: 1; min-width: 0; order: 3; }
+    #modal-radar { order: 1; }
+    #modal-metrics { order: 2; display: flex; gap: 20px; }
+    #modal-metrics .metric { flex: 1; min-width: 0; }
+    #modal-metrics .modal-header { margin-top: 0; }
+    .metric-value {
+        font-family: 'Archivo SemiBold'; font-size: 34px; line-height: 1;
+        letter-spacing: -0.05em; margin-top: 10px; font-variant-numeric: tabular-nums;
+    }
+    .metric-value small { font-family: 'Favorit'; font-size: 12px; letter-spacing: 0; opacity: 0.5; margin-left: 2px; }
+    .metric-compare {
+        font-family: 'Favorit'; font-size: 9pt; min-height: 1.3em; margin-top: 4px;
+    }
+    .metric-compare span { background: #FFFF00; color: #000; padding: 0 3px; }
+    .metric-warning { font-family: 'Favorit'; font-size: 9pt; opacity: 0.5; }
+    .metric-warning:empty { display: none; }
+    #modal-metrics { flex-wrap: wrap; min-width: 0; max-width: 100%; }
+    #modal-songs { display: none; flex: 1 1 100%; min-width: 0; }
+    #modal-songs .modal-header { margin-top: 0; }
+    .song-row { padding: 7px 0; border-bottom: 1px solid white; min-width: 0; }
+    .song-title, .song-artist { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .song-title { font-family: 'Archivo SemiBold'; font-size: 11pt; letter-spacing: -0.03em; }
+    .song-artist { font-family: 'Favorit'; font-size: 9pt; opacity: 0.65; margin-top: 1px; }
+    .dark .song-row { border-color: var(--line); }
     #modal-similar .modal-header { margin-top: 0; }
     .similar-row {
         display: flex;
@@ -1095,8 +1217,17 @@
 
     @media (min-width: 916px) {
         #modal-dna { flex-direction: row; align-items: flex-start; }
-        #modal-radar { flex: 0 0 500px; margin: 0; }
-        #modal-similar {max-width: 30%;}
+        #modal-radar { flex: 0 0 500px; margin: 0; order: 2; margin-top: 12px; }
+        /* the row is as tall as its tallest column (usually stats + songs);
+           You Might Like stretches its list to end on the same line */
+        #modal-dna { align-items: stretch; }
+        #modal-radar { align-self: flex-start; }
+        #modal-similar { order: 3; display: flex; flex-direction: column; }
+        #modal-similar-list { flex: 1 1 0; min-height: 27rem; max-height: none; }
+        #modal-songs-list { max-height: none; overflow: visible; }
+        #modal-metrics { order: 1; flex: 0 0 310px; flex-direction: column; flex-wrap: nowrap; gap: 10px; }
+        #modal-songs { flex: none; margin-top: 0px; }
+        #modal-metrics .metric { flex: none; }
     }
 
     .dark .similar-row,
@@ -1111,6 +1242,13 @@
         margin-top: 15px;
         color:black;
         font-family: "Archivo SemiBold";
+    }
+
+    .modal-show-extra {
+        font-size: 9pt;
+        line-height: 1.35em;
+        opacity: 0.65;
+        margin-top: 6px;
     }
 
     .modal-description {
@@ -2428,6 +2566,133 @@
         }
         #dark-toggle:hover { background: black; color: white; }        
         
+        /* ---- recently played shelf ---- */
+        #shelves { margin-bottom: 20px; }
+        .shelf[hidden] { display: none; }
+        .shelf-header { justify-content: space-between; }
+        .shelf-clear {
+            font-size: 9pt; opacity: 0.5; cursor: pointer; padding: 0 8px;
+            user-select: none; -webkit-user-select: none;
+        }
+        .shelf-clear:hover { opacity: 1; }
+        .shelf-row {
+            display: flex; flex-wrap: nowrap; gap: 10px;
+            overflow-x: auto; overflow-y: hidden; padding: 8px 0 2px;
+            scrollbar-width: none; -webkit-overflow-scrolling: touch;
+        }
+        .shelf-row::-webkit-scrollbar { display: none; }
+        .shelf-tile {
+            --shelf-logo: 80px;                      /* matches main list on mobile */
+            position: relative; flex: 0 0 auto; width: calc(var(--shelf-logo) + 2px); cursor: pointer;
+            animation: fadeIn 0.5s ease-out;
+            user-select: none; -webkit-user-select: none;
+        }
+        .shelf-tile .logo-and-overlay {
+            width: var(--shelf-logo); height: var(--shelf-logo); margin: 0;
+            border: 1px solid rgb(243, 243, 243) !important;   /* keeps white logos visible on white */
+        }
+        .shelf-tile:hover .play-overlay { display: flex; }
+        .shelf-tile:hover .logo-and-overlay,
+        .shelf-tile.playing .logo-and-overlay { background-color: #FFFF00; }
+        .shelf-tile.playing .shelf-text { background-color: #FFFF00; }
+        .shelf-tile.offline { opacity: 0.5; }
+        .shelf-tile .info-icon {
+            position: absolute; top: 3px; right: 5px; margin: 0; z-index: 11; font-size: 10pt;
+            color: white; opacity: 0; cursor: pointer; text-shadow: 0 0 3px rgba(0,0,0,0.6);
+        }
+        .shelf-tile:hover .info-icon { opacity: 0.8; }
+        .shelf-tile .info-icon:hover { opacity: 1; }
+        .shelf-text { padding: 4px 2px 2px; overflow: hidden; }
+        .shelf-name, .shelf-oneliner { white-space: nowrap; overflow: hidden; }
+        .shelf-name { font-family: 'Archivo SemiBold'; font-size: 9pt; line-height: 1.2; }
+        .shelf-oneliner { font-family: 'Favorit'; font-size: 8pt; opacity: 0.7; line-height: 1.2; }
+        @media (min-aspect-ratio: 8/10) {
+            .shelf-tile { --shelf-logo: 100px; }     /* matches main list on desktop */
+            .shelf-name { font-size: 10pt; }
+            .shelf-oneliner { font-size: 9pt; }
+        }
+        .dark .shelf-tile { color: #fff; }
+        .dark .shelf-tile .logo-and-overlay { border-color: #1c1c1c !important; }
+        .dark .shelf-tile.playing .shelf-text { color: #000; }
+
+        /* ---- about ---- */
+        #about-button {
+            color: #000; text-decoration: none; cursor: pointer; user-select: none;
+            border-left: 1px solid white; padding: 0 7.5px; height: 100%;
+            display: flex; align-items: center; background-color: #fff; margin-left: auto;
+        }
+        #about-button:hover { background: #000; color: #fff; }
+        #about-button + #get-app-button { margin-left: 0; }
+        .dark #about-button { background-color: #000; color: #fff; border-left-color: var(--line); }
+        .dark #about-button:hover { background: #fff; color: #000; }
+
+        #about-content { display: none; padding: 0 20px 30px; margin-top: -30px; }
+        #modal.about-mode #modal-content { display: none; }
+        #modal.about-mode #about-content { display: block; }
+        #about-title { font-family: 'Archivo SemiBold'; font-size: 28px; letter-spacing: -0.05em; margin-bottom: 4px; }
+        #about-totals { min-height: 2.9em; }
+
+        /* text stays at a readable width; the charts get the full modal */
+        #about-mission > :not(#about-heard), #about-heard > .modal-header, #about-totals { max-width: 760px; }
+        #about-heard { margin-bottom: 40px; }
+        #about-heard #about-charts { margin-top: 6px; }
+        #about-heard .about-section { margin-top: 0px; }
+        #about-mission { font-family: 'Favorit'; font-size: 11pt; line-height: 1.45; margin-bottom: 40px; }
+        #about-mission p { margin: 0 0 10px; }
+        #about-mission b {
+            font-weight: normal; background: #FFFF00; color: #000; padding: 0 1px;
+            -webkit-box-decoration-break: clone; box-decoration-break: clone;
+        }
+        #about-mission .about-lead {
+            font-family: 'Archivo SemiBold';
+            font-size: 38px;
+            line-height: 1.2;
+            letter-spacing: -0.04em;
+            margin: 28px 0 28px;
+        }
+        .about-step { margin-bottom: 26px; }
+        .about-step .modal-header { margin-bottom: 10px; }
+        #about-mission ol { margin: 0; padding: 0; list-style: none; counter-reset: about-step; }
+        #about-mission li { position: relative; padding-left: 24px; margin-bottom: 6px; counter-increment: about-step; }
+        #about-mission li::before {
+            content: counter(about-step) '.'; position: absolute; left: 0;
+            opacity: 0.5; font-variant-numeric: tabular-nums;
+        }
+        .about-belief {
+            margin: 34px 0; padding: 0;
+            font-family: 'Archivo SemiBold'; font-size: 38px; line-height: 1.3; letter-spacing: -0.03em;
+        }
+        .about-belief p:last-child { margin-bottom: 0 !important; }
+        #about-mission a { font-size: inherit; border-bottom: 1px solid currentColor; }
+                @media (max-width: 600px) {
+            #about-mission { font-size: 10.5pt; }
+            #about-mission .about-lead { font-size: 19px; }
+        }
+        .about-section { margin-top: 24px; }
+        .about-section .modal-header { margin-bottom: 12px; }
+        .about-readout { font-family: 'Favorit'; font-size: 10pt; min-height: 1.4em; margin-top: 6px; }
+        #about-genres .radar-label { font-size: 11px; transition: opacity 0.1s; cursor: default;}
+        #about-genres svg.hovering .radar-label { opacity: 0.35; }
+        #about-genres svg.hovering .radar-label.on { opacity: 1; }
+        .about-hist { display: block; width: 100%; height: auto; overflow: visible; }
+        .about-hist .bar { fill: currentColor; }
+        .about-hist .bar.muted { fill-opacity: 0.35; }
+        .about-hist .bar.on { fill: #FFFF00; fill-opacity: 1; }
+        .about-hist .hit { fill: transparent; cursor: default; }
+        .about-hist .axis { stroke: currentColor; stroke-opacity: 0.4; stroke-width: 1; }
+        .about-hist .tick { font-family: 'Favorit'; font-size: 11px; fill: currentColor; }
+        .about-hist .tick.small { font-size: 10px; opacity: 0.7; }
+        @media (min-aspect-ratio: 8/10) {
+            #about-content { padding: 0 40px 40px; }
+        }
+        /* side by side only on landscape screens wide enough for the wheel's labels
+           (a phone turned sideways stacks, like portrait) */
+        @media (orientation: landscape) and (min-width: 1200px) {
+            #about-charts { display: flex; gap: 40px; align-items: flex-start; }
+            #about-charts > .about-section { flex: 1 1 0; min-width: 0; }
+            #about-charts > .about-section:nth-child(2) { flex-grow: 1.2; }
+        }
+
         /* ---- tokens ---- */
         .dark {
             --line: #000000;                 /* gray outlines */
@@ -2598,6 +2863,15 @@
             return `${r.left + r.width / 2 - m.left}px ${r.top + r.height / 2 - m.top}px`;
         }
 
+        // Chrome can skip painting SVG text that was laid out while the modal was
+        // scaling up from ~2%, and only draws it on some later repaint. Nudge a
+        // paint property on the wheel labels once the modal is full size.
+        function repaintModalText() {
+            const labels = modalEl.querySelectorAll('.radar-label');
+            labels.forEach(t => { t.style.opacity = '0.99'; });
+            requestAnimationFrame(() => labels.forEach(t => { t.style.opacity = ''; }));
+        }
+
         function animateModalIn() {
             const recent = lastInfoClick && (performance.now() - lastInfoClick.t < 1000);
             modalOrigin = recent ? lastInfoClick.el : null;
@@ -2618,7 +2892,7 @@
                 [{ transform: from, opacity: 0 }, { transform: 'none', opacity: 1 }],
                 { duration: reduceMotion.matches ? 150 : 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
             );
-            modalAnim.onfinish = () => { modalAnim = null; };
+            modalAnim.onfinish = () => { modalAnim = null; repaintModalText(); };
         }
 
         function closeModal() {
@@ -2694,12 +2968,11 @@
                 modalShow.style.display = 'block';
                 subtitleText = info[station]['oneLiner'];
             }
-            if (info[station]['nowPlayingAdditionalInfo'] != null) { 
-                subtitleText = subtitleText + '<br><br>' +  info[station]['nowPlayingAdditionalInfo'];
-            }
-            if (info[station]['nowPlayingDescriptionLong'] != null) { 
-                subtitleText = subtitleText + '<br><br>' +  info[station]['nowPlayingDescriptionLong'];
-            }            
+            // show name stays prominent; any extra info sits underneath, smaller
+            const extras = [info[station]['nowPlayingAdditionalInfo'], info[station]['nowPlayingDescriptionLong']]
+                .filter(x => x != null && String(x).trim() !== '');
+            subtitleText = `<div class="modal-show-name">${subtitleText}</div>` +
+                (extras.length ? `<div class="modal-show-extra">${extras.join('<br><br>')}</div>` : '');
             /*if (info[station]['showLogo'] != null) {
                 modalShowLogo.innerHTML = `<div id="modal-show-logo"><img style="width:100%;"src=${info[station]['showLogo']}></div>`;
             }*/
@@ -2809,6 +3082,7 @@
                     previousStations.push(player.dataset.id);
                 }
                 document.title = `${id} on One Radio`;
+                if (typeof recordRecentlyPlayed === 'function') recordRecentlyPlayed(id);
 
                 const station = document.getElementById(id);
                 const oneLiner = station.dataset.oneLiner;
@@ -3695,6 +3969,7 @@
 
                 populateStations(json, needSort=firstLoad);
                 getCustomStations().forEach(u => decorateCustomCard(u.name, u.id));   // <-- decorate
+                if (typeof renderShelves === 'function') renderShelves();
 
                 if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
                     populateTags(info);
@@ -3719,6 +3994,7 @@
                             populateStations(json);
                         }
                         getCustomStations().forEach(u => decorateCustomCard(u.name, u.id));   // <-- decorate
+                        if (typeof renderShelves === 'function') renderShelves();
 
                         if (locationTagActive == false & statusTagActive == false & genreTagActive == false) {
                             populateTags(info);
@@ -4781,11 +5057,33 @@
         };
     }
 
-    // Nearest stations by Euclidean distance over the genre vector
+    // "You Might Like": genre mix, median release year and obscurity rank combined.
+    const SIMILAR_WEIGHTS = { genre: 0.6, year: 0.2, obsc: 0.2 };
+
+    function genreDist(a, b) {
+        let sum = 0;
+        for (let i = 0; i < a.length; i++) { const d = a[i] - b[i]; sum += d * d; }
+        return Math.sqrt(sum);
+    }
+
+    function similarityScales(dna) {
+        if (dna._scales) return dna._scales;
+        const names = Object.keys(dna.radar).filter(n => (dna.totals[n] || 0) >= DNA_MIN_TOTAL);
+        let gMax = 0;
+        for (let i = 0; i < names.length; i++)
+            for (let j = i + 1; j < names.length; j++)
+                gMax = Math.max(gMax, genreDist(dna.radar[names[i]], dna.radar[names[j]]));
+        const vals = k => names.map(n => (dna.spectra[n] || {})[k]).filter(v => v != null);
+        const range = a => a.length ? Math.max(...a) - Math.min(...a) : 0;
+        dna._scales = { genre: gMax || 1, year: range(vals('year_mean')) || 1, obsc: range(vals('obsc_mean')) || 1 };
+        return dna._scales;
+    }
+
     function similarStations(dna, station, limit) {
         const base = dna.radar[station];
         if (!base) return [];
-        const maxDist = 100 * Math.SQRT2;
+        const sc = similarityScales(dna);
+        const me = dna.spectra[station] || {};
         return Object.keys(dna.radar)
             .filter(name =>
                 name !== station &&
@@ -4794,14 +5092,95 @@
                 info && info[name] && info[name].status !== 'Offline' &&
                 document.getElementById(name))
             .map(name => {
-                const vec = dna.radar[name];
-                let sum = 0;
-                for (let i = 0; i < base.length; i++) { const d = base[i] - vec[i]; sum += d * d; }
-                const d = Math.sqrt(sum);
-                return { name, d, pct: Math.round(100 * (1 - d / maxDist)) };
+                const them = dna.spectra[name] || {};
+                const parts = [[SIMILAR_WEIGHTS.genre, genreDist(base, dna.radar[name]) / sc.genre]];
+                if (me.year_mean != null && them.year_mean != null)
+                    parts.push([SIMILAR_WEIGHTS.year, Math.abs(me.year_mean - them.year_mean) / sc.year]);
+                if (me.obsc_mean != null && them.obsc_mean != null)
+                    parts.push([SIMILAR_WEIGHTS.obsc, Math.abs(me.obsc_mean - them.obsc_mean) / sc.obsc]);
+                const wSum = parts.reduce((a, p) => a + p[0], 0);
+                const d = Math.sqrt(parts.reduce((a, p) => a + p[0] * p[1] * p[1], 0) / wSum);
+                return { name, d, pct: Math.max(0, Math.round(100 * (1 - d))) };
             })
             .sort((a, b) => a.d - b.d)
             .slice(0, limit);
+    }
+
+    // ---- median release year + obscurity beside the wheel
+    const metricYear = document.getElementById('metric-year');
+    const metricObsc = document.getElementById('metric-obsc');
+    const metricWarning = document.querySelector('#modal-metrics .metric-warning');
+
+    function renderMetrics(sp) {
+        const fill = (el, value) => {
+            el.style.display = value == null ? 'none' : '';
+            el.querySelector('.metric-value').innerHTML = value == null ? '' : value;
+            el.querySelector('.metric-compare').textContent = '';
+        };
+        fill(metricYear, sp.year_mean);
+        fill(metricObsc, sp.obsc_mean == null ? null : `${sp.obsc_mean}<small>/100</small>`);
+        metricWarning.textContent = sp.coverage_warning || '';
+    }
+
+    // ---- a few random songs we've identified on this station
+    const SONGS_URL = DNA_URL.replace(/\/data$/, '/songs/');
+    const modalSongs = document.getElementById('modal-songs');
+    const modalSongsList = document.getElementById('modal-songs-list');
+
+    function renderStationSongs(station) {
+        modalSongs.style.display = 'none';
+        modalSongsList.innerHTML = ''; modalSongsList.scrollTop = 0;
+        modalSongs.querySelector('.modal-header').textContent = `Songs We've Heard`;
+        fetch(`${SONGS_URL}${encodeURIComponent(station)}?n=10&cacheBust=${Math.random()}`)
+            .then(r => r.ok ? r.json() : [])
+            .then(songs => {
+                if (modalContainer.dataset.station !== station || !songs.length) return;
+                songs.forEach(song => {
+                    const row = document.createElement('div');
+                    row.className = 'song-row';
+                    const t = document.createElement('div');
+                    t.className = 'song-title';
+                    t.textContent = song.title;
+                    const a = document.createElement('div');
+                    a.className = 'song-artist';
+                    // credits often repeat each name ("A, A, A, B, B, B"): keep each once
+                    const artist = [...new Set(String(song.artist).split(/\s*,\s*/).filter(Boolean))].join(', ');
+                    a.textContent = song.year ? `${artist} · ${song.year}` : artist;
+                    row.title = `${artist} — ${song.title}`;
+                    row.append(t, a);
+                    modalSongsList.appendChild(row);
+                });
+                modalSongs.style.display = 'block';
+                watchMoreFade(modalSongsList);
+                watchMoreFade(modalSimilarList);   // its height can change once songs arrive
+            })
+            .catch(() => {});   // endpoint missing or offline: just leave the section hidden
+    }
+
+    function watchMoreFade(el) {
+        const update = () => el.classList.toggle('has-more',
+            el.scrollHeight - el.clientHeight - el.scrollTop > 4);
+        if (!el._fadeWatched) {
+            el.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+            el._fadeWatched = true;
+        }
+        requestAnimationFrame(update);
+    }
+
+    function compareMetrics(dna, name) {
+        const sp = name ? (dna.spectra[name] || {}) : {};
+        const set = (el, v) => {
+            const c = el.querySelector('.metric-compare');
+            c.textContent = '';
+            if (name && v != null) {
+                const tag = document.createElement('span');
+                tag.textContent = `${name}: ${v}`;
+                c.appendChild(tag);
+            }
+        };
+        set(metricYear, sp.year_mean);
+        set(metricObsc, sp.obsc_mean);
     }
 
     function renderSimilar(dna, similar, radar) {
@@ -4836,8 +5215,8 @@
             });
 
             row.append(img, text, infoBtn);
-            row.addEventListener('mouseenter', () => radar.showOverlay(dna.radar[s.name]));
-            row.addEventListener('mouseleave', () => radar.hideOverlay());
+            row.addEventListener('mouseenter', () => { radar.showOverlay(dna.radar[s.name]); compareMetrics(dna, s.name); });
+            row.addEventListener('mouseleave', () => { radar.hideOverlay(); compareMetrics(dna, null); });
             row.addEventListener('click', () => chooseStation(s.name));
             modalSimilarList.appendChild(row);
         });
@@ -4857,8 +5236,17 @@
             const all = similar.reduce((acc, s) => acc.concat(dna.radar[s.name]), vec.slice());
             const radar = buildRadar(dna.categories, vec, niceMax(all));
 
+            const trim = RADAR.size / 2 - RADAR.r - RADAR.labelGap - 14;
+            radar.svg.setAttribute('viewBox', `0 ${trim} ${RADAR.size} ${RADAR.size - 2 * trim}`);
+            // view-box transform origin sits at user (0,0): pin the grow animation to the wheel's centre
+            radar.svg.querySelector('.radar-base').style.transformOrigin = `${RADAR.size / 2}px ${RADAR.size / 2}px`;
             modalRadar.appendChild(radar.svg);
+            renderMetrics(dna.spectra[station] || {});
+            renderStationSongs(station);
+            if (!modalAnim) requestAnimationFrame(repaintModalText);
             renderSimilar(dna, similar, radar);
+            modalSimilarList.scrollTop = 0;
+            watchMoreFade(modalSimilarList);
             modalDNA.style.display = 'flex';
         }).catch(err => console.error('DNA fetch failed:', err));
     }
@@ -5194,6 +5582,378 @@
         scroller.style.animation = `${name} ${total}s linear infinite`;
         el._mqStyle = style;
     }
+</script>
+
+<script>
+    /* ================= RECENTLY PLAYED SHELF =================
+       Horizontal row under "Shows on now". Every station started (from any
+       button) is recorded in localStorage, newest first. */
+    const RECENT_KEY = 'recentlyPlayed';
+    const RECENT_MAX = 12;
+
+    function getRecentlyPlayed() {
+        try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || []; }
+        catch (e) { return []; }
+    }
+
+    function recordRecentlyPlayed(id) {
+        if (!id) return;
+        const list = getRecentlyPlayed().filter(x => x !== id);
+        list.unshift(id);
+        try { localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, RECENT_MAX))); } catch (e) {}
+        renderShelves();
+    }
+
+    function clearRecentlyPlayed() {
+        try { localStorage.removeItem(RECENT_KEY); } catch (e) {}
+        renderShelves();
+    }
+
+    // playable = in the data and has a card in the main grid (chooseStation needs it)
+    function shelfPlayable(id) {
+        return info && info[id] && document.getElementById(id) && document.getElementById(`${id}-audio`);
+    }
+
+    function buildShelfTile(id) {
+        const tile = document.createElement('div');
+        tile.className = 'shelf-tile';
+        tile.dataset.id = id;
+        tile.innerHTML = `
+            <p class="info-icon">ⓘ</p>
+            <div class="logo-and-overlay">
+                <div class="play-overlay">
+                    <svg viewBox="0 0 100 100" width="60%" height="60%">
+                        <polygon points="30,20 30,80 75,50" fill="white" stroke="black" stroke-width="2"/>
+                    </svg>
+                </div>
+                <img class="a-logo" loading="lazy">
+            </div>
+            <div class="shelf-text">
+                <div class="shelf-name"></div>
+                <div class="shelf-oneliner"></div>
+            </div>`;
+        tile.querySelector('.info-icon').addEventListener('click', e => { e.stopPropagation(); openModal(id); });
+        tile.addEventListener('click', () => chooseStation(id));
+        return tile;
+    }
+
+    // marqueeText caches by text; only cache once the element has a real width
+    function shelfMarquee(el, text) {
+        if (!el.clientWidth) { el._mqText = null; el.textContent = text; return; }
+        marqueeText(el, text, { speed: 20, gap: 30, pause: 2 });
+    }
+
+    function updateShelfTile(tile) {
+        const id = tile.dataset.id;
+        const s = info[id];
+        const img = tile.querySelector('.a-logo');
+        if (s.logo && img.getAttribute('src') !== s.logo) img.src = s.logo;
+        shelfMarquee(tile.querySelector('.shelf-name'), id);
+        shelfMarquee(tile.querySelector('.shelf-oneliner'), decodeHtmlEntities(s.oneLiner || ''));
+        tile.classList.toggle('offline', s.status === 'Offline');
+    }
+
+    function syncShelfPlaying() {
+        const audio = document.getElementById('player-audio');
+        const current = document.getElementById('player').dataset.id;
+        const on = audio && !audio.paused;
+        document.querySelectorAll('.shelf-tile').forEach(t =>
+            t.classList.toggle('playing', on && t.dataset.id === current));
+    }
+
+    function renderShelves() {
+        const root = document.getElementById('shelves');
+        if (!root || !info) return;
+
+        let section = root.querySelector('.shelf');
+        if (!section) {
+            section = document.createElement('div');
+            section.className = 'shelf';
+            section.innerHTML = `
+                <div class="category-header shelf-header">
+                    <span>Recently played</span><span class="shelf-clear">Clear</span>
+                </div>
+                <div class="shelf-row"></div>`;
+            section.querySelector('.shelf-clear').addEventListener('click', clearRecentlyPlayed);
+            root.appendChild(section);
+        }
+
+        const ids = getRecentlyPlayed().filter(shelfPlayable);
+        section.hidden = ids.length === 0;
+
+        const row = section.querySelector('.shelf-row');
+        const sig = ids.join('|');
+        if (row.dataset.sig !== sig) {
+            const existing = {};
+            row.querySelectorAll('.shelf-tile').forEach(t => existing[t.dataset.id] = t);
+            ids.forEach(id => row.appendChild(existing[id] || buildShelfTile(id)));   // moves existing nodes
+            Object.keys(existing).forEach(id => { if (!ids.includes(id)) existing[id].remove(); });
+            row.dataset.sig = sig;
+        }
+        row.querySelectorAll('.shelf-tile').forEach(updateShelfTile);
+        syncShelfPlaying();
+    }
+
+    (function initShelves() {
+        const audio = document.getElementById('player-audio');
+        ['play', 'playing', 'pause', 'emptied'].forEach(ev => audio.addEventListener(ev, syncShelfPlaying));
+
+        // tile width changes between mobile/desktop -> re-measure marquees
+        let rt;
+        window.addEventListener('resize', () => {
+            clearTimeout(rt);
+            rt = setTimeout(() => {
+                document.querySelectorAll('.shelf-name, .shelf-oneliner').forEach(el => el._mqText = null);
+                renderShelves();
+            }, 200);
+        });
+
+        renderShelves();
+    })();
+</script>
+
+<script>
+    /* ================= ABOUT =================
+       Opens in the station modal shell (so the player keeps going).
+       Data: /dna/network — distributions across every distinct song polled. */
+    const NETWORK_URL = DNA_URL.replace(/\/data$/, '/network');
+    let networkCache = null, networkFetchedAt = 0;
+
+    function loadNetwork() {
+        if (networkCache && Date.now() - networkFetchedAt < DNA_MAX_AGE) return Promise.resolve(networkCache);
+        return fetch(`${NETWORK_URL}?cacheBust=${Math.random()}`)
+            .then(r => r.json())
+            .then(d => { networkCache = d; networkFetchedAt = Date.now(); return d; });
+    }
+
+    const fmt = n => n.toLocaleString();
+    const svgEl = (tag, attrs) => {
+        const node = document.createElementNS(SVG_NS, tag);
+        for (const k in attrs) node.setAttribute(k, attrs[k]);
+        return node;
+    };
+
+    // Bar chart. bars: [{label, n, muted?}]. Hover/tap a bar -> readout(bar) text.
+    function buildHistogram({ bars, width = 600, height = 200, ticks, readout, idle = '' }) {
+        const pad = { top: 6, right: 4, bottom: 34, left: 4 };
+        const w = width - pad.left - pad.right, h = height - pad.top - pad.bottom;
+        const max = Math.max(1, ...bars.map(b => b.n));
+        const bw = w / bars.length;
+        const gap = bars.length > 30 ? 0.5 : Math.min(6, bw * 0.12);
+        const svg = svgEl('svg', { viewBox: `0 0 ${width} ${height}`, class: 'about-hist', role: 'img' });
+
+        const rects = bars.map((b, i) => {
+            const bh = (b.n / max) * h;
+            const r = svgEl('rect', {
+                x: (pad.left + i * bw + gap / 2).toFixed(2), y: (pad.top + h - bh).toFixed(2),
+                width: Math.max(0.5, bw - gap).toFixed(2), height: Math.max(b.n ? 1 : 0, bh).toFixed(2),
+                class: 'bar' + (b.muted ? ' muted' : ''),
+            });
+            svg.appendChild(r);
+            return r;
+        });
+
+        svg.appendChild(svgEl('line', { x1: pad.left, x2: pad.left + w, y1: pad.top + h + 0.5, y2: pad.top + h + 0.5, class: 'axis' }));
+
+        (ticks || bars.map((b, i) => ({ i, label: b.label }))).forEach(t => {
+            const tx = svgEl('text', {
+                x: (pad.left + (t.i + 0.5) * bw).toFixed(1), y: pad.top + h + 16,
+                'text-anchor': 'middle', class: 'tick' + (t.small ? ' small' : ''),
+            });
+            tx.textContent = t.label;
+            svg.appendChild(tx);
+        });
+
+        // full-height hit areas so thin bars are still easy to hover / tap
+        const out = readout;
+        let active = null;
+        const set = i => {
+            if (active != null) rects[active].classList.remove('on');
+            active = i;
+            if (i == null) { out.textContent = idle; return; }
+            rects[i].classList.add('on');
+            out.textContent = bars[i].text;
+        };
+        bars.forEach((b, i) => {
+            const hit = svgEl('rect', { x: pad.left + i * bw, y: 0, width: bw, height: pad.top + h, class: 'hit' });
+            hit.addEventListener('mouseenter', () => set(i));
+            hit.addEventListener('click', () => set(i));
+            svg.appendChild(hit);
+        });
+        svg.addEventListener('mouseleave', () => set(null));
+        set(null);
+        return svg;
+    }
+
+    function histSize(box) {
+        const width = Math.max(260, box.clientWidth || 600);
+        return { width, height: Math.round(Math.min(240, Math.max(170, width * 0.6))) };
+    }
+
+    function renderAboutGenres(net) {
+        const box = document.getElementById('about-genres');
+        box.innerHTML = '';
+        const pctText = i => `${Math.round(net.genres[i])}%`;
+        const labels = net.categories.map((c, i) => `${c} ${pctText(i)}`);   // measured with % so hover never overflows
+        // Draw at 1:1 pixels so labels are a true 11px, and size the wheel to
+        // match the bar charts' height when they sit side by side.
+        const w = box.clientWidth || 360;
+        const obsc = document.querySelector('#about-obsc svg');
+        const sideBySide = getComputedStyle(document.getElementById('about-charts')).display === 'flex';
+        // never squash the wheel below ~70px radius, or the labels near the top and bottom collide
+        const H = Math.max(2 * (70 + RADAR.labelGap + 12),
+                           sideBySide && obsc ? obsc.viewBox.baseVal.height : Math.min(380, Math.round(w * 0.75)));
+
+        const ctx = document.createElement('canvas').getContext('2d');
+        ctx.font = `11px ${getComputedStyle(box).fontFamily}`;
+        const gap = RADAR.labelGap, n = labels.length;
+        // largest radius where every label still fits inside w x H
+        let r = H / 2 - gap - 12;
+        labels.forEach((lab, i) => {
+            const a = -Math.PI / 2 + 2 * Math.PI * i / n, cos = Math.abs(Math.cos(a));
+            if (cos >= 0.2) r = Math.min(r, (w / 2 - ctx.measureText(lab).width - 4) / cos - gap);
+        });
+        r = Math.max(30, Math.floor(r));
+
+        const saved = { size: RADAR.size, r: RADAR.r };
+        Object.assign(RADAR, { size: H, r });
+        let svg;
+        try { svg = buildRadar(net.categories, net.genres, niceMax(net.genres)).svg; }
+        finally { Object.assign(RADAR, saved); }
+        svg.setAttribute('viewBox', `${-(w - H) / 2} 0 ${w} ${H}`);
+        svg.setAttribute('width', w);
+        svg.setAttribute('height', H);
+        // view-box transform origin sits at user (0,0), so pin the grow animation to the wheel's centre
+        svg.querySelector('.radar-base').style.transformOrigin = `${H / 2}px ${H / 2}px`;
+        box.appendChild(svg);
+
+        // hover / tap: nearest spoke reveals its %
+        const textEls = svg.querySelectorAll('.radar-label');
+        const readout = document.getElementById('about-genres-readout');
+        let active = null;
+        const set = i => {
+            if (i === active) return;
+            if (active != null) textEls[active].textContent = net.categories[active];
+            active = i;
+            svg.classList.toggle('hovering', i != null);
+            textEls.forEach((t, j) => t.classList.toggle('on', j === i));
+            if (i == null) { readout.textContent = ''; return; }
+            textEls[i].textContent = labels[i];
+            readout.textContent = `${net.categories[i]} · ${pctText(i)} of genre tags`;
+        };
+        const pick = e => {
+            const pt = svg.createSVGPoint();
+            pt.x = e.clientX; pt.y = e.clientY;
+            const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+            const dx = p.x - H / 2, dy = p.y - H / 2;
+            if (Math.hypot(dx, dy) < 8) return set(null);
+            const step = 2 * Math.PI / n;
+            set(((Math.round((Math.atan2(dy, dx) + Math.PI / 2) / step) % n) + n) % n);
+        };
+        svg.addEventListener('mousemove', pick);
+        svg.addEventListener('click', pick);
+        svg.addEventListener('mouseleave', () => set(null));
+    }
+
+    function renderAboutYears(net) {
+        const box = document.getElementById('about-years');
+        box.innerHTML = '';
+        const counts = net.years || {};
+        const years = Object.keys(counts).map(Number);
+        if (!years.length) return;
+        const START = 1950;
+        const last = Math.max(...years);
+
+        const bars = [];
+        for (let y = START; y <= last; y++) {
+            const n = counts[y] || 0;
+            bars.push({ label: String(y), n, text: `${y} · ${fmt(n)} song${n === 1 ? '' : 's'}` });
+        }
+        const ticks = [];
+        bars.forEach((b, i) => { if (+b.label % 10 === 0) ticks.push({ i, label: `'${b.label.slice(2)}` }); });
+        box.appendChild(buildHistogram({
+            bars, ticks, readout: document.getElementById('about-years-readout'), ...histSize(box),
+        }));
+    }
+
+    function renderAboutObscurity(net) {
+        const box = document.getElementById('about-obsc');
+        box.innerHTML = '';
+        // most played on the left -> most obscure on the right
+        const pcs = net.playcounts.slice().reverse();           // 10M+ ... 1–9, 0
+        const known = pcs.reduce((a, b) => a + b.n, 0) + net.n_unknown;
+        const pct = n => known ? Math.round(100 * n / known) : 0;
+        const bars = pcs.filter(b => b.label !== '0' || b.n > 0).map(b => ({
+            label: b.label, n: b.n,
+            text: `${b.label === '0' ? 'Never' : b.label} plays · ${fmt(b.n)} songs (${pct(b.n)}%)`,
+        }));
+        bars.push({ label: '0', n: net.n_unknown,
+                    text: `Not on Last.fm at all · ${fmt(net.n_unknown)} songs (${pct(net.n_unknown)}%)` });
+        const ticks = bars.map((b, i) => ({ i, label: b.label.replace(/–.*$/, '').replace('+', ''), small: true }));
+        box.appendChild(buildHistogram({
+            bars, ticks, readout: document.getElementById('about-obsc-readout'), ...histSize(box),
+        }));
+    }
+
+    function renderAbout(net) {
+        renderAboutObscurity(net);
+        renderAboutGenres(net);
+        renderAboutYears(net);
+    }
+
+    let aboutResize;
+    window.addEventListener('resize', () => {
+        if (!modalOpen || !modalEl.classList.contains('about-mode') || !networkCache) return;
+        clearTimeout(aboutResize);
+        aboutResize = setTimeout(() => renderAbout(networkCache), 150);
+    });
+
+    // one random real song sitting right at the median (year + Last.fm plays)
+    function medianExample(net) {
+        const list = net.median_examples || [];
+        if (!list.length) return '';
+        const ex = list[Math.floor(Math.random() * list.length)];
+        const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        const artist = [...new Set(String(ex.artist).split(/\s*,\s*/).filter(Boolean))].join(', ');
+        return ` For example, “${esc(ex.title)}” by ${esc(artist)} (${fmt(ex.playcount)} plays).`;
+    }
+
+    function openAbout() {
+        modalEl.classList.add('about-mode');
+        modalContainer.dataset.station = '';
+        animateModalIn();
+
+        document.getElementById('about-totals').textContent = 'Loading…';
+        loadNetwork().then(net => {
+            if (!modalEl.classList.contains('about-mode')) return;
+            const since = net.first_ts
+                ? new Date(net.first_ts).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+                : null;
+            const hl = v => `<b>${v}</b>`;
+            document.getElementById('about-totals').innerHTML =
+                (since ? `Since we began tracking individual songs on ${since}, we’ve` : 'We’ve') +
+                ` identified ${hl(fmt(net.n_songs))} tracks by ${fmt(net.n_artists)} artists` +
+                ` played across ${fmt(net.n_stations)} stations.` +
+                (net.median_playcount != null && net.year_median
+                    ? ` The median track has ${hl(fmt(net.median_playcount))}` +
+                      ` plays on Last.fm and was released in ${hl(net.year_median)}.` + medianExample(net)
+                    : '');
+            renderAbout(net);
+            if (!modalAnim) requestAnimationFrame(repaintModalText);
+        }).catch(err => {
+            console.error('network fetch failed:', err);
+            document.getElementById('about-totals').textContent = "Couldn't load the numbers right now.";
+        });
+    }
+
+    // station modal takes the shell back
+    const _openModal = openModal;
+    openModal = function (station) {
+        modalEl.classList.remove('about-mode');
+        return _openModal(station);
+    };
+
+    document.getElementById('about-button').addEventListener('click', openAbout);
 </script>
 
 <script type="application/ld+json">
