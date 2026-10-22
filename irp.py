@@ -1089,8 +1089,8 @@ class Stream:
                 if 'server_name' in i.keys():
                     if i['server_name'] == 'Radio Vilnius':
                         self.now_playing = extract_value(i, ['title'])
-                        if len(extract_value(i, ['artist']).split(';')) > 1:
-                            show_and_artist = extract_value(i, ['artist']).split(';')
+                        if len(extract_value(i, ['artist']).split(':')) > 1:
+                            show_and_artist = extract_value(i, ['artist']).split(':')
                             self.now_playing_subtitle = show_and_artist[0]
                             self.now_playing_artist = show_and_artist[1]
                         else:
