@@ -1082,13 +1082,19 @@ class Stream:
             self.now_playing = None
             self.now_playing_artist = None
             self.status = 'Offline'
+            self.now_playing_subtitle = None
             self.listeners = None
                 
             for i in info['allStats']:
                 if 'server_name' in i.keys():
                     if i['server_name'] == 'Radio Vilnius':
                         self.now_playing = extract_value(i, ['title'])
-                        self.now_playing_artist = extract_value(i, ['artist'])
+                        if len(extract_value(i, ['artist']).split(';')) > 1:
+                            show_and_artist = extract_value(i, ['artist']).split(';')
+                            self.now_playing_subtitle = show_and_artist[0]
+                            self.now_playing_artist = show_and_artist[1]
+                        else:
+                            self.now_playing_artist = extract_value(i, ['artist'])
                         if self.now_playing:
                             self.status = "Live"
                         self.listeners = extract_value(i, ['listener_peak'])
