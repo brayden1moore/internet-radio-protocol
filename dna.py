@@ -908,7 +908,8 @@ def rollups(conn):
         "genre_hex": genre_hex,
         "genre_max": gmax,
         "misses": station_stats.uncategorized(conn, min_n=3),
-        "network": station_stats.network_payload(conn),
+        "network": {**station_stats.network_payload(conn),
+                    "highlights": station_stats.highlights(conn)},
     }
     with _cache_lock:
         _cache.update(ver=ver, val=val)

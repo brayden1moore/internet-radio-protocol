@@ -812,3 +812,101 @@ def network_payload(conn, this_year=None):
         ),
         "n_unknown": n_unknown,
     }
+
+
+# ---------------------------------------------------------------------------
+# Network highlights (About page): superlatives + most-played artists/songs
+# ---------------------------------------------------------------------------
+
+HIGHLIGHT_MIN_POLLS = 100        # a station needs this many polls to compete
+HIGHLIGHT_MIN_IDENTIFIED = 30
+_NOT_AN_ARTIST = {"various artists", "various", "va", "unknown", "unknown artist", "[unknown]",
+                  "anonymous", "traditional", "n/a"}
+_ARTIST_SPLIT = re.compile(r"\s*(?:,|&| feat\.? | ft\.? | featuring | x )\s*", re.I)
+
+
+def _primary_artist(artist):
+    return _ARTIST_SPLIT.split(artist.strip())[0].strip() if artist else ""
+
+
+def highlights(conn, top_n=5, candidates=12):
+    """
+    Superlatives come back as short ranked lists (best first) so the page can
+    skip stations it doesn't currently show.
+
+    typical_plays: geometric mean of Last.fm plays over EVERY poll of a station,
+    with unidentified polls and songs Last.fm doesn't know counted as 0. Lowest
+    = most obscure, highest = most agreeable.
+
+    Top artists / songs rank by how many different stations played them, then
+    by total plays, so one station looping a record can't top the list.
+    """
+    per_station = {}                   # station -> [sum log(p+1), polls, identified]
+    artists, songs = {}, {}            # key -> {"name"/"artist","title", "stations": set, "plays": n}
+    for station, matched, artist, title, plays in conn.execute(
+        "SELECT station, matched, artist, title, lf_playcount FROM plays"
+    ):
+        st = per_station.setdefault(station, [0.0, 0, 0])
+        st[1] += 1
+        p = plays if (matched and plays is not None) else 0
+        st[0] += math.log10(max(0, p) + 1)
+        if not matched or not artist or not title:
+            continue
+        st[2] += 1
+        a_disp = fix_text(_primary_artist(artist))
+        a_key = a_disp.lower()
+        if a_key and a_key not in _NOT_AN_ARTIST:
+            a = artists.setdefault(a_key, {"name": a_disp, "stations": set(), "plays": 0})
+            a["stations"].add(station); a["plays"] += 1
+        s_key = (fix_text(artist.strip()).lower(), fix_text(title.strip()).lower())
+        s = songs.setdefault(s_key, {"artist": fix_text(artist.strip()), "title": fix_text(title.strip()),
+                                     "stations": set(), "plays": 0})
+        s["stations"].add(station); s["plays"] += 1
+
+    eligible = {k: v for k, v in per_station.items()
+                if v[1] >= HIGHLIGHT_MIN_POLLS and v[2] >= HIGHLIGHT_MIN_IDENTIFIED}
+    typical = sorted(((10 ** (v[0] / v[1]) - 1, k) for k, v in eligible.items()))
+    obscure = [{"station": k, "typical_plays": round(t)} for t, k in typical[:candidates]]
+    agreeable = [{"station": k, "typical_plays": round(t)} for t, k in reversed(typical[-candidates:])]
+
+    # era + variety from the rollup tables
+    years = conn.execute(
+        "SELECT station, median_year FROM station_stats"
+        " WHERE median_year IS NOT NULL AND n_year >= ? ORDER BY median_year",
+        (HIGHLIGHT_MIN_IDENTIFIED,),
+    ).fetchall()
+    oldest = [{"station": s, "median_year": y} for s, y in years[:candidates]]
+    newest = [{"station": s, "median_year": y} for s, y in reversed(years[-candidates:])]
+
+    spread = []
+    by_station = {}
+    for station, pct in conn.execute(
+        "SELECT g.station, g.pct FROM station_genres g JOIN station_stats s ON s.station = g.station"
+        " WHERE s.categorized >= ?", (HIGHLIGHT_MIN_IDENTIFIED,)
+    ):
+        by_station.setdefault(station, []).append(pct)
+    for station, pcts in by_station.items():
+        tot = sum(pcts) or 1
+        ent = -sum((p / tot) * math.log(p / tot) for p in pcts if p > 0)
+        spread.append((ent, len([p for p in pcts if p >= 3]), station))
+    spread.sort(reverse=True)
+    eclectic = [{"station": s, "genres": n} for _, n, s in spread[:candidates]]
+
+    def top(d, label):
+        ranked = sorted(d.values(), key=lambda v: (-len(v["stations"]), -v["plays"]))
+        out = []
+        for v in ranked[:top_n]:
+            item = {k: v[k] for k in v if k not in ("stations",)}
+            item["n_stations"] = len(v["stations"])
+            out.append(item)
+        return out
+
+    return {
+        "most_obscure": obscure,
+        "most_agreeable": agreeable,
+        "most_eclectic": eclectic,
+        "oldest_ears": oldest,
+        "newest_ears": newest,
+        "top_artists": top(artists, "name"),
+        "top_songs": top(songs, "title"),
+    }
