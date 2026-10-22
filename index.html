@@ -340,15 +340,24 @@
     
         <div id="text-container">
             Please support a station if you like it.<br>            
-            <a target="_blank" href="/info">API</a> 
-            <a href="mailto:bmo@one.radio">Email</a>  
+            <a class="footer-link" target="_blank" href="/info">API</a> 
+            <a class="footer-link" href="mailto:bmo@one.radio">Email</a>  
             <!--<a target="_blank" href="https://github.com/brayden1moore/internet-radio-protocol">GitHub</a>  -->
-            <a class='insta-link' target='_blank' href='https://www.instagram.com/one.radio/'>Instagram</a><br><br>
-            <a target="_blank" href="https://forms.gle/eWZTmtNRinxrtz587">Request a Station</a><br><br>
+            <a class='insta-link footer-link' target='_blank' href='https://www.instagram.com/one.radio/'>Instagram</a><br><br>
+            <a class="footer-link" target="_blank" href="https://forms.gle/eWZTmtNRinxrtz587">Request a Station</a><br><br>
             <span id="hits"></span>&nbsp;visits
         </div>
-        <div id="scud-logo-div"><img id="scud-logo" src='/assets/appicon1024.png'></div>
+        <div id="scud-logo-div"><img id="scud-logo" src='/assets/appicontrans.png'></div>
         </body></html><style>
+
+    .footer-link {
+        border-bottom: 1px solid var(--line);
+    }
+
+    #hits {
+        background-color: yellow;
+        color:black
+    }
 
     #modal-blurb-div {
         display: none;
@@ -2695,12 +2704,12 @@
 
         /* ---- tokens ---- */
         .dark {
-            --line: #000000;                 /* gray outlines */
-            --panel: #0d0d0d;             /* card / surface */
-            --accent: #ffff00;            /* unchanged brand yellow */
-            --pulse: dark-pulse;          /* reuses your existing keyframes */
+            --line: #000000;                
+            --panel: #0d0d0d;          
+            --accent: #ffff00;          
+            --pulse: dark-pulse;        
             --player-paused-color: #1c1c1c;
-            background-color: #000;       /* kills white flash on load */
+            background-color: #000;     
             color-scheme: dark;
         }
         
