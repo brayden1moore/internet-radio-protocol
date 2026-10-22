@@ -40,7 +40,6 @@ STYLE = """
       margin: 0;
       border-bottom: 0px;
       padding: 3px 10px;
-      border-bottom: 1px solid black;
       font-family: "Archivo SemiBold";
       font-weight: normal !important;
    }
@@ -92,7 +91,6 @@ STYLE = """
   .dna {
     margin-left: 5px;
     padding: 4px 12px;
-    border: 1px solid black;
     background-color: yellow;
     font-family: "Archivo Light";
     color: black;
