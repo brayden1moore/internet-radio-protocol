@@ -2851,6 +2851,7 @@ Stream(
         bandcamp_link = "",
         soundcloud_link = "",
         hidden=False,
+        song_basis = True,
         bmo_desc='A Lithuanian station made to make you wonder "where has this song been all my life?" If you catch Radio Vilnius at the right time for you, you will understand.'
 ),
 Stream(
