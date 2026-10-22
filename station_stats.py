@@ -1,4 +1,5 @@
 import math
+import re
 import bisect
 import statistics
 from functools import lru_cache
@@ -134,6 +135,25 @@ UNDERGROUND_ABOVE = 67.0
 # weight the axis by airtime instead, which lets the highest-volume stations
 # define obscurity for everyone.
 DEDUPE_REFERENCE = True
+
+
+# Typical lead bytes of UTF-8 that was read as Latin-1 ("é" -> "Ã©", "ö" -> "Ã¶",
+# Cyrillic -> "Ð…"/"Ñ…", CJK -> "æ…"/"ç…"/"å…"/"ä…"/"è…"/"é…"/"ã…").
+_MOJIBAKE_HINT = re.compile("[\u00c2-\u00c5\u00d0\u00d1\u00e2-\u00e9][\u0080-\u00bf]")
+
+
+def fix_text(s):
+    """
+    Undo UTF-8-read-as-Latin-1 ("RollÃ©n" -> "Rollén"). Safe on clean text: only
+    attempted when the telltale byte pairs are present, and only kept if the
+    round trip decodes cleanly.
+    """
+    if not s or not isinstance(s, str) or not _MOJIBAKE_HINT.search(s):
+        return s
+    try:
+        return s.encode("latin-1").decode("utf-8")
+    except UnicodeError:
+        return s
 
 
 def parse_year(acr_release, mb_year):
@@ -721,7 +741,8 @@ def network_payload(conn, this_year=None):
             y = None
         s = songs.get(key)
         if s is None:
-            songs[key] = [categories, y, plays, artist.strip() if artist else "", title.strip() if title else ""]
+            songs[key] = [categories, y, plays, fix_text(artist.strip()) if artist else "",
+                          fix_text(title.strip()) if title else ""]
         else:  # fill gaps from later sightings of the same song
             if not s[0] and categories: s[0] = categories
             if s[1] is None and y: s[1] = y

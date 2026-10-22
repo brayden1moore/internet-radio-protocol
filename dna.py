@@ -1021,7 +1021,8 @@ def dna_songs(station):
         ).fetchall()
     finally:
         conn.close()
-    resp = jsonify([{"artist": r["artist"], "title": r["title"], "year": r["year"]} for r in rows])
+    fix = station_stats.fix_text   # in case old garbled rows haven't been repaired yet
+    resp = jsonify([{"artist": fix(r["artist"]), "title": fix(r["title"]), "year": r["year"]} for r in rows])
     resp.headers["Access-Control-Allow-Origin"] = "*"
     resp.headers["Cache-Control"] = "no-store"
     return resp

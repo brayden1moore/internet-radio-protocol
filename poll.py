@@ -107,7 +107,10 @@ def acr_identify(sample):
         "signature": sign, "data_type": "audio", "signature_version": "1",
     }
     r = requests.post(f"https://{ACR_HOST}/v1/identify", files=files, data=data, timeout=30)
-    payload = r.json()
+    # Parse the raw bytes, not r.json(): ACR's response has no charset, so requests
+    # falls back to ISO-8859-1 and "é" arrives as "Ã©" -- which then also misses
+    # on Last.fm / MusicBrainz. json.loads on bytes detects UTF-8 itself.
+    payload = json.loads(r.content)
     if payload.get("status", {}).get("code") != 0:
         return None
     music = payload.get("metadata", {}).get("music", [])
