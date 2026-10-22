@@ -721,7 +721,7 @@ def network_payload(conn, this_year=None):
             y = None
         s = songs.get(key)
         if s is None:
-            songs[key] = [categories, y, plays]
+            songs[key] = [categories, y, plays, artist.strip() if artist else "", title.strip() if title else ""]
         else:  # fill gaps from later sightings of the same song
             if not s[0] and categories: s[0] = categories
             if s[1] is None and y: s[1] = y
@@ -731,7 +731,7 @@ def network_payload(conn, this_year=None):
     years = Counter()
     bins = [0] * len(PLAYCOUNT_BINS)
     n_zero = n_unknown = 0
-    for categories, y, plays in songs.values():
+    for categories, y, plays, _, _ in songs.values():
         if categories:
             for c in categories.split(";"):
                 c = c.strip()
@@ -752,14 +752,29 @@ def network_payload(conn, this_year=None):
     total_hits = sum(cat_hits.values()) or 1
     year_list = sorted(years.elements())
     # songs Last.fm doesn't know count as 0 plays
-    playcounts = sorted((p or 0) for _, _, p in songs.values())
+    playcounts = sorted((s[2] or 0) for s in songs.values())
+    median_pc = statistics.median(playcounts) if playcounts else None
+    year_med = round(statistics.median(year_list)) if year_list else None
+
+    # A few real songs that sit right at the median: released in the median
+    # year, with a playcount closest (on a log scale) to the median playcount.
+    examples = []
+    if median_pc and year_med:
+        target = math.log10(median_pc + 1)
+        near = sorted(
+            (abs(math.log10((s[2] or 0) + 1) - target), s[3], s[4], s[2])
+            for s in songs.values()
+            if s[1] == year_med and s[2] and s[3] and s[4]
+        )
+        examples = [{"artist": a, "title": t, "playcount": p} for _, a, t, p in near[:8]]
     top = cat_hits.most_common(1)
     return {
         "n_songs": len(songs),
         "n_artists": len(artists),
         "n_stations": len(stations),
         "first_ts": first_ts,
-        "median_playcount": round(statistics.median(playcounts)) if playcounts else None,
+        "median_playcount": round(median_pc) if median_pc is not None else None,
+        "median_examples": examples,
         "top_genre": top[0][0] if top else None,
         "top_genre_pct": 100 * top[0][1] / total_hits if top else 0,
         "n_plays": n_plays,
