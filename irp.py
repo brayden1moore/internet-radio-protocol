@@ -3047,7 +3047,8 @@ Stream(
         support_link = 'https://lahmacun.hu/donate',
         insta_link = 'http://instagram.com/lahmacunradio',
         bandcamp_link = 'https://lahmacunradio.bandcamp.com/',
-        bmo_desc="Boundary-pushing, scrappy radio station based in Hungary's capital city."
+        bmo_desc="Boundary-pushing, scrappy radio station based in Hungary's capital city.",
+        hidden=True
 ),
 Stream(
         name = 'Gatekeeper Radio',
