@@ -742,8 +742,9 @@ def network_payload(conn, this_year=None):
         s = songs.get(key)
         if s is None:
             songs[key] = [categories, y, plays, fix_text(artist.strip()) if artist else "",
-                          fix_text(title.strip()) if title else ""]
+                          fix_text(title.strip()) if title else "", [station]]
         else:  # fill gaps from later sightings of the same song
+            if station not in s[5]: s[5].append(station)
             if not s[0] and categories: s[0] = categories
             if s[1] is None and y: s[1] = y
             if s[2] is None and plays is not None: s[2] = plays
@@ -752,7 +753,7 @@ def network_payload(conn, this_year=None):
     years = Counter()
     bins = [0] * len(PLAYCOUNT_BINS)
     n_zero = n_unknown = 0
-    for categories, y, plays, _, _ in songs.values():
+    for categories, y, plays, *_ in songs.values():
         if categories:
             for c in categories.split(";"):
                 c = c.strip()
@@ -783,11 +784,12 @@ def network_payload(conn, this_year=None):
     if median_pc and year_med:
         target = math.log10(median_pc + 1)
         near = sorted(
-            (abs(math.log10((s[2] or 0) + 1) - target), s[3], s[4], s[2])
+            (abs(math.log10((s[2] or 0) + 1) - target), s[3], s[4], s[2], s[5])
             for s in songs.values()
             if s[1] == year_med and s[2] and s[3] and s[4]
         )
-        examples = [{"artist": a, "title": t, "playcount": p} for _, a, t, p in near[:25] if 'Wop' not in a and 'Jan & Dean' not in a]
+        examples = [{"artist": a, "title": t, "playcount": p, "stations": st}
+                    for _, a, t, p, st in near[:25] if 'Wop' not in a and 'Jan & Dean' not in a]
     top = cat_hits.most_common(1)
     return {
         "n_songs": len(songs),
