@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS station_stats (
     n_zero            INTEGER,           -- found but never scrobbled
     coverage_pct      REAL,              -- n_known / identified * 100
     -- popularity counting absence as obscurity
-    effective_plays   INTEGER,           -- geometric mean with NULLs imputed
+    effective_plays   INTEGER,           -- geometric mean over all polls; unknown + unidentified = 0
     obscurity         INTEGER,           -- station rank: 0 = most played, 100 = most obscure
     obscurity_known   INTEGER,           -- same rank ignoring missing rows
     -- Shape of this station's own plays on the track obscurity axis. Every
@@ -411,9 +411,12 @@ def recompute(conn, this_year=None, min_tag_count=1):
         pos = [p for p in known if p > 0]
         gmean_known = 10 ** statistics.mean([math.log10(p) for p in pos]) if pos else None
 
-        # Depth counting absence. The +1 keeps zeros and imputed NULLs in range.
+        # Depth counting absence: every poll counts, so plays Last.fm doesn't know
+        # AND polls we couldn't identify at all both count as 0 plays. (Same
+        # number the About page's "most obscure / most agreeable" use.) The +1
+        # keeps zeros in range of the log.
         scored = b["scores"]
-        effective = 10 ** statistics.mean(scored) - 1 if scored else None
+        effective = (10 ** (sum(scored) / b["polled"]) - 1) if scored and b["polled"] else None
 
         # Shape of the same plays on the track obscurity axis.
         shape = _track_shape(
@@ -838,13 +841,16 @@ def highlights(conn, top_n=5, candidates=12):
     with unidentified polls and songs Last.fm doesn't know counted as 0. Lowest
     = most obscure, highest = most agreeable.
 
-    Top artists / songs rank by how many different stations played them, then
-    by total plays, so one station looping a record can't top the list.
+    Top artists / songs rank by how many polls caught them playing (ties broken
+    by how many different stations played them). Back-to-back polls of the same
+    song on the same station count once: songs are minutes long and polls are
+    15+ minutes apart, so a repeat is a stuck now-playing feed, not a new airing.
     """
     per_station = {}                   # station -> [sum log(p+1), polls, identified]
     artists, songs = {}, {}            # key -> {"name"/"artist","title", "stations": set, "plays": n}
+    last_song = {}                     # station -> song key of its previous poll
     for station, matched, artist, title, plays in conn.execute(
-        "SELECT station, matched, artist, title, lf_playcount FROM plays"
+        "SELECT station, matched, artist, title, lf_playcount FROM plays ORDER BY station, ts"
     ):
         st = per_station.setdefault(station, [0.0, 0, 0])
         st[1] += 1
@@ -853,16 +859,22 @@ def highlights(conn, top_n=5, candidates=12):
         if not matched or not artist or not title:
             continue
         st[2] += 1
+        s_key = (fix_text(artist.strip()).lower(), fix_text(title.strip()).lower())
+        repeat = last_song.get(station) == s_key
+        last_song[station] = s_key
+        if repeat:
+            continue
         a_disp = fix_text(_primary_artist(artist))
         a_key = a_disp.lower()
         if a_key and a_key not in _NOT_AN_ARTIST:
             a = artists.setdefault(a_key, {"name": a_disp, "stations": set(), "plays": 0})
             a["stations"].add(station); a["plays"] += 1
-        s_key = (fix_text(artist.strip()).lower(), fix_text(title.strip()).lower())
         s = songs.setdefault(s_key, {"artist": fix_text(artist.strip()), "title": fix_text(title.strip()),
                                      "stations": set(), "plays": 0})
         s["stations"].add(station); s["plays"] += 1
 
+    # Same formula as station_stats.effective_plays (all polls; unknown and
+    # unidentified count as 0), kept unrounded here so near-ties rank properly.
     eligible = {k: v for k, v in per_station.items()
                 if v[1] >= HIGHLIGHT_MIN_POLLS and v[2] >= HIGHLIGHT_MIN_IDENTIFIED}
     typical = sorted(((10 ** (v[0] / v[1]) - 1, k) for k, v in eligible.items()))
@@ -885,15 +897,18 @@ def highlights(conn, top_n=5, candidates=12):
         " WHERE s.categorized >= ?", (HIGHLIGHT_MIN_IDENTIFIED,)
     ):
         by_station.setdefault(station, []).append(pct)
+    # Eclectic = how many genres get a real share of airtime (>= 1% of genre tags),
+    # ties broken by how evenly the station spreads across them (Shannon entropy).
+    n_axis = len(genres.all_categories())
     for station, pcts in by_station.items():
         tot = sum(pcts) or 1
         ent = -sum((p / tot) * math.log(p / tot) for p in pcts if p > 0)
-        spread.append((ent, len([p for p in pcts if p >= 3]), station))
+        spread.append((len([p for p in pcts if p >= 1]), ent, station))
     spread.sort(reverse=True)
-    eclectic = [{"station": s, "genres": n} for _, n, s in spread[:candidates]]
+    eclectic = [{"station": s, "genres": n, "of": n_axis} for n, _, s in spread[:candidates]]
 
     def top(d, label):
-        ranked = sorted(d.values(), key=lambda v: (-len(v["stations"]), -v["plays"]))
+        ranked = sorted(d.values(), key=lambda v: (-v["plays"], -len(v["stations"])))
         out = []
         for v in ranked[:top_n]:
             item = {k: v[k] for k in v if k not in ("stations",)}
