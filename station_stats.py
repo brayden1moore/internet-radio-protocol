@@ -699,6 +699,7 @@ def network_payload(conn, this_year=None):
     on_axis = set(axis)
 
     songs = {}   # key -> [categories, year, playcount]
+    artists = set()
     n_plays = 0
     for (artist, title, categories, acr_release, mb_year, plays) in conn.execute(
         "SELECT artist, title, categories, acr_release, mb_year, lf_playcount"
@@ -706,6 +707,8 @@ def network_payload(conn, this_year=None):
     ):
         n_plays += 1
         key = ((artist or "").strip().lower(), (title or "").strip().lower())
+        if key[0]:
+            artists.add(key[0])
         if key == ("", ""):
             continue
         y = parse_year(acr_release, mb_year)
@@ -743,8 +746,12 @@ def network_payload(conn, this_year=None):
 
     total_hits = sum(cat_hits.values()) or 1
     year_list = sorted(years.elements())
+    top = cat_hits.most_common(1)
     return {
         "n_songs": len(songs),
+        "n_artists": len(artists),
+        "top_genre": top[0][0] if top else None,
+        "top_genre_pct": 100 * top[0][1] / total_hits if top else 0,
         "n_plays": n_plays,
         "categories": axis,
         "genres": [round(100 * cat_hits[c] / total_hits, 2) for c in axis],
