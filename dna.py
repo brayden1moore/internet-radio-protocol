@@ -771,6 +771,7 @@ def rollups(conn):
         "genre_hex": genre_hex,
         "genre_max": gmax,
         "misses": station_stats.uncategorized(conn, min_n=3),
+        "network": station_stats.network_payload(conn),
     }
     with _cache_lock:
         _cache.update(ver=ver, val=val)
@@ -846,6 +847,18 @@ def dna_data():
     conn = _conn()
     try:
         resp = jsonify(rollups(conn)["dna"])
+    finally:
+        conn.close()
+    resp.headers["Access-Control-Allow-Origin"] = "*"
+    return resp
+
+
+@app.route("/dna/network")
+def dna_network():
+    """Network-wide genre / era / playcount distributions for the About page."""
+    conn = _conn()
+    try:
+        resp = jsonify(rollups(conn)["network"])
     finally:
         conn.close()
     resp.headers["Access-Control-Allow-Origin"] = "*"
