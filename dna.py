@@ -480,117 +480,228 @@ DNA_PANEL = """
 </script>
 """
 
-PAGE = STYLE + """
+PAGE_STYLE = """
+<style>
+@font-face{font-family:"Archivo Light";src:url("https://one.radio/assets/Archivo-Light.ttf") format("truetype");}
+@font-face{font-family:"Archivo SemiBold";src:url("https://one.radio/assets/Archivo-SemiBold.ttf") format("truetype");}
+@font-face{font-family:"Archivo Bold";src:url("https://one.radio/assets/Archivo-Bold.ttf") format("truetype");}
+  :root{--gray:rgb(243,243,243);--line:#e6e6e6;--yellow:#FFFF00}
+  *{box-sizing:border-box}
+  body{margin:0;padding:20px;color:#111;letter-spacing:-0.04em;
+       font:13px/1.4 "Archivo Light",system-ui,sans-serif}
+  h1{margin:0 0 24px;padding-bottom:14px;border-bottom:1px solid #000;
+     font:normal 34pt/1 "Archivo Bold",sans-serif;letter-spacing:-0.05em}
+  .dna{margin-left:5px;padding:4px 12px;border:1px solid #000;background:var(--yellow);
+       font:normal 34pt/1 "Archivo Light",sans-serif}
+
+  section{margin-bottom:36px}
+  .bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+       border:1px solid #000;border-bottom:none;padding:6px 6px 6px 10px}
+  .bar h2{margin:0;font:normal 15px/1.2 "Archivo SemiBold",sans-serif}
+  .bar .meta{color:#888}
+  .bar .tools{margin-left:auto;display:flex;gap:6px;align-items:center}
+  .bar input[type=search]{font:inherit;letter-spacing:inherit;width:200px;padding:3px 8px;
+       border:1px solid #000;border-radius:0;outline:none;background:#fff}
+  .bar input[type=search]:focus{background:var(--yellow)}
+  .bar .count{color:#888;font-variant-numeric:tabular-nums;white-space:nowrap}
+  a.btn{padding:3px 10px;border:1px solid #000;background:var(--yellow);color:#000;
+        text-decoration:none;white-space:nowrap}
+  a.btn:hover{background:#000;color:var(--yellow)}
+  a.btn.plain{background:#fff}
+  a.btn.plain:hover{background:#000;color:#fff}
+
+  /* platform stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);
+         border:1px solid #000;border-right:none;border-bottom:none}
+  .stat{padding:12px 12px 10px;border-right:1px solid #000;border-bottom:1px solid #000}
+  .stat .v{font:normal 26px/1.1 "Archivo SemiBold",sans-serif;letter-spacing:-0.05em;
+           font-variant-numeric:tabular-nums}
+  .stat .k{color:#888;margin-top:2px}
+
+  /* tables */
+  .scroll{max-height:520px;overflow:auto;border:1px solid #000}
+  table{border-collapse:collapse;width:100%}
+  th,td{text-align:left;padding:5px 10px;border-bottom:1px solid var(--line);
+        white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px}
+  th{position:sticky;top:0;z-index:1;background:#fff;border-bottom:1px solid #000;
+     font:normal 12px/1.2 "Archivo SemiBold",sans-serif;cursor:pointer;user-select:none}
+  th:hover{background:var(--gray)}
+  th.sorted-asc::after{content:" \\2191"}
+  th.sorted-desc::after{content:" \\2193"}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  tbody tr:hover td{background:var(--gray)}
+  tr.miss td{color:#aaa}
+  tr[hidden]{display:none}
+  .sep{border-left:1px solid #ccc}
+  .empty{padding:14px 10px;color:#888;display:none}
+
+  table.plays{table-layout:fixed;min-width:1100px}
+  table.plays .c-time{width:160px}
+
+  table.stations{width:max-content;min-width:100%}
+  table.stations .g{border-left:1px solid rgba(0,0,0,.05);text-align:center;max-width:none}
+  table.stations th.g{font-size:10px;letter-spacing:0;padding-top:6px}
+  table.stations td.g{border-bottom:1px solid #fff}
+  table.stations td.z{color:#ddd}
+  /* hover must not repaint the heat-map cells */
+  table.stations tbody tr:hover td.g{background:inherit}
+
+  table.tags{max-width:600px}
+  @media (max-width:700px){
+    body{padding:12px}
+    .bar .tools{margin-left:0;width:100%;flex-wrap:wrap}
+    .bar input[type=search]{flex:1 1 140px;width:auto;min-width:0}
+    .stats{grid-template-columns:repeat(2,1fr)}
+  }
+</style>"""
+
+
+PAGE = """<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Radio DNA</title>
+""" + PAGE_STYLE + """
+</head><body>
 <h1>ONE RADIO <span class="dna">DNA</span></h1>
-<h2 style="margin-top:0px;">Station</h2>
-<body style="margin:1.2em";>
-""" + DNA_PANEL + """
-<h2>Stations <small>({{ stations|length }}, genre columns are % of that station's category hits)</small>
-  <a class="dl" href="/dna/stations.csv">CSV &darr;</a>
-</h2>
-<div class="scroll scroll-x">
-<table class="stations sortable">
-  <thead>
-  <tr>
-    <th>station</th>
-    <th class=num data-type=num>polled</th>
-    <th class=num data-type=num>id'd</th>
-    <th class=num data-type=num>id rate</th>
-    <th class="num sep" data-type=num>avg yr</th>
-    <th class=num data-type=num>yr sd</th>
-    <th class="num sep" data-type=num>avg plays</th>
-    <th class=num data-type=num>lf cover</th>
-    <th class=num data-type=num>obscurity</th>
-    <th class=sep>top artist</th>
-    <th>top category</th>
-    <th class=txt>most popular</th>
-    <th class=txt>least popular</th>
-    {% for c in axis %}<th class="num g{{ ' sep' if loop.first else '' }}" data-type=num
-        style="border-top:5px solid {{ genre_hex[c] }}">{{ c }}</th>{% endfor %}
-  </tr>
-  </thead>
-  <tbody>
-  {% for s in stations %}
-  <tr>
-    <td>{{ s.station }}</td>
-    <td class=num>{{ '{:,}'.format(s.polled) }}</td>
-    <td class=num>{{ '{:,}'.format(s.identified) }}</td>
-    <td class=num>{{ '%.0f'|format(s.id_rate) }}%</td>
-    <td class="num sep">{{ s.avg_year or '—' }}</td>
-    <td class=num>{{ s.year_stdev or '—' }}</td>
-    <td class="num sep">{{ '{:,}'.format(s.avg_playcount) if s.avg_playcount else '—' }}</td>
-    <td class=num>{{ '%.0f'|format(s.coverage_pct) ~ '%' if s.coverage_pct is not none else '—' }}</td>
-    <td class=num>{{ s.obscurity if s.obscurity is not none else '—' }}</td>
-    <td class=sep>{{ s.top_artist or '—' }}{% if s.top_artist_n %} ({{ s.top_artist_n }}){% endif %}</td>
-    <td>{{ s.top_category or '—' }}{% if s.top_category_n %} ({{ s.top_category_n }}){% endif %}</td>
-    <td class=txt>{{ s.most_popular or '—' }}</td>
-    <td class=txt>{{ s.least_popular or '—' }}</td>
-    {% for c in axis %}
-      {% set v = s.genres[c] %}
-      <td class="num g{{ ' sep' if loop.first else '' }}{{ ' z' if not v else '' }}"
-          style="{{ s.cells[c] }}">{{ '%.1f'|format(v) if v else '·' }}</td>
+
+<section>
+  <div class="bar"><h2>Platform</h2>
+    {% if platform.first_ts %}<span class="meta">polling since {{ platform.first_ts[:10] }} · last poll {{ platform.last_ts[:16].replace('T',' ') }} UTC</span>{% endif %}
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="v">{{ '{:,}'.format(platform.polls) }}</div><div class="k">polls</div></div>
+    <div class="stat"><div class="v">{{ '%.0f'|format(platform.id_rate) }}%</div><div class="k">identified ({{ '{:,}'.format(platform.identified) }})</div></div>
+    <div class="stat"><div class="v">{{ '{:,}'.format(network.n_songs) }}</div><div class="k">distinct songs</div></div>
+    <div class="stat"><div class="v">{{ '{:,}'.format(network.n_artists) }}</div><div class="k">distinct artists</div></div>
+    <div class="stat"><div class="v">{{ platform.stations }}</div><div class="k">stations polled</div></div>
+    <div class="stat"><div class="v">{{ network.year_median or '—' }}</div><div class="k">median release year</div></div>
+    <div class="stat"><div class="v">{{ '%.0f'|format(100 * (network.n_songs - network.n_unknown) / network.n_songs) if network.n_songs else '—' }}%</div><div class="k">songs on Last.fm</div></div>
+    <div class="stat"><div class="v">{{ network.top_genre or '—' }}</div><div class="k">top genre ({{ '%.0f'|format(network.top_genre_pct) }}% of tags)</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="bar"><h2>Polls</h2>
+    <span class="meta">latest {{ '{:,}'.format(rows|length) }} of {{ '{:,}'.format(total_rows) }}</span>
+    <div class="tools">
+      <span class="count"></span>
+      <input type="search" class="filter" placeholder="Filter polls" data-table="t-plays">
+      {% if rows|length < total_rows %}<a class="btn plain" href="?n={{ [rows|length * 10, 20000]|min }}">Load {{ '{:,}'.format([rows|length * 10, 20000, total_rows]|min) }}</a>{% endif %}
+      <a class="btn" href="/dna/plays.csv">CSV &darr;</a>
+    </div>
+  </div>
+  <div class="scroll">
+  <table class="plays sortable" id="t-plays">
+    <thead><tr>
+      <th class=c-time>time (UTC)</th><th>station</th><th>source</th>
+      <th>artist</th><th>title</th><th>label</th><th>genre</th>
+      <th class=num data-type=num>year</th><th class=num data-type=num>last.fm plays</th>
+      <th>category</th><th>categories</th>
+    </tr></thead>
+    <tbody>
+    {% for r in rows %}
+    <tr class="{{ 'miss' if not r['matched'] else '' }}">
+      <td>{{ r['ts'][:19].replace('T',' ') }}</td>
+      <td>{{ r['station'] }}</td>
+      <td>{{ r['source'] or '' }}</td>
+      <td title="{{ r['artist'] or '' }}">{{ r['artist'] or '' }}</td>
+      <td title="{{ r['title'] or '' }}">{{ r['title'] or '' }}</td>
+      <td title="{{ r['acr_label'] or '' }}">{{ r['acr_label'] or '' }}</td>
+      {% set g = r['acr_genres'] or r['mb_genre'] or r['lf_tags'] or '' %}
+      <td title="{{ g }}">{{ g }}</td>
+      <td class=num>{{ r['acr_release'][:4] if r['acr_release'] else (r['mb_year'] or '') }}</td>
+      <td class=num>{{ '{:,}'.format(r['lf_playcount']) if r['lf_playcount'] else '' }}</td>
+      <td>{{ r['category'] or '' }}</td>
+      <td title="{{ r['categories'] or '' }}">{{ r['categories'] or '' }}</td>
+    </tr>
     {% endfor %}
-  </tr>
-  {% endfor %}
-  </tbody>
-</table>
-</div>
+    </tbody>
+  </table>
+  <div class="empty">No matching rows</div>
+  </div>
+</section>
 
-<h2>Polls <small>(latest {{ '{:,}'.format(rows|length) }} of {{ '{:,}'.format(total_rows) }})</small>
-  <a class="dl" href="/dna/plays.csv">CSV &darr;</a>
-</h2>
-<div class="scroll">
-<table class="plays sortable">
-  <thead>
-  <tr>
-    <th class=c-time>time (UTC)</th><th class=c-station>station</th><th class=c-source>source</th>
-    <th class=c-artist>artist</th><th class=c-title>title</th><th class=c-label>label</th>
-    <th class=c-genre>genre</th><th class="c-year num" data-type=num>year</th><th class="c-plays num" data-type=num>last.fm plays</th>
-    <th class=c-genre>category</th>
-    <th class=c-genre>categories</th>
-  </tr>
-  </thead>
-  <tbody>
-  {% for r in rows %}
-  <tr class="{{ 'miss' if not r['matched'] else '' }}">
-    <td class=wrap>{{ r['ts'][:19].replace('T',' ') }}</td>
-    <td>{{ r['station'] }}</td>
-    <td>{{ r['source'] }}</td>
-    <td>{{ r['artist'] or '' }}</td>
-    <td>{{ r['title'] or '' }}</td>
-    <td>{{ r['acr_label'] or '' }}</td>
-    <td>{{ r['acr_genres'] or r['mb_genre'] or r['lf_tags'] or '' }}</td>
-    <td>{{ r['acr_release'][:4] if r['acr_release'] else (r['mb_year'] or '') }}</td>
-    <td class=num>{{ '{:,}'.format(r['lf_playcount']) if r['lf_playcount'] else '' }}</td>
-    <td>{{ r['category'] or '' }}</td>
-    <td>{{ r['categories'] or '' }}</td>
-  </tr>
-  {% endfor %}
-  </tbody>
-</table>
-</div>
+<section>
+  <div class="bar"><h2>Stations</h2>
+    <span class="meta">{{ stations|length }} · genre columns are % of that station's category hits</span>
+    <div class="tools">
+      <span class="count"></span>
+      <input type="search" class="filter" placeholder="Filter stations" data-table="t-stations">
+      <a class="btn" href="/dna/stations.csv">CSV &darr;</a>
+    </div>
+  </div>
+  <div class="scroll">
+  <table class="stations sortable" id="t-stations">
+    <thead><tr>
+      <th>station</th>
+      <th class=num data-type=num>polled</th>
+      <th class=num data-type=num>id'd</th>
+      <th class=num data-type=num>id rate</th>
+      <th class="num sep" data-type=num>avg yr</th>
+      <th class=num data-type=num>yr sd</th>
+      <th class="num sep" data-type=num>avg plays</th>
+      <th class=num data-type=num>lf cover</th>
+      <th class=num data-type=num>obscurity</th>
+      <th class=sep>top artist</th>
+      <th>top category</th>
+      <th>most popular</th>
+      <th>least popular</th>
+      {% for c in axis %}<th class="num g{{ ' sep' if loop.first else '' }}" data-type=num
+          style="border-top:5px solid {{ genre_hex[c] }}">{{ c }}</th>{% endfor %}
+    </tr></thead>
+    <tbody>
+    {% for s in stations %}
+    <tr>
+      <td>{{ s.station }}</td>
+      <td class=num>{{ '{:,}'.format(s.polled) }}</td>
+      <td class=num>{{ '{:,}'.format(s.identified) }}</td>
+      <td class=num>{{ '%.0f'|format(s.id_rate) }}%</td>
+      <td class="num sep">{{ s.avg_year or '—' }}</td>
+      <td class=num>{{ s.year_stdev or '—' }}</td>
+      <td class="num sep">{{ '{:,}'.format(s.avg_playcount) if s.avg_playcount else '—' }}</td>
+      <td class=num>{{ '%.0f'|format(s.coverage_pct) ~ '%' if s.coverage_pct is not none else '—' }}</td>
+      <td class=num>{{ s.obscurity if s.obscurity is not none else '—' }}</td>
+      <td class=sep>{{ s.top_artist or '—' }}{% if s.top_artist_n %} ({{ s.top_artist_n }}){% endif %}</td>
+      <td>{{ s.top_category or '—' }}{% if s.top_category_n %} ({{ s.top_category_n }}){% endif %}</td>
+      <td title="{{ s.most_popular or '' }}">{{ s.most_popular or '—' }}</td>
+      <td title="{{ s.least_popular or '' }}">{{ s.least_popular or '—' }}</td>
+      {% for c in axis %}
+        {% set v = s.genres[c] %}
+        <td class="num g{{ ' sep' if loop.first else '' }}{{ ' z' if not v else '' }}"
+            style="{{ s.cells[c] }}">{{ '%.1f'|format(v) if v else '·' }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <div class="empty">No matching stations</div>
+  </div>
+</section>
 
-<h2>Uncategorized tags <small>({{ misses|length }} distinct, from unresolved rows only)</small>
-  <a class="dl" href="/dna/tags.csv">CSV &darr;</a>
-</h2>
-<div class="scroll">
-<table class="summary sortable">
-  <thead>
-  <tr><th>tag</th><th class=num data-type=num>count</th></tr>
-  </thead>
-  <tbody>
-  {% for tag, n in misses %}
-  <tr>
-    <td>{{ tag }}</td>
-    <td class=num>{{ n }}</td>
-  </tr>
-  {% endfor %}
-  </tbody>
-</table>
-</div>
-</body>
+<section>
+  <div class="bar"><h2>Uncategorized tags</h2>
+    <span class="meta">{{ misses|length }} distinct, from unresolved rows only</span>
+    <div class="tools">
+      <span class="count"></span>
+      <input type="search" class="filter" placeholder="Filter tags" data-table="t-tags">
+      <a class="btn" href="/dna/tags.csv">CSV &darr;</a>
+    </div>
+  </div>
+  <div class="scroll">
+  <table class="tags sortable" id="t-tags">
+    <thead><tr><th>tag</th><th class=num data-type=num>count</th></tr></thead>
+    <tbody>
+    {% for tag, n in misses %}
+    <tr><td>{{ tag }}</td><td class=num>{{ n }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <div class="empty">No matching tags</div>
+  </div>
+</section>
 
 <script>
+// sortable headers
 document.querySelectorAll("table.sortable").forEach(function(table){
   var ths = table.tHead.rows[0].cells;
   Array.prototype.forEach.call(ths, function(th, col){
@@ -599,33 +710,50 @@ document.querySelectorAll("table.sortable").forEach(function(table){
       var rows = Array.prototype.slice.call(tbody.rows);
       var numeric = th.dataset.type === "num";
       var asc = !th.classList.contains("sorted-asc");
-
-      Array.prototype.forEach.call(ths, function(h){
-        h.classList.remove("sorted-asc","sorted-desc");
-      });
+      Array.prototype.forEach.call(ths, function(h){ h.classList.remove("sorted-asc","sorted-desc"); });
       th.classList.add(asc ? "sorted-asc" : "sorted-desc");
-
       function val(row){
         var t = row.cells[col].textContent.trim();
-        if(numeric){
+        if (numeric){
           var n = parseFloat(t.replace(/[^0-9.\\-]/g,""));
           return isNaN(n) ? -Infinity : n;
         }
         return t.toLowerCase();
       }
-
       rows.sort(function(a,b){
         var x = val(a), y = val(b);
-        if(x < y) return asc ? -1 : 1;
-        if(x > y) return asc ? 1 : -1;
-        return 0;
+        return x < y ? (asc ? -1 : 1) : x > y ? (asc ? 1 : -1) : 0;
       });
       rows.forEach(function(r){ tbody.appendChild(r); });
     });
   });
 });
+
+// filters: every word must appear somewhere in the row
+document.querySelectorAll("input.filter").forEach(function(input){
+  var table = document.getElementById(input.dataset.table);
+  var rows = Array.prototype.slice.call(table.tBodies[0].rows);
+  var text = rows.map(function(r){ return r.textContent.toLowerCase(); });
+  var count = input.parentNode.querySelector(".count");
+  var empty = table.parentNode.querySelector(".empty");
+  var t;
+  function apply(){
+    var words = input.value.toLowerCase().split(/\\s+/).filter(Boolean);
+    var shown = 0;
+    rows.forEach(function(r, i){
+      var ok = words.every(function(w){ return text[i].indexOf(w) !== -1; });
+      r.hidden = !ok;
+      if (ok) shown++;
+    });
+    count.textContent = words.length ? shown.toLocaleString() + " / " + rows.length.toLocaleString() : "";
+    empty.style.display = shown ? "none" : "block";
+  }
+  input.addEventListener("input", function(){ clearTimeout(t); t = setTimeout(apply, 120); });
+});
 </script>
+</body></html>
 """
+
 
 EMBED = """<!doctype html><meta charset="utf-8"><title>One Radio DNA — {{ pin_station }}</title>
 <head><meta name="viewport" content="width=device-width, initial-scale=1"></head>
@@ -663,6 +791,18 @@ def load_recent_rows(conn, limit=DEFAULT_ROW_LIMIT):
 
 def total_rows(conn):
     return conn.execute("SELECT COUNT(*) FROM plays").fetchone()[0]
+
+
+def platform_stats(conn):
+    polls, identified, first_ts, last_ts, stations = conn.execute(
+        "SELECT COUNT(*), COALESCE(SUM(matched), 0), MIN(ts), MAX(ts), COUNT(DISTINCT station)"
+        "  FROM plays"
+    ).fetchone()
+    return {
+        "polls": polls, "identified": identified,
+        "id_rate": 100 * identified / polls if polls else 0,
+        "first_ts": first_ts, "last_ts": last_ts, "stations": stations,
+    }
 
 
 # ----------------------------------------------------------- genre colouring
@@ -814,6 +954,8 @@ def dna():
         r = rollups(conn)
         return render_dna(
             PAGE_T, r["dna"],
+            platform=platform_stats(conn),
+            network=r["network"],
             axis=r["dna"]["categories"],
             stations=r["stations"],
             genre_hex=r["genre_hex"],
