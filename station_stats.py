@@ -542,14 +542,14 @@ def dna_payload(conn):
 
     radar, totals, spectra = {}, {}, {}
     for row in conn.execute(
-        "SELECT station, categorized, median_year, avg_year, year_stdev, year_lo, year_hi,"
+        "SELECT station, categorized, median_year, year_stdev, year_lo, year_hi,"
         "       n_year, obscurity, n_known, n_missing, identified,"
         "       obsc_track_mean, obsc_track_sd, obsc_spread, obscurity_lo,"
         "       obscurity_hi, obsc_p10, obsc_p50, obsc_p90, obsc_qskew,"
         "       share_popular, share_middle, share_underground, obsc_polarity"
         "  FROM station_stats"
     ):
-        (station, categorized, median_year, avg_year, year_sd, year_lo, year_hi,
+        (station, categorized, median_year, year_sd, year_lo, year_hi,
          n_year, obsc, n_known, n_missing, identified,
          t_mean, t_sd, spread, p25, p75, p10, p50, p90, qskew,
          s_pop, s_mid, s_und, polarity) = row
@@ -567,7 +567,7 @@ def dna_payload(conn):
         radar[station] = [got.get(c, 0.0) for c in axis]
         totals[station] = categorized
         spectra[station] = {
-            "year_mean": avg_year, "year_sd": year_sd,
+            "year_mean": median_year, "year_sd": year_sd,
             "year_lo": year_lo, "year_hi": year_hi, "n_year": n_year,
             "obsc_mean": obsc,
             "n_plays": n_known, "n_missing": n_missing,
@@ -664,3 +664,96 @@ def version(conn):
         "SELECT MAX(computed_at), COUNT(*) FROM station_stats"
     ).fetchone()
     return tuple(row) if row else (None, 0)
+
+# ---------------------------------------------------------------------------
+# Network-wide distributions (About page)
+# ---------------------------------------------------------------------------
+
+# Last.fm playcount buckets, by order of magnitude. The per-track 0-100
+# obscurity score can't be used here: it's a percentile rank against this same
+# pool of songs, so across all songs it comes out flat by construction. Raw
+# playcounts on a log scale show the actual shape.
+PLAYCOUNT_BINS = [
+    (1, 10, "1–9"),
+    (10, 100, "10–99"),
+    (100, 1_000, "100–999"),
+    (1_000, 10_000, "1K–10K"),
+    (10_000, 100_000, "10K–100K"),
+    (100_000, 1_000_000, "100K–1M"),
+    (1_000_000, 10_000_000, "1M–10M"),
+    (10_000_000, None, "10M+"),
+]
+
+
+def network_payload(conn, this_year=None):
+    """
+    Distributions across every distinct song (artist + title) the network has
+    played, so a track on heavy rotation counts once:
+      genres     share of category hits per axis category (sums to ~100)
+      years      {year: songs}
+      playcounts last.fm playcount buckets, plus songs last.fm doesn't know
+    """
+    if this_year is None:
+        this_year = datetime.now(timezone.utc).year
+    axis = genres.all_categories()
+    on_axis = set(axis)
+
+    songs = {}   # key -> [categories, year, playcount]
+    n_plays = 0
+    for (artist, title, categories, acr_release, mb_year, plays) in conn.execute(
+        "SELECT artist, title, categories, acr_release, mb_year, lf_playcount"
+        "  FROM plays WHERE matched = 1"
+    ):
+        n_plays += 1
+        key = ((artist or "").strip().lower(), (title or "").strip().lower())
+        if key == ("", ""):
+            continue
+        y = parse_year(acr_release, mb_year)
+        if y and (y > this_year or y <= 1900):   # 1900 is a placeholder date in ACR/MB
+            y = None
+        s = songs.get(key)
+        if s is None:
+            songs[key] = [categories, y, plays]
+        else:  # fill gaps from later sightings of the same song
+            if not s[0] and categories: s[0] = categories
+            if s[1] is None and y: s[1] = y
+            if s[2] is None and plays is not None: s[2] = plays
+
+    cat_hits = Counter()
+    years = Counter()
+    bins = [0] * len(PLAYCOUNT_BINS)
+    n_zero = n_unknown = 0
+    for categories, y, plays in songs.values():
+        if categories:
+            for c in categories.split(";"):
+                c = c.strip()
+                if c in on_axis:
+                    cat_hits[c] += 1
+        if y:
+            years[y] += 1
+        if plays is None:
+            n_unknown += 1
+        elif plays <= 0:
+            n_zero += 1
+        else:
+            for i, (lo, hi, _) in enumerate(PLAYCOUNT_BINS):
+                if plays >= lo and (hi is None or plays < hi):
+                    bins[i] += 1
+                    break
+
+    total_hits = sum(cat_hits.values()) or 1
+    year_list = sorted(years.elements())
+    return {
+        "n_songs": len(songs),
+        "n_plays": n_plays,
+        "categories": axis,
+        "genres": [round(100 * cat_hits[c] / total_hits, 2) for c in axis],
+        "years": {str(y): n for y, n in sorted(years.items())},
+        "year_median": round(statistics.median(year_list)) if year_list else None,
+        "n_year": len(year_list),
+        "playcounts": (
+            [{"label": "0", "n": n_zero}] +
+            [{"label": lab, "n": bins[i]} for i, (_, _, lab) in enumerate(PLAYCOUNT_BINS)]
+        ),
+        "n_unknown": n_unknown,
+    }
