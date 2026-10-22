@@ -26,7 +26,7 @@ STYLE = """
   letter-spacing: -0.05em;
   font:14px/1.4 "Archivo Light",system-ui,sans-serif;margin:0px;color:#111}
   h1{
-        border-bottom: 1px solid black;
+
         margin-left: 0px;
         letter-spacing: -0.05em;
         padding-bottom: 15px;
@@ -486,7 +486,7 @@ PAGE_STYLE = """
   *{box-sizing:border-box}
   body{margin:0;padding:20px;color:#111;letter-spacing:-0.04em;
        font:13px/1.4 "Archivo Light",system-ui,sans-serif}
-  h1{margin:0 0 24px;padding-bottom:14px;border-bottom:1px solid #000;
+  h1{margin:0 0 24px;padding-bottom:14px;
      font:normal 34pt/1 "Archivo Bold",sans-serif;letter-spacing:-0.05em}
   .dna{margin-left:5px;padding:4px 12px;background:var(--yellow);
        font:normal 34pt/1 "Archivo Light",sans-serif}
