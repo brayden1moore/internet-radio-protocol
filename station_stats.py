@@ -828,8 +828,10 @@ def network_payload(conn, this_year=None):
 
 HIGHLIGHT_MIN_POLLS = 100        # a station needs this many polls to compete
 HIGHLIGHT_MIN_IDENTIFIED = 30
+# Credits that aren't really an artist "playing" on a station. Lowercase.
 _NOT_AN_ARTIST = {"various artists", "various", "va", "unknown", "unknown artist", "[unknown]",
-                  "anonymous", "traditional", "n/a"}
+                  "anonymous", "traditional", "n/a",
+                  "john richards"}   # KEXP's morning host, identified during talk breaks
 _ARTIST_SPLIT = re.compile(r"\s*(?:,|&| feat\.? | ft\.? | featuring | x )\s*", re.I)
 
 
