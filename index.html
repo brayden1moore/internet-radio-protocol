@@ -204,6 +204,11 @@
                                 <div class="metric-value"></div>
                                 <div class="metric-compare"></div>
                             </div>
+                            <div class="metric" id="metric-artist">
+                                <div class="modal-header">Top Artist</div>
+                                <div class="metric-value metric-artist"></div>
+                                <div class="metric-compare"></div>
+                            </div>
 
                             <div class="metric-warning"></div>
                             <div id="modal-songs">
@@ -1215,6 +1220,10 @@
         font-family: 'Archivo SemiBold'; font-size: 34px; line-height: 1;
         letter-spacing: -0.05em; margin-top: 10px; font-variant-numeric: tabular-nums;
     }
+    /* phones: the two numbers share a row, the artist gets its own */
+    @media (max-width: 915px) { #modal-metrics #metric-artist { flex: 1 1 100%; } }
+    /* names are longer than numbers: smaller, one line, cut off with … */
+    .metric-value.metric-artist { font-size: 24px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .metric-value small { font-family: 'Favorit'; font-size: 12px; letter-spacing: 0; opacity: 0.5; margin-left: 2px; }
     .metric-compare {
         font-family: 'Favorit'; font-size: 9pt; min-height: 1.3em; margin-top: 4px;
@@ -5206,6 +5215,8 @@
     // ---- median release year + obscurity beside the wheel
     const metricYear = document.getElementById('metric-year');
     const metricObsc = document.getElementById('metric-obsc');
+    const metricArtist = document.getElementById('metric-artist');
+    const escapeHtml = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     const metricWarning = document.querySelector('#modal-metrics .metric-warning');
 
     function renderMetrics(sp) {
@@ -5215,6 +5226,11 @@
             el.querySelector('.metric-compare').textContent = '';
         };
         fill(metricYear, sp.year_mean);
+        const artist = sp.top_artist
+            ? [...new Set(String(sp.top_artist).split(/\s*,\s*/).filter(Boolean))].join(', ')
+            : null;
+        fill(metricArtist, artist ? `${escapeHtml(artist)}<small>${sp.top_artist_n ? ' ' + sp.top_artist_n + ' plays' : ''}</small>` : null);
+        metricArtist.querySelector('.metric-value').title = artist || '';
         fill(metricObsc, sp.obsc_mean == null ? null : `${sp.obsc_mean}<small>/100</small>`);
         metricWarning.textContent = sp.coverage_warning || '';
     }
@@ -5284,6 +5300,7 @@
         };
         set(metricYear, sp.year_mean);
         set(metricObsc, sp.obsc_mean);
+        set(metricArtist, sp.top_artist ? [...new Set(String(sp.top_artist).split(/\s*,\s*/).filter(Boolean))].join(', ') : null);
     }
 
     function renderSimilar(dna, similar, radar) {

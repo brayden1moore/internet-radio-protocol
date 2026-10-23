@@ -316,7 +316,10 @@ def _gather(conn):
             continue
         b["identified"] += 1
         if artist:
-            b["artists"][artist] += 1
+            # credit the lead artist, so "X, Y" and "X feat. Z" both count toward X
+            lead = fix_text(_primary_artist(artist))
+            if lead and lead.lower() not in _NOT_AN_ARTIST:
+                b["artists"][lead] += 1
 
         if not category:
             misses.update(_unresolved(acr_genres, lf_tags))
@@ -569,13 +572,14 @@ def dna_payload(conn):
         "       n_year, obscurity, n_known, n_missing, identified,"
         "       obsc_track_mean, obsc_track_sd, obsc_spread, obscurity_lo,"
         "       obscurity_hi, obsc_p10, obsc_p50, obsc_p90, obsc_qskew,"
-        "       share_popular, share_middle, share_underground, obsc_polarity"
+        "       share_popular, share_middle, share_underground, obsc_polarity,"
+        "       top_artist, top_artist_n"
         "  FROM station_stats"
     ):
         (station, categorized, median_year, year_sd, year_lo, year_hi,
          n_year, obsc, n_known, n_missing, identified,
          t_mean, t_sd, spread, p25, p75, p10, p50, p90, qskew,
-         s_pop, s_mid, s_und, polarity) = row
+         s_pop, s_mid, s_und, polarity, top_artist, top_artist_n) = row
         if not categorized:
             continue
         prose = descriptors.describe_station(
@@ -607,6 +611,7 @@ def dna_payload(conn):
             "era_descriptor": prose["era"],
             "obsc_descriptor": prose["obscurity"],
             "coverage_warning": prose["warning"],
+            "top_artist": top_artist, "top_artist_n": top_artist_n,
         }
     return {"categories": axis, "radar": radar,
             "totals": totals, "spectra": spectra}
