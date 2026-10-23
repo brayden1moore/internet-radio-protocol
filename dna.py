@@ -12,7 +12,7 @@ import station_stats
 DB_PATH = Path("/var/www/internet-radio-protocol/plays.db")
 app = Flask(__name__)
 
-TABLE_COLS = ("ts, station, source, artist, title, acr_label, acr_genres, mb_genre, "
+TABLE_COLS = ("ts, station, show, source, artist, title, acr_label, acr_genres, mb_genre, "
               "lf_tags, acr_release, mb_year, lf_playcount, matched, category, categories")
 
 DEFAULT_ROW_LIMIT = 500
@@ -532,7 +532,7 @@ PAGE_STYLE = """
   .sep{border-left:1px solid #ccc}
   .empty{padding:14px 10px;color:#888;display:none}
 
-  table.plays{table-layout:fixed;min-width:1100px}
+  table.plays{table-layout:fixed;min-width:1250px}
   table.plays .c-time{width:160px}
 
   table.stations{width:max-content;min-width:100%}
@@ -590,7 +590,7 @@ PAGE = """<!doctype html>
   <div class="scroll">
   <table class="plays sortable" id="t-plays">
     <thead><tr>
-      <th class=c-time>time (UTC)</th><th>station</th><th>source</th>
+      <th class=c-time>time (UTC)</th><th>station</th><th>show</th><th>source</th>
       <th>artist</th><th>title</th><th>label</th><th>genre</th>
       <th class=num data-type=num>year</th><th class=num data-type=num>last.fm plays</th>
       <th>category</th><th>categories</th>
@@ -600,6 +600,7 @@ PAGE = """<!doctype html>
     <tr class="{{ 'miss' if not r['matched'] else '' }}">
       <td>{{ r['ts'][:19].replace('T',' ') }}</td>
       <td>{{ r['station'] }}</td>
+      <td title="{{ r['show'] or '' }}">{{ r['show'] or '' }}</td>
       <td>{{ r['source'] or '' }}</td>
       <td title="{{ r['artist'] or '' }}">{{ r['artist'] or '' }}</td>
       <td title="{{ r['title'] or '' }}">{{ r['title'] or '' }}</td>
@@ -774,6 +775,11 @@ def ensure_indexes():
     try:
         conn = _conn()
         conn.execute("CREATE INDEX IF NOT EXISTS idx_plays_ts_desc ON plays(ts DESC)")
+        # poll.py adds this too; doing it here means the page works even before
+        # the first poll run with the new code
+        cols = {r[1] for r in conn.execute("PRAGMA table_info(plays)")}
+        if "show" not in cols:
+            conn.execute("ALTER TABLE plays ADD COLUMN show TEXT")
         conn.commit()
         conn.close()
     except sqlite3.Error:
@@ -1012,7 +1018,9 @@ def dna_songs(station):
     conn = _conn()
     try:
         rows = conn.execute(
-            "SELECT artist, title, MAX(COALESCE(SUBSTR(acr_release, 1, 4), mb_year)) AS year"
+            "SELECT artist, title, MAX(COALESCE(SUBSTR(acr_release, 1, 4), mb_year)) AS year,"
+            # most recent non-empty show for this song (ts sorts as text, so prefix it)
+            "       MAX(CASE WHEN TRIM(COALESCE(show, '')) != '' THEN ts || char(31) || show END) AS last_show"
             "  FROM plays"
             " WHERE station = ? AND matched = 1"
             "   AND TRIM(COALESCE(artist, '')) != '' AND TRIM(COALESCE(title, '')) != ''"
@@ -1023,7 +1031,9 @@ def dna_songs(station):
     finally:
         conn.close()
     fix = station_stats.fix_text   # in case old garbled rows haven't been repaired yet
-    resp = jsonify([{"artist": fix(r["artist"]), "title": fix(r["title"]), "year": r["year"]} for r in rows])
+    resp = jsonify([{"artist": fix(r["artist"]), "title": fix(r["title"]), "year": r["year"],
+                     "show": fix(r["last_show"].split(chr(31), 1)[1]) if r["last_show"] else None}
+                    for r in rows])
     resp.headers["Access-Control-Allow-Origin"] = "*"
     resp.headers["Cache-Control"] = "no-store"
     return resp

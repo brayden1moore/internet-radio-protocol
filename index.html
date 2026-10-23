@@ -1201,6 +1201,7 @@
     .song-title, .song-artist { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .song-title { font-family: 'Archivo SemiBold'; font-size: 11pt; letter-spacing: -0.03em; }
     .song-artist { font-family: 'Favorit'; font-size: 9pt; opacity: 0.65; margin-top: 1px; }
+    .song-show { font-family: 'Favorit'; font-size: 8.5pt; opacity: 0.45; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .dark .song-row { border-color: var(--line); }
     #modal-similar .modal-header { margin-top: 0; }
     .similar-row {
@@ -5214,8 +5215,14 @@
                     // credits often repeat each name ("A, A, A, B, B, B"): keep each once
                     const artist = [...new Set(String(song.artist).split(/\s*,\s*/).filter(Boolean))].join(', ');
                     a.textContent = song.year ? `${artist} · ${song.year}` : artist;
-                    row.title = `${artist} — ${song.title}`;
+                    row.title = `${artist} — ${song.title}` + (song.show ? ` (heard on ${song.show})` : '');
                     row.append(t, a);
+                    if (song.show) {
+                        const sh = document.createElement('div');
+                        sh.className = 'song-show';
+                        sh.textContent = `heard on ${decodeHtmlEntities(song.show)}`;
+                        row.appendChild(sh);
+                    }
                     modalSongsList.appendChild(row);
                 });
                 modalSongs.style.display = 'block';

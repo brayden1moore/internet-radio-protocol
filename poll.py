@@ -3,6 +3,7 @@ import sys
 import time
 import hmac
 import json
+import html
 import base64
 import sqlite3
 import hashlib
@@ -56,12 +57,35 @@ CREATE TABLE IF NOT EXISTS plays (
     categories    TEXT, 
     -- MusicBrainz metadata (optional)
     mb_genre      TEXT,
-    mb_year       INTEGER
+    mb_year       INTEGER,
+    -- What was on air when we polled (show name, from the station's /info entry)
+    show          TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_plays_station ON plays(station);
 CREATE INDEX IF NOT EXISTS idx_plays_ts ON plays(ts);
 CREATE INDEX IF NOT EXISTS idx_plays_matched ON plays(matched);
 """
+
+def ensure_show_column(conn):
+    """Existing databases predate the show column; CREATE TABLE IF NOT EXISTS won't add it."""
+    cols = {r[1] for r in conn.execute("PRAGMA table_info(plays)")}
+    if "show" not in cols:
+        conn.execute("ALTER TABLE plays ADD COLUMN show TEXT")
+        conn.commit()
+
+
+def show_for(st):
+    """
+    The show on air for one /info entry. Song-basis stations report the track in
+    nowPlaying and the show in nowPlayingSubtitle; everyone else reports the show
+    in nowPlaying.
+    """
+    raw = st.get("nowPlayingSubtitle") if st.get("songBasis") else st.get("nowPlaying")
+    if not raw:
+        return None
+    show = html.unescape(str(raw)).strip()
+    return show or None
+
 
 def utcnow():
     return datetime.now(timezone.utc).isoformat()
@@ -245,6 +269,7 @@ def main():
 
     conn = sqlite3.connect(DB_PATH)
     conn.executescript(SCHEMA)
+    ensure_show_column(conn)
     ensure_cache(conn)
 
     # pull in any category changes
@@ -253,9 +278,23 @@ def main():
         print(f"  recategorized {stats['changed']} rows to current mapping")
         station_stats.recompute(conn)
 
+    live_info = not args          # only refresh when we're reading the live endpoint
+    info_at = time.time()
+
     matched = nomatch = skipped = 0
     for key, st in stations.items():
         name = st.get("name", key)
+        # a full run takes a while; re-read /info every couple of minutes so the
+        # logged show is what's on now, not what was on when the run started
+        if live_info and time.time() - info_at > 120:
+            try:
+                fresh = requests.get('https://one.radio/info', timeout=30).json()
+                stations.update({k: v for k, v in fresh.items() if k in stations})
+                st = stations[key]
+            except Exception as e:
+                print(f"  (couldn't refresh /info: {e!r})")
+            info_at = time.time()
+        show = show_for(st)
         print(name)
         count, last_ts = last_play(conn, name)
         if count >= 200 and last_ts:
@@ -275,8 +314,8 @@ def main():
         if not track.get("matched"):
             # Live but unidentified 
             conn.execute(
-                "INSERT INTO plays (ts, station, source, matched) VALUES (?,?,?,0)",
-                (utcnow(), name, "acrcloud_nomatch"),
+                "INSERT INTO plays (ts, station, source, matched, show) VALUES (?,?,?,0,?)",
+                (utcnow(), name, "acrcloud_nomatch", show),
             )
             conn.commit()
             nomatch += 1
@@ -307,8 +346,8 @@ def main():
         conn.execute(
             "INSERT INTO plays (ts, station, source, matched, artist, title,"
             " acr_genres, acr_release, acr_label,"
-            " lf_playcount, lf_listeners, lf_tags, mb_genre, mb_year, category, categories)"
-            " VALUES (?,?,?,1,?,?,?,?,?,?,?,?,?,?,?,?)",
+            " lf_playcount, lf_listeners, lf_tags, mb_genre, mb_year, category, categories, show)"
+            " VALUES (?,?,?,1,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 utcnow(), name, track["source"], track["artist"], track["title"],
                 track.get("acr_genres"), track.get("acr_release"), track.get("acr_label"),
@@ -319,6 +358,7 @@ def main():
                 mb["year"] if mb else None,
                 category, 
                 categories,
+                show,
             ),
         )
         conn.commit()
