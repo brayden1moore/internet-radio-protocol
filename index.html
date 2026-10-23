@@ -24,6 +24,34 @@
         }
     </script>
     <style>html:not(.dark-enabled) #dark-toggle { display: none !important; }</style>
+
+    <!-- Experimental texture (like Figma's Texture effect), as a fixed sheet of warped glass over the
+         whole window: the warp pattern stays put and the page scrolls through it.
+         Off unless the URL asks for it:  ?texture  (or ?texture=6 for stronger; default 4) -->
+    <script>
+        (function () {
+            var v = new URLSearchParams(location.search).get('texture');
+            if (v === null) return;
+            var scale = parseFloat(v) || 4;   // ~ Figma "Radius" x2
+            document.addEventListener('DOMContentLoaded', function () {
+                document.body.insertAdjacentHTML('beforeend',
+                    '<svg width="0" height="0" style="position:absolute" aria-hidden="true">' +
+                    '<filter id="page-texture">' +
+                    '<feTurbulence type="fractalNoise" baseFrequency="0.097" numOctaves="1" seed="2" result="n"/>' +   /* ~ Figma "Size" 10.3 */
+                    '<feDisplacementMap in="SourceGraphic" in2="n" scale="' + scale + '" xChannelSelector="R" yChannelSelector="G"/>' +
+                    '</filter></svg>' +
+                    '<div id="texture-glass" aria-hidden="true"></div>');
+            });
+        })();
+    </script>
+    <style>
+        /* sits above everything, lets clicks through, and warps whatever is behind it */
+        #texture-glass {
+            position: fixed; inset: 0; z-index: 2147483647; pointer-events: none;
+            -webkit-backdrop-filter: url(#page-texture);
+                    backdrop-filter: url(#page-texture);
+        }
+    </style>
     
     <script defer src="https://cloud.umami.is/script.js" data-website-id="8362bf37-0d81-4f25-9ee8-027269410e08"></script>
     <script src="https://cdn.jsdelivr.net/npm/globe.gl"></script>
