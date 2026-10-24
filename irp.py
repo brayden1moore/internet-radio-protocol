@@ -2382,7 +2382,7 @@ Stream(
 Stream(
         name = "NTS 2",
         logo = "https://internetradioprotocol.org/logos/nts2.png",
-        location = "Chicago",
+        location = "London",
         lat = 51.5074456,
         lon = -0.1277653,
         info_link = "https://www.nts.live/api/v2/live",
