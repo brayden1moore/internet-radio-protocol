@@ -6266,7 +6266,7 @@
         matchResults.innerHTML = '';
         const p = r.profile || {};
         const bits = [];
-        if (p.top_genres && p.top_genres.length) bits.push(`You lean <b>${andList(p.top_genres.map(mEsc))}</b>.`);
+        if (p.top_genres && p.top_genres.length) bits.push(`Your listening leans <b>${andList(p.top_genres.map(mEsc))}</b>.`);
         if (p.year_median) bits.push(`Your typical track is from <b>${p.year_median}</b>.`);
         if (p.deeper_than != null) bits.push(p.deeper_than >= 50
             ? `You dig deeper than <b>${p.deeper_than}%</b> of our stations.`
