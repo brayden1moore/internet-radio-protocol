@@ -1001,3 +1001,124 @@ def similar_stations(dna, station, limit=30):
         }))
     out.sort(key=lambda x: x[0])
     return [x for _, x in out[:limit]]
+
+
+# ---------------------------------------------------------------------------
+# Daily Set: three stations a day at different distances from one you love.
+# ---------------------------------------------------------------------------
+
+import random as _random
+
+# Where each role is drawn from, as a slice of the anchor's similarity
+# ranking (0 = closest station, 1 = furthest).
+DAILY_ROLES = (
+    ("close",    0.00, 0.15),
+    ("sideways", 0.35, 0.60),
+    ("far",      0.80, 1.00),
+)
+DAILY_MIN_TOTAL = 30          # a station needs this many categorized plays to be picked or to anchor
+
+
+def _genre_name(cat):
+    # "Club / Dance" -> "club/dance", "Hip-Hop" -> "hip-hop"
+    return cat.lower().replace(" / ", "/")
+
+
+def _top_genres(cats, vec, k=2, floor=6.0):
+    ranked = sorted(zip(cats, vec), key=lambda cv: -cv[1])
+    return [c for c, v in ranked[:k] if v >= floor]
+
+
+def _daily_why(role, dna, anchor, pick):
+    """One sentence on why `pick` is in today's set. Returns (text, mark):
+    mark is the genre phrase inside text that the apps highlight."""
+    cats = dna["categories"]
+    a, p = dna["radar"][anchor], dna["radar"][pick]
+    sa, sp = dna["spectra"].get(anchor, {}), dna["spectra"].get(pick, {})
+    ya, yp = sa.get("year_mean"), sp.get("year_mean")
+    oa, op = sa.get("obsc_mean"), sp.get("obsc_mean")
+    d_year = (yp - ya) if ya is not None and yp is not None else 0
+    d_obsc = (op - oa) if oa is not None and op is not None else 0
+    J = descriptors._join
+
+    if role == "close":
+        shared = sorted(((min(x, y), c) for c, x, y in zip(cats, a, p) if min(x, y) >= 5),
+                        reverse=True)[:2]
+        mark = J([_genre_name(c) for _, c in shared]) if shared else None
+        head = f"The same {mark} lean as {anchor}" if mark else f"Close to {anchor} across the board"
+        if d_obsc > 12:
+            tail = ", a notch more underground."
+        elif d_obsc < -12:
+            tail = ", a little more familiar."
+        elif d_year > 5:
+            tail = f", with newer records (median {round(yp)})."
+        elif d_year < -5:
+            tail = f", with older records (median {round(yp)})."
+        else:
+            tail = "."
+        return head + tail, mark
+
+    if role == "sideways":
+        more = sorted(((y - x, c) for c, x, y in zip(cats, a, p) if y - x >= 3), reverse=True)[:2]
+        less = sorted(((x - y, c) for c, x, y in zip(cats, a, p) if x - y >= 3), reverse=True)[:1]
+        mark = J([_genre_name(c) for _, c in more]) if more else None
+        head = (f"Same era as {anchor}, different corners" if abs(d_year) <= 6
+                else f"A different era (median {round(yp)}) and different corners")
+        if not mark:
+            return head + ".", None
+        text = f"{head}: more {mark}"
+        if less:
+            text += f", less {_genre_name(less[0][1])}"
+        return text + ".", mark
+
+    # far
+    top = _top_genres(cats, p)
+    mark = J([_genre_name(c) for c in top]) if top else None
+    head = f"Mostly {mark}" if mark else "A long way from what you know"
+    if op is not None and op >= 80:
+        tail = ", and among the most obscure stations we track."
+    elif op is not None and op <= 20:
+        tail = ", and one of the most familiar-sounding stations we track."
+    elif abs(d_year) >= 10:
+        tail = f", with a median release of {round(yp)}."
+    else:
+        tail = "."
+    return head + tail, mark
+
+
+def daily_set(dna, date, anchor=None, exclude=(), n=6):
+    """
+    Today's set for one listener. `anchor` is the station they keep coming
+    back to; without one (a new listener) the anchor is picked from the date,
+    so everyone without history shares the same set that day.
+
+    Returns candidates per role, best first. The same date + anchor + exclude
+    always gives the same answer, so the set holds still all day. Callers skip
+    candidates they can't show (offline, unlisted) and take the first left.
+    """
+    radar, totals = dna["radar"], dna["totals"]
+    eligible = sorted(s for s in radar if (totals.get(s) or 0) >= DAILY_MIN_TOTAL)
+    personal = bool(anchor and anchor in radar)
+    if not personal:
+        if not eligible:
+            return None
+        anchor = _random.Random(f"daily|{date}").choice(eligible)
+
+    skip = set(exclude) | {anchor}
+    ranked = [x for x in similar_stations(dna, anchor, limit=len(radar))
+              if (totals.get(x["station"]) or 0) >= DAILY_MIN_TOTAL]
+    rng = _random.Random(f"daily|{date}|{anchor}")
+    used, picks = set(), {}
+    for role, lo, hi in DAILY_ROLES:
+        band = ranked[int(lo * len(ranked)):max(int(hi * len(ranked)), int(lo * len(ranked)) + 1)]
+        pool = [x for x in band if x["station"] not in skip and x["station"] not in used]
+        rng.shuffle(pool)
+        out = []
+        for x in pool[:n]:
+            why, mark = _daily_why(role, dna, anchor, x["station"])
+            out.append({"station": x["station"], "pct": x["pct"], "why": why, "mark": mark})
+        if out:
+            used.add(out[0]["station"])
+        picks[role] = out
+    return {"date": date, "anchor": anchor, "personal": personal,
+            "roles": [r for r, _, _ in DAILY_ROLES], "picks": picks}
