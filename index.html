@@ -149,6 +149,16 @@
                     </div>
 
                 </div>
+                <div id="match-content">
+                    <div class="match-title">Find Your Station</div>
+                    <p class="match-lead">Enter your Last.fm username and we’ll match what you listen to against everything we’ve heard on the stations we track.</p>
+                    <form id="match-form" autocomplete="off">
+                        <input id="match-user" placeholder="Last.fm username" autocapitalize="off" spellcheck="false">
+                        <button type="submit" id="match-go">Match me</button>
+                    </form>
+                    <div id="match-status"></div>
+                    <div id="match-results"></div>
+                </div>
                 <div id="modal-content">
                     <div id="modal-logo-and-links">
                         <div id="modal-logo-container">
@@ -245,6 +255,7 @@
                         <span id='live-count'></span><span class='last-updated'></span>
                     </div>
 
+                    <div id="match-button">Match</div>
                     <div id="about-button">About</div>
 
                     <a id='get-app-button' href="/app" target="_blank"><div id="ios-app" style="display:flex;">
@@ -2680,6 +2691,43 @@
             display: flex; align-items: center; background-color: #fff; margin-left: auto;
         }
         #about-button:hover { background: #000; color: #fff; }
+        #match-button {
+            color: #000; cursor: pointer; user-select: none;
+            border-left: 1px solid white; padding: 0 7.5px; height: 100%;
+            display: flex; align-items: center; background-color: #fff; margin-left: auto;
+        }
+        #match-button:hover { background: #000; color: #fff; }
+        #match-button + #about-button { margin-left: 0; }
+
+        /* ---- find your station ---- */
+        #match-content { display: none; padding: 0 20px 30px; margin-top: -30px; font-family: 'Favorit'; font-size: 11pt; line-height: 1.45; }
+        #modal.match-mode #modal-content, #modal.match-mode #about-content { display: none; }
+        #modal.match-mode #match-content { display: block; }
+        .match-title { font-family: 'Archivo SemiBold'; font-size: 28px; letter-spacing: -0.05em; margin-bottom: 10px; }
+        .match-lead { max-width: 640px; margin: 0 0 18px; }
+        #match-form { display: flex; gap: 0; max-width: 460px; }
+        #match-user {
+            flex: 1; min-width: 0; font: inherit; font-size: 16px; padding: 8px 10px;
+            border: 1px solid white; border-right: none; background: rgb(243,243,243); border-radius: 0; outline: none;
+        }
+        #match-user:focus { background: #FFFF00; }
+        #match-go { font: inherit; padding: 8px 14px; border: 1px solid #000; background: #000; color: #fff; cursor: pointer; border-radius: 0; }
+        #match-go:hover { background: #FFFF00; color: #000; }
+        #match-status { min-height: 1.5em; margin: 10px 0; font-size: 10pt; }
+        #match-content b { font-weight: normal; background: #FFFF00; color: #000; padding: 0 1px; }
+        .match-profile { max-width: 760px; font-family: 'Archivo SemiBold'; font-size: 24px; line-height: 1.25; letter-spacing: -0.03em; margin: 6px 0 22px; }
+        .match-profile b { font-family: 'Archivo SemiBold'; }
+        .match-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 30px; }
+        @media (min-width: 916px) { .match-grid { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 40px; } }
+        .match-row { display: flex; align-items: center; height: 64px; cursor: pointer; border-bottom: 1px solid white; }
+        .match-row:hover { background: #FFFF00; }
+        .match-row img { width: 64px; height: 64px; object-fit: cover; flex: none; border-right: 1px solid white; margin-right: 12px; }
+        .match-row .t { flex: 1; min-width: 0; }
+        .match-row .n { font-family: 'Archivo SemiBold'; font-size: 13pt; letter-spacing: -0.03em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .match-row .m { font-size: 9pt; opacity: 0.65; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .match-row .info-icon { margin: 0 10px; cursor: pointer; }
+        .match-card { margin-bottom: 26px; }
+        .match-card .m { font-size: 9pt; line-height: 1.4; margin-top: 4px; }
         #about-button + #get-app-button { margin-left: 0; }
         .dark #about-button { background-color: #000; color: #fff; border-left-color: var(--line); }
         .dark #about-button:hover { background: #fff; color: #000; }
@@ -6091,6 +6139,7 @@
     }
 
     function openAbout() {
+        modalEl.classList.remove('match-mode');
         modalEl.classList.add('about-mode');
         modalContainer.dataset.station = '';
         animateModalIn();
@@ -6121,11 +6170,113 @@
     // station modal takes the shell back
     const _openModal = openModal;
     openModal = function (station) {
-        modalEl.classList.remove('about-mode');
+        modalEl.classList.remove('about-mode', 'match-mode');
         return _openModal(station);
     };
 
     document.getElementById('about-button').addEventListener('click', openAbout);
+</script>
+
+<script>
+    /* ================= FIND YOUR STATION =================
+       Last.fm username -> /dna/match -> stations ranked on the same genre / era /
+       depth scales as You Might Like, plus artist overlap with our poll log. */
+    const MATCH_URL = DNA_URL.replace(/\/data$/, '/match');
+    const matchForm = document.getElementById('match-form');
+    const matchUser = document.getElementById('match-user');
+    const matchStatus = document.getElementById('match-status');
+    const matchResults = document.getElementById('match-results');
+    const mEsc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const listed = x => info && info[x.station] && document.getElementById(x.station);
+    const andList = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+
+    function openMatch() {
+        modalEl.classList.remove('about-mode');
+        modalEl.classList.add('match-mode');
+        modalContainer.dataset.station = '';
+        animateModalIn();
+        try { if (!matchUser.value) matchUser.value = localStorage.getItem('lastfmUser') || ''; } catch (e) {}
+        setTimeout(() => matchUser.focus(), 300);
+    }
+
+    function stationRow(x, meta) {
+        const st = info[x.station];
+        const row = document.createElement('div');
+        row.className = 'match-row';
+        row.innerHTML = `<img src="${mEsc(st.logo)}" alt=""><div class="t"><div class="n"></div><div class="m"></div></div><p class="info-icon">ⓘ</p>`;
+        row.querySelector('.n').textContent = x.station;
+        row.querySelector('.m').textContent = meta;
+        row.querySelector('.info-icon').addEventListener('click', e => { e.stopPropagation(); openModal(x.station); });
+        row.addEventListener('click', () => chooseStation(x.station));
+        return row;
+    }
+
+    function renderMatch(r) {
+        matchResults.innerHTML = '';
+        const p = r.profile || {};
+        const bits = [];
+        if (p.top_genres && p.top_genres.length) bits.push(`You lean <b>${andList(p.top_genres.map(mEsc))}</b>.`);
+        if (p.year_median) bits.push(`Your typical track is from <b>${p.year_median}</b>.`);
+        if (p.deeper_than != null) bits.push(p.deeper_than >= 50
+            ? `You dig deeper than <b>${p.deeper_than}%</b> of our stations.`
+            : `Your picks are more familiar than <b>${100 - p.deeper_than}%</b> of our stations’.`);
+        const prof = document.createElement('div');
+        prof.className = 'match-profile';
+        prof.innerHTML = bits.join(' ');
+        matchResults.appendChild(prof);
+
+        const grid = document.createElement('div');
+        grid.className = 'match-grid';
+
+        const left = document.createElement('div');
+        left.innerHTML = '<div class="modal-header">Your Matches</div>';
+        (r.matches || []).filter(listed).slice(0, 6).forEach(x => {
+            const shared = x.n_shared ? ` · plays ${x.n_shared} of your top artists` : '';
+            left.appendChild(stationRow(x, `${x.pct}% match${shared}`));
+        });
+
+        const right = document.createElement('div');
+        const card = (title, x, meta) => {
+            if (!x) return;
+            const c = document.createElement('div');
+            c.className = 'match-card';
+            c.innerHTML = `<div class="modal-header">${title}</div>`;
+            c.appendChild(stationRow(x, `${x.pct}% match`));
+            const m = document.createElement('div');
+            m.className = 'm';
+            m.innerHTML = meta;
+            c.appendChild(m);
+            right.appendChild(c);
+        };
+        const top = new Set((r.matches || []).filter(listed).slice(0, 6).map(x => x.station));
+        const shared = (r.most_shared || []).filter(listed)[0];
+        card('Most Artists in Common', shared,
+             shared ? `We’ve heard ${shared.n_shared} of your top artists here, including ${andList(shared.shared.slice(0, 4).map(a => `<b>${mEsc(a)}</b>`))}.` : '');
+        const stretch = (r.stretch || []).filter(x => listed(x) && !top.has(x.station))[0];
+        card('Stretch Pick', stretch, 'Same era and depth as you, different sound. Listen through the friction.');
+
+        grid.append(left, right);
+        matchResults.appendChild(grid);
+    }
+
+    matchForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const user = matchUser.value.trim();
+        if (!user) return;
+        try { localStorage.setItem('lastfmUser', user); } catch (err) {}
+        matchStatus.textContent = 'Listening to your listening…';
+        matchResults.innerHTML = '';
+        fetch(`${MATCH_URL}?user=${encodeURIComponent(user)}`)
+            .then(r => r.json().then(j => ({ ok: r.ok, j })))
+            .then(({ ok, j }) => {
+                if (!ok || j.error) { matchStatus.textContent = j.error || 'Something went wrong.'; return; }
+                matchStatus.textContent = '';
+                renderMatch(j);
+            })
+            .catch(() => { matchStatus.textContent = 'Couldn’t reach the server. Try again in a minute.'; });
+    });
+
+    document.getElementById('match-button').addEventListener('click', openMatch);
 </script>
 
 <script type="application/ld+json">

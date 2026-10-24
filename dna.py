@@ -8,6 +8,8 @@ from flask import Flask, jsonify, request, Response
 
 import genres
 import station_stats
+import match as radio_match
+import time as _time
 
 DB_PATH = Path("/var/www/internet-radio-protocol/plays.db")
 app = Flask(__name__)
@@ -1036,6 +1038,36 @@ def dna_songs(station):
                     for r in rows])
     resp.headers["Access-Control-Allow-Origin"] = "*"
     resp.headers["Cache-Control"] = "no-store"
+    return resp
+
+
+_match_cache = {}   # lowercased username -> (fetched_at, result)
+MATCH_TTL = 3600
+
+
+@app.route("/dna/match")
+def dna_match():
+    """Find-your-station: ?user=<Last.fm username>."""
+    user = (request.args.get("user") or "").strip()
+    key = user.lower()
+    hit = _match_cache.get(key)
+    if hit and _time.time() - hit[0] < MATCH_TTL:
+        resp = jsonify(hit[1])
+    else:
+        conn = _conn()
+        try:
+            profile = radio_match.listener_profile(conn, user)
+            result = radio_match.match(conn, rollups(conn)["dna"], profile)
+            _match_cache[key] = (_time.time(), result)
+            resp = jsonify(result)
+        except radio_match.MatchError as e:
+            resp = jsonify({"error": str(e)}); resp.status_code = 400
+        except Exception as e:   # Last.fm down, timeouts, ...
+            app.logger.exception("match failed")
+            resp = jsonify({"error": "Couldn't reach Last.fm right now. Try again in a minute."}); resp.status_code = 502
+        finally:
+            conn.close()
+    resp.headers["Access-Control-Allow-Origin"] = "*"
     return resp
 
 
