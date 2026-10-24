@@ -2710,7 +2710,6 @@
             flex: 1; min-width: 0; font: inherit; font-size: 16px; padding: 8px 10px;
             border: 1px solid white; border-right: none; background: rgb(243,243,243); border-radius: 0; outline: none;
         }
-        #match-user:focus { background: #FFFF00; }
         #match-go { font: inherit; padding: 8px 14px; border: 1px solid #000; background: #000; color: #fff; cursor: pointer; border-radius: 0; }
         #match-go:hover { background: #FFFF00; color: #000; }
         #match-status { min-height: 1.5em; margin: 10px 0; font-size: 10pt; }
@@ -2740,6 +2739,8 @@
             .match-top .n { font-size: 24px; }
         }
         .match-top .info-icon { margin: 0 10px; cursor: pointer; align-self: flex-start; }
+        .match-top .loc { display: inline-block; margin-top: 6px; background: #00acff; color: #000; font-size: 9pt; padding: 2px 5px; }
+        .match-top .blurb { margin-top: 12px; font-size: 10.5pt; line-height: 1.5; max-width: 620px; }
         .match-top .why { margin-top: 12px; font-size: 10.5pt; line-height: 1.5; max-width: 620px; }
         .match-card .m { font-size: 9pt; line-height: 1.4; margin-top: 4px; }
         #about-button + #get-app-button { margin-left: 0; }
@@ -6233,7 +6234,7 @@
         el.className = 'match-top';
         const why = [];
         if (x.common_genres && x.common_genres.length)
-            why.push(`You both lean <b>${andList(x.common_genres.map(mEsc))}</b>.`);
+            why.push(`You both like <b>${andList(x.common_genres.map(mEsc))}</b>.`);
         if (x.shared && x.shared.length) {
             const names = x.shared.slice(0, 4).map(a => `<b>${mEsc(a)}</b>`);
             const more = x.shared.length > 4 ? `, and ${x.shared.length - 4} more of your top artists` : '';
@@ -6249,9 +6250,11 @@
                 <div class="t">
                     <div class="pct">${x.pct}% match</div>
                     <div class="n"></div>
+                    ${st.location ? `<div class="loc">${mEsc(st.location)}</div>` : ''}
                 </div>
                 <p class="info-icon">ⓘ</p>
             </div>
+            ${st.bmoDesc ? `<div class="blurb">${mEsc(decodeHtmlEntities(st.bmoDesc))}</div>` : ''}
             <div class="why">${why.join(' ')}</div>`;
         el.querySelector('.n').textContent = x.station;
         el.querySelector('.info-icon').addEventListener('click', e => { e.stopPropagation(); openModal(x.station); });
