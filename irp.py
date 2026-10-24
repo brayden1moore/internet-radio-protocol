@@ -2324,10 +2324,10 @@ Stream(
         main_link = "https://www.lowergrandradio.com",
         about = "If you would like to do a show, please contact us at lowergrandshows@gmail.com All ideas are welcome. Please include any links or information about a type of show you are thinking. Please be specific!",
         support_link = "https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=7QPWGHQ5QLXWC&source=url&ssrt=1752175580020",
-        insta_link = None,
+        insta_link = "https://www.instagram.com/lowergrandradio/",
         bandcamp_link = None,
         soundcloud_link = None,
-        archive_link = None,
+        archive_link = "https://www.mixcloud.com/lowergrandradio/",
         bmo_desc = "Oakland's best DJs playing a broad range of pop, dance, alt, and electronic music for a long-running local institution."
 ),
 Stream(
