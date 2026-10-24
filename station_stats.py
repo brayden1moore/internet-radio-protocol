@@ -1014,7 +1014,8 @@ import random as _random
 DAILY_ROLES = (
     ("close",    0.00, 0.15),
     ("sideways", 0.35, 0.60),
-    ("far",      0.80, 1.00),
+    ("far",      0.70, 0.90),
+    ("wildcard", 0.92, 1.00),   # out of left field: the very furthest from the anchor
 )
 DAILY_MIN_TOTAL = 30          # a station needs this many categorized plays to be picked or to anchor
 
@@ -1070,6 +1071,15 @@ def _daily_why(role, dna, anchor, pick):
         if less:
             text += f". Less {_genre_name(less[0][1])}"
         return text + ".", mark
+
+    if role == "wildcard":
+        top = _top_genres(cats, p)
+        mark = J([_genre_name(c) for c in top]) if top else None
+        head = (f"About as far from {anchor} as we go: mostly {mark}" if mark
+                else f"About as far from {anchor} as we go")
+        if abs(d_year) >= 10:
+            head += f", with a median release of {round(yp)}"
+        return head + ". Give it ten minutes.", mark
 
     # far
     top = _top_genres(cats, p)
