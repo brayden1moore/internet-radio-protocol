@@ -5421,8 +5421,27 @@
             if (modalContainer.dataset.station !== station) return;   // modal moved on while loading
             const vec = dna.radar && dna.radar[station];
             if (!vec || (dna.totals[station] || 0) < DNA_MIN_TOTAL) return;
+            return loadSimilar(dna, station).then(similar => drawStationDNA(dna, station, vec, similar));
+        }).catch(err => console.error('DNA fetch failed:', err));
+    }
 
-            const similar = similarStations(dna, station, SIMILAR_COUNT);
+    // You Might Like comes from the server (/dna/similar), the same list the app gets.
+    // If that call fails (e.g. older server), fall back to the in-page calculation.
+    const SIMILAR_URL = DNA_URL.replace(/\/data$/, '/similar/');
+    function loadSimilar(dna, station) {
+        const showable = name => name !== station && dna.radar[name] && info && info[name] &&
+            info[name].status !== 'Offline' && document.getElementById(name);
+        return fetch(`${SIMILAR_URL}${encodeURIComponent(station)}?n=40`)
+            .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+            .then(list => list.filter(x => showable(x.station)).slice(0, SIMILAR_COUNT)
+                              .map(x => ({ name: x.station, pct: x.pct })))
+            .catch(() => similarStations(dna, station, SIMILAR_COUNT));
+    }
+
+    function drawStationDNA(dna, station, vec, similar) {
+            if (modalContainer.dataset.station !== station) return;
+            modalRadar.innerHTML = '';          // in case two loads for this station overlapped
+            modalSimilarList.innerHTML = '';
             const all = similar.reduce((acc, s) => acc.concat(dna.radar[s.name]), vec.slice());
             const radar = buildRadar(dna.categories, vec, niceMax(all));
 
@@ -5438,7 +5457,6 @@
             modalSimilarList.scrollTop = 0;
             watchMoreFade(modalSimilarList);
             modalDNA.style.display = 'flex';
-        }).catch(err => console.error('DNA fetch failed:', err));
     }
 
     // MARK Natural Lang Search

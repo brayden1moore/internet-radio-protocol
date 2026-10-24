@@ -1045,6 +1045,23 @@ _match_cache = {}   # lowercased username -> (fetched_at, result)
 MATCH_TTL = 3600
 
 
+@app.route("/dna/similar/<station>")
+def dna_similar(station):
+    """You Might Like for one station (shared by the site and the app). ?n= (default 30)."""
+    n = max(1, min(request.args.get("n", 30, type=int), 100))
+    conn = _conn()
+    try:
+        dna_ = rollups(conn)["dna"]
+    finally:
+        conn.close()
+    if station not in dna_["radar"]:
+        resp = jsonify([]); resp.status_code = 404
+    else:
+        resp = jsonify(station_stats.similar_stations(dna_, station, n))
+    resp.headers["Access-Control-Allow-Origin"] = "*"
+    return resp
+
+
 @app.route("/dna/match")
 def dna_match():
     """Find-your-station: ?user=<Last.fm username>."""
@@ -1062,6 +1079,9 @@ def dna_match():
             resp = jsonify(result)
         except radio_match.MatchError as e:
             resp = jsonify({"error": str(e)}); resp.status_code = 400
+        except radio_match.ConfigError:
+            app.logger.exception("match not configured")
+            resp = jsonify({"error": "Matching isn't switched on yet. Check back soon."}); resp.status_code = 503
         except Exception as e:   # Last.fm down, timeouts, ...
             app.logger.exception("match failed")
             resp = jsonify({"error": "Couldn't reach Last.fm right now. Try again in a minute."}); resp.status_code = 502

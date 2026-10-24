@@ -932,3 +932,72 @@ def highlights(conn, top_n=5, candidates=12):
         "top_artists": top(artists, "name"),
         "top_songs": top(songs, "title"),
     }
+
+
+# ---------------------------------------------------------------------------
+# "You Might Like" (site + app). One implementation, served by /dna/similar.
+# ---------------------------------------------------------------------------
+
+SIMILAR_WEIGHTS = {"genre": 0.6, "year": 0.2, "obsc": 0.2}
+_similar_scales = {"key": None, "val": None}
+
+
+def _genre_dist(a, b):
+    return math.sqrt(sum((x - y) ** 2 for x, y in zip(a, b)))
+
+
+def similarity_scales(dna):
+    """
+    Each distance is divided by its spread across stations so genre, era and
+    obscurity are comparable before weighting. Cached per payload.
+    """
+    key = id(dna)
+    if _similar_scales["key"] == key:
+        return _similar_scales["val"]
+    names = [s for s in dna["radar"] if (dna["totals"].get(s) or 0) >= MIN_CATEGORIZED]
+    g_max = max((_genre_dist(dna["radar"][a], dna["radar"][b])
+                 for i, a in enumerate(names) for b in names[i + 1:]), default=1) or 1
+    def rng(k):
+        v = [dna["spectra"][s][k] for s in names if dna["spectra"].get(s, {}).get(k) is not None]
+        return (max(v) - min(v)) if v else 0
+    val = {"genre": g_max, "year": rng("year_mean") or 1, "obsc": rng("obsc_mean") or 1}
+    _similar_scales.update(key=key, val=val)
+    return val
+
+
+def similar_stations(dna, station, limit=30):
+    """
+    Nearest stations by genre mix (60%), median release year (20%) and
+    obscurity rank (20%). A station missing year/obscurity data is judged on
+    what it has (weights renormalise). Returns best first:
+    [{"station", "pct", "year_mean", "obsc_mean", "top_artist"}].
+    Callers filter out stations they don't list (offline, hidden), so ask for
+    a few more than you show.
+    """
+    radar, spectra, totals = dna["radar"], dna["spectra"], dna["totals"]
+    base = radar.get(station)
+    if not base:
+        return []
+    sc = similarity_scales(dna)
+    me = spectra.get(station, {})
+    out = []
+    for name, vec in radar.items():
+        if name == station or (totals.get(name) or 0) < MIN_CATEGORIZED or len(vec) != len(base):
+            continue
+        them = spectra.get(name, {})
+        parts = [(SIMILAR_WEIGHTS["genre"], _genre_dist(base, vec) / sc["genre"])]
+        if me.get("year_mean") is not None and them.get("year_mean") is not None:
+            parts.append((SIMILAR_WEIGHTS["year"], abs(me["year_mean"] - them["year_mean"]) / sc["year"]))
+        if me.get("obsc_mean") is not None and them.get("obsc_mean") is not None:
+            parts.append((SIMILAR_WEIGHTS["obsc"], abs(me["obsc_mean"] - them["obsc_mean"]) / sc["obsc"]))
+        wsum = sum(w for w, _ in parts)
+        d = math.sqrt(sum(w * v * v for w, v in parts) / wsum)
+        out.append((d, {
+            "station": name,
+            "pct": max(0, round(100 * (1 - d))),
+            "year_mean": them.get("year_mean"),
+            "obsc_mean": them.get("obsc_mean"),
+            "top_artist": them.get("top_artist"),
+        }))
+    out.sort(key=lambda x: x[0])
+    return [x for _, x in out[:limit]]
