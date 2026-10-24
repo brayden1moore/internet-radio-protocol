@@ -1110,8 +1110,14 @@ def daily_set(dna, date, anchor=None, exclude=(), n=6):
     rng = _random.Random(f"daily|{date}|{anchor}")
     used, picks = set(), {}
     for role, lo, hi in DAILY_ROLES:
-        band = ranked[int(lo * len(ranked)):max(int(hi * len(ranked)), int(lo * len(ranked)) + 1)]
-        pool = [x for x in band if x["station"] not in skip and x["station"] not in used]
+        # Widen the band a step at a time if exclusions (stations they know,
+        # recent picks) have emptied it, so every role still gets candidates.
+        pool, pad = [], 0.0
+        while not pool and pad <= 0.3:
+            a = max(0.0, lo - pad); b = min(1.0, hi + pad)
+            band = ranked[int(a * len(ranked)):max(int(b * len(ranked)), int(a * len(ranked)) + 1)]
+            pool = [x for x in band if x["station"] not in skip and x["station"] not in used]
+            pad += 0.1
         rng.shuffle(pool)
         out = []
         for x in pool[:n]:
