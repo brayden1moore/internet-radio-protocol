@@ -3652,6 +3652,26 @@ import os
 BASE = 'https://one.radio'
 STUB_DIR = 's'
 
+_TZ_FINDER = None
+_TZ_CACHE = {}
+
+def tz_for(lat, lon):
+    """IANA time zone for a station's coordinates (for the radio's station clock)."""
+    global _TZ_FINDER
+    if lat is None or lon is None:
+        return None
+    key = (round(float(lat), 3), round(float(lon), 3))
+    if key not in _TZ_CACHE:
+        try:
+            if _TZ_FINDER is None:
+                from timezonefinder import TimezoneFinder
+                _TZ_FINDER = TimezoneFinder()
+            _TZ_CACHE[key] = _TZ_FINDER.timezone_at(lat=key[0], lng=key[1])
+        except Exception as e:
+            print('timezone lookup failed:', e)
+            _TZ_CACHE[key] = None
+    return _TZ_CACHE[key]
+
 def write_stub(v):
     name = v['name']
     safe = name.replace(' ', '_')
@@ -3759,6 +3779,7 @@ def main_loop():
                     "logo_png": v["logo"],
                     "logo_hash": getattr(v, 'logo_hash', None),
                     "hidden": v['hidden'],
+                    "timezone": tz_for(v.get('lat'), v.get('lon')),
                 }
                 summary_list.append(summary_item)
             summary_list.sort(key=lambda item: item['name'].casefold())
