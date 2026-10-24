@@ -1416,6 +1416,11 @@
         align-items: center;
     }
 
+    /* while a modal is open the page behind it doesn't scroll, and scrolling past
+       the end of the modal doesn't hand off to the page */
+    html.modal-lock, html.modal-lock body { overflow: hidden; }
+    #modal { overscroll-behavior: contain; }
+
     #modal-bg {
         position: fixed;
         top: 0;
@@ -3046,6 +3051,7 @@
             modalContainer.style.display = 'flex';
             modalEl.scrollTop = 0;
             modalOpen = true;
+            document.documentElement.classList.add('modal-lock');   // freeze the page behind
             void modalEl.offsetWidth;   // commit layout so the backdrop fade actually transitions
 
             const origin = modalTransformOrigin();
@@ -3068,6 +3074,7 @@
             const done = () => {
                 modalAnim = null;
                 modalContainer.style.display = 'none';
+                document.documentElement.classList.remove('modal-lock');
             };
 
             // Closed while still opening: just run the open animation backwards
