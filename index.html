@@ -2727,6 +2727,20 @@
         .match-row .m { font-size: 9pt; opacity: 0.65; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .match-row .info-icon { margin: 0 10px; cursor: pointer; }
         .match-card { margin-bottom: 26px; }
+        .match-top { padding: 14px 0 16px; border-bottom: 1px solid white; }
+        .match-top-head { display: flex; align-items: center; gap: 16px; cursor: pointer; }
+        .match-top-head:hover .n { background: #FFFF00; }
+        .match-top-head img { width: 110px; height: 110px; object-fit: cover; flex: none; border: 1px solid white; }
+        .match-top-head .t { flex: 1; min-width: 0; }
+        .match-top .pct { font-size: 10pt; }
+        .match-top .n { font-family: 'Archivo SemiBold'; font-size: 30px; line-height: 1.05; letter-spacing: -0.04em;
+                        margin-top: 2px; width: fit-content; max-width: 100%; overflow-wrap: anywhere; }
+        @media (max-width: 600px) {
+            .match-top-head img { width: 80px; height: 80px; }
+            .match-top .n { font-size: 24px; }
+        }
+        .match-top .info-icon { margin: 0 10px; cursor: pointer; align-self: flex-start; }
+        .match-top .why { margin-top: 12px; font-size: 10.5pt; line-height: 1.5; max-width: 620px; }
         .match-card .m { font-size: 9pt; line-height: 1.4; margin-top: 4px; }
         #about-button + #get-app-button { margin-left: 0; }
         .dark #about-button { background-color: #000; color: #fff; border-left-color: var(--line); }
@@ -6188,7 +6202,8 @@
     const matchResults = document.getElementById('match-results');
     const mEsc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     const listed = x => info && info[x.station] && document.getElementById(x.station);
-    const andList = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+    // Oxford comma: "A and B", "A, B, and C"
+    const andList = a => a.length < 3 ? a.join(' and ') : a.slice(0, -1).join(', ') + ', and ' + a[a.length - 1];
 
     function openMatch() {
         modalEl.classList.remove('about-mode');
@@ -6211,6 +6226,39 @@
         return row;
     }
 
+    // the #1 match gets a big card that explains the number
+    function topMatch(x, p) {
+        const st = info[x.station];
+        const el = document.createElement('div');
+        el.className = 'match-top';
+        const why = [];
+        if (x.common_genres && x.common_genres.length)
+            why.push(`You both lean <b>${andList(x.common_genres.map(mEsc))}</b>.`);
+        if (x.shared && x.shared.length) {
+            const names = x.shared.slice(0, 4).map(a => `<b>${mEsc(a)}</b>`);
+            const more = x.shared.length > 4 ? `, and ${x.shared.length - 4} more of your top artists` : '';
+            why.push(`We’ve heard ${more ? names.join(', ') + more : andList(names)} here.`);
+        }
+        if (x.year_median && p.year_median)
+            why.push(Math.abs(x.year_median - p.year_median) <= 2
+                ? `Its typical track is from <b>${x.year_median}</b>, right in your era.`
+                : `Its typical track is from <b>${x.year_median}</b> (yours: ${p.year_median}).`);
+        el.innerHTML = `
+            <div class="match-top-head">
+                <img src="${mEsc(st.logo)}" alt="">
+                <div class="t">
+                    <div class="pct">${x.pct}% match</div>
+                    <div class="n"></div>
+                </div>
+                <p class="info-icon">ⓘ</p>
+            </div>
+            <div class="why">${why.join(' ')}</div>`;
+        el.querySelector('.n').textContent = x.station;
+        el.querySelector('.info-icon').addEventListener('click', e => { e.stopPropagation(); openModal(x.station); });
+        el.querySelector('.match-top-head').addEventListener('click', () => chooseStation(x.station));
+        return el;
+    }
+
     function renderMatch(r) {
         matchResults.innerHTML = '';
         const p = r.profile || {};
@@ -6230,7 +6278,9 @@
 
         const left = document.createElement('div');
         left.innerHTML = '<div class="modal-header">Your Matches</div>';
-        (r.matches || []).filter(listed).slice(0, 6).forEach(x => {
+        const mine = (r.matches || []).filter(listed).slice(0, 6);
+        if (mine[0]) left.appendChild(topMatch(mine[0], p));
+        mine.slice(1).forEach(x => {
             const shared = x.n_shared ? ` · plays ${x.n_shared} of your top artists` : '';
             left.appendChild(stationRow(x, `${x.pct}% match${shared}`));
         });

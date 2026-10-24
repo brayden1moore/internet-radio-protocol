@@ -37,18 +37,36 @@ class MatchError(Exception):
     """User-facing problem (unknown username, private profile, no history)."""
 
 
+class ConfigError(Exception):
+    """Server-side setup problem (not the visitor's fault)."""
+
+
 def _lastfm_key():
-    try:
-        env = json.loads((Path(__file__).parent / "environ.json").read_text())
-        if env.get("LASTFM_KEY"):
-            return env["LASTFM_KEY"]
-    except Exception:
-        pass
-    return os.environ.get("LASTFM_KEY")
+    """
+    Same sources as poll.py: an environ.json, or the LASTFM_KEY environment
+    variable. The web app usually runs from a different folder / service than
+    the poller, so look next to this file, in the working directory and next
+    to the database too.
+    """
+    if os.environ.get("LASTFM_KEY"):
+        return os.environ["LASTFM_KEY"]
+    for folder in (Path(__file__).parent, Path.cwd(), Path("/var/www/internet-radio-protocol")):
+        try:
+            key = json.loads((folder / "environ.json").read_text()).get("LASTFM_KEY")
+            if key:
+                return key
+        except Exception:
+            continue
+    return None
 
 
 def lf(method, **params):
-    r = requests.get(LF_URL, params={"method": method, "api_key": _lastfm_key(),
+    key = _lastfm_key()
+    if not key:
+        # without this, requests silently drops api_key=None and Last.fm answers
+        # "Invalid parameters - Your request is missing a required parameter"
+        raise ConfigError("LASTFM_KEY isn't set for the web app (env var or environ.json)")
+    r = requests.get(LF_URL, params={"method": method, "api_key": key,
                                      "format": "json", **params},
                      headers={"User-Agent": UA}, timeout=20)
     data = r.json()
@@ -239,6 +257,7 @@ def match(conn, dna, profile):
     mine = {a.lower() for a in profile["top_artists"]}
     display = {a.lower(): a for a in profile["top_artists"]}
     played = station_artists(conn)
+    axis = profile["categories"]
 
     scored = []
     for s in names:
@@ -256,8 +275,12 @@ def match(conn, dna, profile):
         d = math.sqrt(sum(w * v * v for w, v in parts) / wsum)
         shared = sorted(mine & played.get(s, set()),
                         key=lambda a: profile["top_artists"].index(display[a]))
+        # genres you share: biggest overlap in share of genre tags (min of the two)
+        both = sorted(range(len(axis)), key=lambda i: -min(profile["genres"][i], radar[s][i]))
+        common = [axis[i] for i in both[:3] if min(profile["genres"][i], radar[s][i]) >= 3]
         scored.append({
             "station": s, "d": d, "pct": max(0, round(100 * (1 - d))),
+            "common_genres": common, "year_median": sp.get("year_mean"),
             "shared": [display[a] for a in shared], "n_shared": len(shared),
             "_g": g, "_eo": math.sqrt(((y or 0) ** 2 + (o or 0) ** 2) / 2),
         })

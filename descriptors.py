@@ -15,7 +15,7 @@ def _join(names):
         return names[0]
     if len(names) == 2:
         return f"{names[0]} and {names[1]}"
-    return f"{', '.join(names[:-1])} and {names[-1]}"
+    return f"{', '.join(names[:-1])}, and {names[-1]}"   # Oxford comma
 
 
 # ---------------------------------------------------------------------------
