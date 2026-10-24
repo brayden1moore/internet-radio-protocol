@@ -6241,7 +6241,7 @@
         }
         if (x.year_median && p.year_median)
             why.push(Math.abs(x.year_median - p.year_median) <= 2
-                ? `Its typical track is from <b>${x.year_median}</b>, right in your era.`
+                ? `Its typical track is from <b>${x.year_median}</b>, about the same as you.`
                 : `Its typical track is from <b>${x.year_median}</b> (yours: ${p.year_median}).`);
         el.innerHTML = `
             <div class="match-top-head">
@@ -6303,7 +6303,7 @@
         card('Most Artists in Common', shared,
              shared ? `We’ve heard ${shared.n_shared} of your top artists here, including ${andList(shared.shared.slice(0, 4).map(a => `<b>${mEsc(a)}</b>`))}.` : '');
         const stretch = (r.stretch || []).filter(x => listed(x) && !top.has(x.station))[0];
-        card('Stretch Pick', stretch, 'Same era and depth as you, different sound. Listen through the friction.');
+        card('Stretch Pick', stretch, 'Same era and depth as you, but a different sound. Give it a listen if you want to try something new.');
 
         grid.append(left, right);
         matchResults.appendChild(grid);
