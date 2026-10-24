@@ -3,6 +3,7 @@ import csv
 import sqlite3
 import colorsys
 import threading
+import datetime
 from pathlib import Path
 from flask import Flask, jsonify, request, Response
 
@@ -1043,6 +1044,28 @@ def dna_songs(station):
 
 _match_cache = {}   # lowercased username -> (fetched_at, result)
 MATCH_TTL = 3600
+
+
+@app.route("/dna/daily")
+def dna_daily():
+    """
+    Today's Daily Set. ?date=YYYY-MM-DD (the listener's local date)
+    &anchor=<station they listen to most> (omit for new listeners)
+    &exclude=<station> (repeatable: stations they already know)&n=6
+    """
+    date = (request.args.get("date") or "")[:10] or datetime.date.today().isoformat()
+    anchor = request.args.get("anchor") or None
+    exclude = request.args.getlist("exclude")
+    n = max(1, min(request.args.get("n", 6, type=int), 12))
+    conn = _conn()
+    try: dna_ = rollups(conn)["dna"]
+    finally: conn.close()
+    out = station_stats.daily_set(dna_, date, anchor, exclude, n)
+    resp = jsonify(out or {})
+    if out is None:
+        resp.status_code = 404
+    resp.headers["Access-Control-Allow-Origin"] = "*"
+    return resp
 
 
 @app.route("/dna/similar/<station>")
