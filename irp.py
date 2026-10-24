@@ -142,6 +142,7 @@ class Stream:
         self.cri_id = cri_id or cri.get(name)
         self.logo = logo
         self.location = location
+        self.home_location = location   # fixed home city; `location` can change per show (NTS guests)
         self.info_link = info_link
         self.stream_link = stream_link
         self.main_link = main_link
@@ -176,6 +177,7 @@ class Stream:
             self.name = from_dict.get('name')
             self.logo = from_dict.get('logo')
             self.location = from_dict.get('location')
+            self.home_location = from_dict.get('homeLocation') or self.location
             self.info_link = from_dict.get('infoLink')
             self.stream_link = from_dict.get('streamLink')
             self.main_link = from_dict.get('mainLink')
@@ -216,6 +218,7 @@ class Stream:
             "logo": self.logo,
             "about": self.about,
             "location": self.location,
+            "homeLocation": self.home_location,
             "status": self.status,
             "songBasis": self.song_basis,
             "criId":self.cri_id,
@@ -3783,6 +3786,7 @@ def main_loop():
                     "oneLiner": rendered,
                     "status": v['status'],
                     "location": v['location'],
+                    "homeLocation": v.get('homeLocation') or v['location'],   # matches `timezone` (lat/lon are the home city)
                     "genres": v['genres'],
                     "streamLink": v['streamLink'],
                     "logo": f'https://one.radio/logos/{safe}.xbm',  
