@@ -1052,19 +1052,29 @@ def dna_daily():
     Today's Daily Set. ?date=YYYY-MM-DD (the listener's local date)
     &anchor=<station they listen to most> (omit for new listeners)
     &exclude=<station> (repeatable: stations they already know)&n=6
+
+    With &explain=<role>|<station> (repeatable) and the set's anchor, returns
+    only {"explained": [...]}: fresh wording for picks the app already has.
     """
     date = (request.args.get("date") or "")[:10] or datetime.date.today().isoformat()
     anchor = request.args.get("anchor") or None
     exclude = request.args.getlist("exclude")
+    explain = [e.split("|", 1) for e in request.args.getlist("explain") if "|" in e]
     n = max(1, min(request.args.get("n", 6, type=int), 12))
     conn = _conn()
     try: dna_ = rollups(conn)["dna"]
     finally: conn.close()
+    if explain:
+        resp = jsonify({"explained": station_stats.daily_explain(dna_, anchor, explain)})
+        resp.headers["Access-Control-Allow-Origin"] = "*"
+        resp.headers["Cache-Control"] = "no-store"
+        return resp
     out = station_stats.daily_set(dna_, date, anchor, exclude, n)
     resp = jsonify(out or {})
     if out is None:
         resp.status_code = 404
     resp.headers["Access-Control-Allow-Origin"] = "*"
+    resp.headers["Cache-Control"] = "no-store"
     return resp
 
 

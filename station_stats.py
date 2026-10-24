@@ -1122,3 +1122,22 @@ def daily_set(dna, date, anchor=None, exclude=(), n=6):
         picks[role] = out
     return {"date": date, "anchor": anchor, "personal": personal,
             "roles": [r for r, _, _ in DAILY_ROLES], "picks": picks}
+
+
+def daily_explain(dna, anchor, items):
+    """
+    Fresh wording for a set the app already holds: [(role, station)] ->
+    [{"role", "station", "pct", "why", "mark"}]. The app keeps its picks for
+    the whole day but re-reads the sentences, so wording edits show up
+    without waiting for tomorrow's set.
+    """
+    if anchor not in dna["radar"]:
+        return []
+    pct = {x["station"]: x["pct"] for x in similar_stations(dna, anchor, limit=len(dna["radar"]))}
+    out = []
+    for role, station in items:
+        if station not in dna["radar"] or station not in pct:
+            continue
+        why, mark = _daily_why(role, dna, anchor, station)
+        out.append({"role": role, "station": station, "pct": pct[station], "why": why, "mark": mark})
+    return out
