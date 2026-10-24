@@ -136,7 +136,7 @@ class Stream:
     from each station and convert it into a dict to be served at /info.
     '''
 
-    def __init__(self, from_dict=None, lat=None, bmo_desc=None, lon=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, status=None, show_logo=None, now_playing=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, hidden=False, genres=None, tuner_only=False, category=None, song_basis=False, cri_id=None):
+    def __init__(self, from_dict=None, lat=None, bmo_desc=None, lon=None, name=None, logo=None, location=None, info_link=None, stream_link=None, main_link=None, status=None, show_logo=None, now_playing=None, about=None, support_link=None, insta_link=None, bandcamp_link=None, soundcloud_link=None, archive_link=None, hidden=False, genres=None, tuner_only=False, category=None, song_basis=False, cri_id=None):
         # station info 
         self.name = name
         self.cri_id = cri_id or cri.get(name)
@@ -151,6 +151,9 @@ class Stream:
         self.insta_link = insta_link
         self.bandcamp_link = bandcamp_link
         self.soundcloud_link = soundcloud_link
+        # Station-level archive (SoundCloud, Mixcloud or the station's own
+        # archive page). Unlike soundcloud_link, show parsing never touches it.
+        self.archive_link = archive_link
         self.hidden = hidden
         self.genres = genres
         self.tuner_only = tuner_only
@@ -172,6 +175,11 @@ class Stream:
         self.last_updated = None
         self.one_liner = None
         self.listeners = None
+        # Links for the show on air right now (NTS, Dublab). Kept apart from
+        # the station's own insta/bandcamp/soundcloud links, which never change.
+        self.show_insta_link = None
+        self.show_bandcamp_link = None
+        self.show_soundcloud_link = None
 
         if isinstance(from_dict, dict):
             self.name = from_dict.get('name')
@@ -193,6 +201,10 @@ class Stream:
             self.insta_link = from_dict.get('instaLink')
             self.bandcamp_link = from_dict.get('bandcampLink')
             self.soundcloud_link = from_dict.get('soundcloudLink')
+            self.archive_link = from_dict.get('archiveLink')
+            self.show_insta_link = from_dict.get('showInstaLink')
+            self.show_bandcamp_link = from_dict.get('showBandcampLink')
+            self.show_soundcloud_link = from_dict.get('showSoundcloudLink')
             self.last_updated = from_dict.get('lastUpdated')
             self.one_liner = self.one_liner
             self.support_link = from_dict.get('supportLink')
@@ -241,6 +253,10 @@ class Stream:
 
             "bandcampLink": self.bandcamp_link,
             "soundcloudLink": self.soundcloud_link,
+            "archiveLink": self.archive_link,
+            "showInstaLink": self.show_insta_link,
+            "showBandcampLink": self.show_bandcamp_link,
+            "showSoundcloudLink": self.show_soundcloud_link,
             "instaLink": self.insta_link,
 
             "lastUpdated": self.last_updated,
@@ -331,16 +347,16 @@ class Stream:
             self.genres = extract_value(now, ['embeds', 'details','genres'], sub_location=['value'], rule='list_genres')
             self.status = 'Live'
 
-            self.insta_link = None
-            self.bandcamp_link = None
-            self.soundcloud_link = None
+            self.show_insta_link = None
+            self.show_bandcamp_link = None
+            self.show_soundcloud_link = None
             for l in now['embeds']['details']['external_links']: # various external links
                 if 'instagram.' in l.lower():
-                    self.insta_link = l
+                    self.show_insta_link = l
                 elif 'bandcamp.' in l.lower():
-                    self.bandcamp_link = l
+                    self.show_bandcamp_link = l
                 elif 'soundcloud.' in l.lower():
-                    self.soundcloud_link = l
+                    self.show_soundcloud_link = l
 
         elif self.name == 'Dublab':
             now = datetime.now(timezone.utc)
@@ -546,17 +562,17 @@ class Stream:
                             if '.' not in last_line:
                                 self.genres = extract_value(last_line, rule='list_genres')
                         
-                        self.insta_link = None
-                        self.bandcamp_link = None
-                        self.soundcloud_link = None
+                        self.show_insta_link = None
+                        self.show_bandcamp_link = None
+                        self.show_soundcloud_link = None
                         for l in description_lines:
                             l = clean_text(l)
                             if 'instagram.' in l.lower():
-                                self.insta_link = l
+                                self.show_insta_link = l
                             elif 'bandcamp.' in l.lower():
-                                self.bandcamp_link = l
+                                self.show_bandcamp_link = l
                             elif 'soundcloud.' in l.lower():
-                                self.soundcloud_link = l   
+                                self.show_soundcloud_link = l   
                     except:
                         self.now_playing_description = None
                         self.now_playing_description_long = None
@@ -1933,6 +1949,7 @@ Stream(
         insta_link = "https://www.instagram.com/cashmere_radio/",
         bandcamp_link = "https://cashmereradio.bandcamp.com/",
         soundcloud_link = "https://www.mixcloud.com/CashmereRadio/",
+        archive_link = "https://www.mixcloud.com/CashmereRadio/",
         bmo_desc="A heady German station playing a broad range of imaginative sounds from 80s Egyptian pop to 2020s experimental ambient to live spoken word."
 ),
 Stream(
@@ -1948,7 +1965,8 @@ Stream(
         support_link = "https://www.patreon.com/refugeworldwide",
         insta_link = "https://www.instagram.com/RefugeWorldwide/",
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "Pan African Space Station",
@@ -1964,6 +1982,7 @@ Stream(
         insta_link = "https://www.instagram.com/chimurenga_sa/?hl=en",
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         bmo_desc = "Fascinating African music and poetry selections from boundary-pushing arts platform Chimurenga."
 ),
 Stream(
@@ -1980,6 +1999,7 @@ Stream(
         insta_link = "https://www.instagram.com/bffdotfm",
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         song_basis = True,
         bmo_desc = "A fun mix of underground and classic alternative music selected by a range of Bay Area DJs."
 ),
@@ -1997,6 +2017,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         hidden = True
 ),
 Stream(
@@ -2013,6 +2034,7 @@ Stream(
         insta_link = "https://instagram.com/ckutmusic/",
         bandcamp_link = None,
         soundcloud_link = "https://soundcloud.com/radiockut",
+        archive_link = "https://soundcloud.com/radiockut",
         category='Student',
         bmo_desc = "McGill's campus radio is one of North America's best. Solid, long running indie rock and reggae shows, and well curated music throughout." 
 ),
@@ -2030,6 +2052,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         hidden = True
 ),
 Stream(
@@ -2045,7 +2068,8 @@ Stream(
         support_link = "https://vmgkdp-0h.myshopify.com/",
         insta_link = "https://www.instagram.com/desirepath.radio/",
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "Do!!You!!! World",
@@ -2061,6 +2085,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         bmo_desc="Heads will know Do!!You!!! has some of the most consistently high-quality, thoughtfully dug selections from some of the most experienced DJs in London. Disco, soul, house, downtempo, it's all good."
 ),
 Stream(
@@ -2074,9 +2099,10 @@ Stream(
         main_link = "https://dublab.com",
         about = "dublab is a Los Angeles-based, community-supported internet radio station and creative collective dedicated to the growth of positive music, arts, and culture.",
         support_link = "https://www.dublab.com/support/memberships",
-        insta_link = None,
+        insta_link = "https://www.instagram.com/dublab/",
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = "https://www.mixcloud.com/dublab/",
         bmo_desc = "The best of the west. Thoughtfully curated selections around the genre spectrum, from deep soul cuts to the frontier of electronic experimentation." 
 ),
 Stream(
@@ -2093,6 +2119,7 @@ Stream(
         insta_link = "https://www.instagram.com/its_fault_radio/",
         bandcamp_link = None,
         soundcloud_link = "https://soundcloud.com/faultradio",
+        archive_link = "https://soundcloud.com/faultradio",
         hidden = True
 ),
 Stream(
@@ -2109,6 +2136,7 @@ Stream(
         insta_link = "https://www.instagram.com/hkcronline/",
         bandcamp_link = None,
         soundcloud_link = "https://soundcloud.com/hkcrlive",
+        archive_link = "https://soundcloud.com/hkcrlive",
         bmo_desc="Often exploring the fringes of electronic music, Hong Kong Community Radio is a prime example of boundary-pushing internet radio."
 ),
 Stream(
@@ -2124,7 +2152,8 @@ Stream(
         support_link = "https://www.every.org/hydefm?donationId=f8d1ff72-0f9a-4cfc-9055-f54389b66ca7&utm_campaign=receipts&utm_medium=email&utm_source=donation",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "Internet Public Radio",
@@ -2140,6 +2169,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         bmo_desc="A Guadalajaran outfit blasting hard-hitting dance music 24/7."
 ),
 Stream(
@@ -2156,6 +2186,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         hidden= False,
         song_basis= True,
         bmo_desc="Your mom's favorite station on One Radio for good reason. A west coast institution playing the best in safe-for-radio selections across alt, rock, and pop."
@@ -2174,6 +2205,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         genres = ['Jazz'],
         hidden=True
 ),
@@ -2191,6 +2223,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         genres = ['Talk'],
         hidden=True
 ),
@@ -2208,6 +2241,7 @@ Stream(
         insta_link = "https://www.instagram.com/kusforg",
         bandcamp_link = "https://kusforg.bandcamp.com",
         soundcloud_link = None,
+        archive_link = None,
         genres = ['Student'],
         category='Student',
         song_basis=True,
@@ -2225,6 +2259,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         song_basis = True,
         bmo_desc='In and of the internet, KWSX is like a nonstop playlist made for you by an online friend with impeccable taste.'
 ),
@@ -2242,6 +2277,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         bmo_desc='Broadcasting from a wood shack in a Brussels park, Kiosk DJs play electronic music to make you move.'
 ),
 Stream(
@@ -2258,6 +2294,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         bmo_desc = "Non-stop jungle and dnb with raucous hosts who have no fear of the mic. It's what pirate radio was meant to be."
 ),
 Stream(
@@ -2273,7 +2310,8 @@ Stream(
         support_link = "https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=C37FVDHHSZCA6",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "Lower Grand Radio",
@@ -2289,6 +2327,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         bmo_desc = "Oakland's best DJs playing a broad range of pop, dance, alt, and electronic music for a long-running local institution."
 ),
 Stream(
@@ -2304,7 +2343,8 @@ Stream(
         support_link = "https://venmo.com/?txn=pay&audience=public&recipients=miles-barrow-1&note=Support%20Monotonic%20Radio",
         insta_link = "https://www.instagram.com/monotonicradio/",
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "Mutant Radio",
@@ -2319,7 +2359,8 @@ Stream(
         support_link = "https://mutantradio.bandcamp.com/album/mutant-fundraising-compilation",
         insta_link = "https://www.instagram.com/mutantradiotbilisi/",
         bandcamp_link = "https://mutantradio.bandcamp.com",
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "NTS 1",
@@ -2332,9 +2373,10 @@ Stream(
         main_link = "https://nts.live",
         about = "NTS provides curious minds with a home for music discovery. Built by music lovers, for music lovers.",
         support_link = "https://www.nts.live/supporters",
-        insta_link = None,
+        insta_link = "https://www.instagram.com/nts_radio/",
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = "https://www.nts.live/shows",
         bmo_desc = "The standard for internet radio. Top-tier, genre-agnostic curation that balances experimentation with deep appreciation for the timeless."
 ),
 Stream(
@@ -2348,9 +2390,10 @@ Stream(
         main_link = "https://nts.live",
         about = "NTS provides curious minds with a home for music discovery. Built by music lovers, for music lovers.",
         support_link = "https://www.nts.live/supporters",
-        insta_link = None,
+        insta_link = "https://www.instagram.com/nts_radio/",
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = "https://www.nts.live/shows",
         bmo_desc = "The standard for internet radio. Top-tier, genre-agnostic curation that balances experimentation with deep appreciation for the timeless."
 ),
 Stream(
@@ -2367,6 +2410,7 @@ Stream(
         insta_link = "https://www.instagram.com/noodsradio/",
         bandcamp_link = "https://dummyhand.bandcamp.com",
         soundcloud_link = "https://www.mixcloud.com/NoodsRadio/",
+        archive_link = "https://www.mixcloud.com/NoodsRadio/",
         bmo_desc="A Bristol-based station playing a mix of sounds that internet radio lovers will welcome with well-curated, sometimes off-kilter music."
 ),
 Stream(
@@ -2383,6 +2427,7 @@ Stream(
         insta_link = "https://www.instagram.com/orokoradio/",
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         bmo_desc="A Ghanaian outfit featuring bright sounds from and influenced by the African continent."
 ),
 Stream(
@@ -2398,7 +2443,8 @@ Stream(
         support_link = "https://www.paypal.com/donate?token=LCf1aVOt7zZUOu_RvVLMHCt-AMaaNIkIk9kLxzPV5Mn4tlTfXYMo2oKH2qZTVdIpThcTb02HlSPuhItU",
         insta_link = "https://www.instagram.com/particlefm",
         bandcamp_link = "https://particlefm.bandcamp.com",
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "Radio 80000",
@@ -2414,6 +2460,7 @@ Stream(
         insta_link = "https://www.instagram.com/radio80000/",
         bandcamp_link = None,
         soundcloud_link = "https://soundcloud.com/radio80000",
+        archive_link = "https://soundcloud.com/radio80000",
         hidden = False
 ),
 Stream(
@@ -2430,6 +2477,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         bmo_desc = "High quality Palestine-based radio with a focus on global sounds."
 ),
 Stream(
@@ -2445,7 +2493,8 @@ Stream(
         support_link = "https://www.patreon.com/rblmedia",
         insta_link = "https://www.instagram.com/rbltorino/",
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "Radio Nopal",
@@ -2460,7 +2509,8 @@ Stream(
         support_link = "https://www.patreon.com/cw/nopalradio",
         insta_link = "https://www.instagram.com/radionopal/",
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "Radio Punctum",
@@ -2476,6 +2526,7 @@ Stream(
         insta_link = "https://www.instagram.com/radio_punctum/",
         bandcamp_link = "https://punctumtapes.bandcamp.com",
         soundcloud_link = "https://soundcloud.com/radiopunctum",
+        archive_link = "https://soundcloud.com/radiopunctum",
         hidden = True
 ),
 Stream(
@@ -2491,7 +2542,8 @@ Stream(
         support_link = "https://www.paypal.com/donate?token=TeUgFAbv6YKrSZK1gda3T4X8YpPd-X6rKNAA0aRHgjwm8Gab8dfjw4L6MtTxqDQn3OPeH1o6p8VCRY7c",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "Radio Raheem",
@@ -2506,7 +2558,8 @@ Stream(
         support_link = "https://gigastock.net/collections/radio-raheem",
         insta_link = "https://www.instagram.com/radioraheem.milano/",
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "Radio Sygma",
@@ -2522,6 +2575,7 @@ Stream(
         insta_link = 'https://www.instagram.com/radiosygma/',
         bandcamp_link = 'https://radiosygma.bandcamp.com/',
         soundcloud_link = 'https://soundcloud.com/radiosygma',
+        archive_link = 'https://soundcloud.com/radiosygma',
         genres = ['Experimental'],
         bmo_desc = "A favorite for ambient music. You are guaranteed to hear something you've never even dreamed of. A wealth of inspiration."
 ),
@@ -2538,7 +2592,8 @@ Stream(
         support_link = "https://www.rinse.fm/shop/",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "Rinse UK",
@@ -2554,6 +2609,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         bmo_desc = "A pirate radio OG highlighting cuts bubbling up from London's dance music innovators."
 ),
 Stream(
@@ -2570,6 +2626,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         hidden=True
 ),
 Stream(
@@ -2586,6 +2643,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         bmo_desc = "Solid, egoless dance music from Bristol's underground."
 ),
 Stream(
@@ -2602,6 +2660,7 @@ Stream(
         insta_link = "https://www.instagram.com/sharedfrequenciesradio/",
         bandcamp_link = None,
         soundcloud_link = "https://soundcloud.com/sharedfrequenciesradio",
+        archive_link = "https://soundcloud.com/sharedfrequenciesradio",
         hidden = True
 ),
 Stream(
@@ -2617,7 +2676,8 @@ Stream(
         support_link = "https://www.skylab-radio.com/subscribe",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "SomaFM Live",
@@ -2633,6 +2693,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         hidden = True
 ),
 Stream(
@@ -2648,7 +2709,8 @@ Stream(
         support_link = "mailto:info@stegi.radio",
         insta_link = "https://www.instagram.com/stegiradio/",
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "Subtle Radio",
@@ -2664,6 +2726,7 @@ Stream(
         insta_link = "https://www.instagram.com/subtleradio/",
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         bmo_desc="Prepare yourself for frenetic breaks and booming footwork from this high-energy London-based station."
 ),
 Stream(
@@ -2680,6 +2743,7 @@ Stream(
         insta_link = "https://www.instagram.com/sutrofm",
         bandcamp_link = None,
         soundcloud_link = "https://soundcloud.com/sutrofm",
+        archive_link = "https://soundcloud.com/sutrofm",
         hidden = True
 ),
 Stream(
@@ -2695,7 +2759,8 @@ Stream(
         support_link = "https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=TNGKXZ2B2Z6LL&source=url&ssrt=1752175817476",
         insta_link = "https://www.instagram.com/softcircle",
         bandcamp_link = None,
-        soundcloud_link = "https://www.soundcloud.com/537hmusic"
+        soundcloud_link = "https://www.soundcloud.com/537hmusic",
+        archive_link = "https://www.soundcloud.com/537hmusic"
 ),
 Stream(
         name = "Vestiges",
@@ -2711,6 +2776,7 @@ Stream(
         insta_link = "https://www.instagram.com/vestiges_life/",
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         hidden = True
 ),
 Stream(
@@ -2726,7 +2792,8 @@ Stream(
         support_link = "https://shop.voicesradio.co.uk",
         insta_link = None,
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "WNYU",
@@ -2742,6 +2809,7 @@ Stream(
         insta_link = None,
         bandcamp_link = None,
         soundcloud_link = None,
+        archive_link = None,
         category='Student',
         bmo_desc = "The best in college radio, NYU's campus station has consistently been at the forefront of new and underground music."
 ),
@@ -2758,7 +2826,8 @@ Stream(
         support_link = "https://wearevarious.com/support-wav/",
         insta_link = "https://www.instagram.com/we_are_various/",
         bandcamp_link = None,
-        soundcloud_link = None
+        soundcloud_link = None,
+        archive_link = None
 ),
 Stream(
         name = "n10.as",
@@ -2773,7 +2842,8 @@ Stream(
         support_link = "https://www.patreon.com/n10as",
         insta_link = "https://www.instagram.com/n10.as",
         bandcamp_link = None,
-        soundcloud_link = "https://soundcloud.com/n10-as"
+        soundcloud_link = "https://soundcloud.com/n10-as",
+        archive_link = "https://soundcloud.com/n10-as"
 ),
 Stream(
         name = "stayfm",
@@ -2788,7 +2858,8 @@ Stream(
         support_link = "https://www.paypal.com/paypalme/radiostayfm",
         insta_link = "https://www.instagram.com/radiostayfm",
         bandcamp_link = None,
-        soundcloud_link = "https://hearthis.at/stayfm/"
+        soundcloud_link = "https://hearthis.at/stayfm/",
+        archive_link = "https://hearthis.at/stayfm/"
 ),
 Stream(
         name = "Radio Plato",
@@ -2804,6 +2875,7 @@ Stream(
         insta_link = "https://www.instagram.com/radio_plato",
         bandcamp_link = "https://radioplato.bandcamp.com/",
         soundcloud_link = "https://soundcloud.com/radioplato",
+        archive_link = "https://soundcloud.com/radioplato",
         hidden = True
 ),
 Stream(
@@ -2820,6 +2892,7 @@ Stream(
         insta_link = "https://www.instagram.com/veneno.live/",
         bandcamp_link = "",
         soundcloud_link = "",
+        archive_link = "",
         hidden = False,
         bmo_desc='Diverse dance music (and occasionally pop) from this popular Brazilian station.'
 ),
@@ -2837,6 +2910,7 @@ Stream(
         insta_link = "https://www.instagram.com/relativaradio/",
         bandcamp_link = "",
         soundcloud_link = "https://soundcloud.com/radio-relativa",
+        archive_link = "https://soundcloud.com/radio-relativa",
         bmo_desc='A Madrid-based station that pulls from the depths to uncover hidden gems wherever it goes, from ambient to electro pop.'
 ),
 Stream(
@@ -2853,6 +2927,7 @@ Stream(
         insta_link = "https://instagram.com/radiovilnius",
         bandcamp_link = "",
         soundcloud_link = "",
+        archive_link = "",
         hidden=False,
         song_basis = True,
         bmo_desc='A Lithuanian station made to make you wonder "where has this song been all my life?" If you catch Radio Vilnius at the right time for you, you will understand.'
@@ -2871,6 +2946,7 @@ Stream(
         insta_link = "https://www.instagram.com/rukh.live/",
         bandcamp_link = "",
         soundcloud_link = "https://www.soundcloud.com/rukh-radio",
+        archive_link = "https://www.soundcloud.com/rukh-radio",
         bmo_desc = "If you aren't from Ukraine, you've likely never heard Rukh's rare alt rock selections, and you'll be thankful once you do."
 )
 ,
@@ -2888,6 +2964,7 @@ Stream(
         insta_link = "https://www.instagram.com/program.audio/",
         bandcamp_link = "https://program-audio.bandcamp.com/music",
         soundcloud_link = "https://soundcloud.com/programaudio",
+        archive_link = "https://soundcloud.com/programaudio",
         tuner_only = True
 ),
 Stream(
@@ -3013,6 +3090,7 @@ Stream(
         about = 'IDA is an online radio located in Tallinn & Helsinki.',
         support_link = 'https://idaidaida.net/about#about#support',
         soundcloud_link = 'https://soundcloud.com/ida_radio',
+        archive_link = 'https://soundcloud.com/ida_radio',
         insta_link = 'https://www.instagram.com/ida.radio/'
 ),
 Stream(
@@ -3025,6 +3103,7 @@ Stream(
         about = 'Tīrkultūra is an interdisciplinary contemporary culture platform working mainly through the medium of sound. Tīrkultura is a listener-powered, non-commercial, and non-profit online radio station, based in Riga, Latvia.',
         support_link = 'mailto:reinis@tirkultura.net',
         soundcloud_link = 'https://soundcloud.com/tirkultura',
+        archive_link = 'https://soundcloud.com/tirkultura',
         insta_link = 'https://www.instagram.com/tirkultura/',
         song_basis = True,
         bmo_desc='Beautiful, often airy and melancholic sounds for curious minds playing from Riga, Latvia.'
@@ -3088,6 +3167,7 @@ Stream(
         support_link = 'https://20ftradio.net/donate',
         insta_link = 'https://www.instagram.com/20ftradio/?hl=en',
         soundcloud_link = 'https://soundcloud.com/20ft_radio',
+        archive_link = 'https://soundcloud.com/20ft_radio',
         bmo_desc="Dance-heavy radio outfit based in Kyiv."
 ),
 Stream(
@@ -3102,7 +3182,8 @@ Stream(
         about = "Parea Radio is an independent, community-oriented online radio platform based in Athens. Rooted in the idea of parea, a circle of friends gathered around sound, the station exists as a shared space for listening, exchange and documentation. It is built around presence rather than performance, continuity rather than volume.",
         support_link = 'https://parearadio.com/support-us/',
         insta_link = 'https://www.instagram.com/parea.radio/',
-        soundcloud_link = 'https://soundcloud.com/parea-radio'
+        soundcloud_link = 'https://soundcloud.com/parea-radio',
+        archive_link = 'https://soundcloud.com/parea-radio'
 ),
 Stream(
         name = 'Radio Dopo',
@@ -3116,7 +3197,8 @@ Stream(
         about = "Established in 2025, Radio Dopo is a Palermo-based community radio station, working with artists, cultural workers and non-profit organizations, born from a partnership with like-minded community radio stations Kiosk Radio in Brussels and Refuge Worldwide in Berlin. This project has been funded by the European Union through the Erasmus+ program.",
         support_link = 'mailto:info@radiodopo.it',
         insta_link = 'https://www.instagram.com/radiodopo/',
-        soundcloud_link = 'https://soundcloud.com/radiodopo'
+        soundcloud_link = 'https://soundcloud.com/radiodopo',
+        archive_link = 'https://soundcloud.com/radiodopo'
 ),
 Stream(
         name = 'Radio Sofa',
@@ -3130,7 +3212,8 @@ Stream(
         about = "Radio Sofa is a collective set up in April 2020, originally in the form of a web radio, in order to participate in the continuity of the diffusion of current and electronic music in a context of closure of cultural places.",
         support_link = 'https://pay.sumup.com/b2c/QU2R9LMJ',
         insta_link = 'https://www.instagram.com/radio.sofa/',
-        soundcloud_link = 'https://soundcloud.com/radio-sofa'
+        soundcloud_link = 'https://soundcloud.com/radio-sofa',
+        archive_link = 'https://soundcloud.com/radio-sofa'
 ),
 Stream(
         name = 'Sphere Radio',
@@ -3175,6 +3258,7 @@ Stream(
         support_link = 'mailto:zoneestradio@gmail.com',
         insta_link = 'https://www.instagram.com/zest.radio',
         soundcloud_link = 'https://soundcloud.com/zoneestradio',
+        archive_link = 'https://soundcloud.com/zoneestradio',
         hidden = True
 ),
 Stream(
@@ -3205,6 +3289,7 @@ Stream(
         support_link = 'https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=05fce6105847446a9727e8cecbdbb891',
         insta_link = 'https://www.instagram.com/muitoradio/',
         soundcloud_link = 'https://soundcloud.com/muitoradio',
+        archive_link = 'https://soundcloud.com/muitoradio',
         hidden = False,
         song_basis=True
 ),
@@ -3332,6 +3417,7 @@ Stream(
         support_link = 'https://www.helloasso.com/associations/ola-radio/formulaires/1',
         insta_link = 'https://www.instagram.com/ola_radio/',
         soundcloud_link = 'https://soundcloud.com/ola_radio',
+        archive_link = 'https://soundcloud.com/ola_radio',
         hidden = False,
         song_basis = True
 ),
@@ -3364,6 +3450,7 @@ Stream(
         support_link = 'https://buymeacoffee.com/virtualpublicnetwork',
         insta_link = 'https://instagram.com/vpn.radio',
         soundcloud_link = 'https://soundcloud.com/virtualpublicnetwork',
+        archive_link = 'https://soundcloud.com/virtualpublicnetwork',
         hidden = False,
         song_basis = False,
         bmo_desc="Expect a mix of deep house, smooth downtempo, and club rollers from this LA-based outfit."
@@ -3396,6 +3483,7 @@ Stream(
         support_link = 'mailto:iepa@diaradio.live',
         insta_link = 'https://www.instagram.com/dia.radio/',
         soundcloud_link = 'https://soundcloud.com/diaradio',
+        archive_link = 'https://soundcloud.com/diaradio',
         hidden = False,
         song_basis = False,
         bmo_desc="A French outfit typically playing techno and techno-adjacent music who does not fear experimentation."
@@ -3413,6 +3501,7 @@ Stream(
         support_link = 'https://www.helloasso.com/associations/lace/formulaires/2',
         insta_link = 'https://www.instagram.com/laceradio/',
         soundcloud_link = 'https://soundcloud.com/laceradio',
+        archive_link = 'https://soundcloud.com/laceradio',
         hidden = False,
         song_basis = False
 ),
@@ -3429,6 +3518,7 @@ Stream(
         support_link = 'mailto:radiocalotropis@gmail.com',
         insta_link = 'https://www.instagram.com/calotropis.xyz/',
         soundcloud_link = None,
+        archive_link = None,
         hidden = False,
         song_basis = True,
         bmo_desc="A young Kenyan station playing music you will want to pocket for your next time hosting guests. Sunny global folk, reggae, jazz, and soul."
@@ -3446,6 +3536,7 @@ Stream(
         support_link = 'https://gds.fm/member',
         insta_link = 'https://www.instagram.com/gdsfm/',
         soundcloud_link = None,
+        archive_link = None,
         hidden = False,
         song_basis = False,
         bmo_desc="Ear-pleasing -- but never boring -- selections in alt, jazz, and soul from Zürich's premier online radio station."
@@ -3463,6 +3554,7 @@ Stream(
         support_link = 'https://t.me/rytmabot',
         insta_link = 'https://www.instagram.com/rytmabad.radio/',
         soundcloud_link = None,
+        archive_link = None,
         hidden = False,
         song_basis = False,
         bmo_desc="Non-stop dance bangers from Uzbekistan’s capital city."
@@ -3480,6 +3572,7 @@ Stream(
         support_link = 'https://www.patreon.com/cw/BLUEMOONRADIO444/membership',
         insta_link = 'https://www.instagram.com/rytmabad.radio/',
         soundcloud_link = None,
+        archive_link = None,
         hidden = True,
         song_basis = False
 ),
@@ -3496,6 +3589,7 @@ Stream(
         support_link = 'https://boosty.to/kurs_radio/donate',
         insta_link = 'https://www.instagram.com/kurs.radio/',
         soundcloud_link = 'https://soundcloud.com/kurs_radio',
+        archive_link = 'https://soundcloud.com/kurs_radio',
         hidden = False,
         song_basis = False
 ),
@@ -3512,6 +3606,7 @@ Stream(
         support_link = 'https://www.patreon.com/retreatradio',
         insta_link = 'https://www.instagram.com/retreatradio',
         soundcloud_link = 'https://soundcloud.com/retreatradio',
+        archive_link = 'https://soundcloud.com/retreatradio',
         hidden = False,
         song_basis = False
 ),
@@ -3528,6 +3623,7 @@ Stream(
         support_link = 'mailto:radio@radioaparat.com',
         insta_link = 'https://www.instagram.com/radioaparat/',
         soundcloud_link = None,
+        archive_link = None,
         hidden = False,
         song_basis = True,
         bmo_desc="A fun mix of mega hits from the West with Serbian gems sprinkled in. Don't always trust what song it says is playing!"
@@ -3546,6 +3642,7 @@ Stream(
         support_link = 'https://jeromefm.live/get-involved',
         insta_link = 'https://www.instagram.com/jerome_sound/',
         soundcloud_link = "https://soundcloud.com/jerome_fm",
+        archive_link = "https://soundcloud.com/jerome_fm",
         hidden = False,
         song_basis = False,
         bmo_desc="A freaked-out station from a small town in Pennsylvania. Experimental and very fun."
@@ -3614,6 +3711,7 @@ def get_mixtapes():
             insta_link = "https://www.instagram.com/nts_radio/",
             bandcamp_link = "",
             soundcloud_link = "",
+            archive_link = "",
             hidden = False,
             status = 'Re-Run',
             category = "Mixtape",
