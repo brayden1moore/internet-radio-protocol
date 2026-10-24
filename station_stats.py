@@ -1047,13 +1047,13 @@ def _daily_why(role, dna, anchor, pick):
         mark = J([_genre_name(c) for _, c in shared]) if shared else None
         head = f"The same {mark} curation as {anchor}" if mark else f"Close to {anchor} across the board"
         if d_obsc > 12:
-            tail = ", and a notch more underground."
+            tail = " and a notch more underground."
         elif d_obsc < -12:
-            tail = ", and a little more familiar."
+            tail = " and a little more familiar."
         elif d_year > 5:
-            tail = f", with newer records (median {round(yp)})."
+            tail = f" with newer records (median {round(yp)})."
         elif d_year < -5:
-            tail = f", with older records (median {round(yp)})."
+            tail = f" with older records (median {round(yp)})."
         else:
             tail = "."
         return head + tail, mark
