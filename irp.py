@@ -3672,92 +3672,16 @@ def tz_for(lat, lon):
             _TZ_CACHE[key] = None
     return _TZ_CACHE[key]
 
-# ---- show art for the Otis ambient screen ----
-# The radio can't fetch and crop arbitrary show images itself (slow, huge files,
-# odd hosts), so we make one 320x240 cover crop per show image here and serve it
-# next to the logos. The device adds its own gradient + station logo on top.
-SHOW_ART_DIR = 'show_art'
-SHOW_ART_W, SHOW_ART_H = 320, 240
-SHOW_ART_RETRY = 1800          # seconds before retrying an image that failed
-_ART_CACHE = {}                # source url -> (filename or None, checked_at)
-_ART_LAST_PRUNE = 0
-
-def _art_name(url):
-    return hashlib.md5(url.encode('utf-8')).hexdigest()[:16] + '.png'
-
-def _make_show_art(url):
-    """Download one show image and write the 320x240 crop. Returns the filename or None."""
-    fname = _art_name(url)
-    path = os.path.join(SHOW_ART_DIR, fname)
-    if os.path.exists(path):
-        return fname
-    r = requests.get(url, timeout=8, headers={'User-Agent': 'Mozilla/5.0 (One Radio show art)'})
-    r.raise_for_status()
-    if len(r.content) > 15_000_000:
-        return None
-    img = Image.open(BytesIO(r.content))
-    img.draft('RGB', (SHOW_ART_W * 2, SHOW_ART_H * 2))      # fast JPEG decode at reduced size
-    img = ImageOps.exif_transpose(img)
-    if img.mode in ('RGBA', 'LA', 'P') or 'transparency' in img.info:
-        img = img.convert('RGBA')
-        bg = Image.new('RGBA', img.size, (0, 0, 0, 255))
-        img = Image.alpha_composite(bg, img)
-    img = img.convert('RGB')
-    w, h = img.size
-    if min(w, h) < 200:                      # too small: would look mushy full-screen
-        return None
-    if max(w, h) / min(w, h) > 2.4:          # long banners crop badly
-        return None
-    img = ImageOps.fit(img, (SHOW_ART_W, SHOW_ART_H), Image.LANCZOS, centering=(0.5, 0.5))
-    lo, hi = img.convert('L').getextrema()
-    if hi - lo < 12:                         # flat placeholder (blank / single colour)
-        return None
-    os.makedirs(SHOW_ART_DIR, exist_ok=True)
-    tmp = path + '.tmp'
-    img.save(tmp, 'PNG', optimize=True)
-    os.replace(tmp, path)
-    return fname
-
-def refresh_show_art(values):
-    """Make art for any show image we haven't handled yet (in parallel), prune old files."""
-    global _ART_LAST_PRUNE
-    now = time.time()
-    todo = set()
-    for v in values:
-        url = v.get('showLogo')
-        if not isinstance(url, str) or not url.startswith('http'):
-            continue
-        hit = _ART_CACHE.get(url)
-        if hit is None or (hit[0] is None and now - hit[1] > SHOW_ART_RETRY):
-            todo.add(url)
-    def work(url):
-        try:
-            return url, _make_show_art(url)
-        except Exception as e:
-            print('show art failed:', url, type(e).__name__, e)
-            return url, None
-    if todo:
-        with ThreadPoolExecutor(max_workers=6) as ex:
-            for url, fname in ex.map(work, todo):
-                _ART_CACHE[url] = (fname, now)
-    if now - _ART_LAST_PRUNE > 3600 and os.path.isdir(SHOW_ART_DIR):
-        _ART_LAST_PRUNE = now
-        live = {f for f, _ in _ART_CACHE.values() if f}
-        for f in os.listdir(SHOW_ART_DIR):
-            p = os.path.join(SHOW_ART_DIR, f)
-            if f not in live and now - os.path.getmtime(p) > 2 * 86400:
-                try: os.remove(p)
-                except OSError: pass
-
-def show_art_for(v):
-    """Public URL of the current show's 320x240 art, or None."""
+def show_logo_for(v):
+    """The current show's image for the Otis ambient screen, or None.
+    Same rules as the app's show cards: no Mixtapes; also skip Offline stations
+    and stations that just repeat their station logo as the show image."""
     url = v.get('showLogo')
-    if not isinstance(url, str) or v.get('status') == 'Offline' or v.get('category') == 'Mixtape':
+    if not isinstance(url, str) or not url.startswith('http'):
         return None
-    if url == v.get('logo'):                 # some stations repeat their logo as the show image
+    if v.get('status') == 'Offline' or v.get('category') == 'Mixtape' or url == v.get('logo'):
         return None
-    hit = _ART_CACHE.get(url)
-    return f'{BASE}/{SHOW_ART_DIR}/{hit[0]}' if hit and hit[0] else None
+    return url
 
 def write_stub(v):
     name = v['name']
@@ -3848,7 +3772,6 @@ def main_loop():
                 json.dump(updated, f, indent=4, sort_keys=True, default=str)
 
             # make summary
-            refresh_show_art(updated.values())
             summary_list = []
             for _, v in updated.items():
                 rendered = html.unescape(v['oneLiner']).replace('&amp;', '&').strip()
@@ -3868,7 +3791,7 @@ def main_loop():
                     "logo_hash": getattr(v, 'logo_hash', None),
                     "hidden": v['hidden'],
                     "timezone": tz_for(v.get('lat'), v.get('lon')),
-                    "showArt": show_art_for(v),
+                    "showLogo": show_logo_for(v),
                 }
                 summary_list.append(summary_item)
             summary_list.sort(key=lambda item: item['name'].casefold())
