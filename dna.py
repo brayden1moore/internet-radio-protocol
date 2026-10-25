@@ -1007,7 +1007,10 @@ def dna_network():
     """Network-wide genre / era / playcount distributions for the About page."""
     conn = _conn()
     try:
-        resp = jsonify(rollups(conn)["network"])
+        # Copy, don't mutate the cached rollup. n_polls / first_poll count every
+        # poll (identified or not), for the app's footer.
+        first_poll, n_polls = conn.execute("SELECT MIN(ts), COUNT(*) FROM plays").fetchone()
+        resp = jsonify(dict(rollups(conn)["network"], n_polls=n_polls, first_poll=first_poll))
     finally:
         conn.close()
     resp.headers["Access-Control-Allow-Origin"] = "*"
