@@ -1765,6 +1765,8 @@ class Stream:
             self.now_playing = extract_value(info, ['icestats','source','title'])
             self.listeners = extract_value(info, ['icestats','source','listeners'])
             self.status = 'Live'
+            if not self.now_playing:
+                self.status = 'Offline'
 
         ### MARK: STATION LOGIC END
 
