@@ -1157,3 +1157,64 @@ def daily_explain(dna, anchor, items):
         why, mark = _daily_why(role, dna, anchor, station)
         out.append({"role": role, "station": station, "pct": pct[station], "why": why, "mark": mark})
     return out
+
+
+# ---------------------------------------------------------------------------
+# Daily tracks: three songs we've heard on a station, one per popularity tier.
+# ---------------------------------------------------------------------------
+
+DAILY_TRACK_TIERS = ("popular", "middle", "deep")
+
+
+def _plausible_year(acr_release, mb_year):
+    this_year = datetime.now(timezone.utc).year
+    y = parse_year(acr_release, mb_year)
+    if y is None or not (1900 <= y <= this_year + 1):
+        # ACR sometimes sends placeholder dates like 2500-12-31
+        y = parse_year(None, mb_year)
+    return y if y is not None and 1900 <= y <= this_year + 1 else None
+
+
+def daily_tracks(conn, station, date):
+    """
+    Three songs identified on `station`, picked for `date`: one from the most
+    popular third of its polls, one from the middle, one from the least
+    popular (Last.fm playcount; unknown counts as 0). Every poll counts, so a
+    song the station plays a lot is more likely to come up. Same station +
+    date always gives the same three. Returns
+    [{"tier", "title", "artist", "year", "category", "playcount"}].
+    """
+    rows = conn.execute(
+        "SELECT artist, title, category, acr_release, mb_year, lf_playcount"
+        "  FROM plays"
+        " WHERE station = ? AND matched = 1"
+        "   AND TRIM(COALESCE(title, '')) != '' AND TRIM(COALESCE(artist, '')) != ''",
+        (station,)).fetchall()
+    rows = [r for r in rows if _primary_artist(fix_text(r[0])).lower() not in _NOT_AN_ARTIST]
+    if not rows:
+        return []
+    rows.sort(key=lambda r: -(r[5] or 0))
+    n = len(rows)
+    tiers = (rows[:max(1, n // 3)], rows[n // 3:2 * n // 3], rows[2 * n // 3:])
+
+    rng = _random.Random(f"tracks|{date}|{station}")
+    picked, seen = [], set()
+    for tier, band in zip(DAILY_TRACK_TIERS, tiers):
+        band = list(band)
+        rng.shuffle(band)
+        for artist, title, category, acr_release, mb_year, playcount in band:
+            artist, title = fix_text(artist).strip(), fix_text(title).strip()
+            key = (artist.lower(), title.lower())
+            if key in seen:
+                continue
+            seen.add(key)
+            picked.append({
+                "tier": tier,
+                "title": title,
+                "artist": artist,
+                "year": _plausible_year(acr_release, mb_year),
+                "category": category,
+                "playcount": playcount,
+            })
+            break
+    return picked

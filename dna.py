@@ -1081,6 +1081,82 @@ def dna_daily():
     return resp
 
 
+# ---- song artwork + links (iTunes Search: free, no key), cached in the db
+
+_track_links_lock = threading.Lock()
+
+
+def _ensure_track_links(conn):
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS track_links ("
+        "  artist TEXT, title TEXT, artwork TEXT, apple_url TEXT, ts REAL,"
+        "  PRIMARY KEY (artist, title))")
+
+
+def _itunes_track(artist, title):
+    """(artwork_url, apple_music_url) for a song, or (None, None)."""
+    import requests
+    try:
+        r = requests.get("https://itunes.apple.com/search",
+                         params={"term": f"{artist} {title}", "entity": "song", "limit": 1},
+                         timeout=6)
+        res = (r.json().get("results") or []) if r.ok else []
+    except Exception:
+        return None, None
+    if not res:
+        return None, None
+    art = res[0].get("artworkUrl100")
+    if art:
+        art = art.replace("100x100bb", "600x600bb")
+    return art, res[0].get("trackViewUrl")
+
+
+def _track_links(conn, artist, title):
+    """Cached iTunes lookup. Misses are cached too (for a week) so a song
+    iTunes doesn't know isn't looked up on every request."""
+    from urllib.parse import quote
+    key = (artist.lower(), title.lower())
+    with _track_links_lock:
+        _ensure_track_links(conn)
+        row = conn.execute("SELECT artwork, apple_url, ts FROM track_links WHERE artist = ? AND title = ?",
+                           key).fetchone()
+        if row is None or (row[0] is None and _time.time() - (row[2] or 0) > 7 * 86400):
+            art, apple = _itunes_track(artist, title)
+            conn.execute("INSERT OR REPLACE INTO track_links VALUES (?, ?, ?, ?, ?)",
+                         (key[0], key[1], art, apple, _time.time()))
+            conn.commit()
+        else:
+            art, apple = row[0], row[1]
+    return {
+        "artwork": art,
+        "apple_music": apple,
+        # No Spotify key needed: a search link opens the Spotify app on the song.
+        "spotify": "https://open.spotify.com/search/" + quote(f"{artist} {title}"),
+    }
+
+
+@app.route("/dna/tracks/<station>")
+def dna_tracks(station):
+    """
+    Three songs heard on a station for today's recs: popular, middle, deep.
+    ?date=YYYY-MM-DD (listener's local date) keeps them steady all day.
+    Each: tier, title, artist, year, category, playcount, artwork, apple_music, spotify.
+    """
+    date = (request.args.get("date") or "")[:10] or datetime.date.today().isoformat()
+    conn = _conn()
+    try:
+        tracks = station_stats.daily_tracks(conn, station, date)
+        for t in tracks:
+            t.update(_track_links(conn, t["artist"], t["title"]))
+    finally:
+        conn.close()
+    resp = jsonify(tracks)
+    if not tracks:
+        resp.status_code = 404
+    resp.headers["Access-Control-Allow-Origin"] = "*"
+    return resp
+
+
 @app.route("/dna/similar/<station>")
 def dna_similar(station):
     """You Might Like for one station (shared by the site and the app). ?n= (default 30)."""
