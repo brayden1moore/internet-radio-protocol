@@ -1046,7 +1046,7 @@ def _daily_why(role, dna, anchor, pick):
         shared = sorted(((min(x, y), c) for c, x, y in zip(cats, a, p) if min(x, y) >= 5),
                         reverse=True)[:2]
         mark = J([_genre_name(c) for _, c in shared]) if shared else None
-        head = f"The same {mark} curation as {anchor}" if mark else f"Close to {anchor} across the board"
+        head = f"Similar {mark} curation as {anchor}" if mark else f"Close to {anchor} across the board"
         if d_obsc > 12:
             tail = " and a notch more underground."
         elif d_obsc < -12:
@@ -1063,7 +1063,7 @@ def _daily_why(role, dna, anchor, pick):
         more = sorted(((y - x, c) for c, x, y in zip(cats, a, p) if y - x >= 3), reverse=True)[:2]
         less = sorted(((x - y, c) for c, x, y in zip(cats, a, p) if x - y >= 3), reverse=True)[:1]
         mark = J([_genre_name(c) for _, c in more]) if more else None
-        head = (f"Same era as {anchor}, but a different sound" if abs(d_year) <= 6
+        head = (f"Similar era as {anchor} but a different sound" if abs(d_year) <= 6
                 else f"A different era (median {round(yp)}) and a different sound")
         if not mark:
             return head + ".", None
