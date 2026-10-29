@@ -1164,8 +1164,8 @@ def daily_explain(dna, anchor, items):
 # ---------------------------------------------------------------------------
 
 DAILY_TRACK_TIERS = ("popular", "middle", "deep")
-# How many songs each tier contributes (6 in all).
-DAILY_TRACK_COUNTS = {"popular": 2, "middle": 3, "deep": 1}
+# How many songs each tier contributes.
+DAILY_TRACK_COUNTS = {"popular": 3, "middle": 3, "deep": 2}
 
 
 def _plausible_year(acr_release, mb_year):
