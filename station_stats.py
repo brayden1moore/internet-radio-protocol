@@ -1164,6 +1164,8 @@ def daily_explain(dna, anchor, items):
 # ---------------------------------------------------------------------------
 
 DAILY_TRACK_TIERS = ("popular", "middle", "deep")
+# How many songs each tier contributes (6 in all).
+DAILY_TRACK_COUNTS = {"popular": 2, "middle": 3, "deep": 1}
 
 
 def _plausible_year(acr_release, mb_year):
@@ -1177,16 +1179,16 @@ def _plausible_year(acr_release, mb_year):
 
 def daily_tracks(conn, station, date, accept=None, max_tries=8):
     """
-    Three songs identified on `station`, picked for `date`: one from the most
-    popular third of its polls, one from the middle, one from the least
-    popular (Last.fm playcount; unknown counts as 0). Every poll counts, so a
+    Songs identified on `station`, picked for `date`: DAILY_TRACK_COUNTS from
+    the most popular third of its polls, the middle and the least popular
+    (Last.fm playcount; unknown counts as 0). Every poll counts, so a
     song the station plays a lot is more likely to come up. Same station +
     date always gives the same three. Returns
     [{"tier", "title", "artist", "year", "category", "playcount"}].
 
     `accept(track)` (optional) returns the track (possibly enriched) to keep
     it, or None to skip to the tier's next candidate; at most `max_tries`
-    candidates per tier are offered. A tier with no acceptable song is left out.
+    candidates per song wanted are offered. A tier can come back short.
     """
     rows = conn.execute(
         "SELECT artist, title, category, acr_release, mb_year, lf_playcount"
@@ -1206,7 +1208,8 @@ def daily_tracks(conn, station, date, accept=None, max_tries=8):
     for tier, band in zip(DAILY_TRACK_TIERS, tiers):
         band = list(band)
         rng.shuffle(band)
-        tries = 0
+        want = DAILY_TRACK_COUNTS.get(tier, 1)
+        got, tries = 0, 0
         for artist, title, category, acr_release, mb_year, playcount in band:
             artist, title = fix_text(artist).strip(), fix_text(title).strip()
             key = (artist.lower(), title.lower())
@@ -1225,9 +1228,11 @@ def daily_tracks(conn, station, date, accept=None, max_tries=8):
                 tries += 1
                 track = accept(track)
                 if track is None:
-                    if tries >= max_tries:
+                    if tries >= max_tries * want:
                         break
                     continue
             picked.append(track)
-            break
+            got += 1
+            if got >= want:
+                break
     return picked
