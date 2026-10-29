@@ -1079,7 +1079,7 @@ def _daily_why(role, dna, anchor, pick):
                 else f"About as far from {anchor} as we go")
         if abs(d_year) >= 10:
             head += f", with a median release of {round(yp)}"
-        return head + ". Give it ten minutes.", mark
+        return head + ". Give it a try.", mark
 
     # far
     top = _top_genres(cats, p)
