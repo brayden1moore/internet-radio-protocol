@@ -1175,7 +1175,7 @@ def _plausible_year(acr_release, mb_year):
     return y if y is not None and 1900 <= y <= this_year + 1 else None
 
 
-def daily_tracks(conn, station, date):
+def daily_tracks(conn, station, date, accept=None, max_tries=8):
     """
     Three songs identified on `station`, picked for `date`: one from the most
     popular third of its polls, one from the middle, one from the least
@@ -1183,6 +1183,10 @@ def daily_tracks(conn, station, date):
     song the station plays a lot is more likely to come up. Same station +
     date always gives the same three. Returns
     [{"tier", "title", "artist", "year", "category", "playcount"}].
+
+    `accept(track)` (optional) returns the track (possibly enriched) to keep
+    it, or None to skip to the tier's next candidate; at most `max_tries`
+    candidates per tier are offered. A tier with no acceptable song is left out.
     """
     rows = conn.execute(
         "SELECT artist, title, category, acr_release, mb_year, lf_playcount"
@@ -1202,19 +1206,28 @@ def daily_tracks(conn, station, date):
     for tier, band in zip(DAILY_TRACK_TIERS, tiers):
         band = list(band)
         rng.shuffle(band)
+        tries = 0
         for artist, title, category, acr_release, mb_year, playcount in band:
             artist, title = fix_text(artist).strip(), fix_text(title).strip()
             key = (artist.lower(), title.lower())
             if key in seen:
                 continue
             seen.add(key)
-            picked.append({
+            track = {
                 "tier": tier,
                 "title": title,
                 "artist": artist,
                 "year": _plausible_year(acr_release, mb_year),
                 "category": category,
                 "playcount": playcount,
-            })
+            }
+            if accept is not None:
+                tries += 1
+                track = accept(track)
+                if track is None:
+                    if tries >= max_tries:
+                        break
+                    continue
+            picked.append(track)
             break
     return picked

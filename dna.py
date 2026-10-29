@@ -1144,10 +1144,16 @@ def dna_tracks(station):
     """
     date = (request.args.get("date") or "")[:10] or datetime.date.today().isoformat()
     conn = _conn()
+
+    def on_apple_music(t):
+        # Only songs Apple Music has, so every row gets real artwork.
+        links = _track_links(conn, t["artist"], t["title"])
+        if not (links["artwork"] and links["apple_music"]):
+            return None
+        return dict(t, **links)
+
     try:
-        tracks = station_stats.daily_tracks(conn, station, date)
-        for t in tracks:
-            t.update(_track_links(conn, t["artist"], t["title"]))
+        tracks = station_stats.daily_tracks(conn, station, date, accept=on_apple_music)
     finally:
         conn.close()
     resp = jsonify(tracks)
