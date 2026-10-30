@@ -1037,9 +1037,15 @@ def dna_songs(station):
     finally:
         conn.close()
     fix = station_stats.fix_text   # in case old garbled rows haven't been repaired yet
-    resp = jsonify([{"artist": fix(r["artist"]), "title": fix(r["title"]), "year": r["year"],
-                     "show": fix(r["last_show"].split(chr(31), 1)[1]) if r["last_show"] else None}
-                    for r in rows])
+    songs = [{"artist": fix(r["artist"]), "title": fix(r["title"]), "year": r["year"],
+              "show": fix(r["last_show"].split(chr(31), 1)[1]) if r["last_show"] else None}
+             for r in rows]
+    # ?links=1 (the app): same random list, plus artwork / Apple Music /
+    # Spotify for each song. Songs Apple doesn't have keep null artwork.
+    if request.args.get("links"):
+        for song, links in zip(songs, _links_many([(x["artist"], x["title"]) for x in songs])):
+            song.update(links)
+    resp = jsonify(songs)
     resp.headers["Access-Control-Allow-Origin"] = "*"
     resp.headers["Cache-Control"] = "no-store"
     return resp
@@ -1133,6 +1139,41 @@ def _track_links(conn, artist, title):
         # No Spotify key needed: a search link opens the Spotify app on the song.
         "spotify": "https://open.spotify.com/search/" + quote(f"{artist} {title}"),
     }
+
+
+def _links_many(pairs):
+    """[(artist, title)] -> [{artwork, apple_music, spotify}], same order.
+    Cached in track_links; the uncached ones are looked up in parallel so a
+    list of ten random songs doesn't take ten round trips."""
+    from concurrent.futures import ThreadPoolExecutor
+    from urllib.parse import quote
+    keys = [(a.lower(), t.lower()) for a, t in pairs]
+    found = {}
+    conn = _conn()
+    try:
+        with _track_links_lock:
+            _ensure_track_links(conn)
+            for k in keys:
+                row = conn.execute("SELECT artwork, apple_url, ts FROM track_links WHERE artist = ? AND title = ?",
+                                   k).fetchone()
+                if row is not None and not (row[0] is None and _time.time() - (row[2] or 0) > 7 * 86400):
+                    found[k] = (row[0], row[1])
+        need = [(p, k) for p, k in zip(pairs, keys) if k not in found]
+        if need:
+            with ThreadPoolExecutor(max_workers=6) as ex:
+                results = list(ex.map(lambda pk: _itunes_track(*pk[0]), need))
+            with _track_links_lock:
+                for (_, k), (art, apple) in zip(need, results):
+                    conn.execute("INSERT OR REPLACE INTO track_links VALUES (?, ?, ?, ?, ?)",
+                                 (k[0], k[1], art, apple, _time.time()))
+                    found[k] = (art, apple)
+                conn.commit()
+    finally:
+        conn.close()
+    return [{"artwork": found.get(k, (None, None))[0],
+             "apple_music": found.get(k, (None, None))[1],
+             "spotify": "https://open.spotify.com/search/" + quote(f"{a} {t}")}
+            for (a, t), k in zip(pairs, keys)]
 
 
 @app.route("/dna/tracks/<station>")
