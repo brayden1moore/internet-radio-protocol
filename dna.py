@@ -1025,6 +1025,7 @@ def dna_songs(station):
     try:
         rows = conn.execute(
             "SELECT artist, title, MAX(COALESCE(SUBSTR(acr_release, 1, 4), mb_year)) AS year,"
+            "       MAX(category) AS category,"
             # most recent non-empty show for this song (ts sorts as text, so prefix it)
             "       MAX(CASE WHEN TRIM(COALESCE(show, '')) != '' THEN ts || char(31) || show END) AS last_show"
             "  FROM plays"
@@ -1046,6 +1047,7 @@ def dna_songs(station):
         conn.close()
     fix = station_stats.fix_text   # in case old garbled rows haven't been repaired yet
     songs = [{"artist": fix(r["artist"]), "title": fix(r["title"]), "year": r["year"],
+              "category": r["category"],
               "show": fix(r["last_show"].split(chr(31), 1)[1]) if r["last_show"] else None}
              for r in rows]
     # ?links=1 (the app): same random list, plus artwork / Apple Music /
