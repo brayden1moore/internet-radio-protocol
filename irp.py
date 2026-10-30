@@ -3469,8 +3469,8 @@ Stream(
         logo = "https://internetradioprotocol.org/logos/uhdw.png",
         location = 'Denver',
         country = "US",
-        lat = -41.2887953,
-        lon = 174.7772114,
+        lat = 39.7392358,
+        lon = -104.990251,
         info_link = "https://api.radiocult.fm/api/station/Mouthfull%20Radio/schedule/live",
         stream_link = 'https://mouthfull-radio.radiocult.fm/stream',
         main_link = 'https://mouthfull.live',
@@ -4053,10 +4053,11 @@ def main_loop():
             }
 
             taglines = [
-                f'{status["total"] - status["hidden"]} of the best curated internet radio stations for the music discovery pleasure of those unafraid to listen through friction.',
+                f"{status['total'] - status['hidden']} of the world's best curated internet radio stations.",
                 'As soon as the generals and the politicos can predict the motions of your mind, lose it.',
                 'Radiation from computer screens is boiling your eyes. Use your ears.',
                 'You might hear something.',
+                'Listen like a kid again.',
                 'Be like the fox who makes more tracks than necessary, some in the wrong direction.',
                 'Somewhere out there, a song is playing for you.',
                 f'{status["total"] - status["hidden"]} of the best curated internet radio stations, meticulously tracked.',
