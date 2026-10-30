@@ -1034,6 +1034,14 @@ def dna_songs(station):
             " ORDER BY RANDOM() LIMIT ?",
             (station, n),
         ).fetchall()
+        # How many distinct songs we've identified there in all (for "+ N more").
+        total = conn.execute(
+            "SELECT COUNT(*) FROM (SELECT 1 FROM plays"
+            " WHERE station = ? AND matched = 1"
+            "   AND TRIM(COALESCE(artist, '')) != '' AND TRIM(COALESCE(title, '')) != ''"
+            " GROUP BY LOWER(TRIM(artist)), LOWER(TRIM(title)))",
+            (station,),
+        ).fetchone()[0]
     finally:
         conn.close()
     fix = station_stats.fix_text   # in case old garbled rows haven't been repaired yet
@@ -1046,6 +1054,9 @@ def dna_songs(station):
         for song, links in zip(songs, _links_many([(x["artist"], x["title"]) for x in songs])):
             song.update(links)
     resp = jsonify(songs)
+    # A header, not a field, so the list stays the same shape for the site.
+    resp.headers["X-Total-Songs"] = str(total)
+    resp.headers["Access-Control-Expose-Headers"] = "X-Total-Songs"
     resp.headers["Access-Control-Allow-Origin"] = "*"
     resp.headers["Cache-Control"] = "no-store"
     return resp
