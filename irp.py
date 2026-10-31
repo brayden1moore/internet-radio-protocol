@@ -855,8 +855,11 @@ class Stream:
         elif self.name == 'Radio Alhara':
             self.status = 'Live'
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
+
             self.now_playing = info['title']
             self.now_playing_artist = info['artist']
+            self.status = 'Re-Run' if info['isRerun'] else 'Live'
+
         
         elif self.name == 'Mutant Radio':
             self.status = 'Live'
@@ -2507,8 +2510,8 @@ Stream(
         country = "PS",
         lat = 31.7043556,
         lon = 35.2061876,
-        info_link = "https://proxy.radiojar.com/api/stations/78cxy6wkxtzuv/now_playing/",
-        stream_link = "https://stream.radiojar.com/78cxy6wkxtzuv",
+        info_link = "https://ch2.radioalhara.net/api/now-playing",
+        stream_link = "https://stream.radioalhara.net/ra",
         main_link = "https://www.radioalhara.net",
         about = "Palestine community radio.",
         support_link = "https://www.paypal.com/GB/fundraiser/charity/4920746",
