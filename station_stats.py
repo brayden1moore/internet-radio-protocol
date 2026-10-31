@@ -1046,7 +1046,7 @@ def _daily_why(role, dna, anchor, pick):
         shared = sorted(((min(x, y), c) for c, x, y in zip(cats, a, p) if min(x, y) >= 5),
                         reverse=True)[:2]
         mark = J([_genre_name(c) for _, c in shared]) if shared else None
-        head = f"Similar {mark} curation as {anchor}" if mark else f"Close to {anchor} across the board"
+        head = f"They've got similar {mark} curation as {anchor}" if mark else f"Close to {anchor} across the board"
         if d_obsc > 12:
             tail = " and a notch more underground."
         elif d_obsc < -12:
@@ -1063,8 +1063,8 @@ def _daily_why(role, dna, anchor, pick):
         more = sorted(((y - x, c) for c, x, y in zip(cats, a, p) if y - x >= 3), reverse=True)[:2]
         less = sorted(((x - y, c) for c, x, y in zip(cats, a, p) if x - y >= 3), reverse=True)[:1]
         mark = J([_genre_name(c) for _, c in more]) if more else None
-        head = (f"Similar era as {anchor} but a different sound" if abs(d_year) <= 6
-                else f"A different era (median {round(yp)}) and a different sound")
+        head = (f"They pull tracks from a similar depth and era as {anchor} but with a different sound" if abs(d_year) <= 6
+                else f"They pull tracks from a similar depth as {anchor} but with and a different sound")
         if not mark:
             return head + ".", None
         text = f"{head}. More {mark}"
@@ -1075,8 +1075,8 @@ def _daily_why(role, dna, anchor, pick):
     if role == "wildcard":
         top = _top_genres(cats, p)
         mark = J([_genre_name(c) for c in top]) if top else None
-        head = (f"One of the stations least like {anchor}. Mostly {mark}" if mark
-                else f"One of the stations least like {anchor}")
+        head = (f"Of our stations, it's least like {anchor}. Mostly {mark}" if mark
+                else f"Of our stations, it's least like {anchor}")
         if abs(d_year) >= 10:
             head += f", with a median release year of {round(yp)}"
         return head + ". Give it a try.", mark
