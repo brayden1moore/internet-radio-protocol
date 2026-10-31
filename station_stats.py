@@ -1050,7 +1050,7 @@ def _daily_why(role, dna, anchor, pick):
         if d_obsc > 12:
             tail = " and a notch more underground."
         elif d_obsc < -12:
-            tail = " and a little more familiar."
+            tail = " playing slightly more popular tracks."
         elif d_year > 5:
             tail = f" with newer records (median {round(yp)})."
         elif d_year < -5:
@@ -1075,10 +1075,10 @@ def _daily_why(role, dna, anchor, pick):
     if role == "wildcard":
         top = _top_genres(cats, p)
         mark = J([_genre_name(c) for c in top]) if top else None
-        head = (f"About as far from {anchor} as we go: mostly {mark}" if mark
-                else f"About as far from {anchor} as we go")
+        head = (f"One of the stations least like {anchor}. Mostly {mark}" if mark
+                else f"One of the stations least like {anchor}")
         if abs(d_year) >= 10:
-            head += f", with a median release of {round(yp)}"
+            head += f", with a median release year of {round(yp)}"
         return head + ". Give it a try.", mark
 
     # far
@@ -1086,9 +1086,9 @@ def _daily_why(role, dna, anchor, pick):
     mark = J([_genre_name(c) for c in top]) if top else None
     head = f"Mostly {mark}" if mark else "A long way from what you know"
     if op is not None and op >= 80:
-        tail = ", and plays some of the deepest cuts of stations we track."
+        tail = ", playing some of the deepest cuts of stations we track."
     elif op is not None and op <= 20:
-        tail = ", and one of the most familiar-sounding stations we track."
+        tail = ", playing more popular tracks on the whole."
     elif abs(d_year) >= 10:
         tail = f", with a median release of {round(yp)}."
     else:
