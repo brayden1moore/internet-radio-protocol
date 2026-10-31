@@ -1104,48 +1104,170 @@ def dna_daily():
 
 _track_links_lock = threading.Lock()
 
+# Bump when the matching rules change: rows saved under an older version are
+# looked up again (lazily, the next time they're asked for, or all at once
+# with relink_all()).
+LINKS_VERSION = 2
+
+# Words that mark a different recording of the same song.
+_VERSION_WORDS = ("remix", "mix", "live", "edit", "version", "instrumental",
+                  "acapella", "a cappella", "dub", "karaoke", "cover", "tribute",
+                  "demo", "rework", "re-edit", "reprise")
+
 
 def _ensure_track_links(conn):
     conn.execute(
         "CREATE TABLE IF NOT EXISTS track_links ("
         "  artist TEXT, title TEXT, artwork TEXT, apple_url TEXT, ts REAL,"
         "  PRIMARY KEY (artist, title))")
+    cols = {r[1] for r in conn.execute("PRAGMA table_info(track_links)")}
+    # What Apple actually returned, so a bad match can be spotted later,
+    # and which rules produced the row.
+    for col, typ in (("matched_artist", "TEXT"), ("matched_title", "TEXT"), ("v", "INTEGER")):
+        if col not in cols:
+            conn.execute(f"ALTER TABLE track_links ADD COLUMN {col} {typ}")
+    # Hand fixes: pin the right link for a song, or block it (apple_url NULL).
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS track_link_overrides ("
+        "  artist TEXT, title TEXT, artwork TEXT, apple_url TEXT,"
+        "  PRIMARY KEY (artist, title))")
+
+
+# ---- matching
+
+def _fold(s):
+    """Lowercase, accents off, '&' as 'and', punctuation to spaces."""
+    import re
+    import unicodedata
+    s = unicodedata.normalize("NFKD", s or "")
+    s = "".join(c for c in s if not unicodedata.combining(c)).lower()
+    s = s.replace("&", " and ").replace("+", " and ")
+    s = re.sub(r"[^\w\s]", " ", s)
+    return " ".join(s.split())
+
+
+def _artist_names(artist):
+    """'A feat. B & C' -> {'a', 'b', 'c', 'a feat b and c'}: each credited
+    name, folded, without a leading 'the'."""
+    import re
+    raw = artist or ""
+    parts = re.split(r"\s*(?:,|&|\+|/|;|\bfeat\.?|\bft\.?|\bfeaturing\b|\bwith\b|\bvs\.?|\bx\b|\band\b)\s*",
+                     raw, flags=re.I)
+    names = {_fold(p) for p in parts + [raw]}
+    names = {n[4:] if n.startswith("the ") else n for n in names}
+    return {n for n in names if n}
+
+
+def _artist_ok(ours, theirs):
+    a, b = _artist_names(ours), _artist_names(theirs)
+    if a & b:
+        return True
+    # 'ESG' vs 'ESG & Friends' style containment, whole words only,
+    # and not on very short names.
+    fa, fb = _fold(ours), _fold(theirs)
+    for x, y in ((fa, fb), (fb, fa)):
+        if len(x) >= 3 and f" {x} " in f" {y} ":
+            return True
+    return False
+
+
+def _core_title(title):
+    """Title without '(Remastered)', '[12" Version]', ' - Radio Edit', 'feat. X'."""
+    import re
+    t = title or ""
+    t = re.sub(r"[\(\[].*?[\)\]]", " ", t)
+    t = re.sub(r"\s+-\s+.*$", " ", t)
+    t = re.sub(r"\b(feat\.?|ft\.?|featuring)\b.*$", " ", t, flags=re.I)
+    return _fold(t)
+
+
+def _title_ok(ours, theirs):
+    import difflib
+    a, b = _core_title(ours), _core_title(theirs)
+    if not a or not b:
+        return False
+    return a == b or difflib.SequenceMatcher(None, a, b).ratio() >= 0.92
+
+
+def _is_other_version(ours, theirs):
+    """Their title says remix / live / edit… and ours doesn't."""
+    o, t = _fold(ours), _fold(theirs)
+    return any(f" {w} " in f" {t} " and f" {w} " not in f" {o} " for w in _VERSION_WORDS)
+
+
+def _pick(artist, title, results):
+    """The best result that is really this song, or None. Never a guess."""
+    ok = [r for r in results
+          if _artist_ok(artist, r.get("artistName", "")) and _title_ok(title, r.get("trackName", ""))]
+    if not ok:
+        return None
+
+    def rank(r):
+        compilation = (r.get("collectionArtistName") or "").lower() == "various artists"
+        return (
+            _is_other_version(title, r.get("trackName", "")),        # the original first
+            _fold(r.get("trackName", "")) != _fold(title),           # exact title next
+            compilation,                                             # the artist's own release
+            _fold(r.get("artistName", "")) != _fold(artist),         # exact artist credit
+        )
+    return min(ok, key=rank)
 
 
 def _itunes_track(artist, title):
-    """(artwork_url, apple_music_url) for a song, or (None, None)."""
+    """Apple's match for a song: dict(artwork, apple_url, matched_artist,
+    matched_title), all None when Apple doesn't have it. None (no dict) when
+    the lookup itself failed, so a timeout or rate limit isn't saved as a miss."""
     import requests
     try:
         r = requests.get("https://itunes.apple.com/search",
-                         params={"term": f"{artist} {title}", "entity": "song", "limit": 1},
+                         params={"term": f"{artist} {title}", "entity": "song",
+                                 "media": "music", "limit": 25},
                          timeout=6)
-        res = (r.json().get("results") or []) if r.ok else []
+        if not r.ok:
+            return None
+        results = r.json().get("results") or []
     except Exception:
-        return None, None
-    if not res:
-        return None, None
-    art = res[0].get("artworkUrl100")
+        return None
+    best = _pick(artist, title, results)
+    if best is None:
+        return {"artwork": None, "apple_url": None, "matched_artist": None, "matched_title": None}
+    art = best.get("artworkUrl100")
     if art:
         art = art.replace("100x100bb", "600x600bb")
-    return art, res[0].get("trackViewUrl")
+    return {"artwork": art, "apple_url": best.get("trackViewUrl"),
+            "matched_artist": best.get("artistName"), "matched_title": best.get("trackName")}
 
 
-def _track_links(conn, artist, title):
-    """Cached iTunes lookup. Misses are cached too (for a week) so a song
-    iTunes doesn't know isn't looked up on every request."""
+# ---- cache
+
+def _cached(conn, key):
+    """(artwork, apple_url) if the saved row is still good, else None.
+    An override always wins. Misses are kept a week; rows saved under older
+    matching rules are redone."""
+    o = conn.execute("SELECT artwork, apple_url FROM track_link_overrides WHERE artist = ? AND title = ?",
+                     key).fetchone()
+    if o is not None:
+        return (o[0], o[1])
+    row = conn.execute("SELECT artwork, apple_url, ts, v FROM track_links WHERE artist = ? AND title = ?",
+                       key).fetchone()
+    if row is None or (row[3] or 1) < LINKS_VERSION:
+        return None
+    if row[0] is None and _time.time() - (row[2] or 0) > 7 * 86400:
+        return None
+    return (row[0], row[1])
+
+
+def _save(conn, key, m):
+    conn.execute(
+        "INSERT OR REPLACE INTO track_links "
+        "(artist, title, artwork, apple_url, ts, matched_artist, matched_title, v) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        (key[0], key[1], m["artwork"], m["apple_url"], _time.time(),
+         m["matched_artist"], m["matched_title"], LINKS_VERSION))
+
+
+def _links(art, apple, artist, title):
     from urllib.parse import quote
-    key = (artist.lower(), title.lower())
-    with _track_links_lock:
-        _ensure_track_links(conn)
-        row = conn.execute("SELECT artwork, apple_url, ts FROM track_links WHERE artist = ? AND title = ?",
-                           key).fetchone()
-        if row is None or (row[0] is None and _time.time() - (row[2] or 0) > 7 * 86400):
-            art, apple = _itunes_track(artist, title)
-            conn.execute("INSERT OR REPLACE INTO track_links VALUES (?, ?, ?, ?, ?)",
-                         (key[0], key[1], art, apple, _time.time()))
-            conn.commit()
-        else:
-            art, apple = row[0], row[1]
     return {
         "artwork": art,
         "apple_music": apple,
@@ -1154,12 +1276,28 @@ def _track_links(conn, artist, title):
     }
 
 
+def _track_links(conn, artist, title):
+    """Cached, checked iTunes lookup for one song."""
+    key = (artist.lower(), title.lower())
+    with _track_links_lock:
+        _ensure_track_links(conn)
+        hit = _cached(conn, key)
+    if hit is None:
+        m = _itunes_track(artist, title)
+        if m is None:                       # lookup failed: no link this time, nothing saved
+            return _links(None, None, artist, title)
+        with _track_links_lock:
+            _save(conn, key, m)
+            conn.commit()
+        hit = (m["artwork"], m["apple_url"])
+    return _links(hit[0], hit[1], artist, title)
+
+
 def _links_many(pairs):
     """[(artist, title)] -> [{artwork, apple_music, spotify}], same order.
-    Cached in track_links; the uncached ones are looked up in parallel so a
-    list of ten random songs doesn't take ten round trips."""
+    The uncached ones are looked up in parallel so a list of ten random songs
+    doesn't take ten round trips."""
     from concurrent.futures import ThreadPoolExecutor
-    from urllib.parse import quote
     keys = [(a.lower(), t.lower()) for a, t in pairs]
     found = {}
     conn = _conn()
@@ -1167,26 +1305,63 @@ def _links_many(pairs):
         with _track_links_lock:
             _ensure_track_links(conn)
             for k in keys:
-                row = conn.execute("SELECT artwork, apple_url, ts FROM track_links WHERE artist = ? AND title = ?",
-                                   k).fetchone()
-                if row is not None and not (row[0] is None and _time.time() - (row[2] or 0) > 7 * 86400):
-                    found[k] = (row[0], row[1])
+                hit = _cached(conn, k)
+                if hit is not None:
+                    found[k] = hit
         need = [(p, k) for p, k in zip(pairs, keys) if k not in found]
         if need:
             with ThreadPoolExecutor(max_workers=6) as ex:
                 results = list(ex.map(lambda pk: _itunes_track(*pk[0]), need))
             with _track_links_lock:
-                for (_, k), (art, apple) in zip(need, results):
-                    conn.execute("INSERT OR REPLACE INTO track_links VALUES (?, ?, ?, ?, ?)",
-                                 (k[0], k[1], art, apple, _time.time()))
-                    found[k] = (art, apple)
+                for (_, k), m in zip(need, results):
+                    if m is None:
+                        continue
+                    _save(conn, k, m)
+                    found[k] = (m["artwork"], m["apple_url"])
                 conn.commit()
     finally:
         conn.close()
-    return [{"artwork": found.get(k, (None, None))[0],
-             "apple_music": found.get(k, (None, None))[1],
-             "spotify": "https://open.spotify.com/search/" + quote(f"{a} {t}")}
-            for (a, t), k in zip(pairs, keys)]
+    return [_links(*found.get(k, (None, None)), a, t) for (a, t), k in zip(pairs, keys)]
+
+
+def relink_all(pause=3.2):
+    """Redo every saved link under the current rules, gently (Apple allows
+    roughly 20 searches a minute). Prints what changed. Safe to stop and
+    rerun: finished rows are skipped.
+        python3 -c "import dna; dna.relink_all()"
+    """
+    conn = _conn()
+    try:
+        with _track_links_lock:
+            _ensure_track_links(conn)
+            conn.commit()
+        rows = conn.execute("SELECT artist, title, apple_url FROM track_links "
+                            "WHERE v IS NULL OR v < ?", (LINKS_VERSION,)).fetchall()
+        print(f"{len(rows)} links to check")
+        dropped = changed = kept = failed = 0
+        for i, (artist, title, old) in enumerate(rows, 1):
+            m = _itunes_track(artist, title)
+            if m is None:
+                failed += 1
+                _time.sleep(pause * 3)
+                continue
+            with _track_links_lock:
+                _save(conn, (artist, title), m)
+                conn.commit()
+            if old and not m["apple_url"]:
+                dropped += 1
+                print(f"  dropped  {artist} - {title}")
+            elif old and m["apple_url"] != old:
+                changed += 1
+                print(f"  changed  {artist} - {title}  ->  {m['matched_artist']} - {m['matched_title']}")
+            else:
+                kept += 1
+            if i % 50 == 0:
+                print(f"  {i}/{len(rows)}")
+            _time.sleep(pause)
+        print(f"done: {kept} kept, {changed} changed, {dropped} dropped, {failed} failed (rerun to retry)")
+    finally:
+        conn.close()
 
 
 @app.route("/dna/tracks/<station>")
