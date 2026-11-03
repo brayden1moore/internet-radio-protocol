@@ -1142,6 +1142,9 @@ def _fold(s):
     s = unicodedata.normalize("NFKD", s or "")
     s = "".join(c for c in s if not unicodedata.combining(c)).lower()
     s = s.replace("&", " and ").replace("+", " and ")
+    # Dots and apostrophes close up rather than split a word:
+    # "U.F.O" = "UFO", "Don't" = "Dont", "A.R. Kane" = "AR Kane".
+    s = re.sub(r"[.'\u2019]", "", s)
     s = re.sub(r"[^\w\s]", " ", s)
     return " ".join(s.split())
 
@@ -1186,6 +1189,8 @@ def _title_ok(ours, theirs):
     a, b = _core_title(ours), _core_title(theirs)
     if not a or not b:
         return False
+    if a.replace(" ", "") == b.replace(" ", ""):      # "Love 2" = "Love2"
+        return True
     return a == b or difflib.SequenceMatcher(None, a, b).ratio() >= 0.92
 
 
