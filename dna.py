@@ -1725,6 +1725,24 @@ def _spotify_add(conn, playlist_id, uris):
                 raise RuntimeError(f"{first}; tracks {r.status_code}: {r.text[:160]}")
 
 
+def _spotify_still_followed(conn, playlist_id):
+    """Is the playlist still on One Radio's account? Deleting a playlist in
+    Spotify only unfollows it, and the old link still opens it, so ask.
+    When Spotify can't say, assume yes rather than make duplicates."""
+    try:
+        me = conn.execute("SELECT user_id FROM spotify_auth WHERE id = 1").fetchone()
+        r = _spotify(conn, "GET", f"/playlists/{playlist_id}/followers/contains",
+                     params={"ids": me[0]} if me and me[0] else None)
+        if r.status_code == 404:
+            return False
+        if r.ok:
+            answer = r.json()
+            return bool(answer[0]) if isinstance(answer, list) and answer else True
+    except Exception as e:
+        print(f"spotify follow check failed: {e}", flush=True)
+    return True
+
+
 def _spotify_cleanup(conn):
     """Take playlists older than SPOTIFY_KEEP_DAYS off One Radio's profile.
     (Spotify can't delete a playlist; unfollowing hides it. Anyone who saved
@@ -1766,9 +1784,15 @@ def spotify_playlist():
     try:
         with _spotify_make_lock:
             _ensure_spotify_tables(conn)
-            row = conn.execute("SELECT url FROM spotify_playlists WHERE key = ? AND removed = 0", (key,)).fetchone()
+            row = conn.execute("SELECT url, playlist_id FROM spotify_playlists WHERE key = ? AND removed = 0",
+                               (key,)).fetchone()
             if row:
-                return jsonify({"url": row[0], "reused": True})
+                if _spotify_still_followed(conn, row[1]):
+                    return jsonify({"url": row[0], "reused": True})
+                # Deleted from One Radio's account (Spotify's "delete" is an
+                # unfollow): build a fresh one below.
+                conn.execute("UPDATE spotify_playlists SET removed = 1 WHERE key = ?", (key,))
+                conn.commit()
 
             uris, lines = [], []
             for s in stations:
