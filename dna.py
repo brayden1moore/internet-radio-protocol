@@ -1711,6 +1711,20 @@ def _spotify_match(conn, artist, title):
     return uri, url
 
 
+def _spotify_add(conn, playlist_id, uris):
+    """Add songs, 100 at a time. Spotify has been moving this from
+    /tracks to /items, so try /items and fall back. Raises with Spotify's
+    answer if neither takes them."""
+    for i in range(0, len(uris), 100):
+        chunk = {"uris": uris[i:i + 100]}
+        r = _spotify(conn, "POST", f"/playlists/{playlist_id}/items", json=chunk)
+        if not r.ok:
+            first = f"items {r.status_code}: {r.text[:160]}"
+            r = _spotify(conn, "POST", f"/playlists/{playlist_id}/tracks", json=chunk)
+            if not r.ok:
+                raise RuntimeError(f"{first}; tracks {r.status_code}: {r.text[:160]}")
+
+
 def _spotify_cleanup(conn):
     """Take playlists older than SPOTIFY_KEEP_DAYS off One Radio's profile.
     (Spotify can't delete a playlist; unfollowing hides it. Anyone who saved
@@ -1781,8 +1795,13 @@ def spotify_playlist():
             if not r.ok:
                 return jsonify({"error": f"Spotify wouldn't create the playlist ({r.status_code})"}), 502
             pl = r.json()
-            for i in range(0, len(uris), 100):
-                _spotify(conn, "POST", f"/playlists/{pl['id']}/tracks", json={"uris": uris[i:i + 100]})
+            try:
+                _spotify_add(conn, pl["id"], uris)
+            except RuntimeError as e:
+                # Don't leave (or hand out) an empty playlist.
+                print(f"spotify add failed: {e}", flush=True)
+                _spotify(conn, "DELETE", f"/playlists/{pl['id']}/followers")
+                return jsonify({"error": f"Spotify wouldn't add the songs ({e})"}), 502
             if SPOTIFY_COVER.exists():
                 try:
                     _spotify(conn, "PUT", f"/playlists/{pl['id']}/images",
