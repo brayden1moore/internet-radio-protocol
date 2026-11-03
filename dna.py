@@ -1612,8 +1612,15 @@ def spotify_callback():
         return f"Spotify said: {request.args.get('error', 'no code')}", 400
     tok = _spotify_token_request({"grant_type": "authorization_code", "code": request.args["code"],
                                   "redirect_uri": SPOTIFY_REDIRECT})
-    me = requests.get("https://api.spotify.com/v1/me", timeout=10,
-                      headers={"Authorization": f"Bearer {tok['access_token']}"}).json()
+    r = requests.get("https://api.spotify.com/v1/me", timeout=10,
+                     headers={"Authorization": f"Bearer {tok['access_token']}"})
+    if not r.ok:
+        # Spotify answers in plain text here, e.g. 403 "Check settings on
+        # developer.spotify.com/dashboard, the user may not be registered."
+        return (f"Signed in, but Spotify refused the account ({r.status_code}): {r.text[:300]}\n\n"
+                "In a development-mode app, this account must be the app's owner or be added "
+                "under User Management in the Spotify developer dashboard."), 502, {"Content-Type": "text/plain"}
+    me = r.json()
     conn = _conn()
     try:
         with _spotify_lock:
@@ -1627,6 +1634,44 @@ def spotify_callback():
     return f"Connected as {me.get('display_name') or me.get('id')}. Playlists will be made on this account."
 
 
+def _spotify_search(conn, artist, title):
+    """Spotify's results for a song: field search first, then plain words.
+    Raises on an error answer, so it's logged and not saved as a miss."""
+    items = []
+    for q in (f'track:"{_core_title(title) or title}" artist:"{artist}"', f"{artist} {_core_title(title) or title}"):
+        r = _spotify(conn, "GET", "/search", params={"q": q, "type": "track", "limit": 10})
+        if not r.ok:
+            raise RuntimeError(f"search {r.status_code}: {r.text[:200]}")
+        items = (r.json().get("tracks") or {}).get("items") or []
+        if items:
+            break
+    return items
+
+
+@app.route("/dna/spotify/test")
+def spotify_test():
+    """Debug: what Spotify returns for one song and which results pass.
+    /dna/spotify/test?key=<admin_key>&artist=ESG&title=UFO"""
+    cfg = _spotify_config()
+    if not cfg or request.args.get("key") != cfg.get("admin_key"):
+        return "Not allowed.", 403
+    artist, title = request.args.get("artist", ""), request.args.get("title", "")
+    conn = _conn()
+    try:
+        items = _spotify_search(conn, artist, title)
+        return jsonify([{
+            "name": t.get("name"),
+            "artists": [a.get("name") for a in t.get("artists", [])],
+            "artist_ok": any(_artist_ok(artist, a.get("name", "")) for a in t.get("artists", [])),
+            "title_ok": _title_ok(title, t.get("name", "")),
+            "uri": t.get("uri"),
+        } for t in items])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 502
+    finally:
+        conn.close()
+
+
 def _spotify_match(conn, artist, title):
     """(uri, url) for a song on Spotify, checked like the Apple Music links;
     (None, None) when there's no real match. Misses kept a week; a failed
@@ -1636,15 +1681,9 @@ def _spotify_match(conn, artist, title):
     if row is not None and not (row[0] is None and _time.time() - (row[2] or 0) > 7 * 86400):
         return row[0], row[1]
     try:
-        r = _spotify(conn, "GET", "/search", params={
-            "q": f'track:"{_core_title(title) or title}" artist:"{artist}"', "type": "track", "limit": 20})
-        if not r.ok:
-            return None, None
-        items = r.json().get("tracks", {}).get("items", [])
-        if not items:   # field filters can be too strict; try plain words once
-            r = _spotify(conn, "GET", "/search", params={"q": f"{artist} {title}", "type": "track", "limit": 20})
-            items = r.json().get("tracks", {}).get("items", []) if r.ok else []
-    except Exception:
+        items = _spotify_search(conn, artist, title)
+    except Exception as e:
+        print(f"spotify search failed for {artist} - {title}: {e}", flush=True)
         return None, None
 
     ok = [t for t in items
