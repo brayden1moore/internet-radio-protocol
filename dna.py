@@ -1487,4 +1487,279 @@ def dna_plays_csv():
     return csv_response(header, rows, "plays.csv")
 
 
+# ---- Spotify playlists, made on One Radio's own Spotify account ------------
+#
+# Listeners never sign in to Spotify. One Radio's account signs in once
+# (/dna/spotify/login?key=...), the server keeps its refresh token, and every
+# playlist is made on that account; the app just opens the link.
+#
+# Credentials live in spotify.json next to plays.db (not in git):
+#   {"client_id": "...", "client_secret": "...", "admin_key": "..."}
+
+SPOTIFY_CONFIG = DB_PATH.parent / "spotify.json"
+SPOTIFY_COVER = Path(__file__).resolve().parent / "assets" / "spotify-cover.jpg"
+SPOTIFY_REDIRECT = "https://www.one.radio/dna/spotify/callback"
+SPOTIFY_SCOPES = "playlist-modify-public playlist-modify-private ugc-image-upload"
+SPOTIFY_KEEP_DAYS = 7          # older playlists come off One Radio's profile
+
+_spotify_lock = threading.Lock()          # token refresh
+_spotify_make_lock = threading.Lock()     # one playlist build at a time
+
+
+def _spotify_config():
+    import json
+    try:
+        return json.loads(SPOTIFY_CONFIG.read_text())
+    except Exception:
+        return None
+
+
+def _ensure_spotify_tables(conn):
+    conn.execute("CREATE TABLE IF NOT EXISTS spotify_auth ("
+                 "  id INTEGER PRIMARY KEY CHECK (id = 1),"
+                 "  user_id TEXT, refresh_token TEXT, access_token TEXT, expires REAL)")
+    conn.execute("CREATE TABLE IF NOT EXISTS spotify_links ("
+                 "  artist TEXT, title TEXT, uri TEXT, url TEXT,"
+                 "  matched_artist TEXT, matched_title TEXT, ts REAL,"
+                 "  PRIMARY KEY (artist, title))")
+    conn.execute("CREATE TABLE IF NOT EXISTS spotify_playlists ("
+                 "  key TEXT PRIMARY KEY, playlist_id TEXT, url TEXT, ts REAL, removed INTEGER DEFAULT 0)")
+
+
+def _spotify_state(cfg, ts=None, nonce=None):
+    """Signed login state (time.nonce.sig), so the callback can check it came
+    from our login page whichever server worker handles it."""
+    import hmac
+    import hashlib
+    import secrets
+    ts = ts or str(int(_time.time()))
+    nonce = nonce or secrets.token_urlsafe(8)
+    sig = hmac.new(cfg["admin_key"].encode(), f"{ts}.{nonce}".encode(), hashlib.sha256).hexdigest()[:24]
+    return f"{ts}.{nonce}.{sig}"
+
+
+def _spotify_state_ok(cfg, state):
+    import hmac
+    try:
+        ts, nonce, _ = state.split(".", 2)
+    except ValueError:
+        return False
+    return (hmac.compare_digest(_spotify_state(cfg, ts, nonce), state)
+            and _time.time() - int(ts) < 600)
+
+
+def _spotify_token_request(data):
+    import requests
+    cfg = _spotify_config() or {}
+    r = requests.post("https://accounts.spotify.com/api/token", data=data,
+                      auth=(cfg.get("client_id", ""), cfg.get("client_secret", "")), timeout=10)
+    r.raise_for_status()
+    return r.json()
+
+
+def _spotify_token(conn):
+    """A live access token for One Radio's account, refreshed when stale."""
+    with _spotify_lock:
+        _ensure_spotify_tables(conn)
+        row = conn.execute("SELECT refresh_token, access_token, expires FROM spotify_auth WHERE id = 1").fetchone()
+        if row is None or not row[0]:
+            raise RuntimeError("Spotify isn't connected: visit /dna/spotify/login")
+        if row[1] and (row[2] or 0) > _time.time() + 60:
+            return row[1]
+        tok = _spotify_token_request({"grant_type": "refresh_token", "refresh_token": row[0]})
+        conn.execute("UPDATE spotify_auth SET access_token = ?, expires = ?, refresh_token = ? WHERE id = 1",
+                     (tok["access_token"], _time.time() + tok.get("expires_in", 3600),
+                      tok.get("refresh_token") or row[0]))
+        conn.commit()
+        return tok["access_token"]
+
+
+def _spotify(conn, method, path, **kw):
+    """Web API call as One Radio. Waits out a rate limit once."""
+    import requests
+    extra = kw.pop("headers", {})
+    for attempt in range(2):
+        r = requests.request(method, "https://api.spotify.com/v1" + path, timeout=12,
+                             headers={"Authorization": f"Bearer {_spotify_token(conn)}", **extra}, **kw)
+        if r.status_code == 429 and attempt == 0:
+            _time.sleep(min(int(r.headers.get("Retry-After", "2")), 10))
+            continue
+        return r
+    return r
+
+
+@app.route("/dna/spotify/login")
+def spotify_login():
+    """One-time: sign in as One Radio's Spotify account. ?key= is admin_key."""
+    from urllib.parse import urlencode
+    from flask import redirect
+    cfg = _spotify_config()
+    if not cfg or request.args.get("key") != cfg.get("admin_key"):
+        return "Not allowed.", 403
+    state = _spotify_state(cfg)
+    return redirect("https://accounts.spotify.com/authorize?" + urlencode({
+        "client_id": cfg["client_id"], "response_type": "code", "redirect_uri": SPOTIFY_REDIRECT,
+        "scope": SPOTIFY_SCOPES, "state": state, "show_dialog": "true"}))
+
+
+@app.route("/dna/spotify/callback")
+def spotify_callback():
+    import requests
+    cfg = _spotify_config() or {}
+    if not cfg.get("admin_key") or not _spotify_state_ok(cfg, request.args.get("state", "")):
+        return "Sign-in expired or not started here. Start again at /dna/spotify/login.", 400
+    if "code" not in request.args:
+        return f"Spotify said: {request.args.get('error', 'no code')}", 400
+    tok = _spotify_token_request({"grant_type": "authorization_code", "code": request.args["code"],
+                                  "redirect_uri": SPOTIFY_REDIRECT})
+    me = requests.get("https://api.spotify.com/v1/me", timeout=10,
+                      headers={"Authorization": f"Bearer {tok['access_token']}"}).json()
+    conn = _conn()
+    try:
+        with _spotify_lock:
+            _ensure_spotify_tables(conn)
+            conn.execute("INSERT OR REPLACE INTO spotify_auth VALUES (1, ?, ?, ?, ?)",
+                         (me.get("id"), tok["refresh_token"], tok["access_token"],
+                          _time.time() + tok.get("expires_in", 3600)))
+            conn.commit()
+    finally:
+        conn.close()
+    return f"Connected as {me.get('display_name') or me.get('id')}. Playlists will be made on this account."
+
+
+def _spotify_match(conn, artist, title):
+    """(uri, url) for a song on Spotify, checked like the Apple Music links;
+    (None, None) when there's no real match. Misses kept a week; a failed
+    search isn't saved."""
+    key = (artist.lower(), title.lower())
+    row = conn.execute("SELECT uri, url, ts FROM spotify_links WHERE artist = ? AND title = ?", key).fetchone()
+    if row is not None and not (row[0] is None and _time.time() - (row[2] or 0) > 7 * 86400):
+        return row[0], row[1]
+    try:
+        r = _spotify(conn, "GET", "/search", params={
+            "q": f'track:"{_core_title(title) or title}" artist:"{artist}"', "type": "track", "limit": 20})
+        if not r.ok:
+            return None, None
+        items = r.json().get("tracks", {}).get("items", [])
+        if not items:   # field filters can be too strict; try plain words once
+            r = _spotify(conn, "GET", "/search", params={"q": f"{artist} {title}", "type": "track", "limit": 20})
+            items = r.json().get("tracks", {}).get("items", []) if r.ok else []
+    except Exception:
+        return None, None
+
+    ok = [t for t in items
+          if any(_artist_ok(artist, a.get("name", "")) for a in t.get("artists", []))
+          and _title_ok(title, t.get("name", ""))]
+    best = None
+    if ok:
+        best = min(ok, key=lambda t: (
+            _is_other_version(title, t.get("name", "")),
+            _fold(t.get("name", "")) != _fold(title),
+            (t.get("album") or {}).get("album_type") == "compilation",
+            -(t.get("popularity") or 0)))
+    uri = best and best.get("uri")
+    url = best and (best.get("external_urls") or {}).get("spotify")
+    conn.execute("INSERT OR REPLACE INTO spotify_links VALUES (?, ?, ?, ?, ?, ?, ?)",
+                 (key[0], key[1], uri, url,
+                  best and ", ".join(a.get("name", "") for a in best.get("artists", [])),
+                  best and best.get("name"), _time.time()))
+    conn.commit()
+    return uri, url
+
+
+def _spotify_cleanup(conn):
+    """Take playlists older than SPOTIFY_KEEP_DAYS off One Radio's profile.
+    (Spotify can't delete a playlist; unfollowing hides it. Anyone who saved
+    it keeps it.)"""
+    old = conn.execute("SELECT key, playlist_id FROM spotify_playlists WHERE removed = 0 AND ts < ?",
+                       (_time.time() - SPOTIFY_KEEP_DAYS * 86400,)).fetchall()
+    for key, pid in old:
+        try:
+            r = _spotify(conn, "DELETE", f"/playlists/{pid}/followers")
+            if r.ok or r.status_code == 404:
+                conn.execute("UPDATE spotify_playlists SET removed = 1 WHERE key = ?", (key,))
+        except Exception:
+            break
+    conn.commit()
+
+
+@app.route("/dna/playlist/spotify", methods=["POST"])
+def spotify_playlist():
+    """
+    Today's recs as a Spotify playlist on One Radio's account.
+    Body: {"date": "YYYY-MM-DD", "name": "One Radio Recs · Nov 2",
+           "stations": [{"name": "SWU", "tracks": [{"artist", "title"}, ...]}, ...]}
+    -> {"url", "count"}. The same recs on the same day reuse one playlist.
+    """
+    import hashlib
+    import json
+    import base64
+    body = request.get_json(silent=True) or {}
+    stations = [s for s in (body.get("stations") or []) if s.get("name") and s.get("tracks")]
+    if not stations:
+        return jsonify({"error": "no tracks"}), 400
+    date = str(body.get("date") or datetime.date.today().isoformat())[:10]
+    name = str(body.get("name") or "One Radio Recs")[:100]
+    key = hashlib.sha1(json.dumps([date, [[s["name"], [[t.get("artist", ""), t.get("title", "")]
+                                                         for t in s["tracks"]]] for s in stations]],
+                                  sort_keys=True).encode()).hexdigest()
+
+    conn = _conn()
+    try:
+        with _spotify_make_lock:
+            _ensure_spotify_tables(conn)
+            row = conn.execute("SELECT url FROM spotify_playlists WHERE key = ? AND removed = 0", (key,)).fetchone()
+            if row:
+                return jsonify({"url": row[0], "reused": True})
+
+            uris, lines = [], []
+            for s in stations:
+                mine = []
+                for t in s["tracks"]:
+                    uri, _ = _spotify_match(conn, t.get("artist", ""), t.get("title", ""))
+                    if uri and uri not in uris:
+                        uris.append(uri)
+                        mine.append(t.get("title", ""))
+                if mine:
+                    lines.append(f'{s["name"]}, from "{mine[0]}" to "{mine[-1]}"' if len(mine) > 1
+                                 else f'{s["name"]}, "{mine[0]}"')
+            if not uris:
+                return jsonify({"error": "none of today's tracks are on Spotify"}), 404
+
+            # Spotify descriptions are one line (no line breaks), max 300 characters.
+            desc = "Featuring tracks heard on " + "; ".join(lines) + ". From One Radio."
+            if len(desc) > 300:
+                desc = "Featuring tracks heard on " + ", ".join(s["name"] for s in stations) + ". From One Radio."
+            desc = desc[:300]
+
+            r = _spotify(conn, "POST", "/me/playlists",
+                         json={"name": name, "description": desc, "public": True})
+            if not r.ok:
+                return jsonify({"error": f"Spotify wouldn't create the playlist ({r.status_code})"}), 502
+            pl = r.json()
+            for i in range(0, len(uris), 100):
+                _spotify(conn, "POST", f"/playlists/{pl['id']}/tracks", json={"uris": uris[i:i + 100]})
+            if SPOTIFY_COVER.exists():
+                try:
+                    _spotify(conn, "PUT", f"/playlists/{pl['id']}/images",
+                             data=base64.b64encode(SPOTIFY_COVER.read_bytes()),
+                             headers={"Content-Type": "image/jpeg"})
+                except Exception:
+                    pass   # the playlist is fine without its cover
+
+            url = (pl.get("external_urls") or {}).get("spotify") or f"https://open.spotify.com/playlist/{pl['id']}"
+            conn.execute("INSERT OR REPLACE INTO spotify_playlists VALUES (?, ?, ?, ?, 0)",
+                         (key, pl["id"], url, _time.time()))
+            conn.commit()
+            try:
+                _spotify_cleanup(conn)
+            except Exception:
+                pass
+            return jsonify({"url": url, "count": len(uris)})
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 503
+    finally:
+        conn.close()
+
+
 ensure_indexes()
