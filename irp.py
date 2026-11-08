@@ -1692,6 +1692,11 @@ class Stream:
             info = requests.get(self.info_link, timeout=TIMEOUT).json()
             self.now_playing = extract_value(info, ['now_playing','song','title'])
             self.now_playing_artist = extract_value(info, ['now_playing','song','artist'])
+
+            if self.now_playing == None:
+                self.now_playing = extract_value(info, ['now_playing','slot','track'])
+                self.now_playing_subtitle = extract_value(info, ['now_playing','slot','title'])
+                
             self.status = 'Live' if extract_value(info, ['live','is_live']) == True else 'Re-Run'
 
         elif self.name == 'KURS Radio':
@@ -2601,7 +2606,7 @@ Stream(
         stream_link = "https://radioraheem.out.airtime.pro/radioraheem_a",
         main_link = "https://radioraheem.it",
         about = "Radio Raheem is an independent online radio station streaming 24/7 music and visuals from Milan with a cosmic perspective. The radio, located in the Navigli area of the city, aims to support and elevate a genuine and diverse local scene while keeping an eye to the moon and the galaxies far away.",
-        support_link = "https://gigastock.net/collections/radio-raheem",
+        support_link = "ciao@radioraheem.it",
         insta_link = "https://www.instagram.com/radioraheem.milano/",
         bandcamp_link = None,
         soundcloud_link = None,
@@ -3653,8 +3658,8 @@ Stream(
         country = "UZ",
         lat = 41.311081,
         lon = 69.240562,
-        info_link = "https://radio.filmtastic.uz/api/nowplaying/rytmabad",
-        stream_link = 'https://radio.filmtastic.uz/listen/rytmabad/radio.mp3',
+        info_link = "https://dashboard.rytmabad.radio/api/now",
+        stream_link = 'https://dashboard.rytmabad.radio/listen/radio.mp3',
         main_link = 'https://rytmabad.radio/',
         about = "Community radio based in Tashkent, Uzbekistan.",
         support_link = 'https://t.me/rytmabot',
