@@ -1720,35 +1720,30 @@ class Stream:
                 self.status = 'Re-Run'
 
         elif self.name == 'Radio Aparat':
-            headers = {
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                "Sec-Fetch-Site": "same-origin",
-                "Sec-Fetch-Dest": "document",
-                "Sec-Fetch-Mode": "navigate",
-                "Accept-Language": "en-US,en;q=0.9",
-                "User-Agent": (
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/605.1.15 (KHTML, like Gecko) "
-                    "Version/26.1 Safari/605.1.15"
-                ),
-                "Referer": "https://www.google.com/",
-            }
-
-            cookies = {
-                "_ga": "GA1.1.1232385581.1783920249",
-                "_ga_7JRX7PV391": "GS2.1.s1789191060$o4$g1$t1789191476$j6$l0$h0",
-                "click-here": "clicked",
-            }
-
-            webpage = requests.get(self.main_link, headers=headers, cookies=cookies).text
-            soup = BeautifulSoup(webpage, 'html.parser')
-            now_playing = soup.find_all("span", "now-playing")[0].get_text() # host name
-            if now_playing:
+            # The site's own now-playing call (what its player polls): plain
+            # text like ": Artist - Title". No cookies or page scraping needed.
+            response = requests.post(
+                "https://radioaparat.rs/wp-admin/admin-ajax.php",
+                data={"action": "now_playing_ajax"},
+                headers={
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Origin": "https://radioaparat.rs",
+                    "Referer": "https://radioaparat.rs/",
+                    "User-Agent": (
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/605.1.15 (KHTML, like Gecko) "
+                        "Version/26.1 Safari/605.1.15"
+                    ),
+                },
+                timeout=TIMEOUT,
+            )
+            now_playing = response.text.strip().lstrip(":").strip() if response.ok else ""
+            if now_playing and now_playing != "0":     # WordPress answers "0" when the action fails
                 self.status = 'Live'
-                now_playing = now_playing[2:]
                 if ' - ' in now_playing:
-                    self.now_playing = now_playing.split(' - ')[1]
-                    self.now_playing_artist = now_playing.split(' - ')[0]
+                    artist, title = now_playing.split(' - ', 1)
+                    self.now_playing_artist = artist.strip()
+                    self.now_playing = title.strip()
                 else:
                     self.now_playing = now_playing
                     self.now_playing_artist = None
