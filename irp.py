@@ -4056,14 +4056,13 @@ def main_loop():
             }
 
             taglines = [
-                f"{status['total'] - status['hidden']} of the world's best curated internet radio stations.",
                 'As soon as the generals and the politicos can predict the motions of your mind, lose it.',
                 'Radiation from computer screens is boiling your eyes. Use your ears.',
                 'You might hear something.',
                 'Listen like a kid again.',
                 'Be like the fox who makes more tracks than necessary, some in the wrong direction.',
                 'Somewhere out there, a song is playing for you.',
-                f'{status["total"] - status["hidden"]} of the best curated internet radio stations, meticulously tracked.',
+                f"The world's most thoughtfully curated internet radio.",
             ]
             status['app_tagline'] = taglines[datetime.fromtimestamp(time.time()).hour % len(taglines)]
 
